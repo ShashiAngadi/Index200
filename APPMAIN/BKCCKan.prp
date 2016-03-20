@@ -1,0 +1,29 @@
+[LoanIssue] 
+Prop1=Prompt=}|ç|}|Øë| °¤|#|;PropType=Heading;SubITems=2 
+Prop2=Prompt=}á™ç| Ááâ³ }|…Á³Ø;PropType=Editable;DescTitle=}á™ Ááâ³ }|…Á³Ø;Description=}á™ç| Ááâ³…ä|ä }|…Á³Ø…ä|äë|äÓ ë|¤|äå¡µ.;DataSource=AccNum 
+Prop3=Prompt=}|ç|}|Ø#| °‘ç|;PropType=Editable;LockEdit=True;Description=}|ç|}|Ø#| °‘ç|¤|ë|äÓ }|å“}|äâ|Ïç³.;DescTitle=}|ç|}|Ø#| °‘ç|;DataSource=MemberType;DisplayType=List;ListData=Áá…ä|ä… }|ç|Ø}|,Associate Member; 
+Prop4=Prompt=}|ç|}|Øë| {³ã#|ä }|…Á³Ø;PropType=Editable;DescTitle=}|ç|}|Ø }|…Á³Ø;Description=}á™ â³Â³ç|äÿ³å¶|äà¤|¤|ë| }|ç|}|Ø }|…Á³Ø…ä|äë|äÓ }|å“}|äâ|Ïç³.;DisplayType=Browse;DataSource=MemberID 
+Prop5=Prompt=}á™Âá#|ë| ~³}|#|ä;PropType=Editable;DescTitle=Member;Description=}á™ â³Â³ç|äÿ³å¶|äà¤|¤|ë| ~³}|#|ë|äÓ }|å“}|äâ|Ïç³.;DataSource=MemberName;LockEdit=True 
+Prop6=Prompt=¸¾|ä¤|¹çá#|;PropType=Editable;DescTitle=Member;Description=“ÿ|À, ¤|ä‘ç|Ø¤|ä, ðšç|¤á ç³å¾|Ì ¸¾|ä¤|¹çá#|#|ë|äÓ }|å“}|äâ|Ïç³.;DataSource=FarmerType;LockEdit=True;DisplayType=List;ListData=“ÿ|À ¸¾|ä¤|¹çá#|,ç³å¾|Ì ¸¾|ä¤|¹çá#|,¤|ä‘ç|Ø¤|ä ¸¾|ä¤|¹çá#| 
+
+Prop7=Prompt=ÿá¾|‚ °¤|#|Â|¶|ä;PropType=Heading;SubItems=4 
+Prop8=Prompt=}á™ ÿ³åŠÊ ¡ëá…ÿ|;PropType=Editable;Description=}|ç|}|Ø«Â³ }á™ ÿ³åŠÊ ¡ëá…ÿ|¤|ë|äÓ }|å“}|äâ|Ïç³.;DescTitle=}á™ ¡ëá…ÿ|;DataSource=IssueDate;DisplayType=Browse 
+Prop9=Prompt=3¤|œí|‚ç| âáþÛÿ| ¤|ä…‡å«;PropType=Editable;Description=}|ç|}|Ø¢Â³ ÿ³å¾|ä¤| }á™ç| âáþÛÿ| Â|«œí|Ë °äþ…ä|äë|äÓ }|å“}|äâ|Ïç³;DescTitle=âáþÛÿ| ¤|ä…‡å«;DataSource=SanctionAmount 
+Prop10=Prompt=í|Ù}|ÿ|Ï ¤|œí|‚ç| ¤|ä…‡å«;PropType=Editable;Description=}|ç|}|Ø¢Â³ ó ¤|œí|‚ ÿ³å¾|ä¤| }á™ç| Â|«œí|Ë °äþ…ä|äë|äÓ }|å“}|äâ|Ïç³;DescTitle=Â|«œí|ÌÍ }á™ °äþ;DataSource=CurrentSanction 
+Prop11=Prompt=~³¨|äÅ¤|« ¤|ä…‡å«;PropType=Editable;Description=}|ç|}|Ø¢Â³ ó ¤|œí|‚ç|®Ú }á™ç| Â|«œí|Ë °äþÄ…â| ~³“Åë| ¤|ä…‡å«;DescTitle=~³¨|äÅ¤|« ¤|ä…‡å«;DataSource=ExtraSanction 
+Prop12=Prompt=}á™ç| Â|«œí|Ë °äþ;PropType=Editable;Description=}|ç|}|Ø¢Â³ ÿ³å¾|ä¤| }á™ç| Â|«œí|Ë °äþ…ä|äë|äÓ }|å“}|äâ|Ïç³;DescTitle=Â|«œí|ÌÍ }á™ °äþ;DataSource=TotalAmount;LockEdit=True 
+Prop13=Prompt=}á™ç| °¤|#|Â|¶|ä;PropType=Heading;SubItems=4 
+Prop14=Prompt=}á™ ë|°ãÿ|«}|ä¤| ¡ëá…ÿ|;PropType=Editable;Description=}á™ç| °¤|#|Â|¶|ë|äÓ ë|°ãÿ|«}|ä¤| ¡ëá…ÿ|¤|ë|äÓ }|å“}|äâ|Ïç³.;DescTitle=ë|°ãÿ|#|×;DataSource=RenewDate;DisplayType=Browse 
+Prop15=Prompt=•ßÌ ç|#| (}á™);PropType=Editable;Description=}á™ç| •ßÌ…ä|ä ç|#|¤|ë|äÓ }|å“}|äâ|Ïç³.;DescTitle=•ßÌ…ä|ä ç|#|;DataSource=InterestRate 
+Prop16=Prompt=ç|…¾|ç| •ßÌ ç|#|;PropType=Editable;Description=}á™ç| ç|…¾|ç| •ßÌ…ä|ä ç|#|¤|ë|äÓ }|å“}|äâ|Ïç³.;DescTitle=•ßÌ…ä|ä ç|#|;DataSource=PenalInterestRate 
+Prop17=Prompt=‹#³ã¤|×© •ßÌ ç|#|;PropType=Editable;Description=BKCC ‹#³ã¤|×©…ä|ä •ßÌ ç|#|¤|ë|äÓ }|å“}|äâ|Ïç³.;DescTitle=‹#³ã¤|×© •ßÌ;DataSource=DepositInterestRate 
+Prop18=Prompt=´á°äë|ä °¤|#|;PropType=Heading;SubItems=2 
+Prop19=Prompt=¤³åç|™ë³ ´á°äãë|äçá#|;PropType=Editable;Description=¤³åç|™ë³ ´á°äãë|äçá#| ~³}|#|ë|äÓ }|å“}|äâ|Ïç³;DescTitle=Guarantor1;DataSource=Guarantor1;DisplayType=Browse 
+Prop20=Prompt=÷#|¾|ë³ ´á°äãë|äçá#|;PropType=Editable;Description=÷#|¾|ë³ ´á°äãë|äçá#|ë| ~³}|#|ë|äÓ }|å“}|äâ|Ïç³;DescTitle=Guarantor2;DataSource=Guarantor2;DisplayType=Browse 
+Prop21=Prompt=‡°äãë|ä °¤|#|;PropType=Heading;SubITems=4 
+Prop22=Prompt=ú× ý³ã}á…ä|äç| ‡°äãë|ä;PropType=Editable;DescTitle=ú× ý³ã}á…ä|ä;Description=ú× ý³ã}á…ä|ä ¤|ºá¾|ä¤| ‡°äã¢ë| °µÏ×‚¤|ë|äÓ ë|¤|äå¡µ;DataSource=DryLand;DisplayType=Browse 
+Prop23=Prompt=¢ã#á¤|« ‡°äãë|ä;PropType=Editable;DescTitle=¢ã#á¤|«;Description=¢ã#á¤|« ò#|â|ÿ|À ‡°äã¢ë| °µÏ×‚ ë|¤|äå¡µ.;DataSource=WetLand 
+Prop24=Prompt=ú× ý³ã}á…ä|äç| ñçá…ä|ä;PropType=Editable;DescTitle=ñçá…ä|ä;Description=ú× ý³ã}á…ä|ä¡…ç| •#|ä¤| ñçá…ä|ä¤|ë|äÓ ë|¤|äå¡µ;DataSource=DryIncome 
+Prop25=Prompt=¢ã#á¤|« ñçá…ä|ä;PropType=Editable;DescTitle=ñçá…ä|ä;Description=¢ã#á¤|« ¬ä…ç| •#|â|ÿ|À ñçá…ä|ä¤|ë|äÓ ë|¤|äå¡µ;DataSource=WetIncome 
+Prop26=Prompt=ýá† •ßÌ;PropType=Editable;DescTitle=ýá† •ßÌ;Description=ó }á™ç| Ááâ³¬ä…ç| •#|ý³ãÿáç| •ßÌ ~|×¤|ë|äÓ â³åã«}|äâ|Ïç³;DataSource=InterestBalance 
+Prop27=Prompt=•#|â|ÿ|À¤|èÂ|¶|ä;PropType=Editable;DescTitle=òâ|#³ •#|â|ÿ|À¤|èÂ|¶|ä;Description=ÂáÙ~|ÿ|«…ç| •#|â|ÿ|À òâ|#³ ýá† (°¤³ä, ABN ‘¦);DataSource=Receivable;DisplayType=Browse;LockEdit=True 

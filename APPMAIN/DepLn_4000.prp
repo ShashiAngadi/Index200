@@ -1,0 +1,19 @@
+[LoanIssue] 
+Prop1=Prompt=}|ç|}|Ø#| °¤|#|;PropType=Heading;SubITems=2 
+Prop2=Prompt=ÂáÙ~|ÿ| }|…Á³Ø;PropType=Editable;DescTitle=}|ç|}|Ø#| Â|äþ‚ë| }|…Á³Ø;Description=}á™ â³Â³ç|äÿ³å¶|äà¤| ÂáÙ~|ÿ|#| }|…Á³Ø…ä|äë|äÓ }|å“}|äâ|Ïç³.;DataSource=MemberId;DisplayType=Browse 
+Prop3=Prompt=}|ç|}|Ø#| ~³}|#|ä;PropType=Editable;DescTitle=}|ç|}|Ø#|ä;Description=}á™ â³Â³ç|äÿ³å¶|à•…ä|ä}|ä¤| }|ç|}|Ø#| ~³}|#|ë|äÓ }|å“}|äâ|Ïç³.;DataSource=MemberName;LockEdit=True 
+Prop4=Prompt=}á™ç| Ááâ³…ä|ä }|…Á³Ø;PropType=Editable;DescTitle=Loan Number;Description=}á™ç| Ááâ³…ä|ä }|…Á³Ø…ä|äë|äÓ }|å“}|äâ|Ïç³.;DataSource=LoanAccNo 
+Prop5=Prompt=‹#³ã¤|×© °¤|#|Â|¶|ä;PropType=Heading;SubItems=4 
+Prop6=Prompt=‹#³ã¤|×© ~³}|#|ä;PropType=Editable;Description=‹#³ã¤|×©…ä|ä °ç|¤|ë|äÓ }|å“}|äâ|Ïç³;DescTitle=‹#³ã¤|×©…ä|ä °ç|;DataSource=DepositType;DisplayType=List;ListData=1,2,3 
+Prop7=Prompt=Ä#|°¬äŠÊ ‹#³ã¤|×© }|…Á³Ø;PropType=Editable;Description=}á™ÿáÀÄ Ä#|°¬äŠÊ ¤|}|äÏ¤|ë|äÓ }|å“}|äâ|Ïç³.;DescTitle=Ä#|°¬äŠÊ ¤|}|äÏ.;DataSource=PledgeDeposit;DisplayType=Browse;LockEdit=True 
+Prop8=Prompt=‹#³ã¤|×©…ä|ä ¤³åâ|Ï;PropType=Editable;Description=Ä#|°¬äŠÊ ‹#³ã¤|×©Â|¶| úŠäÊ ¤³åâ|Ï.;DescTitle=‹#³ã¤|×© ¤³åâ|Ï;DataSource=PledgeValue 
+Prop9=Prompt=‹#³ã¤|×©Â|¶| }|…Á³Ø;PropType=Editable;Description=Ä#|°¬äŠÊ úŠäÊ ‹#³ã¤|×©Â|¶| }|…Á³Ø…ä|äë|äÓ â³åã«}|äâ|Ïç³.;DescTitle=Evaluator;‹#³ã¤|×©Â|¶| }|…Á³Ø;DataSource=NoOfDep; 
+Prop10=Prompt=}á™ç| °¤|#|;PropType=Heading;SubItems=4 
+Prop11=Prompt=}á™ç| ¤³åâ|Ï;PropType=Editable;Description= ÿ³å¾|ä¤| }á™;DescTitle=Loan Amount;DataSource=LoanAmount 
+Prop12=Prompt=}á™ ÿ³åŠÊ ¡ëá…ÿ|;PropType=Editable;Description=}á™ ÿ³åŠÊ ¡ëá…ÿ|;DescTitle=}á™ ÿ³åŠÊ ¡ëá…ÿ|;DataSource=IssueDate;DisplayType=Browse;LockEdit=False 
+Prop13=Prompt=}á™ç| ÿ³åë|…ä|ä ¡ëá…ÿ|;PropType=Editable;Description=}á™ç| ÿ³åë³…ä|ä ¡ëá…ÿ|;DescTitle=ÿ³åë³…ä|ä ¡ëá…ÿ|;DataSource=DueDate;DisplayType=Browse 
+Prop14=Prompt=•ßÌ…ä|ä ‘ç|#|;PropType=Editable;Description=ó }á™ÿ³À ðë|Û¬ä}|ä¤| •ßÌ…ä|ä ‘ç|#|.;DescTitle=•ßÌ…ä|ä ‘ç|#|;DataSource=InterestRate 
+Prop15=Prompt=ç|…¾|ç| •ßÌ;PropType=Editable;Description=°¶|…•¤áç| ¤|ä#|äíá¤|þ…ä|ºáç|®Ú •ßÌ…ä|äç|#|¤|ë|äÓ }|å“}|äâ|Ïç³.;DescTitle=ç|…¾|ç| •ßÌ…ä|ä ‘ç|#|;DataSource=PenalInterestRate 
+Prop16=Prompt= òâ|#³;PropType=Heading;SubItems=2 
+Prop17=Prompt=œí|#á;PropType=Editable;Description=ó }á™ç| •Â³È }|…†Ýí|Ï °¤|#|¿³;DescTitle=œí|#á;DataSource=Remarks; 
+Prop18=Prompt=ýá† •ßÌ;PropType=Editable;DescTitle=ýá† •ßÌ;Description=ó }á™ç| Ááâ³¬ä…ç| •#|ý³ãÿáç| •ßÌ ~|×¤|ë|äÓ â³åã«}|äâ|Ïç³;DataSource=InterestBalance 

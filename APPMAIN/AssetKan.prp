@@ -1,0 +1,14 @@
+[Asset] 
+Prop1=Prompt=}|ç|}|Øë| °¤|#|;PropType=Heading;SubITems=2 
+Prop2=Prompt=}|ç|}|Øë| {³ã#|ä }|…Á³Ø;PropType=Editable;DescTitle=}|ç|}|Ø }|…Á³Ø;Description=}á™ â³Â³ç|äÿ³å¶|äà¤|¤|ë| }|ç|}|Ø }|…Á³Ø…ä|äë|äÓ }|å“}|äâ|Ïç³.;DisplayType=Browse;DataSource=MemberID 
+Prop3=Prompt=}|ç|}|Øë| ~³}|#|ä;PropType=Editable;DescTitle=Member;Description=}á™ â³Â³ç|äÿ³å¶|äà¤|¤|ë| ~³}|#|ë|äÓ }|å“}|äâ|Ïç³.;DataSource=MemberName;LockEdit=True 
+Prop4=Prompt=}|ç|}|Øë| °‘ç|;PropType=Editable;DescTitle=Member;Description=“ÿ|À, ¤|ä‘ç|Ø¤|ä, ðšç|¤á  ç³å¾|Ì ¸¾|ä¤|¹çá#|#|ë|äÓ }|å“}|äâ|Ïç³.;DataSource=MemberType;LockEdit=True;DisplayType=List;ListData=“ÿ|À ¸¾|ä¤|¹çá#|,ç³å¾|Ì ¸¾|ä¤|¹çá#|,¤|ä‘ç|Ø¤|ä ¸¾|ä¤|¹çá#| 
+Prop6=Prompt=ÂáÙ¤|ä;PropType=Editable;DescTitle=ÂáÙ¤|ä;Description=‡°äãë|ä ò#|ä¤| ÂáÙ¤|ä¤|ë|äÓ ë|¤|äå¡µ;DataSource=Place 
+
+Prop5=Prompt=‡°äãë|ä °¤|#|;PropType=Heading;SubITems=4 
+Prop6=Prompt=ú× ý³ã}á…ä|äç| ‡°äãë|ä;PropType=Editable;DescTitle=ú× ý³ã}á…ä|ä;Description=ú× ý³ã}á…ä|ä ¤|ºá¾|ä¤| ‡°äã¢ë| °µÏ×‚¤|ë|äÓ ë|¤|äå¡µ;DataSource=DryLand 
+Prop7=Prompt=¢ã#á¤|#³ ‡°äãë|ä;PropType=Editable;DescTitle=¢ã#á¤|#³;Description=¢ã#á¤|#³ò#|â|ÿ|À ‡°äã¢ë| °µÏ×‚ ë|¤|äå¡µ.;DataSource=WetLand 
+Prop8=Prompt=ú× ý³ã}á…ä|äç| ñçá…ä|ä;PropType=Editable;DescTitle=ñçá…ä|ä;Description=ú× ý³ã}á…ä|ä¡…ç| •#|ä¤| ñçá…ä|ä¤|ë|äÓ ë|¤|äå¡µ;DataSource=DryIncome 
+Prop9=Prompt=¢ã#á¤|#³ ñçá…ä|ä;PropType=Editable;DescTitle=ñçá…ä|ä;Description=¢ã#á¤|#³¬ä…ç| •#|â|ÿ|À ñçá…ä|ä¤|ë|äÓ ë|¤|äå¡µ;DataSource=WetIncome 
+Prop10=Prompt=ýá† •ßÌ;PropType=Editable;DescTitle=ýá† •ßÌ;Description=ó }á™ç| Ááâ³¬ä…ç| •#|ý³ãÿáç| •ßÌ ~|×¤|ë|äÓ â³åã«}|äâ|Ïç³;DataSource=InterestBalance 
+Prop11=Prompt=•#|â|ÿ|À¤|èÂ|¶|ä;PropType=Editable;DescTitle=òâ|#³ •#|â|ÿ|À¤|èÂ|¶|ä;Description=ÂáÙ~|ÿ|#³…ç| •#|â|ÿ|À òâ|#³ ýá† (°¤³ä, ABN ‘¦);DataSource=Receivable;DisplayType=Browse;LockEdit=True 

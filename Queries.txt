@@ -1,0 +1,20 @@
+Write theinformation to be collected by  Society
+and queries to be done at society
+
+1) Asset Stament
+Account No: this directs to which a)KCC Account b) Share Account No c)Any other account No
+    Each Member will have only one KCC or Share account, Here for different account no are there for each assett
+
+Whether Pump set details are for his all lands, Are only for the particular survey No
+	Now I assumed for the particular survey No
+Ploguh Details (ÊÑ–ÐÔÀÐÏ ÀÐ¦Ñ¯·Ð ¾°ÐÖÁÔ)
+  Where it to be provide for each survey No or for all
+ 	Now I assumed for the particular survey No
+'Deatils a)By Rain b)by Well c) by tank/Canal d) by River
+
+Other Details --> Whther these dwtails for each survey No orfor whole
+  Number of wells
+  Number of pupset
+
+
+

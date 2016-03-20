@@ -1,0 +1,321 @@
+ToolTab(
+	Caption(#³ã¤|èÂ|¶|ä)
+	Alignment(Top)
+	Button(
+	  	Label(
+	  		caption(ô¹âá…ä|ä Ááâ³)
+	  	)
+		Icon(111)
+		Key(SBACC)
+	)
+	Button(
+		Label(
+			caption(¨á®Ï Ááâ³Â|¶|ä)
+		)
+		Icon(112)
+		Key(CAAcc)
+	)
+	Button(
+		Label(
+		caption(¤|ääç|Ñâ|ä ‹#³ã¤|èÂ|¶|ä)
+		)
+		Icon(113)
+		Key(FDACC)
+	)
+	Button(
+		Label(
+		caption(ñ¤|þ‚â| ‹#³ã¤|èÂ|¶|ä)
+		)
+		Icon(114)
+		Key(RDACC)
+	)
+	Button(
+		Label(
+		caption(¦Äê  ‹#³ã¤|èÂ|¶|ä)
+		)
+		Icon(103)
+		Key(PDACC)
+	)
+	Button(
+		Label(
+		caption(}|Û }|~á…ä|ä Â|ä…í|è)
+		)
+		Icon(136)
+		Key(SHG)
+	)
+	Button(
+		Label(
+		caption(¢Â|‚¤|äë|)
+		)
+		Icon(107)
+		Key(EXIT)
+	)
+)
+Tooltab(
+	Caption(}á™Â|¶|ä)
+	Alignment(Bottom)
+	Button(
+		Label(
+		caption(}|ç|}|Ø#|ä)
+		)
+		Icon(121)
+		Key(Members)
+	)
+	Button(
+		Label(
+		Caption(#³ã¤|×© }á™)
+		)
+		Icon(115)
+		Key(DepLoans)
+	)
+	Button(
+		Label(
+		Caption(†}áë| ÿ³ÙßŠ ÿá¾|‚)
+		)
+		Icon(113)
+		Key(KCC)
+	)
+	Button(
+		Label(
+		caption(}á™ç| ¤|Ø¤|~á#|)
+		)
+		Icon(119)
+		Key(LNTRANS)
+	)
+	Button(
+		Label(
+		caption(}á™ Ááâ³Â|¶|ä)
+		)
+		Icon(116)
+		Key(LNACCOUNT)
+	)
+	Button(
+		Label(
+		caption(}á™ çáÒ§³Â|¶|ä)
+		)
+		Icon(120)
+		Key(LNREPORTS)
+	)
+	Button(
+		Label(
+		Caption(}á™ç| ë|¤|äåë³)
+		)
+		Icon(122)
+		Key(LNCREATE)
+	)
+)
+Tooltab(
+	Caption(¤áØíá#|)
+	Alignment(Bottom)
+	Button(
+		Label(
+		caption(¤áØíá« ÂáÙ~|ÿ|)
+		)
+		Icon(141)
+		KEY(TradeCust)
+	)
+	Button(
+		Label(
+		caption(¤áØíá« ¤|}|äÏÂ|¶|ä)
+		)
+		Icon(162)
+		KEY(Product)
+	)
+	Button(
+		Label(
+		caption(Ò«ã¡)
+		)
+		Icon(164)
+		Key(Purchase)
+	)
+	Button(
+		Label(
+		caption(°†Ù)
+		)
+		Icon(163)
+		Key(Sales)
+	)
+	Button(
+		Label(
+		caption(#|²ã¡)
+		)
+		Icon(169)
+		Key(Invoice)
+	)
+	Button(
+		Label(
+		caption(çá}áÏë|ä ¤|Âá‚¤|¿³)
+		)
+		Icon(165)
+		Key(Transfer)
+	)
+    	Button(
+	        	Label(
+            			caption(çá}áÏë|ä çáÒ§³Â|¶|ä)
+       		 )
+        		Icon(118)
+        		KEY(StockRep)
+    	)
+	Button(
+		Label(
+		caption(¤|Ø¤|~á« í|þÙÿ³)
+		)
+		Icon(131)
+		KEY(TRAcc)
+	)
+)
+Tooltab(
+	Caption(çáÒ§³Â|¶|ä)
+	Alignment(Bottom)
+	Button(
+		Label(
+		caption(§á‘ý|-~á¢ í|þÙÿ³)
+		)
+		Icon(109)
+		Key(PLACC)
+	)
+	Button(
+		Label(
+		caption(‡¤|ºá - Ò¨|ä‚ í|þÙÿ³)
+		)
+		Icon(104)
+		Key(DebitCredit)
+	)
+	Button(
+		Label(
+		caption(ŠÙ…ä|ä™ ýáØ§³ë|Þ) 
+		)
+		ICON(133)
+		Key(TRIALBALANCE)
+	)
+	Button(
+		Label(
+		caption(ð¾á¤³ í|þÙÿ³)
+		)
+		ICON(132)
+		Key(BALANCESHEET)
+	)
+	Button(
+		Label(
+			caption(¡ë|¤|¸ í|è}|Ïÿ|)
+		)
+		ICON(135)
+		Key(DailyBook)
+	)
+	Button(
+		Label(
+		caption(òâ|#³ çáÒ§³Â|¶|ä)
+		)
+		Icon(134)
+		Key(DDC)
+	)
+	Button(
+		Label (
+			caption(}|¤|‚ }áçá#|× í|þÙÿ³)
+		)
+		Icon(123)
+		Key(GenLedger)
+	)
+	Button(
+		Label (
+		caption(‡¤|ºá ”³åãœí|¤á« í|þÙÿ³)
+		)
+		Icon(125)
+		Key(DrTrans)
+	)
+	Button(
+		Label (
+		caption(Ò¨|ä‚ ”³åãœí|¤á« í|þÙÿ³)
+		)
+		Icon(126)
+		Key(CrTrans)
+	)
+	Button(
+		Label (
+		caption(ýáØ§³¢Þ…Â|)
+		)
+		Icon(123)
+		Key(Balance)
+	)
+)
+Tooltab(
+	Caption(òâ|#³)
+	Alignment(Bottom)
+	Button(
+		Label(
+		caption(ÂáÙ~|ÿ| ýá† °¤|#|)
+		)
+		Icon(123)
+		Key(CustInfo)
+	)
+	Button(
+		Label(
+		caption(~|ä¾|äÿ|ä)
+		)
+		Bitmap(144)
+		Key(Search)
+	)
+	Button(
+		Label(
+			caption(µ•Ö…¡ ¢¤|‚~|¿³)
+		)
+		Icon(117)
+		Key(USERS)
+	)
+	Button(
+		Label(
+			caption(ýáØ…ÿ» Ááâ³Â|¶|ä)
+		)
+		Icon(142)
+		Key(BANKACC)
+	)
+	Button(
+		Label(
+			caption(}|}³Ôë|Þ Ááâ³)
+		)
+		Icon(167)
+		Key(SuspACC)
+	)
+	Button(
+		Label(
+			caption(~³å…çá×©ÿ³ ¤|Ø¤|~á#|)
+		)
+		Icon(110)
+		Key(Contra)
+	)
+	Button(
+		Label(
+			caption(†Ú…ä|ä«…Â»)
+		)
+		BITMAP(119)
+		Key(Clearing)
+	)	  
+	Button(
+		Label(
+		caption(òâ|#³ ¤|ºá¸þ -Utils)
+		)
+		ICON(146)
+		Key(Utils)
+	)
+	Button(
+		Label(
+		caption(}|…}³Ë…ä|ä ~³}|#|ä)
+		)
+		ICON(112)
+		Key(BankName)
+	)
+	Button(
+		Label(
+		caption(}|~á…ä|ä)
+		)
+		Bitmap(143)
+		Key(Help)
+	)
+	Button(
+		Label(
+		caption(ÿ|ä«â|ä)
+		)
+		Bitmap(144)
+		Key(About)
+	)
+)

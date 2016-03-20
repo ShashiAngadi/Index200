@@ -1,0 +1,20 @@
+[LoanIssue]
+Prop1=Prompt=ÎÜÜÎÜÔ†Ü ·³Ü†Ü;PropType=Heading;SubITems=2
+Prop2=Prompt=ÎÜÜÎÜÔ†Ü ÎÜ•ÉäÔ;PropType=Editable;DescTitle=ÎÜÜÎÜÔ†Ü ÍÜ˜°¢Ü ÎÜ•ÉäÔ;Description=Îİ» –äÍäÜÅäáÌÜÛ³Ü ÎÜÜÎÜÔ†Ü ÎÜ•ÉäÔ•ˆÜ¢Ü’ ÎÜáåÿõÎÜ–Üøä.;DataSource=MemberId
+Prop3=Prompt=ÎÜÜÎÜÔ†Ü ÈäÎÜ†Ü;PropType=Editable;DescTitle=ÎÜÜÎÜÔ†Ü;Description=Îİ» –äÍäÜÅäáÌÜÛ®•ˆÜÎÜ³Ü ÎÜÜÎÜÔ†Ü ÈäÎÜ†Ü¢Ü’ ÎÜáåÿõÎÜ–Üøä.;DataSource=MemberName;LockEdit=True;DisplayType=Browse
+Prop4=Prompt=Îİ»Ü Éİ–ä•ˆÜ ÎÜ•ÉäÔ;PropType=Editable;DescTitle=Loan Number;Description=Îİ»Ü Éİ–ä•ˆÜ ÎÜ•ÉäÔ•ˆÜ¢Ü’ ÎÜáåÿõÎÜ–Üøä.;DataSource=LoanAccNo
+Prop5=Prompt=äß³Ü“Ş ·³Ü†ÜÍÜÌÜ;PropType=Heading;SubItems=4
+Prop6=Prompt=äß³Ü“Ş ÈäÎÜ†Ü;PropType=Editable;Description=äß³Ü“Ş•ˆÜ ·Ü³Ü¢Ü’ ÎÜáåÿõÎÜ–Üøä ;DescTitle=äß³Ü“Ş•ˆÜ ·Ü;DataSource=DepositType;DisplayType=List;ListData=1,2,3
+Prop7=Prompt=ÇÕ†Ü·¹‹ô äß³Ü“Ş ÎÜ•ÉäÔ;PropType=Editable;Description=Îİ»ÅİçÇÕ ÇÕ†Ü·¹‹ô ³ÜÎÜø³Ü¢Ü’ ÎÜáåÿõÎÜ–Üøä.;DescTitle=ÇÕ†Ü·¹‹ô ³ÜÎÜø.;DataSource=PledgeDeposit;DisplayType=Browse
+Prop7=Prompt=äß³Ü“Ş ÈäÎÜ†Ü;PropType=Editable;Description=äß³Ü“Ş•ˆÜ ·Ü³Ü¢Ü’ ÎÜáåÿõÎÜ–Üøä ;DescTitle=äß³Ü“Ş•ˆÜ ·Ü;DataSource=PledgeDeposit;DisplayType=List;ListData=1,2,3
+Prop8=Prompt=äß³Ü“Ş•ˆÜ ³äá–Üø;PropType=Editable;Description=ÇÕ†Ü·¹‹ô äß³Ü“ŞÍÜÌÜ ¿‹ô ³äá–Üø.;DescTitle=äß³Ü“Ş ³äá–Üø;DataSource=PledgeValue
+Prop9=Prompt=äß³Ü“ŞÍÜÌÜ ÎÜ•ÉäÔ;PropType=Editable;Description=ÇÕ†Ü·¹‹ô ¿‹ô äß³Ü“ŞÍÜÌÜ ÎÜ•ÉäÔ•ˆÜ¢Ü’ –äáß‰ÎÜ–Üøä.;DescTitle=Evaluator;äß³Ü“ŞÍÜÌÜ ÎÜ•ÉäÔ=NoOfDep;
+Prop10=Prompt=Îİ»Ü ·³Ü†Ü;PropType=Heading;SubItems=4
+Prop11=Prompt=Îİ»Ü ³äá–Üø;PropType=Editable;Description= ÅäáÜ³Ü Îİ»;DescTitle=Loan Amount;DataSource=LoanAmount
+Prop12=Prompt=Îİ» Åäá‹ô ¡¢İ•ÅÜ;PropType=Editable;Description=Îİ» Åäá‹ô ¡¢İ•ÅÜ ;DescTitle=Îİ» Åäá‹ô ¡¢İ•ÅÜ;DataSource=IssueDate;DisplayType=Browse;LockEdit=False
+Prop13=Prompt=Îİ»Ü Åäá¢Ü•ˆÜ ¡¢İ•ÅÜ;PropType=Editable;Description=Îİ»Ü Åäá¢ä•ˆÜ ¡¢İ•ÅÜ ;DescTitle=Åäá¢ä•ˆÜ ¡¢İ•ÅÜ;DataSource=DueDate;DisplayType=Browse
+Prop14=Prompt=®‚ö•ˆÜ ‘Ü†Ü;PropType=Editable;Description=£ Îİ»Åäç ™¢ÜÖ¹ÎÜ³Ü ®‚ö•ˆÜ ‘Ü†Ü.;DescTitle=®‚ö•ˆÜ ‘Ü†Ü;DataSource=InterestRate
+Prop15=Prompt=Ü•ÜÜ ®‚ö;PropType=Editable;Description=·ÌÜ•®³İÜ ³Ü†Ü©İ³Ü˜•ˆÜˆİÜ¾Õ ®‚ö•ˆÜÜ†Ü³Ü¢Ü’ ÎÜáåÿõÎÜ–Üøä.;DescTitle=Ü•ÜÜ ®‚ö•ˆÜ ‘Ü†Ü;DataSource=PenalInterestRate
+Prop16=Prompt= Ÿ–Ü†ä;PropType=Heading;SubItems=2
+Prop17=Prompt=ÃÜ†İ;PropType=Editable;Description=£ Îİ»Ü ®Íäê ÎÜ•ÏØ©Üø ·³Ü†Ü”ä;DescTitle=ÃÜ†İ;DataSource=Remarks;
+

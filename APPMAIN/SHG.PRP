@@ -1,0 +1,21 @@
+[Property Sheet]
+Prop1=Prompt=Group Details;PropType=Heading;SubItems=3
+Prop2=Prompt=Group number;PropType=Editable;Description=Identifies the number for self help group(SHG).;DescTitle=Group Number;DataSource=AccID;DisplayType=Browse
+Prop3=Prompt=Group name;PropType=Editable;Description=Identifies the name of the group.;DescTitle=SHG  name;DisplayType=Browse;DataSource=AccName;LockEdit=True
+Prop4=Prompt=Inception date;PropType=Editable;Description=Identifies the formation date of the group.;DescTitle=Formation date;DisplayType=Browse;DataSource=CreateDate
+Prop5=Prompt=Member details;PropType=Heading;SubItems=4
+Prop6=Prompt=Total Members;PropType=Editable;Description=Identifies total number of members of the group.;DescTitle=Total members;DataSource=TotalMem;
+Prop7=Prompt=Female Members;PropType=Editable;Description=Identifies number of female members in the group.;DescTitle=Female members;DataSource=FemaleMem;
+Prop8=Prompt=SC/ST Members;PropType=Editable;Description=Identifies number of sc/st members in the group.;DescTitle=SC/ST members;DataSource=SCSTMem;
+Prop9=Prompt=Female SC/ST Members;PropType=Editable;Description=Identifies number of female SC/ST members in the group.;DescTitle=Female &SCST members;DataSource=FemaleSCSTMem;
+Prop10=Prompt=Other details;PropType=Heading;SubItems=4
+Prop11=Prompt=Contact person;PropType=Editable;Description=Identifies responsible person of the group;DescTitle=Group Leader;DataSource=Contact
+Prop12=Prompt=Weekly meeting day;PropType=Editable;DescTitle=Meeting day;Description=Identifies the on which day weekly meeting will held;Datasource=MeetDay;LockEdit=True;DisplayType=List;ListData=Sunday,Monday,Tuesday,Wednsday,ThursDay,Friday,Saturday
+Prop13=Prompt=Weekly meeting place;PropType=Editable;DescTitle=Meeting place;Description=Identifies the place, where weekly meeting will held;Datasource=MeetPlace;LockEdit=False
+Prop14=Prompt=SH Group gender;PropType=Editable;DescTitle=Gender of group;Description=Identifies the whether group formaed by females or not.;DataSource=Gender;LockEdit=True;DisplayType=List;ListData=Female;Male;General
+Prop15=Prompt=SH Group place;PropType=Editable;DescTitle=Place of SHG;Description=Identifies the place of the self help group.;DataSource=Place;DisplayType=List;ListData= ,Home town;LockEdit=True
+Prop16=Prompt=SH Group caste;PropType=Editable;DescTitle=Caste of group;Description=Identifies the Caste, if all mebers belongs to one caste.;DataSource=Caste;DisplayType=List;ListData=Indian,NRI;LockEdit=True
+Prop17=Prompt=Account details;PropType=Heading;SubItems=3
+Prop18=Prompt=SB account No;PropType=Editable;DescTitle=Savings account number;Description=Identifies the savings account number of the group.;DataSource=SBAccNum;LockEdit=True
+Prop19=Prompt=Loan Account no;PropType=Editable;DescTitle=Loan account number;Description=Identifies the loan account number if group has any loan.;DataSource=LoanAccNum;LockEdit=True
+Prop20=Prompt=Remarks;PropType=Editable;DescTitle=Remarks;Description=key in any other details of the SHG.;DataSource=Remarks

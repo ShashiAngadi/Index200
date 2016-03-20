@@ -1,0 +1,28 @@
+[SBSetup]
+MinimumBalance=500
+
+[Particulars]
+Key0=Apple
+Key1=By Cheque
+Key2=iiii
+Key3=By dsf
+Key4=By Interest
+Key5=shfdhgsfdghfdsgfdsgs
+
+[Property Sheet]
+Prop1=Prompt=Account Holder;PropType=Heading;SubItems=2
+Prop2=Prompt=Account Number;PropType=Editable;Description=Identifies the Account number of the account holder.;DescTitle=Account Holder;DataSource=AccID;DisplayType=Browse
+Prop3=Prompt=Account holder name;LockEdit=True;PropType=Editable;Description=Identifies the name of the account holder.;DescTitle=Account holder name;DisplayType=Browse;DataSource=AccName
+Prop4=Prompt=Nominee;PropType=Heading;SubItems=3
+Prop5=Prompt=Name;PropType=Editable;Description=Identifies the name of the nominee.;DescTitle=Nominee name;DataSource=NomineeName;
+Prop6=Prompt=Age;PropType=Editable;Description=Identifies the age of the nominee.;DescTitle=Age;DataSource=NomineeAge
+Prop7=Prompt=Relationship;PropType=Editable;LockEdit=True;Description=Identifies the relationship of the nominee with respect to the Account holder.;DescTitle=Relationship;DataSource=NomineeRelation;DisplayType=List;ListData=,Mother,Father,Brother,Sister,Wife,Husband,Son,Daughter
+Prop8=Prompt=Introducer;PropType=Heading;SubItems=2;
+Prop9=Prompt=Account number;PropType=Editable;Description=Identifies the account number of the Introducer.;DescTitle=Introducer account number.;DataSource=IntroducerID;DisplayType=Browse
+Prop10=Prompt=Name;PropType=Editable;DescTitle=Introducer name;Description=Identifies the name of the introducer.;Datasource=IntroducerName;LockEdit=True
+Prop11=Prompt=Ledger details;PropType=Heading;SubItems=3
+Prop12=Prompt=Ledger number;PropType=Editable;DescTitle=Ledger number;Description=Identifies the ledger number for this account.;DataSource=LedgerNo
+Prop13=Prompt=Folio number;PropType=Editable;DescTitle=Folio number;Description=Identifies the folio number for this account.;DataSource=FolioNo
+Prop14=Prompt=Creation date;PropType=Editable;DescTitle=Creation date;Description=Identifies the date on which this account was created.;DataSource=CreateDate
+Prop15=Prompt=Notify on maturity;PropType=Editable;DescTitle=Notify on maturity;Description=Indicates that this account holder has to be intimated, when the deposit matures.;DisplayType=Boolean
+

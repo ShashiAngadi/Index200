@@ -1,0 +1,34 @@
+[Property Sheet] 
+Prop1=Prompt=ֱבג³…ה|ה °₪|#|;PropType=Heading;SubItems=2 
+Prop2=Prompt=ֱבג³ }|…ֱ³״;PropType=Editable;Description=ֱבג³…ה|ה }|…ֱ³״…ה|הכ|ה׃ }|ו“}|הג|ֿח³.;DescTitle=ֱבג³חב#|כ| °₪|#|;DataSource=AccID;DisplayType=Browse 
+Prop3=Prompt=ֱבג³חב#|כ| ~³}|#|ה;LockEdit=True;PropType=Editable;Description=ֱבג³חב#|כ| ~³}|#|כ|ה׃ }|ו“}|הג|ֿח³.;DescTitle=ֱבג³חב#|כ| ~³}|#|ה;DisplayType=Browse;DataSource=AccName 
+Prop4=Prompt=כב₪|ה ¢ח³‚ד²ג|;PropType=Heading;SubItems=3 
+Prop5=Prompt=~³}|#|ה;PropType=Editable;Description=כב₪|ה ¢ח³‚ד²ג|כ| ~³}|#|כ|ה׃ }|ו“}|הג|ֿח³;DescTitle=כב₪|ה ¢ח³‚ד{|כ|;DataSource=NomineeName; 
+Prop6=Prompt=₪|…ה|ה}|הÞ;PropType=Editable;Description=כב₪|ה ¢ח³‚ד²ג|כ| ₪|…ה|ה}|Þכ|ה׃ }|ו“}|הג|ֿח³.;DescTitle=₪|…ה|ה}|הÞ;DataSource=NomineeAge 
+Prop7=Prompt=}|…•…ח|;PropType=Editable;LockEdit=True;Description=ֱבג³חב#|כ³ו…¡ֲ³ כב₪|ה¢ח³‚ד²ג|כ| }|…•…ח|₪|כ|ה׃ }|ו“}|הג|ֿח³;DescTitle=}|…•…‘ח|;DataSource=NomineeRelation;DisplayType=List;ListData=גב¬ה,ג|…ח³,}|~³ודח|#|,}|~³ודח|«,ם|‏,ם|‏׃,₪|הֲ|,₪|הֲ|¶|ה,עג|#³ 
+Prop8=Prompt=‡…› ֱבג³חב#|#|ה;PropType=Heading;SubItems=1; 
+Prop9=Prompt=®}|Ê ...;PropType=Editable;Description=‡…› ֱבג³…ה|ה פ¹ח| ֱבג³חב#|#|כ|ה׃ }|ו“}|הג|ֿח³.;DescTitle=‡…› ֱבג³חב#|#|ה;DisplayType=Browse;DataSource=JointHolder 
+Prop10=Prompt=ם|«¨|¬ה}|ה₪|₪|#|ה;PropType=Heading;SubItems=2; 
+Prop11=Prompt=ֱבג³ }|…ֱ³״;PropType=Editable;Description=ם|«¨|¬ה}|ה₪|₪|#| ֱבג³ }|…ֱ³״…ה|הכ|ה׃ }|ו“}|הג|ֿח³.;DescTitle=ם|«¨|¬ה}|ה₪|₪|#| ֱבג³ }|…ֱ³י.;DataSource=IntroducerID 
+Prop12=Prompt=~³}|#|ה;PropType=Editable;DescTitle=ם|«¨|¬ה}|ה₪|₪|#| ~³}|#|ה;Description=ם|«¨|¬ה}|ה₪|₪|#| ~³}|#|כ|ה׃ }|ו“}|הג|ֿח³..;Datasource=IntroducerName;LockEdit=True;DisplayType=Browse 
+Prop13=Prompt=§³¾|ַ#| }|…ֱ³״;PropType=Heading;SubItems=3 
+Prop14=Prompt=§³¾|ַ#| }|…ֱ³״;PropType=Editable;DescTitle=§³¾|ַ#| }|…ֱ³״;Description=§³¾|ַ#| }|…ֱ³״…ה|הכ|ה׃ }|ו“}|הג|ֿח³.;DataSource=LedgerNo 
+Prop15=Prompt=‘ם³’ד®—³ו }|…ֱ³״;PropType=Editable;DescTitle=‘ם³’ד®—³ו }|…ֱ³״;Description=ֱבג³…ה|ה ‘ם³’ד®—³ו }|…ׂ״…ה|הכ|ה׃ }|ו“}|הג|ֿח³.;DataSource=FolioNo 
+Prop16=Prompt=ֱבג³ ג³#³…ה|הה₪| ¡כב…ÿ|;PropType=Editable;DescTitle=¡כב…ÿ|;Description=ֱבג³ ג³#³…ה|הה₪| ¡כב…ÿ|₪|כ|ה׃ }|ו“}|הג|ֿח³.;DataSource=CreateDate 
+Prop17=Prompt=ֱבג³…ה|ה ֲ|הÙם»;PropType=Editable;DescTitle=ֱבג³…ה|ה ֲ|הÙם»;Description=ף ֱבג³…ה|הה …ה|÷ב₪| ֲ|ה…¦ֲ³ }³ד#|הג|ֿח³ ק…•הח|כ|ה׃ }|ו“}|הג|ֿח³;DataSource=AccGroup;DisplayType=List;DataList=}ב₪|÷בכ|״ 
+Prop18=Prompt=}|ִֿג|₪בִ#|ה₪| ֱבג³;PropType=Editable;DescTitle=}|ִֿג|₪בִ#|ה₪| ֱבג³;Description=עח|ה ֱבג³…ה|הה }|ִֿג|₪בִח³—³ו נח|₪ב ע™Ú₪³’ד }|ו“}|הג|ֿח³.;DataSource=InOperative;DisplayType=Boolean 
+
+[Transactions] 
+Cols=6 
+ColWidth0=1770 
+ColWidth1=1020 
+ColWidth2=1020 
+ColWidth3=1020 
+ColWidth4=3465 
+ColWidth5=3030 
+
+[Balances] 
+Cols=2 
+ColWidth0=2115 
+ColWidth1=3135 
+

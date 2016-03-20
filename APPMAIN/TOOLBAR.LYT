@@ -1,0 +1,320 @@
+ToolTab(
+    	Caption(Deposits)
+    	Alignment(Top)
+    	Button(
+        		Label (
+            			caption(Savings Bank Accounts)
+        		)
+        		Icon(111)
+        		Key(SBACC)
+    	)
+    	Button(
+        		Label(
+            			caption(Current Accounts)
+        		)
+        		Icon(112)
+        		Key(CAAcc)
+    	)
+    	Button(
+        		Label(
+            			caption(  Fixed Deposit)
+        		)
+        		Icon(113)
+        		Key(FDACC)
+    	)
+    	Button(
+        		Label(
+            			caption(Recurring Deposits)
+        		)
+        		Icon(114)
+        		Key(RDACC)
+    	)
+    	Button(
+        		Label(
+            			caption(Pigmy Deposits)
+        		)
+        		Icon(103)
+        		Key(PDACC)
+    	)
+    	Button(
+        		Label(
+            			caption(Selp Help Group)
+        		)
+        		Icon(136)
+        		Key(SHG)
+    	)
+    	Button(
+        		Label(
+            			caption(Exit)
+        		)
+        		Icon(107)
+        		Key(EXIT)
+    	)
+)
+Tooltab(
+    	Caption(Loans)
+    	Alignment(Bottom)
+    	Button(
+        		Label(
+            			caption(Members)
+        		)
+        		Icon(121)
+        		Key(Members)
+    	)
+	Button(
+		Label(
+			Caption(Deposit Loans)
+		)
+		Icon(115)
+		Key(DepLoans)
+	)
+	Button(
+		Label(
+			Caption(Kisaan Credit Card)
+		)
+		Icon(113)
+		Key(KCC)
+	)
+	Button(
+		Label(
+			caption(Loan Transaction)
+		)
+		Icon(119)
+		Key(LNTRANS)
+	)
+	Button(
+		Label(
+			caption(Loan Accounts)
+		)
+		Icon(116)
+		Key(LNACCOUNT)
+	)
+	Button(
+		Label(
+			caption(Loan Reports)
+		)
+		Icon(120)
+		Key(LNREPORTS)
+	)
+	Button(
+		Label(
+			caption(Loan Scheme)
+		)
+		Icon(122)
+		Key(LNCREATE)
+	)
+)
+Tooltab(
+	Caption(Trading)
+	Alignment(Bottom)
+	Button(
+		Label(
+			caption(Trading Customer)
+		)
+		Icon(141)
+		KEY(TradeCust)
+	)
+	Button(
+		Label(
+			caption(Trading Items)
+		)
+		Icon(162)
+		KEY(Product)
+	)
+	Button(
+		Label(
+			caption(Purchase)
+		)
+		Icon(164)
+		Key(Purchase)
+	)
+	Button(
+		Label(
+			caption(Sales)
+		)
+		Icon(163)
+		Key(Sales)
+	)
+	Button(
+		Label(
+			caption(Invoice)
+		)
+		Icon(169)
+		Key(Invoice)
+	)
+	Button(
+		Label(
+			caption(Stock Transfer)
+		)
+		Icon(165)
+		Key(Transfer)
+	)
+    	Button(
+	        	Label(
+            			caption(StockReport)
+       		 )
+        		Icon(118)
+        		KEY(StockRep)
+    	)
+    	Button(
+	        	Label(
+            			caption(Trading Account)
+       		 )
+        		Icon(131)
+        		KEY(TRAcc)
+    	)
+)
+Tooltab(
+    	Caption(Reports)
+    	Alignment(Bottom)
+    	Button(
+        		Label(
+            			caption(Profit - Loss)
+        		)
+        		Icon(128)
+        		Key(PLACC)
+    	)    
+    	Button(
+        		Label(
+            			caption(Debit - Credit)
+        		)
+        		Icon(127)
+        		Key(DebitCredit)
+    	)
+	Button(
+		Label(
+			caption(Trial Balance)
+		)
+		ICON(133)
+		Key(TRIALBALANCE)
+	)
+    	Button(
+        		Label(
+            			caption(Balance Sheet)
+        		)
+        		Icon(134)
+        		Key(BALANCESHEET)
+    	)
+    	Button(
+        		Label(
+            			caption(Daily Ledger)
+        		)
+        		Icon(135)
+        		Key(DailyBook)
+    	)Button(
+        		Label (
+            		caption(Other Reports)
+        		)
+        		Icon(111)
+        		Key(DDC)
+    	)
+    	Button(
+        		Label (
+            			caption(General Ledger)
+        		)
+        		Icon(123)
+        		Key(GenLedger)
+    	)
+	Button(
+		Label (
+			caption(Credit declaration)
+		)
+		Icon(129)
+		Key(CrTrans)
+	)
+	Button(
+		Label (
+			caption(Debit declaration)
+		)
+		Icon(130)
+		Key(DrTrans)
+	)
+	Button(
+		Label (
+			caption(Balancing)
+		)
+		Icon(123)
+		Key(Balance)
+    	)
+)
+Tooltab(
+	Caption(Others)
+   	 Alignment(Bottom)
+   	Button(
+        		Label(
+            			caption(Customer Details)
+        		)
+        		Icon(123)
+	        	Key(CustInfo)
+    	)
+	Button(
+        		Label(
+            			caption(Search)
+        		)
+        		Bitmap(144)
+        		Key(Search)
+	)
+    	Button(
+        		Label(
+            			caption(User Management)
+        		)
+        		Icon(117)
+        		Key(USERS)
+    	)
+    	Button(
+        		Label(
+            			caption(Bank Accounts)
+        		)
+        		Icon(142)
+        		Key(BANKACC)
+    	)
+	Button(
+		Label(
+		caption(Suspence Account)
+		)
+		Icon(167)
+		Key(SuspACC)
+	)
+	Button(
+        		Label(
+            			caption(Contra Transaction)
+        		)
+        		Icon(110)
+        		Key(Contra)
+    	)
+    	Button(
+        		Label(
+            			caption(Clearing)
+        		)
+        		Bitmap(119)
+        		Key(Clearing)
+    	)
+	Button(
+		Label(
+			caption(Utilities)
+		)
+		ICON(112)
+		Key(Utils)
+	)
+	Button(
+		Label(
+			caption(Bank Name)
+		)
+		ICON(112)
+		Key(BankName)
+	)
+    	Button(
+        		Label(
+            			caption(Help)
+        		)
+        		Bitmap(143)
+        		Key(Help)
+    	)
+    	Button(
+        		Label(
+            			caption(About)
+        		)
+        		Bitmap(144)
+        		Key(About)
+    	)
+)

@@ -1,0 +1,21 @@
+[Property Sheet] 
+Prop1=Prompt=}|…ƒç| °¤|#|;PropType=Heading;SubItems=3 
+Prop2=Prompt=}|…ƒç| }|…Á³Ø;PropType=Editable;Description=}|…ƒ¤|ë|äÓ Â|äþ‚}|™ä ú…ç|ä ÿ|Ù¤|ä }|…Á³Ø.;DescTitle=}|…ƒç| }|…Á³Ø;DataSource=AccID;DisplayType=Browse 
+Prop3=Prompt=}|Û }| }|…ƒç| ~³}|#|ä;PropType=Editable;Description=}|Û }|~á…ä|ä }|…ƒç| ~³}|#|ë|äÓ ë|¤|äå¡µ.;DescTitle=}|…ƒç| ~³}|#|ä;DisplayType=Browse;DataSource=AccName;LockEdit=True 
+Prop4=Prompt=íáÙ#|…•ç| ¡ëá…ÿ|;PropType=Editable;Description=}|…ƒ¤|è íáÙ#|…•¤áç| ¡ëá…ÿ|¤|ë|äÓ ë|¤|äå¡µ.;DescTitle=íáÙ#|…• ¡ëá…ÿ|;DisplayType=Browse;DataSource=CreateDate 
+Prop5=Prompt=}|ç|}|Ø#| °¤|#|;PropType=Heading;SubItems=4 
+Prop6=Prompt=úŠäÊ }|ç|}|Ø#|ä;PropType=Editable;Description=}|…ƒç| úŠäÊ }|ç|}|Ø#| }|…Á³Ø…ä|äë|äÓ ë|¤|äå¡µ.;DescTitle=úŠäÊ }|ç|}|Ø }|…Á³Ø;DataSource=TotalMem; 
+Prop7=Prompt=µÏïÙã }|ç|}|Ø#|ä;PropType=Editable;Description=Identifies number of female members in the group.;DescTitle=µÏïÙã }|ç|}|Ø#| }|…Á³Ø;DataSource=FemaleMem; 
+Prop8=Prompt=í|«²œí|Ê }|ç|}|Ø#|ä;PropType=Editable;Description=}|…ƒç|®Ú#|ä¤| í|«²œí|Ê ´áþ/í|…Â|¾| }|ç|}|Ø#| }|…Á³Ø ë|¤|äå¡µ.;DescTitle=í|«²œí|Ê ´áþ/í|…Â|¾| }|ç|}|Ø }|…Á³Ø;DataSource=SCSTMem; 
+Prop9=Prompt=µÏïÙã í|«²œí|Ê  }|ç|}|Ø#| }|…Á³Ø;PropType=Editable;Description=}|…ƒç|®Ú#|ä¤| í|«²œí|Ê ´áþ/í|…Â|¾| µÏïÙã }|ç|}|Ø#| }|…Á³Ø ë|¤|äå¡µ..;DescTitle=í|«²œí|Ê ´áþ/í|…Â|¾|ç| µÏïÙã }|ç|}|Ø }|…Á³Ø;DataSource=FemaleSCSTMem; 
+Prop10=Prompt=òâ|#³ °¤|#|;PropType=Heading;SubItems=4 
+Prop11=Prompt=}|…í|‚†}|ä¤| ¤|Ø†Ï ~³}|#|ä;PropType=Editable;Description=Identifies responsible person of the group;DescTitle=Group Leader;DataSource=Contact 
+Prop12=Prompt=¤á#|ç| °ä›…Â| ¡ë|;PropType=Editable;DescTitle=Meeting day;Description=Identifies the on which day weekly meeting will held;Datasource=MeetDay;LockEdit=True;DisplayType=List;ListData=Sunday,Monday,Tuesday,Wednsday,ThursDay,Friday,Saturday 
+Prop13=Prompt=¤á#|ç| °ä›…Â| ë|¾³…ä|ää¤| }|Ð¶|;PropType=Editable;DescTitle=Meeting place;Description=Identifies the place, where weekly meeting will held;Datasource=MeetPlace;LockEdit=False 
+Prop14=Prompt=}|Û}|~á…ä|ä }|…ƒç| }|…•…ç|;PropType=Editable;DescTitle=Gender of group;Description=Identifies the whether group formaed by females or not.;DataSource=Gender;LockEdit=True;DisplayType=List;ListData=Female;Male;General 
+Prop15=Prompt=}|Û}|~á…ä|ä }|…ƒç| }|Ð¶|;PropType=Editable;DescTitle=Place of SHG;Description=Identifies the place of the self help group.;DataSource=Place;DisplayType=List;ListData= ,Home town;LockEdit=True 
+Prop16=Prompt=}|Û}|~á…ä|ä }|…ƒç| ´áþ;PropType=Editable;DescTitle=Caste of group;Description=Identifies the Caste, if all mebers belongs to one caste.;DataSource=Caste;DisplayType=List;ListData=Indian,NRI;LockEdit=True 
+Prop17=Prompt=Ááâ³…ä|ä °¤|#|;PropType=Heading;SubItems=3 
+Prop18=Prompt=ô¹âá…ä|ä Ááâ³…ä|ä }|…Á³Ø;PropType=Editable;DescTitle=Savings account number;Description=Identifies the savings account number of the group.;DataSource=SBAccNum;LockEdit=True 
+Prop19=Prompt=}á™ Ááâ³…ä|ä }|…Á³Ø;PropType=Editable;DescTitle=Loan account number;Description=Identifies the loan account number if group has any loan.;DataSource=LoanAccNum;LockEdit=True 
+Prop20=Prompt=Remarks;PropType=Editable;DescTitle=Remarks;Description=key in any other details of the SHG.;DataSource=Remarks 

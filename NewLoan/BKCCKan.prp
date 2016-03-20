@@ -1,0 +1,29 @@
+[LoanIssue]
+Prop1=Prompt=ÊÐ·ÐÊÐô¹Ð ÁÀÐ¤Ð;PropType=Heading;SubITems=2
+Prop2=Prompt=ÊÑÃ·Ð ”Ñ³Ù ÊÐ”Ùô;PropType=Editable;DescTitle=ÊÑÃ ”Ñ³Ù ÊÐ”Ùô;Description=ÊÑÃ·Ð ”Ñ³Ù¦ÐÔ ÊÐ”Ùô¦ÐÔ¹ÐÔî ¹ÐÀÐÔÖ¸Ë.;DataSource=AccNum
+Prop3=Prompt=ÊÐ·ÐÊÐô¹Ð ÆÙÓ¤ÐÔ ÊÐ”Ùô;PropType=Editable;DescTitle=ÊÐ·ÐÊÐô ÊÐ”Ùô;Description=ÊÑÃ ³Ù–Ù·ÐÔ‘ÙÖÎÐÔüÀÐÀÐ¹Ð ÊÐ·ÐÊÐô ÊÐ”Ùô¦ÐÔ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DisplayType=Browse;DataSource=MemberID
+Prop4=Prompt=ÊÑÃ–Ñ¤Ð¹Ð ÌÙÊÐ¤ÐÔ;PropType=Editable;DescTitle=Member;Description=ÊÑÃ ³Ù–Ù·ÐÔ‘ÙÖÎÐÔüÀÐÀÐ¹Ð ÌÙÊÐ¤Ð¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DataSource=MemberName;LockEdit=True
+Prop5=Prompt=ÊÐ·ÐÊÐô¹Ð Á·°Ð;PropType=Editable;DescTitle=Member;Description=œ‘ÐÜ, ÀÐÔ·°ÐôÀÐÔ, ƒµ°ÐÀÑ ·ÙÖ®Ðç Í®ÐÔÀÐÏ·Ñ¤Ð¤Ð¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DataSource=MemberType;LockEdit=True;DisplayType=List;ListData=œ‘ÐÜ Í®ÐÔÀÐÏ·Ñ¤Ð,ÀÐÔ·°ÐôÀÐÔ Í®ÐÔÀÐÏ·Ñ¤Ð,·ÙÖ®Ðç Í®ÐÔÀÐÏ·Ñ¤Ð
+
+Prop6=Prompt=‘Ñ®Ðþ ÁÀÐ¤Ð–ÐÎÐÔ;PropType=Heading;SubItems=4
+Prop7=Prompt=‘Ñ®Ðþ ‘ÙÖ©å ¸¹Ñ‘Ð;PropType=Editable;Description=ÊÐ·ÐÊÐô§–Ù ‘Ñ®Ðþ ‘ÙÖ©å ¸¹Ñ‘ÐÀÐ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=‘Ñ®Ðþ ¸¹Ñ‘Ð;DataSource=IssueDate;DisplayType=Browse
+Prop8=Prompt=ÊÑÃ·Ð –Ð§ÈÐæ ÁÔ´;PropType=Editable;Description=ÊÐ·ÐÊÐôº–Ù ‘ÙÖ®ÐÔÀÐ ÊÑÃ·Ð ³Ñ´÷‘Ð –Ð§ÈÐæ ÁÔ´¦ÐÔ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù;DescTitle=–Ð§ÈÐè ÊÑÃ ÁÔ´;DataSource=SanctionAmount
+Prop9=Prompt=»ÐõÊÐ‘Ðê ÀÐÈÐþ·Ð ÀÐÔ¡Ö§;PropType=Editable;Description=ÊÐ·ÐÊÐôº–Ù † ÀÐÈÐþ ‘ÙÖ®ÐÔÀÐ ÊÑÃ·Ð –Ð§ÈÐæ ÁÔ´¦ÐÔ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù;DescTitle=–Ð§ÈÐè ÊÑÃ ÁÔ´;DataSource=CurrentSanction
+Prop10=Prompt=ÌÙ›ÐÔàÀÐ§ ÀÐÔ¡Ö§;PropType=Editable;Description=ÊÐ·ÐÊÐôº–Ù † ÀÐÈÐþ·ÐÅö ÊÑÃ·Ð –Ð§ÈÐæ ÁÔ´—³Ð ÌÙœà¹Ð ÀÐÔ¡Ö§;DescTitle=ÌÙ›ÐÔàÀÐ§ ÀÐÔ¡Ö§;DataSource=ExtraSanction
+
+Prop11=Prompt=ÊÑÃ·Ð ÁÀÐ¤Ð–ÐÎÐÔ;PropType=Heading;SubItems=4
+Prop12=Prompt=ÊÑÃ ¹ÐÁÓ‘Ð§ÊÐÔÀÐ ¸¹Ñ‘Ð;PropType=Editable;Description=ÊÑÃ·Ð ÁÀÐ¤Ð–ÐÎÐ¹ÐÔî ¹ÐÁÓ‘Ð§ÊÐÔÀÐ ¸¹Ñ‘ÐÀÐ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=¹ÐÁÓ‘Ð¤Ð±;DataSource=RenewDate;DisplayType=Browse
+Prop13=Prompt=½¯ç ·Ð¤Ð (ÊÑÃ);PropType=Editable;Description=ÊÑÃ·Ð ½¯ç¦ÐÔ ·Ð¤ÐÀÐ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=½¯ç¦ÐÔ ·Ð¤Ð;DataSource=InterestRate
+Prop14=Prompt=·Ð®Ð·Ð ½¯ç ·Ð¤Ð;PropType=Editable;Description=ÊÑÃ·Ð ·Ð®Ð·Ð ½¯ç¦ÐÔ ·Ð¤ÐÀÐ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=½¯ç¦ÐÔ ·Ð¤Ð;DataSource=PenalInterestRate
+Prop15=Prompt=¬ÙÓÀÐ±Ò ½¯ç ·Ð¤Ð ;PropType=Editable;Description=BKCC ¬ÙÓÀÐ±Ò¦ÐÔ ½¯ç ·Ð¤ÐÀÐ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=¬ÙÓÀÐ±Ò ½¯ç;DataSource=DepositInterestRate
+
+Prop16=Prompt=¢ÑÁÔ¹ÐÔ ÁÀÐ¤Ð;PropType=Heading;SubItems=2
+Prop17=Prompt=ÀÙÖ·ÐÃ¹Ù ¢ÑÁÔÓ¹ÐÔ·Ñ¤Ð;PropType=Editable;Description=ÀÙÖ·ÐÃ¹Ù ¢ÑÁÔÓ¹ÐÔ·Ñ¤Ð ÌÙÊÐ¤Ð¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù;DescTitle=Guarantor1;DataSource=Guarantor1;DisplayType=Browse
+Prop18=Prompt=Š¤Ð®Ð¹Ù ¢ÑÁÔÓ¹ÐÔ·Ñ¤Ð;PropType=Editable;Description=Š¤Ð®Ð¹Ù ¢ÑÁÔÓ¹ÐÔ·Ñ¤Ð¹Ð ÌÙÊÐ¤Ð¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù;DescTitle=Guarantor2;DataSource=Guarantor2;DisplayType=Browse
+
+Prop19=Prompt=¡ÁÔÓ¹ÐÔ ÁÀÐ¤Ð;PropType=Heading;SubITems=4
+Prop20=Prompt=± ¾ÙÓÊÑ¦ÐÔ·Ð ¡ÁÔÓ¹ÐÔ;PropType=Editable;DescTitle=DryLand;Description=± ¾ÙÓÊÑ¦ÐÔ ÀÐ¦Ñ®ÐÔÀÐ ¡ÁÔÓº¹Ð ÁËê±þÀÐ¹ÐÔî ¹ÐÀÐÔÖ¸Ë;DataSource=DryLand
+Prop21=Prompt=ºÓ¤ÑÀÐ§ ¡ÁÔÓ¹ÐÔ;PropType=Editable;DescTitle=ºÓ¤ÑÀÐ§;Description=ºÓ¤ÑÀÐ§ …¤Ð³Ð‘ÐÜ ¡ÁÔÓº¹Ð ÁËê±þ ¹ÐÀÐÔÖ¸Ë.;DataSource=WetLand
+Prop22=Prompt=± ¾ÙÓÊÑ¦ÐÔ·Ð „·Ñ¦ÐÔ;PropType=Editable;DescTitle=„·Ñ¦ÐÔ;Description=± ¾ÙÓÊÑ¦ÐÔ¸·Ð ½¤ÐÔÀÐ „·Ñ¦ÐÔÀÐ¹ÐÔî ¹ÐÀÐÔÖ¸Ë;DataSource=DryIncome
+Prop23=Prompt=ºÓ¤ÑÀÐ§ „·Ñ¦ÐÔ;PropType=Editable;DescTitle=„·Ñ¦ÐÔ ;Description=ºÓ¤ÑÀÐ§ ÂÔ·Ð ½¤Ð³Ð‘ÐÜ „·Ñ¦ÐÔÀÐ¹ÐÔî ¹ÐÀÐÔÖ¸Ë;DataSource=WetIncome
+Prop24=Prompt=Interest Balance;PropType=Editable;DescTitle=¾Ñ’ ½¯ç;Description=† ÊÑÃ·Ð ”Ñ³ÙÂÔ·Ð ½¤Ð¾ÙÓ‘Ñ·Ð ½¯ç ÌÐ±ÀÐ¹ÐÔî ³ÙÖÓ§ÊÐÔ³Ðê·Ù;DataSource=InterestBalance

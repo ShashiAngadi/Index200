@@ -1,0 +1,191 @@
+[Root]
+Most Recent Package=Standard Setup Package 1
+
+
+[Package|Standard Setup Package 1|FixedDeposit]
+Icon1=FDAcc.exe
+Title1=FixedDeposit
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Standard Setup Package 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\FDInst
+
+[Package|Standard Setup Package 1|Configure DAO ISAMs]
+Applicable=Yes
+Excel=Yes
+Jet 2.x=Yes
+
+[Package|Standard Setup Package 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Standard Setup Package 1|Files Found]
+FDAcc.mdb=C:\WINDOWS\Desktop\FDAcc\FDAcc.mdb
+
+[Package|Standard Setup Package 1|Files Released]
+
+[Package|Standard Setup Package 1|Missing Dependency Information]
+C:\Program Files\Common Files\SYSTEM\ADO\MSJRO.DLL=
+C:\Program Files\Common Files\SYSTEM\ADO\MSADOX.DLL=
+C:\WINDOWS\SYSTEM\MSJRO.DLL=
+C:\WINDOWS\SYSTEM\MSADOX.DLL=
+C:\WINDOWS\SYSTEM\GRDPRINT.OCX=
+C:\WINDOWS\SYSTEM\CurrText.ocx=
+C:\WINDOWS\SYSTEM\kannada-nudi.dll=
+
+[Package|Standard Setup Package 1|Out-of-Date Dependency Information]
+C:\WINDOWS\SYSTEM\MSCAL.OCX=
+C:\WINDOWS\SYSTEM\MSFLXGRD.OCX=
+C:\WINDOWS\SYSTEM\COMCTL32.OCX=
+
+[Package|Standard Setup Package 1|Files Added]
+c:\index 2000 total new\distrib\fdacc.prp=
+c:\index 2000 total new\distrib\fdacckan.prp=
+fdacc.mdb=
+C:\Index 2000 Total New\FDACC\DepLnkan.prp=
+
+[Package|Standard Setup Package 1|Files Removed]
+c:\windows\system\comctl32.ocx=
+c:\program files\microsoft visual studio\vb98\wizards\pdwizard\redist\mdac_typ.exe=
+c:\windows\system\mscal.ocx=
+c:\windows\system\msflxgrd.ocx=
+c:\windows\system\msjro.dll=
+c:\windows\system\msvbvm60.dll=
+c:\windows\system\oleaut32.dll=
+c:\windows\system\olepro32.dll=
+c:\windows\system\asycfilt.dll=
+c:\windows\system\stdole2.tlb=
+c:\program files\microsoft visual studio\vb98\wizards\pdwizard\redist\comcat.dll=
+c:\program files\microsoft visual studio\vb98\wizards\pdwizard\redist\riched32.dll=
+c:\program files\common files\microsoft shared\dao\dao350.dll=
+
+[Package|Standard Setup Package 1|Files In Project]
+C:\WINDOWS\SYSTEM\msvbvm60.dll=No
+C:\WINDOWS\SYSTEM\OLEAUT32.DLL=No
+C:\WINDOWS\SYSTEM\OLEPRO32.DLL=No
+C:\WINDOWS\SYSTEM\asycfilt.dll=No
+C:\WINDOWS\SYSTEM\STDOLE2.TLB=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=No
+C:\WINDOWS\SYSTEM\win2isc.dll=Yes
+C:\WINDOWS\SYSTEM\MSFLXGRD.OCX=No
+C:\WINDOWS\SYSTEM\MSCAL.OCX=No
+C:\WINDOWS\SYSTEM\RICHTX32.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=No
+C:\WINDOWS\SYSTEM\COMCTL32.OCX=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\SYSTEM\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\Index 2000 Total New\DISTRIB\FDACC.PRP=Yes
+C:\Index 2000 Total New\DISTRIB\FDACCKAN.PRP=Yes
+C:\WINDOWS\SYSTEM\MSADOX.DLL=Yes
+C:\WINDOWS\SYSTEM\MSJRO.DLL=No
+C:\Index 2000 Total New\FDACC\FDAcc.exe=Yes
+C:\WINDOWS\SYSTEM\kannada-nudi.dll=Yes
+C:\Program Files\Common Files\Microsoft Shared\DAO\DAO350.DLL=No
+C:\WINDOWS\SYSTEM\MSJET35.DLL=Yes
+C:\WINDOWS\SYSTEM\MSJTER35.DLL=Yes
+C:\WINDOWS\SYSTEM\MSJINT35.DLL=Yes
+C:\WINDOWS\SYSTEM\VBAJET32.DLL=Yes
+C:\WINDOWS\SYSTEM\EXPSRV.DLL=Yes
+C:\WINDOWS\SYSTEM\MSRD2X35.DLL=Yes
+C:\WINDOWS\SYSTEM\MSREPL35.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MSVCRT40.DLL=Yes
+C:\WINDOWS\SYSTEM\VB5DB.DLL=Yes
+C:\WINDOWS\SYSTEM\CurrText.ocx=Yes
+C:\WINDOWS\SYSTEM\GRDPRINT.OCX=Yes
+C:\WINDOWS\Desktop\FDAcc\FDAcc.mdb=Yes
+C:\WINDOWS\SYSTEM\MSEXCL35.DLL=Yes
+C:\Index 2000 Total New\FDACC\DepLnkan.prp=Yes
+
+[Package|Standard Setup Package 1|Configure Registry Files]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Standard Setup Package 1|Install Locations]
+C:\Index 2000 Total New\FDACC\FDAcc.exe=$(AppPath)
+C:\WINDOWS\SYSTEM\msvbvm60.dll=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\win2isc.dll=$(AppPath)
+C:\Program Files\Common Files\SYSTEM\ADO\MSADOX.DLL=$(WinSysPath)
+C:\Program Files\Common Files\SYSTEM\ADO\MSJRO.DLL=$(WinSysPath)
+C:\WINDOWS\SYSTEM\MSFLXGRD.OCX=$(WinSysPath)
+C:\WINDOWS\SYSTEM\MSCAL.OCX=$(WinSysPath)
+C:\WINDOWS\SYSTEM\RICHTX32.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\COMCTL32.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\SYSTEM\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\Index 2000 Total New\DISTRIB\FDACC.PRP=$(AppPath)
+C:\Index 2000 Total New\DISTRIB\FDACCKAN.PRP=$(AppPath)
+C:\WINDOWS\Desktop\FDAcc.mdb=$(AppPath)
+C:\indx2000\FDACC\FDAcc.exe=$(AppPath)
+C:\WINDOWS\SYSTEM\kannada-nudi.dll=$(WinSysPath)
+C:\Program Files\Common Files\Microsoft Shared\DAO\DAO350.DLL=$(MSDAOPath)
+C:\WINDOWS\SYSTEM\MSJET35.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\MSJTER35.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\MSJINT35.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\VBAJET32.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\EXPSRV.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\MSRD2X35.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\MSREPL35.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MSVCRT40.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\SYSTEM\VB5DB.DLL=$(WinSysPath)
+C:\WINDOWS\SYSTEM\CurrText.ocx=$(WinSysPath)
+C:\WINDOWS\SYSTEM\GRDPRINT.OCX=$(WinSysPath)
+C:\WINDOWS\Desktop\FDAcc\FDAcc.mdb=$(AppPath)
+C:\WINDOWS\SYSTEM\MSADOX.DLL=$(WinSysPath)
+C:\WINDOWS\SYSTEM\MSEXCL35.DLL=$(WinSysPathSysFile)
+C:\Index 2000 Total New\FDACC\DepLnkan.prp=$(AppPath)
+
+[Package|Standard Setup Package 1|Configure Shared Files]
+Applicable=Yes
+C:\Index 2000 Total New\FDACC\FDAcc.exe=No
+C:\WINDOWS\SYSTEM\win2isc.dll=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=No
+C:\Index 2000 Total New\DISTRIB\FDACC.PRP=No
+C:\Index 2000 Total New\DISTRIB\FDACCKAN.PRP=No
+C:\WINDOWS\Desktop\FDAcc.mdb=No
+C:\indx2000\FDACC\FDAcc.exe=No
+C:\WINDOWS\Desktop\FDAcc\FDAcc.mdb=No
+C:\Index 2000 Total New\FDACC\DepLnkan.prp=No
+
+[Package|Standard Setup Package 1|Distribution]
+Type=multi
+Size=1.44 MB
+Title=Fixed Deposit & Loans
+
+[Package|Standard Setup Package 1|Package]
+PackageFolder=C:\FDInst
+ProjectFolder=C:\Index 2000 Total New\FDACC
+ServerSideCab=
+File1=C:\FDInst\setup.exe
+File2=C:\FDInst\Setup.Lst
+File3=C:\FDInst\FDAcc1.CAB
+File4=C:\FDInst\FDAcc2.CAB
+Handler1=PDWizard.FloppyDplySubWiz
+Handler2=PDWizard.FolderDplySubWiz
+Handler3=PDWizard.WebPostDplySubWiz
+
+[Package|Standard Setup Package 1|IconGroups]
+Group0=Index 2000
+PrivateGroup0=False
+Parent0=$(Programs)
+
+[Package|Standard Setup Package 1|Index 2000]
+Icon1=FDAcc.exe
+Title1=FixedDeposit
+StartIn1=$(AppPath)
+Key1=Icon1

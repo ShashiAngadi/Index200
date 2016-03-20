@@ -1,0 +1,41 @@
+[Property Sheet] 
+Prop1=Prompt=χ΄³…Ό» °¤|#|;PropType=Heading;SubItems=2 
+;Prop2=Prompt=χ΄³… }|…Α³Ψ;PropType=Editable;Description=χ΄³…Ό»Β³ ÿ³ε›Κ#|δ¤| }|…Α³Ψ;DescTitle=χ΄³…Ό» °¤|#| 
+Prop2=Prompt=χ΄³…Ό»λ| ~³}|#|δ;PropType=Editable;LockEdit=True;Description=χ΄³…Ό»λ| ~³}|#|λ|δΣ }|ε“}|δβ|Οη³;DescTitle=χ‡…λ| ~³}|#|δ;DisplayType=List;DataSource=AgentName 
+Prop3=Prompt=Ααβ³ηα#|;PropType=Heading;SubItems=2 
+Prop4=Prompt=Ααβ³…δ|δ }|…Α³Ψ;PropType=Editable;Description=Ααβ³…δ|δ }|…Α³Ψ…δ|δλ|δΣ }|ε“}|δβ|Οη³;DescTitle=Ααβ³…δ|δ }|…Α³Ψ;DataSource=AccId 
+Prop5=Prompt=Ααβ³ηα#|λ| ~³}|#|δ;PropType=Editable;Description=Ααβ³ηα#|λ| ~³}|#|λ|δΣ }|ε“}|δβ|Οη³;DescTitle=~³}|#|δ;DataSource=AccName;DisplayType=Browse 
+Prop6=Prompt=λα¤|δΆ‘η³‚γ²β|;PropType=Heading;SubItems=3 
+Prop7=Prompt=~³}|#|δ;PropType=Editable;Description=λα¤|δ Ά‘η³‚γ²β|λ| ~³}|#|λ|δΣ }|ε“}|δβ|Οη³.;DescTitle=λα¤|δΆ‘η³‚²β|λ| ~³}|#|δ;DataSource=NomineeName;DisplayType=Browse 
+Prop8=Prompt=¤|…δ|δ}|δή;PropType=Editable;Description=λα¤|δ Ά‘η³‚γ²β|λ| ¤|…δ|δ}|ήλ|δΣ }|ε“}|δβ|Οη³.;DescTitle=¤|…δ|δ}|δή;DataSource=NomineeAge 
+Prop9=Prompt=}|…•…‘η|;PropType=Editable;LockEdit=True;Description=Ααβ³ηα#|λ³ε…΅Β³ λα¤|δΆ‘η³‚γ²β|λ| }|…•…‘η|¤|λ|δΣ }|ε“}|δβ|η³.;DescTitle=}|…•…‘η|;DataSource=NomineeRelation;DisplayType=List;ListData=βα¬δ,β|…η³,}|~³εγη|#|,,}|~³εγη|«,ν|ώ,ν|ώΣ,¤|δΒ|,¤|δΒ|¶|δ,ςβ|#³ 
+Prop10=Prompt=¦Δκ ‹#³γ¤|Χ©;PropType=Heading;SubItems=4 
+Prop11=Prompt=¦Δκ λ|¤|δελ³;PropType=Editable;Description=¦Δκ…δ|δ λ|¤|δελ³…δ|δλ|δΣ }|ε“}|δβ|Οη³.;DescTitle=¦Δκ…δ|δ °ηαλ|;DataSource=PigmyType;DisplayType=List;ListData=΅λ|,¤α#|,να†έÿ|,ώ…Β|¶|δ,χ#|Ύ|δ ώ…Β|¶|δ,¤|δε#|δ ώ…Β|¶|δ 
+;΅λ|¤|Έ,}αν|ΟΈÿ|,να†έÿ|,¤|Ίαµÿ|,η³Ϋ¤|Ίαµÿ|,¤|Ίαµÿ| 
+Prop12=Prompt=¦Δκ ¤³εβ|Ο;PropType=Editable;Description=¦Δκ ¤³εβ|Ο¤|λ|δΣ }|ε“}|δβ|Οη³;DescTitle=¤³εβ|Ο;DataSource=PigmyAmount 
+Prop13=Prompt=¤|ΊαΨ¨|δ#αΒ|δ¤| ΅λα…ÿ|;PropType=Editable;Description=‹#³γ¤|Χ© ¤|ΊαΨ¨|δ#αΒ|δ¤| ΅λα…ÿ|¤|λ|δΣ }|ε“}|δβ|Οη³.;DescTitle=ν|ÿ|Ϋ¤αΒ|δ¤| ΅λα…ÿ|;DataSource=MaturityDate;DisPlayType=Browse 
+Prop14=Prompt=•ίΜ…δ|δ η|#|;PropType=Editable;Description=ύαΨ…ÿ| °΅}|δ¤| •ίΜ…δ|δ η|#|¤|λ|δΣ }|ε“}|δβ|Οη³.;DescTitle=•ίΜ…δ|δ ‘η|#|;DataSource=RateOfInterest 
+Prop15=Prompt=ν|«¨|¬δ}|δ¤|¤|#|δ;PropType=Heading;SubItems=2; 
+Prop16=Prompt=Ααβ³ }|…Α³Ψ;PropType=Editable;Description=ν|«¨|¬δ}|δ¤|¤|#| Ααβ³ }|…Α³Ψ…δ|δλ|δΣ }|ε“}|δβ|Οη³.;DescTitle=ν|«¨|¬δ}|δ¤|¤|#| Ααβ³ }|…Α³Ψ.;DataSource=IntroducerID;DisplayType=Browse 
+Prop17=Prompt=~³}|#|δ;PropType=Editable;DescTitle=ν|«¨|¬δ}|δ¤|¤|#| ~³}|#|δ;Description=ν|«¨|¬δ}|δ¤|¤|#| ~³}|#|λ|δΣ }|ε“}|δβ|Οη³.;Datasource=IntroducerName;LockEdit=True 
+Prop18=Prompt=§³Ύ|Η#| °¤|#|;PropType=Heading;SubItems=3 
+Prop19=Prompt=§³Ύ|Η#| }|…Α³Ψ;PropType=Editable;DescTitle=§³Ύ|Η#| }|…Α³Ψ;Description=σ Ααβ³…δ|δ §³Ύ|Η#» }|…Α³Ψ…δ|δλ|δΣ }|ε“}|δβ|Οη³.;DataSource=LedgerNo 
+Prop20=Prompt=ν³’γ®—³ε }|…Α³Ψ;PropType=Editable;DescTitle=ν³’γ®—³ε }|…Α³Ψ;Description=σ Ααβ³…δ|δ ν³’γ®—³ε }|…Α³Ψ…δ|δλ|δΣ }|ε“}|δβ|Οη³.;DataSource=FolioNo 
+Prop21=Prompt=Ααβ³ β³#³…δ|δδ¤| ΅λα…ÿ|;PropType=Editable;DescTitle=Ααβ³ β³#³…δ|δδ¤| ΅λα…ÿ|;Description=Ααβ³ ναΩ#|…‘ύ|¤αη| ΅λα…ÿ|¤|λ|δΣ }|ε“}|δβ|Οη³.;DataSource=CreateDate 
+Prop22=Prompt=Ααβ³…δ|δ Β|δΩν»;PropType=Editable;DescTitle=Ααβ³…δ|δ Β|δΩν»;Description=σ Ααβ³…δ|δδ …δ|Ία¤| Β|δ…¦Β³ }³γ#|δβ|Οη³ χ…•δη|λ|δΣ }|ε“}|δβ|Οη³;DataSource=AccGroup;DisplayType=List;DataList=}α¤|Ίαλ|Ψ 
+Prop23=Prompt=¤|ΊαΨ¨|δ«›…δ|ΊαηαΒ| }|ε“}|δ;PropType=Editable;DescTitle=¤|ΊαΨ¨|δ«› }|ε¨|λ³;Description=‹#³γ¤|Χ© ¤|ΊαΨ¨|δ#| ρηαΒ| Ααβ³ηα#|ΆΒ³ ώΉ}|™δ }|ε¨|λ³.;DisplayType=Boolean;DataSource=Notify 
+
+[Transactions] 
+:Cols=6 
+ColWidth0=1770 
+ColWidth1=1020 
+ColWidth2=1020 
+ColWidth3=1020 
+ColWidth4=3465 
+ColWidth5=3030 
+
+[Balances] 
+Cols=2 
+ColWidth0=2115 
+ColWidth1=3135 
+

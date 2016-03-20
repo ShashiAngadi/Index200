@@ -1,0 +1,14 @@
+[Language]
+Language=kannada
+1LanguageTool=NUDI
+LanguageTool=SAMHITA
+FontName=SUCHI-KAN-0850
+[DBPath]
+Path=C:\Projects\Index 2000 Total New\APPMAIN
+[CONFIG]
+NewReport=true
+FarmerType=true
+FarmerTypeName=Customer
+[FinYear]
+Year1=FromYear#01/04/2014,ToYear#31/03/2015,DBPath#WISDB1415
+Year2=FromYear#01/04/2015,ToYear#31/03/2016,DBPath#WISDB1516
