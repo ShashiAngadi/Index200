@@ -1,0 +1,234 @@
+Comparing files INDX2000.TAB and \INDEXT~1\APPMAIN\INDX2000.TAB
+***** INDX2000.TAB
+Table83=CloseStock
+Table84=Denomination
+Table85=DenoTrans
+
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+Table83=CloseStock
+
+*****
+
+***** INDX2000.TAB
+Field14=FieldName=UserID;FieldType=dbInteger
+Field15=FieldName=FieldName=AccGroupID;FieldType=Byte;Default=1
+Index1=IndexName=idxAccID;Fields=AccID;Primary=True;Unique=true
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+Field14=FieldName=UserID;FieldType=dbInteger
+Field15=FieldName=AccGroupID;FieldType=Byte
+Index1=IndexName=idxAccID;Fields=AccID;Primary=True;Unique=true
+*****
+
+***** INDX2000.TAB
+Field23=FieldName=LastIntDate;FieldType=DbDate
+Field24=FieldName=AccGroupID;FieldType=Byte;Default=1
+Index1=IndexName=idxAccId;Fields=AccID;Primary=True;Unique=True;IgnoreNulls=False
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+Field23=FieldName=LastIntDate;FieldType=DbDate
+Field24=FieldName=AccGroupID;FieldType=Byte;Default=1;Desc=This field identifies the group of the account.;New=True
+Index1=IndexName=idxAccId;Fields=AccID;Primary=True;Unique=True;IgnoreNulls=False
+*****
+
+***** INDX2000.TAB
+Field30=FieldName=Remarks;FieldType=dbText;FieldLength=150
+Field31=FieldName=AccGroupID;FieldType=Byte;Default=1
+Index1=IndexName=idxLoan;Fields=LoanID;Unique=true;Primary=True
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+Field30=FieldName=Remarks;FieldType=dbText;FieldLength=150
+Field31=FieldName=AccGroupID;FieldType=Byte;Default=1;Desc=This field identifies the group of the account.;New=True
+Index1=IndexName=idxLoan;Fields=LoanID;Unique=true;Primary=True
+*****
+
+***** INDX2000.TAB
+Field21=FieldName=UserId;FieldType=dbInteger
+Field22=FieldName=AccGroupID;FieldType=Byte;Default=1
+Index1=IndexName=idxAccId;Fields=AccID;Primary=True;Unique=True
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+Field21=FieldName=UserId;FieldType=dbInteger
+Field22=FieldName=AccGroupID;FieldType=Byte;Default=1;Desc=This field identifies the group of the account.;New=True
+Index1=IndexName=idxAccId;Fields=AccID;Primary=True;Unique=True
+*****
+
+***** INDX2000.TAB
+True
+Field17=FieldName=AccGroupID;FieldType=Byte;Default=1
+Field18=FieldName=LastPrintId;FieldType=Long;Default=1;Desc=This keeps transid of sbtrans upto where printing was done.;New=Tru
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+True
+Field17=FieldName=AccGroupID;FieldType=Byte;Default=1;Desc=This field identifies the group of the account.;New=True
+Field18=FieldName=LastPrintId;FieldType=Long;Default=1;Desc=This keeps transid of sbtrans upto where printing was done.;New=Tru
+*****
+
+***** INDX2000.TAB
+Field1=FieldName=TransID;FieldType=DbLong
+Field2=FieldName=TransDate;FieldType=DbDate
+Field3=FieldName=CustomerID;FieldType=dbLong
+Field4=FieldName=AccType;FieldType=dbInteger
+Field5=FieldName=AccId;FieldType=DbInteger
+Field6=FieldName=CustName;FieldType=DbText;Fieldlength=255
+Field7=FieldName=AccTransID;FieldType=DbInteger
+Field8=FieldName=TransType;FieldType=DbByte
+Field9=FieldName=Amount;FieldType=dbcurrency
+Field10=FieldName=Balance;FieldType=DbCurrency
+Field11=FieldName=UserID;FieldType=dbInteger
+Field12=FieldName=VoucherNo;FieldType=dbText;FieldLength=30
+Field13=FieldName=Cleared;FieldType=dbByte
+
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+Field1=FieldName=TransID;FieldType=DbLong
+Field2=FieldName=CustomerID;FieldType=dbLong
+Field3=FieldName=AccType;FieldType=dbInteger
+Field4=FieldName=AccId;FieldType=DbInteger
+Field5=FieldName=CustName;FieldType=DbText;Fieldlength=255
+Field6=FieldName=AccTransID;FieldType=DbInteger
+Field7=FieldName=TransType;FieldType=DbByte
+Field8=FieldName=Amount;FieldType=dbcurrency
+Field9=FieldName=Balance;FieldType=DbCurrency
+Field10=FieldName=UserID;FieldType=dbInteger
+Field11=FieldName=VoucherNo;FieldType=dbText;FieldLength=30
+Field12=FieldName=Cleared;FieldType=dbByte
+
+*****
+
+***** INDX2000.TAB
+
+[BankMaster]
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+
+
+[BankMaster]
+*****
+
+***** INDX2000.TAB
+Field1=FieldName=HeadID;FieldType=dbLong;Requred=True
+Field2=FieldName=InvoiceDate;FieldType=dbDate;Requred=True
+Field3=FieldName=InvoiceAmount;FieldType=dbCurrency;Requred=True
+Field4=FieldName=InvoiceNo;FieldType=dbText;FieldLength=100
+Field5=FieldName=InvoiceType;FieldType=dbByte
+Field6=FieldName=Redirected;FieldType=dbByte
+Field7=FieldName=RedirectHeadID;FieldType=dbLong
+Field8=FieldName=Trans_TransID;FieldType=dbLong
+Field9=FieldName=TransDate;FieldType=dbDate
+Field10=FieldName=TransID;FieldType=dbLong
+Field11=FieldName=VoucherType;FieldType=dbByte;Required=True
+Index1=IndexName=idxTrans;Fields=TransId;Primary=True;Unique=True
+Index2=IndexName=idxHead;Fields=HeadId
+
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+Field1=FieldName=HeadID;FieldType=dbLong;Requred=True
+Field2=FieldName=TransID;FieldType=dbLong
+Field3=FieldName=InvoiceNo;FieldType=dbText;FieldLength=100
+Field4=FieldName=InvoiceType;FieldType=dbByte
+Field5=FieldName=InvoiceDate;FieldType=dbDate;Requred=True
+Field6=FieldName=InvoiceAmount;FieldType=dbCurrency;Requred=True
+Field7=FieldName=TransDate;FieldType=dbDate
+Field8=FieldName=VoucherType;FieldType=dbByte;Required=True
+Field9=FieldName=Trans_TransID;FieldType=dbLong
+Field10=FieldName=Redirected;FieldType=dbByte
+Field11=FieldName=RedirectHeadID;FieldType=dbLong
+Index1=IndexName=idxHeadTrans;Fields=HeadId+TransId;Primary=True;Unique=True
+Index2=IndexName=idxTrans;Fields=TransId;Unique=True
+Index3=IndexName=idxHead;Fields=HeadId
+
+*****
+
+***** INDX2000.TAB
+[RelationMaster]
+Field1=FieldName=GodownID;FieldType=dbLong;Requred=True
+Field2=FieldName=GroupID;FieldType=dbLong;Requred=True
+Field3=FieldName=MRP;FieldType=dbCurrency
+Field4=FieldName=PriceChanged;FieldType=dbByte
+Field5=FieldName=ProductID;FieldType=dbLong;Requred=True
+Field6=FieldName=RelationID;FieldType=dbLong;Requred=True
+Field7=FieldName=SalesPrice;FieldType=dbCurrency
+Field8=FieldName=TradingPrice;FieldType=dbCurrency
+Field9=FieldName=UnitID;FieldType=dbLong;Required=True
+;Field10=FieldName=HeadID;FieldType=dbLong;Requred=True
+Index1=IndexName=idxRealtion;Fields=RelationId;Primary=True;Unique=True
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+[RelationMaster]
+Field1=FieldName=RelationID;FieldType=dbLong;Requred=True
+Field2=FieldName=GodownID;FieldType=dbLong;Requred=True
+Field3=FieldName=HeadID;FieldType=dbLong;Requred=True
+Field4=FieldName=GroupID;FieldType=dbLong;Requred=True
+Field5=FieldName=ProductID;FieldType=dbLong;Requred=True
+Field6=FieldName=UnitID;FieldType=dbLong;Required=True
+Field7=FieldName=TradingPrice;FieldType=dbCurrency
+Field8=FieldName=MRP;FieldType=dbCurrency
+Field9=FieldName=SalesPrice;FieldType=dbCurrency
+Field10=FieldName=PriceChanged;FieldType=dbByte
+Index1=IndexName=idxRealtion;Fields=RelationId;Primary=True;Unique=True
+*****
+
+***** INDX2000.TAB
+Field9=FieldName=VoucherType;FieldType=dbByte;Required=True
+Index1=IndexName=idxTrans;Fields=TransId;Primary=True;Unique=True
+Index2=IndexName=idxGodown;Fields=GodownId
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+Field9=FieldName=VoucherType;FieldType=dbByte;Required=True
+Index1=IndexName=idxHeadTrans;Fields=GodownId+HeadiD+TransId;Primary=True;Unique=True
+Index1=IndexName=idxTrans;Fields=TransId;Unique=True
+Index2=IndexName=idxGodown;Fields=GodownId
+*****
+
+***** INDX2000.TAB
+[Stock]
+Field1=FieldName=GodownID;FieldType=dbLong
+Field2=FieldName=PurOrSaleID;FieldType=dbLong
+Field3=FieldName=RelationID;FieldType=dbLong;Requred=True
+Field4=FieldName=TransID;FieldType=dbLong;Requred=True
+Field5=FieldName=Quantity;FieldType=dbdouble
+Field6=FieldName=TransDate;FieldType=dbDate
+Field7=FieldName=UnitPrice;FieldType=dbCurrency
+Field8=FieldName=VoucherType;FieldType=dbByte;Required=True
+Index1=IndexName=idxTrans;Fields=GodownId+RelationId+TransId;Primary=True;Unique=True
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+[Stock]
+Field1=FieldName=RelationID;FieldType=dbLong;Requred=True
+Field2=FieldName=GodownID;FieldType=dbLong
+Field3=FieldName=TransID;FieldType=dbLong;Requred=True
+Field4=FieldName=Quantity;FieldType=dbdouble
+Field5=FieldName=UnitPrice;FieldType=dbCurrency
+Field6=FieldName=VoucherType;FieldType=dbByte;Required=True
+Field7=FieldName=TransDate;FieldType=dbDate
+Field8=FieldName=PurOrSaleID;FieldType=dbLong
+Index1=IndexName=idxTrans;Fields=GodownId+RelationId+TransId;Primary=True;Unique=True
+*****
+
+***** INDX2000.TAB
+
+[Denomination]
+Field1=FieldName=OPDate;FieldType=dbDate
+Field2=FieldName=Rs1000;FieldType=dbLong
+Field3=FieldName=Rs500;FieldType=dbLong
+Field4=FieldName=Rs100;FieldType=dbLong
+Field5=FieldName=Rs50;FieldType=dbLong
+Field6=FieldName=Rs20;FieldType=dbLong
+Field7=FieldName=Rs10;FieldType=dbLong
+Field8=FieldName=Rs5;FieldType=dbLong
+Field9=FieldName=Rs2;FieldType=dbLong
+Field10=FieldName=Rs1;FieldType=dbLong
+Field11=FieldName=RsChange;FieldType=dbLong
+
+[DenoTrans]
+Field1=FieldName=AccHeadId;FieldType=dbLong
+Field2=FieldName=AccId;FieldType=dblong
+Field3=FieldName=TransType;FieldType=dbbyte
+Field4=FieldName=Rs1000;FieldType=dbLong
+Field5=FieldName=Rs500;FieldType=dbLong
+Field6=FieldName=Rs100;FieldType=dbLong
+Field7=FieldName=Rs50;FieldType=dbLong
+Field8=FieldName=Rs20;FieldType=dbLong
+Field9=FieldName=Rs10;FieldType=dbLong
+Field10=FieldName=Rs5;FieldType=dbLong
+Field11=FieldName=Rs2;FieldType=dbLong
+Field12=FieldName=Rs1;FieldType=dbLong
+Field13=FieldName=RsChange;FieldType=dbLong
+
+
+[Query]
+***** \INDEXT~1\APPMAIN\INDX2000.TAB
+
+[Query]
+*****
+

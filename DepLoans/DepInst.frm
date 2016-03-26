@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F166A15E-AA26-47C4-9C7F-A61A5BECEDFF}#2.0#0"; "CURRTEXT.OCX"
+Object = "{F166A15E-AA26-47C4-9C7F-A61A5BECEDFF}#2.0#0"; "CurrText.ocx"
 Begin VB.Form frmDepLoanInst 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Dposit Loan Payment"
@@ -36,6 +36,14 @@ Begin VB.Form frmDepLoanInst
       TabIndex        =   0
       Top             =   0
       Width           =   7575
+      Begin VB.ComboBox cmbSB 
+         Height          =   315
+         Left            =   120
+         TabIndex        =   25
+         Text            =   "Combo1"
+         Top             =   3360
+         Width           =   2655
+      End
       Begin VB.TextBox txtInterest 
          Height          =   315
          Left            =   2190
@@ -357,7 +365,7 @@ lblLessIntOnPrevLoan.Caption = GetResourceString(248)
 lblTotAmtIssued.Caption = GetResourceString(249)
 cmdAccept.Caption = GetResourceString(4)
 cmdCancel.Caption = GetResourceString(11)
-chkSb.Caption = GetResourceString(421, 271)
+Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271)
 lblMisc.Caption = GetResourceString(327)
 
 End Sub
@@ -366,12 +374,12 @@ Private Sub chkSb_Click()
 
 If m_LoanID = 0 Then Exit Sub
 If chkSb.Value = vbUnchecked Then
-    cmdSb.Enabled = False
+    cmdSB.Enabled = False
     txtSbAccNum.Enabled = False
     Exit Sub
 End If
 
-cmdSb.Enabled = True
+cmdSB.Enabled = True
 txtSbAccNum.Enabled = True
 
 Dim rst As Recordset
@@ -379,8 +387,31 @@ gDbTrans.SqlStmt = "SELECT AccNum From SBMASTER " & _
     " WHERE CustomerId = (SELECT CustomerID From DepositLoanMaster " & _
         " WHERE LoanID = " & m_LoanID & ")"
 
-If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then _
-    txtSbAccNum = FormatField(rst(0))
+Dim recCount As Integer
+    recCount = gDbTrans.Fetch(rst, adOpenForwardOnly)
+    If recCount = 1 Then
+        txtSbAccNum = FormatField(rst(0))
+        If cmbSB.Visible Then Call SetComboIndex(cmbSB, , FormatField(rst("DepositTYpe")))
+        
+    End If
+    If recCount > 1 Then
+        If Not cmbSB.Visible Then
+            txtSbAccNum = FormatField(rst(0))
+            Exit Sub
+        End If
+        
+        If cmbSB.ListIndex < 0 Then
+            MsgBox "Please select deposit type", , wis_MESSAGE_TITLE
+            Exit Sub
+        Else
+            gDbTrans.SqlStmt = "SELECT AccNum From SBMASTER " & _
+                " WHERE DepositType = " & cmbSB.ItemData(cmbSB.ListIndex) & _
+                " And CustomerId = (SELECT CustomerID From DepositLoanMaster " & _
+                " WHERE LoanID = " & m_LoanID & ")"
+            recCount = gDbTrans.Fetch(rst, adOpenForwardOnly)
+            If recCount > 0 Then txtSbAccNum = FormatField(rst(0))
+        End If
+    End If
 
 End Sub
 
@@ -500,7 +531,9 @@ If chkSb.Value = vbChecked Then
     
     'Check For the SB Number Existace
     Set SBClass = New clsSBAcc
-    SbACCID = SBClass.GetAccountID(txtSbAccNum)
+    SbACCID = 0
+    If cmbSB.Visible Then SbACCID = cmbSB.ItemData(cmbSB.ListIndex)
+    SbACCID = SBClass.GetAccountID(txtSbAccNum, SbACCID)
     Set SBClass = Nothing
     
     If SbACCID = 0 Then
@@ -568,8 +601,7 @@ InTrans = True
     End If
     If chkSb.Value = vbChecked Then
         transType = wContraWithdraw
-        SbHeadID = bankClass.GetHeadIDCreated(GetResourceString(421), LoadResString(421), _
-                                        parMemberDeposit, 0, wis_SBAcc)
+        SbHeadID = bankClass.GetHeadIDCreated(GetResourceString(421), LoadResString(421), parMemberDeposit, 0, wis_SBAcc)
         gDbTrans.SqlStmt = "Insert INTO ContraTrans " & _
                     " (ContraID, AccHeadID,AccID," & _
                     " TransType,TransID,Amount,UserID )" & _
@@ -875,11 +907,11 @@ Err.Clear
 End Sub
 
 
-Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+Private Sub Form_QueryUnload(cancel As Integer, UnloadMode As Integer)
 m_Loaded = False
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 '""(Me.hwnd, False)
 'Set frmPDLoans = Nothing
 End Sub

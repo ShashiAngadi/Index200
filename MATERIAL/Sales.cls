@@ -233,13 +233,14 @@ For ItemCount = 0 To MaxCount - 1
         .TextMatrix(.Row, 6) = TaxAmount
         
         .TextMatrix(.Row, 7) = FormatCurrency(Amount + TaxAmount)
-         
+        .Col = 7: .CellFontBold = False
         ParentID = MaterialClass.ParentID
         
         'Get the total amount
         Select Case ParentID
             Case 0 ' will be given zero for stock transactions
                 TotalAmount = TotalAmount + Amount + TaxAmount
+                TotalTaxAmount = TotalTaxAmount + TaxAmount
             Case wis_IncomeParentID To (wis_IncomeParentID + HEAD_OFFSET - 1)
                 TotalAmount = TotalAmount + Amount
             Case wis_ExpenseParentID To (wis_ExpenseParentID + HEAD_OFFSET - 1)
@@ -257,7 +258,8 @@ With m_frmSales.grd
             
     .Col = 1: .CellFontBold = True: .Text = GetResourceString(286) '52  Text Amount
     .Col = 7: .Text = TotalAmount: .CellFontBold = True
-    
+    .Col = 6: .Text = TotalTaxAmount
+    .Col = 4: .Text = TotalAmount - TotalTaxAmount
 End With
 
 Debug.Assert 1 = 0

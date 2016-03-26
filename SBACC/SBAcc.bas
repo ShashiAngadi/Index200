@@ -355,10 +355,10 @@ Dim Count7 As Integer, Count14 As Integer, Count21 As Integer, Count30 As Intege
 '***********************************************************
 
 'Loop through all the accounts to calculate the products
-    For I = 1 To rst_Main.RecordCount
+    For I = 1 To rst_Main.recordCount
 
         'L_frmcancel.prg.Value = rst_Main.AbsolutePosition
-        UpdateStatus L_frmcancel.PicStatus, I / rst_Main.RecordCount
+        UpdateStatus L_frmcancel.PicStatus, I / rst_Main.recordCount
         Balance = 0: Balance1TO10 = 0: Balance11TO31 = 0
         AccId = FormatField(rst_Main("AccID"))
         If Not rst_PM Is Nothing Then
@@ -477,7 +477,7 @@ End If
     Set L_frmcancel = Nothing
 End Function
 
-Public Function ComputeSBProducts_Daily(AccIDArr() As Long, ByRef IntAmounts() As Currency, fromDate As Date, toDate As Date, Rate As Double, NoInterestOnMinBal As Boolean) As Currency
+Public Function ComputeSBProducts_Daily(AccIDArr() As Long, ByRef IntAmounts() As Currency, fromDate As Date, toDate As Date, Rate As Double, NoInterestOnMinBal As Boolean, Deptype As Integer) As Currency
 
 Dim I As Long
 Dim rst_Main As ADODB.Recordset
@@ -489,8 +489,8 @@ Dim MinBalance As Currency
 Dim MinBalance_1 As Currency
 
 Dim SetUp As New clsSetup
-   MinBalance = SetUp.ReadSetupValue("SBAcc", "MinBalanceWithoutChequeBook", "0.00")
-   MinBalance_1 = SetUp.ReadSetupValue("SBAcc", "MinBalanceWithChequeBook", CStr(MinBalance))
+   MinBalance = SetUp.ReadSetupValue("SBAcc" & Deptype, "MinBalanceWithoutChequeBook", "0.00")
+   MinBalance_1 = SetUp.ReadSetupValue("SBAcc" & Deptype, "MinBalanceWithChequeBook", CStr(MinBalance))
    
 Set SetUp = Nothing
 If MinBalance < 10 Then NoInterestOnMinBal = False
@@ -501,8 +501,12 @@ If MinBalance < 10 Then NoInterestOnMinBal = False
     Dim L_frmcancel As New frmCancel
     Set rst_Main = Nothing
     gDbTrans.SqlStmt = "Select A.AccID, ClosedDate from SBMaster A " & _
-        " where AccID in (Select Distinct AccID From SBTRANS)" & _
-        " AND (ClosedDate is NULL OR CLosedDate > #" & toDate & "#) order BY A.AccID"
+        " where  AccID in (Select Distinct AccID From SBTRANS)" & _
+        " AND (ClosedDate is NULL OR CLosedDate > #" & toDate & "#) "
+    If Deptype > 0 Then _
+        gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And A.DepositTYpe = " & Deptype
+    
+    gDbTrans.SqlStmt = gDbTrans.SqlStmt & " Order BY A.AccID"
     Call gDbTrans.Fetch(rst_Main, adOpenForwardOnly)
     
 On Error Resume Next
@@ -516,8 +520,11 @@ L_frmcancel.lblMessage.Caption = "Computing Sb Interest"
     gDbTrans.SqlStmt = "Select B.AccID, MAX(TransID) As MaxTransID " & _
                 " FROM SBTrans A, SBMaster B " & _
                 " WHERE A.AccID = B.AccID And TransDate < #" & fromDate & "#" & _
-                " AND (ClosedDate is NULL OR CLosedDate <= #" & fromDate & "#)" & _
-                " GROUP BY B.AccID"
+                " AND (ClosedDate is NULL OR CLosedDate <= #" & fromDate & "#)"
+    If Deptype > 0 Then _
+        gDbTrans.SqlStmt = gDbTrans.SqlStmt & " AND B.DepositTYpe = " & Deptype
+        
+    gDbTrans.SqlStmt = gDbTrans.SqlStmt & " GROUP BY B.AccID"
     If Not gDbTrans.CreateView("QrySBPMIDs") Then Exit Function
     
     Set rst_PM = Nothing
@@ -533,8 +540,10 @@ L_frmcancel.lblMessage.Caption = "Computing Sb Interest"
     gDbTrans.SqlStmt = "Select A.AccID, MAX(TransID) AS MaxTransID, TransDate " & _
                 " FROM SBMaster A, SBTrans B " & _
                 " WHERE A.AccID = B.AccID " & _
-                " and TransDate between #" & fromDate & "# and #" & toDate & "#" & _
-                " GROUP BY A.AccID,TransDate"
+                " and TransDate between #" & fromDate & "# and #" & toDate & "#"
+    If Deptype > 0 Then _
+        gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And A.DepositType = " & Deptype
+    gDbTrans.SqlStmt = gDbTrans.SqlStmt & " GROUP BY A.AccID,TransDate"
     If Not gDbTrans.CreateView("QrysbDayBalance") Then Exit Function
     
     'Now Get the Balance for each account on end of each day
@@ -563,10 +572,10 @@ Dim rst As ADODB.Recordset
 '***********************************************************
 
 'Loop through all the accounts to calculate the IntAmounts
-    For I = 1 To rst_Main.RecordCount
+    For I = 1 To rst_Main.recordCount
          'Debug.Assert rst_Main.Fields("AccID") <> 1400
         'L_frmcancel.prg.Value = rst_Main.AbsolutePosition
-        UpdateStatus L_frmcancel.PicStatus, I / rst_Main.RecordCount
+        UpdateStatus L_frmcancel.PicStatus, I / rst_Main.recordCount
         Balance = 0
         PrevBalance = 0
         AccId = FormatField(rst_Main("AccID"))
@@ -587,7 +596,7 @@ Dim rst As ADODB.Recordset
         PrevDate = FinUSFromDate
         Interest = 0
         TotalInterest = 0
-        If rst_Daily.RecordCount > 0 Then
+        If rst_Daily.recordCount > 0 Then
             Do While Not rst_Daily.EOF
                 CurrentDate = rst_Daily("TransDate")
                 DaysForInterest = DateDiff("d", PrevDate, CurrentDate)
@@ -605,9 +614,9 @@ Dim rst As ADODB.Recordset
                 rst_Daily.MoveNext
             Loop
         Else
-            CurrentDate = FinUSEndDate
+            CurrentDate = toDate 'FinUSEndDate Changing from Financial year end date to the given date
         End If
-        CurrentDate = FinUSEndDate
+        CurrentDate = toDate 'FinUSEndDate Changing from Financial year end date to the given date
         DaysForInterest = DateDiff("d", PrevDate, CurrentDate)
         Interest = PrevBalance * (DaysForInterest / 365) * (Rate / 100)
         ''Check whether the balance is more than the Minimum and interest has to be issued on Minimum balance

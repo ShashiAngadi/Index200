@@ -92,7 +92,7 @@ End With
 End Sub
 
 
-Public Sub ExitApplication(Confirm As Boolean, Cancel As Integer)
+Public Sub ExitApplication(Confirm As Boolean, cancel As Integer)
 
 If Confirm Then
     ' Ask for user confirmation.
@@ -101,7 +101,7 @@ If Confirm Then
             vbQuestion + vbYesNo, wis_MESSAGE_TITLE)
     nRet = MsgBox(GetResourceString(750), _
             vbQuestion + vbYesNo, wis_MESSAGE_TITLE)
-    If nRet = vbNo Then Cancel = True: Exit Sub
+    If nRet = vbNo Then cancel = True: Exit Sub
 End If
 
 If gWindowHandle Then CloseWindow (gWindowHandle)
@@ -151,56 +151,57 @@ Dim sqlClause As String
 Set rstReturn = Nothing
 On Error GoTo Exit_Line
 
-Dim ModuleId As wisModules
-
-ModuleId = GetModuleIDFromHeadID(AccHeadID)
-
+Dim ModuleID As wisModules
+Dim Deptype As Integer
+ModuleID = GetModuleIDFromHeadID(AccHeadID)
+Deptype = ModuleID Mod 100 'GetDepositTypeIDFromHeadID(AccHeadID)
+If ModuleID > 100 Then ModuleID = ModuleID - ModuleID Mod 100
 Set rstReturn = Nothing
 
 'Members
-If ModuleId >= wis_Members And ModuleId < wis_Members + 100 Then
+If ModuleID = wis_Members Then
         SqlStr = "Select AccNum, A.AccID as ID,A.CustomerID,MemberType From MemMaster A"
-
-    If ModuleId >= wis_Members And ModuleId < wis_Members + 100 Then sqlClause = " ANd A.MemberType= " & ModuleId - wis_Members
+        
+    If ModuleID >= wis_Members And ModuleID < wis_Members + 100 Then sqlClause = " ANd A.MemberType= " & Deptype
     
 'BKcc Account
-ElseIf ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then
+ElseIf ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Then
         SqlStr = "Select AccNum, A.LoanID as ID From BKCCMaster A"
 'Current Account
-ElseIf ModuleId = wis_CAAcc Then
+ElseIf ModuleID = wis_CAAcc Then
     SqlStr = "Select AccNum, AccId as Id,A.CustomerID From CAMaster A"
-
+    If Deptype > 0 Then sqlClause = " And A.DepositType = " & Deptype
 'DepositLoans
-ElseIf ModuleId >= wis_DepositLoans And ModuleId < wis_DepositLoans + 100 Then
+ElseIf ModuleID = wis_DepositLoans Then
     SqlStr = "Select AccNum, LoanId as ID,A.CustomerID From DepositLoanMaster A"
-    If ModuleId > wis_DepositLoans Then _
-        sqlClause = " ANd A.DepositType = " & ModuleId - wis_DepositLoans
+    If Deptype > 0 Then _
+        sqlClause = " ANd A.DepositType = " & Deptype
 
 'Deposit Accounts like Fd
-ElseIf ModuleId >= wis_Deposits And ModuleId < wis_Deposits + 100 Then
+ElseIf ModuleID = wis_Deposits Then
     SqlStr = "Select AccNum, AccId as ID,A.CustomerID From FDMaster A"
-    If ModuleId > wis_Deposits Then _
-        sqlClause = " ANd A.DepositType = " & ModuleId - wis_Deposits
+    If Deptype > 0 Then _
+        sqlClause = " ANd A.DepositType = " & Deptype
 'Loan Accounts
-ElseIf ModuleId >= wis_Loans And ModuleId < wis_Loans + 100 Then
+ElseIf ModuleID = wis_Loans Then
     SqlStr = "Select AccNum, LoanId as ID,A.CustomerID From LoanMaster A"
-    If ModuleId > wis_Loans Then _
-        sqlClause = " AND A.SchemeID = " & ModuleId - wis_Loans
+    If Deptype > wis_Loans Then _
+        sqlClause = " AND A.SchemeID = " & Deptype
 
 'Pigmy Accounts
-ElseIf ModuleId = wis_PDAcc Then
+ElseIf ModuleID = wis_PDAcc Then
     SqlStr = "Select AccNum, AccId as ID,A.CustomerID From PDMaster A"
-
+    If Deptype > 0 Then sqlClause = " And A.DepositType = " & Deptype
 'Recurring Accounts
-ElseIf ModuleId = wis_RDAcc Then
+ElseIf ModuleID = wis_RDAcc Then
     SqlStr = "Select AccNum, AccId as ID,A.CustomerID From RDMaster A"
-
+    If Deptype > 0 Then sqlClause = " And A.DepositType = " & Deptype
 'Savings account
-ElseIf ModuleId >= wis_SBAcc And ModuleId < wis_SBAcc + 100 Then
+ElseIf ModuleID = wis_SBAcc Then
     SqlStr = "Select AccNum, AccId as ID,A.CustomerID From SBMaster A"
-
+    If Deptype > 0 Then sqlClause = " And A.DepositType = " & Deptype
 'Suspencaccount
-ElseIf ModuleId = wis_SuspAcc Then
+ElseIf ModuleID = wis_SuspAcc Then
     SqlStr = "Select TransId as AccNum, AccId as ID,A.CustomerID " & _
             " From SuspAccount "
     
@@ -210,7 +211,6 @@ Else
 End If
     
 'If Moduleid <> wis_SuspAcc Then
-
     SqlStr = Trim(SqlStr)
     pos = InStr(1, SqlStr, "FROM", vbTextCompare)
     
@@ -222,12 +222,11 @@ End If
     
     SqlStr = SqlStr & ", NameTab B WHERE B.CustomerID = A.CustomerID"
         
-    If ModuleId = wis_SuspAcc Then
+    If ModuleID = wis_SuspAcc Then
         SqlStr = SqlStr & " ANd Cleared = 0 And CustomerID > 0" & _
             " ANd (TransType = " & wDeposit & " OR TransType = " & wContraDeposit & ")"
         If AccNum <> "" Then _
             SqlStr = SqlStr & " AND A.TransID = " & Val(AccNum)
-    
     Else
         If AccNum <> "" Then _
             SqlStr = SqlStr & " AND A.AccNum = " & AddQuotes(AccNum, True)
@@ -267,71 +266,71 @@ Dim SqlStr As String
 
 On Error GoTo Exit_Line
 
-Dim ModuleId As wisModules
-
-ModuleId = GetModuleIDFromHeadID(AccHeadID)
-
-If ModuleId = wis_None Then Exit Function
+Dim ModuleID As wisModules
+Dim Deptype As Integer
+Deptype = ModuleID Mod 10
+ModuleID = GetModuleIDFromHeadID(AccHeadID)
+If ModuleID = wis_None Then Exit Function
 
 'Members
-If ModuleId >= wis_Members And ModuleId < wis_Members + 100 Then
+If ModuleID >= wis_Members And ModuleID < wis_Members + 100 Then
     SqlStr = "Select AccNum, A.AccID as ID," & _
         " Title +' '+ FIrstName +' '+ MiddleName +' ' + LastName as CustName" & _
         " From MemMaster A, NameTab B" & _
         " Where A.CustomerID = B.CustomerID "
-        
+    If Deptype > 0 Then SqlStr = SqlStr & " And A.memberType = " & Deptype
 'Savings Account
-ElseIf ModuleId >= wis_SBAcc And ModuleId < wis_SBAcc + 100 Then
+ElseIf ModuleID >= wis_SBAcc And ModuleID < wis_SBAcc + 100 Then
     SqlStr = "Select AccNum, A.AccID as ID," & _
         " Title +' '+ FIrstName +' '+ MiddleName +' ' + LastName as CustName" & _
         " From SBMaster A, Nametab B" & _
         " Where A.CustomerID = B.CustomerID "
-        
+    If Deptype > 0 Then SqlStr = SqlStr & " And A.DepositType = " & Deptype
 'Current Account
-ElseIf ModuleId = wis_CAAcc Then
+ElseIf ModuleID = wis_CAAcc Then
     SqlStr = "Select AccNum, A.AccID as ID," & _
         " Title +' '+ FIrstName +' '+ MiddleName +' ' + LastName as CustName" & _
         " From CAMaster A,Nametab B" & _
         " Where A.CustomerID = B.CustomerID "
-        
+    If Deptype > 0 Then SqlStr = SqlStr & " And A.DepositType = " & Deptype
 'Pigmy Accounts
-ElseIf ModuleId = wis_PDAcc Then
+ElseIf ModuleID >= wis_PDAcc And ModuleID < wis_PDAcc + 100 Then
     SqlStr = "Select AccNum, A.AccID as ID, " & _
         " Title +' '+ FIrstName +' '+ MiddleName +' ' + LastName as CustName" & _
         " From PDMaster A, Nametab B" & _
         " Where A.CustomerID = B.CustomerID "
-        
+    If Deptype > 0 Then SqlStr = SqlStr & " And A.DepositType = " & Deptype
 'Recurring Accounts
-ElseIf ModuleId = wis_RDAcc Then
+ElseIf ModuleID >= wis_RDAcc And ModuleID < wis_RDAcc + 100 Then
     SqlStr = "Select AccNum, A.AccID as ID," & _
         " Title +' '+ FIrstName +' '+ MiddleName +' ' + LastName as CustName" & _
         " From RDMaster A,Nametab B" & _
         " Where A.CustomerID = B.CustomerID "
-        
+    If Deptype > 0 Then SqlStr = SqlStr & " And A.DepositType = " & Deptype
 
 'Deposit Accounts like Fd
-ElseIf ModuleId >= wis_Deposits And ModuleId < wis_Deposits + 100 Then
+ElseIf ModuleID >= wis_Deposits And ModuleID < wis_Deposits + 100 Then
     SqlStr = "Select AccNum, A.AccID as ID, " & _
         " Title +' '+ FIrstName +' '+ MiddleName +' ' + LastName as CustName" & _
         " From FDMaster A,Nametab B" & _
         " Where A.CustomerID = B.CustomerID "
-        
+    
 'BKCC Account
-ElseIf ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then
+ElseIf ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Then
     SqlStr = "Select AccNum, A.LoanID as ID," & _
         " Title +' '+ FIrstName +' '+ MiddleName +' ' + LastName as CustName" & _
         " From BKCCMaster A,Nametab B" & _
         " Where A.CustomerID = B.CustomerID "
         
 'DepositLoans
-ElseIf ModuleId >= wis_DepositLoans And ModuleId < wis_DepositLoans + 100 Then
+ElseIf ModuleID >= wis_DepositLoans And ModuleID < wis_DepositLoans + 100 Then
     SqlStr = "Select AccNum, A.LoanID as ID," & _
         " Title +' '+ FIrstName +' '+ MiddleName +' ' + LastName as CustName" & _
         " From DepositLoanMaster A,Nametab B" & _
         " Where A.CustomerID = B.CustomerID "
         
 'Loan Accounts
-ElseIf ModuleId >= wis_Loans And ModuleId < wis_Loans + 100 Then
+ElseIf ModuleID >= wis_Loans And ModuleID < wis_Loans + 100 Then
     SqlStr = "Select AccNum, A.LoanID as ID," & _
         " Title +' '+ FIrstName +' '+ MiddleName +' ' + LastName as CustName" & _
         " From LoanMaster A,Nametab B" & _
@@ -773,7 +772,7 @@ End If
 
 End Sub
 
-Public Sub LoadDepositTypes(cmbObject As ComboBox)
+Public Sub LoadFixedDepositTypes(cmbObject As ComboBox)
  'add the Loan deposit types here
  Dim Deptype As wis_DepositType
       
@@ -792,15 +791,35 @@ Public Sub LoadDepositTypes(cmbObject As ComboBox)
                 rstDeposit.MoveNext
             Wend
         End If
-
-         Deptype = wisDeposit_RD
-        .AddItem GetResourceString(424) '"Recuring Deposit"
-        .ItemData(.newIndex) = Deptype
-        
+        'START "Recuring Deposit"
+        Deptype = wisDeposit_RD
+        gDbTrans.SqlStmt = "SELECT * From DepositTypeTab where ModuleID = " & wis_RDAcc
+        If gDbTrans.Fetch(rstDeposit, adOpenDynamic) > 0 Then
+            While Not rstDeposit.EOF
+                .AddItem FormatField(rstDeposit("DepositTypeName"))
+                '.ItemData(.NewIndex) = wis_Deposits + RstDeposit("DepositID")
+                .ItemData(.newIndex) = (FormatField(rstDeposit("DepositType")))
+                rstDeposit.MoveNext
+            Wend
+        Else
+            .AddItem GetResourceString(424) '"Recuring Deposit"
+            .ItemData(.newIndex) = Deptype
+        End If
+        'END "Recuring Deposit"
+        'START "Pigmy Depoisit"
         Deptype = wisDeposit_PD
-        .AddItem GetResourceString(425) '"Pigmy Depoisit"
-        .ItemData(.newIndex) = Deptype
-        
+        gDbTrans.SqlStmt = "SELECT * From DepositTypeTab where ModuleID = " & wis_PDAcc
+        If gDbTrans.Fetch(rstDeposit, adOpenDynamic) > 0 Then
+            While Not rstDeposit.EOF
+                .AddItem FormatField(rstDeposit("DepositTypeName"))
+                .ItemData(.newIndex) = (FormatField(rstDeposit("DepositID")))
+                rstDeposit.MoveNext
+            Wend
+        Else
+            .AddItem GetResourceString(425) '"Pigmy Depoisit"
+            .ItemData(.newIndex) = Deptype
+        End If
+        'END "Pigmy Depoisit"
       End With
 End Sub
 
@@ -918,34 +937,153 @@ Call TempSub
 Exit Sub
 
 End Sub
-Private Sub TempSub()
-    'Check For Memei Id o
-    gDbTrans.SqlStmt = "UPDATE LoanMaster INNER JOIN MemMaster ON " & _
-        " LoanMaster.CustomerID = MemMaster.CustomerID " & _
-        " SET LoanMaster.MemId = MemMaster.AccID where LoanMaster.MemId=0"
+Private Sub PostLoginDepositLoanFix()
+    Dim MaxCount As Integer
+    Dim loopCount As Integer
+    Dim rst As Recordset
+    Dim headNames(0)  As String
+    Dim depName As String
+    Dim Deptype As Integer
+    Dim LoanDeptype As Integer
+    Dim ModuleID As Integer
+    
     gDbTrans.BeginTrans
-    If gDbTrans.SQLExecute Then
-        gDbTrans.CommitTrans
-    Else
-        gDbTrans.RollBack
+    MaxCount = 1
+    'ReDim Preserve headNames(maxCount)
+    gDbTrans.SqlStmt = "Select DepositName,DepositNameEnglish,DepositId,DepositId as LoanDepositType From DepositName"
+    
+    If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
+        While Not rst.EOF
+            depName = FormatField(rst("depositName"))
+            Deptype = FormatField(rst("depositId"))
+            LoanDeptype = FormatField(rst("depositId"))
+            'Deposit
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & wis_Deposits + Deptype & " Where HeadName = " & AddQuotes(depName)
+            Call gDbTrans.SQLExecute
+            
+            'Deposit Interest Paid
+            'ClsBank.GetHeadIDCreated(424+487, headNameEnglish, parMemDepIntPaid, 0, wis_RDAcc + m_DepositType)    'Interest Paid
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & wis_Deposits + Deptype & " Where HeadName = " & AddQuotes(depName & " " & GetResourceString(487))
+            Call gDbTrans.SQLExecute
+            gDbTrans.SqlStmt = "UPDATE Heads Set parentId = " & parMemDepIntPaid & " WHERE HEADName = " & AddQuotes(depName & " " & GetResourceString(487))
+            Call gDbTrans.SQLExecute
+            
+            'Payable Interest
+            'ClsBank.GetHeadIDCreated(424+375+47, headNameEnglish, parDepositIntProv, 0, wis_RDAcc + m_DepositType)  'Payable + Interest
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & wis_Deposits + Deptype & " Where HeadName = " & AddQuotes(depName & " " & GetResourceString(375, 47))
+            Call gDbTrans.SQLExecute
+            gDbTrans.SqlStmt = "UPDATE Heads Set parentId = " & parDepositIntProv & " WHERE HEADName = " & AddQuotes(depName & " " & GetResourceString(375, 47))
+            Call gDbTrans.SQLExecute
+            
+            'Interest Provision
+            'bankClass.GetHeadIDCreated(424+450, headNameEnglish, parMemDepIntPaid, 0, wis_RDAcc + m_DepositType)   'Interest Provision
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & wis_Deposits + Deptype & " Where HeadName = " & AddQuotes(depName & " " & GetResourceString(450))
+            Call gDbTrans.SQLExecute
+            gDbTrans.SqlStmt = "UPDATE Heads Set parentId = " & parMemDepIntPaid & " WHERE HEADName = " & AddQuotes(depName & " " & GetResourceString(450))
+            Call gDbTrans.SQLExecute
+            
+            'Deposit Loan
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & wis_DepositLoans + Deptype & " Where HeadName = " & AddQuotes(depName & " " & GetResourceString(58))
+            Call gDbTrans.SQLExecute
+           
+           'Deposit Loan Interest
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & wis_DepositLoans + Deptype & " Where HeadName = " & AddQuotes(depName & " " & GetResourceString(58, 483))
+            Call gDbTrans.SQLExecute
+            gDbTrans.SqlStmt = "UPDATE Heads Set parentId = " & parMemDepLoanIntReceived & " WHERE HEADName = " & AddQuotes(depName & " " & GetResourceString(58, 483))
+            Call gDbTrans.SQLExecute
+            rst.MoveNext
+        Wend
+    End If
+    
+    gDbTrans.SqlStmt = " " & _
+                        "Select top 1 '" & GetResourceString(424) & "' as DepositName, '" & LoadResourceStringS(424) & "' as DepositNameEnglish," & _
+                                wis_RDAcc & " as DepositID," & wisDeposit_RD & " as LoanDepositType  From RDMaster"
+    gDbTrans.SqlStmt = gDbTrans.SqlStmt & " UNION  " & _
+                        "Select '" & GetResourceString(425) & "' as DepositName, '" & LoadResourceStringS(425) & "' as DepositNameEnglish," & _
+                                wis_PDAcc & " as DepositID," & wisDeposit_PD & " as LoanDepositType  From PDMaster"
+    
+    
+    If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
+        While Not rst.EOF
+            depName = FormatField(rst("depositName"))
+            ModuleID = FormatField(rst("depositId"))
+            LoanDeptype = FormatField(rst("LoanDepositType"))
+            
+            'Deposit
+            'GetHeadIDCreated(424, headNameEnglish, parMemberDeposit, 0, wis_RDAcc + Deptype)
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & ModuleID & " Where HeadName = " & AddQuotes(depName)
+            Call gDbTrans.SQLExecute
+            
+            'Deposit Interest Paid
+            'GetHeadIDCreated(424+487, headNameEnglish, parMemDepIntPaid, 0, wis_RDAcc + m_DepositType)    'Interest Paid
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & ModuleID & " Where HeadName = " & AddQuotes(depName & " " & GetResourceString(487))
+            Call gDbTrans.SQLExecute
+            gDbTrans.SqlStmt = "UPDATE Heads Set parentId = " & parMemDepIntPaid & " WHERE HEADName = " & AddQuotes(depName & " " & GetResourceString(487))
+            Call gDbTrans.SQLExecute
+            
+            'Payable Interest
+            'GetHeadIDCreated(424+375+47, headNameEnglish, parDepositIntProv, 0, wis_RDAcc + m_DepositType)  'Payable + Interest
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & ModuleID & " Where HeadName = " & AddQuotes(depName & " " & GetResourceString(375, 47))
+            Call gDbTrans.SQLExecute
+            gDbTrans.SqlStmt = "UPDATE Heads Set parentId = " & parDepositIntProv & " WHERE HEADName = " & AddQuotes(depName & " " & GetResourceString(375, 47))
+            Call gDbTrans.SQLExecute
+            
+            'Interest Provision
+            'bankClass.GetHeadIDCreated(424+450, headNameEnglish, parMemDepIntPaid, 0, wis_RDAcc + m_DepositType)   'Interest Provision
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & ModuleID & " Where HeadName = " & AddQuotes(depName & " " & GetResourceString(450))
+            Call gDbTrans.SQLExecute
+            gDbTrans.SqlStmt = "UPDATE Heads Set parentId = " & parMemDepIntPaid & " WHERE HEADName = " & AddQuotes(depName & " " & GetResourceString(450))
+            Call gDbTrans.SQLExecute
+            
+            'Deposit Loan
+            'GetHeadIDCreated(424+58, LoanHeadNameEnglish, parMemDepLoan, 0, wis_DepositLoans + m_DepositType)
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & wis_DepositLoans + LoanDeptype & " Where HeadName = " & AddQuotes(depName & " " & GetResourceString(58))
+            Call gDbTrans.SQLExecute
+           
+           'Deposit Loan Interest
+           'GetHeadIDCreated(424+483, LoanHeadNameEnglish, parMemDepLoanIntReceived, 0, wis_DepositLoans + m_DepositType)
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = " & wis_DepositLoans + LoanDeptype & " Where HeadName = " & AddQuotes(depName & " " & GetResourceString(58, 483))
+            Call gDbTrans.SQLExecute
+            gDbTrans.SqlStmt = "UPDATE Heads Set parentId = " & parMemDepLoanIntReceived & " WHERE HEADName = " & AddQuotes(depName & " " & GetResourceString(58, 483))
+            Call gDbTrans.SQLExecute
+            rst.MoveNext
+        Wend
     End If
     
     
-     'Check For Memei Id o
-    gDbTrans.SqlStmt = "UPDATE ShareTrans A INNER JOIN MemTrans B" & _
-        " ON A.AccID = B.AccID AND (A.SaleTransid = B.TransID or A.ReturnTransID=b.TransID)" & _
-        " SET A.ReturnTransID = Null " & _
-        " Where Not exists (Select TransID From MemTrans C Where (C.TransType =2 or C.TransType =4) " & _
-        " AND C.AccId=A.AccID and C.TransID = A.ReturnTransID )"
-    gDbTrans.BeginTrans
-    If gDbTrans.SQLExecute Then
-        gDbTrans.CommitTrans
-    Else
-        gDbTrans.RollBack
-    End If
+    'Now Fix the DepositLoans
+    'Recurring
+    gDbTrans.SqlStmt = "Update DepositLoanMaster Set DepositType = 40 where DepositType = 4"
+    If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+    gDbTrans.SqlStmt = "Update PledgeDeposit Set DepositType = 40 where DepositType = 4"
+    If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+    'Pigmy Deposit Loan
+    gDbTrans.SqlStmt = "Update DepositLoanMaster Set DepositType = 50 where DepositType = 8"
+    If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+    gDbTrans.SqlStmt = "Update PledgeDeposit Set DepositType = 50 where DepositType = 8"
+    If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+    
+    'Fixed Deposit
+    'gDbTrans.SqlStmt = "Update DepositLoanMaster Set DepositType = DepositType + 90 where DepositType < 20"
+    'If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+    'gDbTrans.SqlStmt = "Update PledeDeposit Set DepositType = DepositType + 90  where DepositType < 20"
+    'If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+    
+
+    
+    
+    
+    
+    
+    
+    gDbTrans.CommitTrans
+  
+   
 End Sub
 
-Private Sub PostLoginInitialize()
+Private Sub PostLoginInitialize_OLDToCompate()
+
+'OCTOBER 2015 CODE
 
 gUserID = gCurrUser.UserID
 
@@ -967,7 +1105,7 @@ gDbTrans.SqlStmt = "SELECT CustomerID,Title + ' ' + FirstName + ' ' + MiddleName
 gDbTrans.CreateView ("QryOnlyName")
 
 gDbTrans.SqlStmt = "SELECT X.CustomerID,Y.AccNum as MemberNum,Y.ACCID as MemID, Title + ' ' + FirstName + ' ' + MiddleName +' '+ " & _
-        " LastName as NAME,Place,Caste,Gender,IsciName,MemberType From NameTab X " & _
+        " LastName as NAME,Place,Caste,Gender,IsciName From NameTab X " & _
         " Inner Join MemMaster Y on Y.CustomerID = X.CustomerID"
 gDbTrans.CreateView ("QryMemName")
 
@@ -986,44 +1124,6 @@ gDbTrans.SqlStmt = "Delete * FROM IdFromInventory Where TransID not in (Select d
 If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
 
 'TEMPORARY CODE REMOVE IN 2016
-'UPdate the New ModuleIds OD SB and Memebre
-gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 2000 where AccType = 2"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 2000 where ModuleID = 2"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 2000 where ModuleID = 2"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-
-
-gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 3000 where AccType = 3"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 3000 where ModuleID = 3"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 3000 where ModuleID = 3"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-
-gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 4000 where AccType = 4"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 4000 where ModuleID = 4"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 4000 where ModuleID = 4"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-
-gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 5000 where AccType = 5"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 5000 where ModuleID = 5"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 5000 where ModuleID = 5"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-
-gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 8000 where AccType = 8"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 8000 where ModuleID = 8"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 8000 where ModuleID = 8"
-If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
-
-
 gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + " & 10 & _
         " where AccType < " & wis_Deposits + 10 & " and AccType > " & wis_Deposits
 
@@ -1109,6 +1209,210 @@ gDbTrans.CommitTrans
 
 End Sub
 
+Private Sub TempSub()
+    'Check For Memei Id o
+    gDbTrans.SqlStmt = "UPDATE LoanMaster INNER JOIN MemMaster ON " & _
+        " LoanMaster.CustomerID = MemMaster.CustomerID " & _
+        " SET LoanMaster.MemId = MemMaster.AccID where LoanMaster.MemId=0"
+    gDbTrans.BeginTrans
+    If gDbTrans.SQLExecute Then
+        gDbTrans.CommitTrans
+    Else
+        gDbTrans.RollBack
+    End If
+    
+    
+     'Check For Memei Id o
+    gDbTrans.SqlStmt = "UPDATE ShareTrans A INNER JOIN MemTrans B" & _
+        " ON A.AccID = B.AccID AND (A.SaleTransid = B.TransID or A.ReturnTransID=b.TransID)" & _
+        " SET A.ReturnTransID = Null " & _
+        " Where Not exists (Select TransID From MemTrans C Where (C.TransType =2 or C.TransType =4) " & _
+        " AND C.AccId=A.AccID and C.TransID = A.ReturnTransID )"
+    gDbTrans.BeginTrans
+    If gDbTrans.SQLExecute Then
+        gDbTrans.CommitTrans
+    Else
+        gDbTrans.RollBack
+    End If
+End Sub
+
+Private Sub PostLoginInitialize()
+
+gUserID = gCurrUser.UserID
+
+Dim SetUp As clsSetup
+Set SetUp = New clsSetup
+
+gImagePath = SetUp.ReadSetupValue("General", "ImagePath", "")
+
+If Len(Trim(gImagePath)) > 0 Then _
+    If Dir(gImagePath, vbDirectory) = "" Then MakeDirectories (gImagePath)
+
+Set SetUp = Nothing
+gDbTrans.SqlStmt = "SELECT CustomerID,Title + ' ' + FirstName + ' ' + MiddleName +' '+ " & _
+        " LastName as NAME,Place,Caste,Gender,IsciName From NameTab"
+gDbTrans.CreateView ("QryName")
+
+gDbTrans.SqlStmt = "SELECT CustomerID,Title + ' ' + FirstName + ' ' + MiddleName +' '+ " & _
+        " LastName as NAME,IsciName From NameTab"
+gDbTrans.CreateView ("QryOnlyName")
+
+gDbTrans.SqlStmt = "SELECT X.CustomerID,Y.AccNum as MemberNum,Y.ACCID as MemID, Title + ' ' + FirstName + ' ' + MiddleName +' '+ " & _
+        " LastName as NAME,Place,Caste,Gender,IsciName,MemberType From NameTab X " & _
+        " Inner Join MemMaster Y on Y.CustomerID = X.CustomerID"
+gDbTrans.CreateView ("QryMemName")
+
+'Free Cust Id
+gDbTrans.BeginTrans
+
+gDbTrans.SqlStmt = "Delete * FROM FreeCustId Where FreeID in (Select distinct customerID from NameTab)"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+
+gDbTrans.SqlStmt = "Update FreeCustId set Selected = False Where FreeID in (Select distinct customerID from NameTab)"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+
+'TransID
+gDbTrans.SqlStmt = "Delete * FROM IdFromInventory Where TransID not in (Select distinct TransID from AccTrans)" & _
+    " and TransID not in (Select distinct TransID from TransParticulars)"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+
+'TEMPORARY CODE REMOVE IN 2016
+'UPdate the New ModuleIds Of SB and Member
+'Saving Bank
+gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 2000 where AccType = 2"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 2000 where ModuleID = 2"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 2000 where ModuleID = 2"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+
+'Current Account
+gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 3000 where AccType = 3"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 3000 where ModuleID = 3"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 3000 where ModuleID = 3"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+
+'Recurring Deposit
+gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 4000 where AccType = 4"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 4000 where ModuleID = 4"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 4000 where ModuleID = 4"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+'Pigmy Account
+gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 5000 where AccType = 5"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 5000 where ModuleID = 5"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 5000 where ModuleID = 5"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+'Members
+gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 8000 where AccType = 8"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 8000 where ModuleID = 8"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 8000 where ModuleID = 8"
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+
+'Update ModuleID in Bank HeadId's for FD deposits
+'From 101 to  111
+gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + " & 10 & " where AccType < " & 110 & " and AccType > " & 100
+        '" where AccType < " & wis_Deposits + 10 & " and AccType > " & wis_Deposits
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+
+'Update ModuleID in Bank HeadId's for deposit Loan on FD
+gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + " & 10 & " where AccType < " & 210 & " and AccType > " & 200
+        '" where AccType < " & wis_DepositLoans + 10 & " and AccType > " & wis_DepositLoans
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+'END TEMPORARY CODE REMOVE IN 2016
+
+
+gDbTrans.CommitTrans
+
+PostLoginDepositLoanFix
+'END TEMPORARY CODE REMOVE IN 2017
+
+
+
+''Correct the Deposit ID
+Dim RstDep As Recordset
+gDbTrans.SqlStmt = "SELECT * from DepositName where DepositID > 10 "
+
+If gDbTrans.Fetch(RstDep, adOpenDynamic) < 1 Then
+    
+    'DepositLoanMaster
+    
+    gDbTrans.BeginTrans
+    'Select All the Deposit WHich are More than 4
+    Dim rstDepLoan As Recordset
+    Set RstDep = Nothing
+    gDbTrans.SqlStmt = "SELECT LoanId,CustomerID,DepositType,PledgeDescription from DepositLoanMaster where DepositType = 4 or DepositType = 8 "
+    
+    If gDbTrans.Fetch(rstDepLoan, adOpenDynamic) > 0 Then
+        ''414/1;414;417;422;425
+        Dim depNum As String
+        Dim DepositId As Integer
+        
+        Do
+            'Get the Deposit
+            depNum = FormatField(rstDepLoan("PledgeDescription"))
+            DepositId = FormatField(rstDepLoan("DepositType"))
+                
+            gDbTrans.SqlStmt = "SELECT * from " & IIf(DepositId = 4, "RD", "PD") & "Master" & _
+                " Where AccNum = " & AddQuotes(depNum, True)
+            
+            If gDbTrans.Fetch(RstDep, adOpenDynamic) < 1 Then
+                gDbTrans.SqlStmt = "Update DepositLoanMaster Set DepositType = DepositType + 10 Where LoanId = " & rstDepLoan("LoanID")
+                If Not gDbTrans.SQLExecute Then
+                    gDbTrans.RollBack
+                    Exit Sub
+                End If
+            End If
+NextDepLoan:
+            rstDepLoan.MoveNext
+            If rstDepLoan.EOF = True Then Exit Do
+            
+        Loop
+    
+    End If
+    gDbTrans.SqlStmt = "Update DepositName Set DepositID = DepositID +10"
+    If Not gDbTrans.SQLExecute Then
+        gDbTrans.RollBack
+        Exit Sub
+    End If
+    'FDMaster
+    gDbTrans.SqlStmt = "Update FDMAster Set DepositType = DepositType + 10"
+    If Not gDbTrans.SQLExecute Then
+        gDbTrans.RollBack
+        Exit Sub
+    End If
+    'DepositLoanMaster
+    gDbTrans.SqlStmt = "Update DepositLoanMaster Set DepositType = DepositType + 10 where DepositType < 10 and DepositType <> 4 and DepositType <> 8"
+    If Not gDbTrans.SQLExecute Then
+        gDbTrans.RollBack
+        Exit Sub
+    End If
+    
+    'DepositLoanMaster
+    gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + " & wis_Deposits + 10 & _
+            " where AccType < " & wis_Deposits + 10 & " and AccType > " & wis_Deposits
+            
+    If Not gDbTrans.SQLExecute Then
+        gDbTrans.RollBack
+        Exit Sub
+    End If
+    
+    
+    gDbTrans.CommitTrans
+End If
+
+
+
+
+End Sub
+
 
 Public Function SetTransactionCombo(cmbTrans As ComboBox, transType As wisTransactionTypes) As Boolean
     On Error GoTo ErrLine
@@ -1132,6 +1436,7 @@ Public Function SetTransactionCombo(cmbTrans As ComboBox, transType As wisTransa
     Exit Function
 ErrLine:
 End Function
+
 Public Function GetResourcseString(ResourceID As Long)
     GetResourcseString = GetResourceString(ResourceID)
 End Function

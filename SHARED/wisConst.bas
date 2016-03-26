@@ -88,11 +88,11 @@ End Enum
 
 
 Public Enum wis_DepositType
-    wisDeposit_SB = 1
-    wisDeposit_CA = 2
-    wisDeposit_RD = 4
-    wisDeposit_PD = 8
-    wisDeposit_FD = 10
+    wisDeposit_SB = 20  'Changed on Feb 2016 '1
+    wisDeposit_CA = 30  'Changed on Feb 2016 '2
+    wisDeposit_RD = 40 'Changed on Feb 2016 '4
+    wisDeposit_PD = 50 'Changed on Feb 2016 '8
+    wisDeposit_FD = 10 '100 'Changed on Feb 2016 '10
 End Enum
 
 

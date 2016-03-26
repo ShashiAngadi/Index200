@@ -18,7 +18,7 @@ Begin VB.Form frmLoanPay
       Caption         =   "&Cancel"
       Height          =   400
       Left            =   6330
-      TabIndex        =   39
+      TabIndex        =   40
       Top             =   6270
       Width           =   1215
    End
@@ -27,14 +27,14 @@ Begin VB.Form frmLoanPay
       Default         =   -1  'True
       Height          =   400
       Left            =   5040
-      TabIndex        =   38
+      TabIndex        =   39
       Top             =   6270
       Width           =   1215
    End
    Begin VB.Frame fraLoan 
       Height          =   2265
       Left            =   90
-      TabIndex        =   40
+      TabIndex        =   41
       Top             =   30
       Width           =   7455
       Begin VB.Label txtLoanBalance 
@@ -51,7 +51,7 @@ Begin VB.Form frmLoanPay
          BorderStyle     =   1  'Fixed Single
          Height          =   345
          Left            =   5790
-         TabIndex        =   43
+         TabIndex        =   44
          Top             =   1800
          Width           =   1425
       End
@@ -60,7 +60,7 @@ Begin VB.Form frmLoanPay
          BorderStyle     =   1  'Fixed Single
          Height          =   345
          Left            =   5790
-         TabIndex        =   42
+         TabIndex        =   43
          Top             =   240
          Width           =   1425
       End
@@ -69,7 +69,7 @@ Begin VB.Form frmLoanPay
          BorderStyle     =   1  'Fixed Single
          Height          =   345
          Left            =   1890
-         TabIndex        =   41
+         TabIndex        =   42
          Top             =   240
          Width           =   1365
       End
@@ -146,6 +146,14 @@ Begin VB.Form frmLoanPay
       TabIndex        =   0
       Top             =   2160
       Width           =   7455
+      Begin VB.ComboBox cmbSB 
+         Height          =   315
+         Left            =   1080
+         TabIndex        =   35
+         Top             =   3420
+         Visible         =   0   'False
+         Width           =   2535
+      End
       Begin VB.TextBox txtVoucherNo 
          Height          =   345
          Left            =   5790
@@ -178,18 +186,17 @@ Begin VB.Form frmLoanPay
          Width           =   1425
       End
       Begin VB.CheckBox chkSb 
-         Alignment       =   1  'Right Justify
          Caption         =   "Credit To SB Account"
          Height          =   300
          Left            =   120
          TabIndex        =   34
          Top             =   3420
-         Width           =   3135
+         Width           =   3495
       End
       Begin VB.TextBox txtSbAccNum 
          Height          =   315
          Left            =   5760
-         TabIndex        =   36
+         TabIndex        =   37
          Top             =   3420
          Width           =   1185
       End
@@ -197,7 +204,7 @@ Begin VB.Form frmLoanPay
          Caption         =   "..."
          Height          =   315
          Left            =   6990
-         TabIndex        =   35
+         TabIndex        =   36
          Top             =   3420
          Width           =   315
       End
@@ -229,7 +236,7 @@ Begin VB.Form frmLoanPay
       Begin VB.TextBox txtDate 
          Height          =   345
          Left            =   1890
-         TabIndex        =   37
+         TabIndex        =   38
          Top             =   240
          Width           =   1425
       End
@@ -494,7 +501,8 @@ If chkSb.Value = vbChecked Then
     If Trim(txtSbAccNum) <> "" Then
         'check the existance of sbaccount
         Set SBClass = New clsSBAcc
-        SbACCID = SBClass.GetAccountID(txtSbAccNum)
+        If cmbSB.Visible Then SbACCID = cmbSB.ItemData(cmbSB.ListIndex)
+        SbACCID = SBClass.GetAccountID(txtSbAccNum, SbACCID)
         Set SBClass = Nothing
         If SbACCID = 0 Then
             'Invalid Account NO
@@ -733,7 +741,16 @@ If SbACCID Then
     'Now Pay the Amount SHHead
     
     Dim SbHeadID As Long
-    SbHeadID = bankClass.GetHeadIDCreated(GetResourceString(421), LoadResString(421), parMemberDeposit, 0, wis_SBAcc)
+    Dim sbTYpe As Integer
+    Dim headName As String
+    sbTYpe = 0
+    If cmbSB.Visible Then
+        sbTYpe = cmbSB.ItemData(cmbSB.ListIndex)
+        headName = GetDepositName(wis_SBAcc, sbTYpe, engHeadName)
+        SbHeadID = bankClass.GetHeadIDCreated(headName, engHeadName, parMemberDeposit, 0, wis_SBAcc + sbTYpe)
+    Else
+        SbHeadID = bankClass.GetHeadIDCreated(GetResourceString(421), LoadResString(421), parMemberDeposit, 0, wis_SBAcc + sbTYpe)
+    End If
     
     If Not bankClass.UpdateContraTrans(LoanHeadID, SbHeadID, Amount, TransDate) Then GoTo Err_line
                             
@@ -797,7 +814,7 @@ lblPenal = GetResourceString(345) '"PenalInterest
 lblNewBalance = GetResourceString(260, 42) 'New BAlance
 chkInterest.Caption = GetResourceString(308)  'Deduct Interest
 'chk.Caption = GetResourceString(309)  'Deduct Legal Fee
-chkSb.Caption = GetResourceString(421, 271)
+Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271)
 
 cmdCancel.Caption = GetResourceString(2)  'Cancel
 cmdOk.Caption = GetResourceString(1)      'OK
@@ -1126,14 +1143,37 @@ If chkSb.Value = vbUnchecked Then Exit Sub
 If m_LoanID = 0 Then Exit Sub
 
 Dim rst As Recordset
-gDbTrans.SqlStmt = "SELECT AccNum From SBMASTER " & _
-    " WHERE CustomerId = (SELECT CustomerID From LoanMAster " & _
+gDbTrans.SqlStmt = "SELECT AccNum,DepositType From SBMASTER " & _
+    " WHERE CustomerId = (SELECT CustomerID From LoanMaster " & _
         " WHERE LoanID = " & m_LoanID & ")"
 
-If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then _
-    txtSbAccNum = FormatField(rst(0))
-
+Dim recCount As Integer
+    recCount = gDbTrans.Fetch(rst, adOpenForwardOnly)
+    If recCount = 1 Then
+        txtSbAccNum = FormatField(rst(0))
+        If cmbSB.Visible Then Call SetComboIndex(cmbSB, , FormatField(rst(1)))
+    End If
+    If recCount > 1 Then
+        If Not cmbSB.Visible Then
+            txtSbAccNum = FormatField(rst(0))
+            Exit Sub
+        End If
+        
+        If cmbSB.ListIndex < 0 Then
+            MsgBox "Please select savings account type", , wis_MESSAGE_TITLE
+            Exit Sub
+        Else
+            gDbTrans.SqlStmt = "SELECT AccNum From SBMASTER " & _
+                " WHERE DepositType = " & cmbSB.ItemData(cmbSB.ListIndex) & _
+                " And CustomerId = (SELECT CustomerID From LoanMaster " & _
+                " WHERE LoanID = " & m_LoanID & ")"
+            recCount = gDbTrans.Fetch(rst, adOpenForwardOnly)
+            If recCount > 0 Then txtSbAccNum = FormatField(rst(0))
+        End If
+    End If
 End Sub
+
+
 
 Private Sub cmdCancel_Click()
 Unload Me
@@ -1253,10 +1293,8 @@ Exit_Line:
 Err_line:
     
     If Err Then
-        'MsgBox "Data lookup: " & vbCrLf _
-            & Err.Description, vbCritical
-        MsgBox "Data lookup: " & vbCrLf _
-            & Err.Description, vbCritical
+        'MsgBox "Data lookup: " & vbCrLf & Err.Description, vbCritical
+        MsgBox "Data lookup: " & vbCrLf & Err.Description, vbCritical
     End If
     GoTo Exit_Line
 
@@ -1283,7 +1321,7 @@ End Sub
 
 
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 m_FormLoaded = False
 End Sub
 

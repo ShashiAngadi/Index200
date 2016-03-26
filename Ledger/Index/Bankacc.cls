@@ -52,7 +52,7 @@ InsertIntoIndexIds = False
 
 If headID = 0 Then Exit Function
 
-gDbTrans.SqlStmt = " INSERT INTO BankHeadIds " & _
+gDbTrans.SqlStmt = "INSERT INTO BankHeadIds " & _
                 "(HeadID,HeadName,AccType,AliasName) " & _
                  " VALUES ( " & _
                  headID & "," & _
@@ -1090,7 +1090,7 @@ On Error GoTo Hell:
 Dim RetLng As Long
 Dim rst As ADODB.Recordset
 
-ReDim HeadNames(0)
+ReDim headNames(0)
 ReDim HeadIds(0)
     
 gDbTrans.SqlStmt = " SELECT ParentName,ParentID " & _
@@ -1102,13 +1102,13 @@ RetLng = gDbTrans.Fetch(rst, adOpenStatic)
 
 If RetLng < 1 Then Exit Function
     
-ReDim HeadNames(RetLng - 1)
+ReDim headNames(RetLng - 1)
 ReDim HeadIds(RetLng - 1)
 
 RetLng = 0
 
 Do While rst.EOF
-    HeadNames(RetLng) = FormatField(rst("ParentName"))
+    headNames(RetLng) = FormatField(rst("ParentName"))
     HeadIds(RetLng) = FormatField(rst("ParentID"))
     RetLng = RetLng + 1
     rst.MoveNext
@@ -1214,6 +1214,15 @@ headID = FormatField(rstHeads.Fields(0)) + 1
 
 Set rstHeads = Nothing
     
+gDbTrans.SqlStmt = "SELECT headID from BankHeadIDs where HeadID= " & headID
+Call gDbTrans.Fetch(rstHeads, adOpenForwardOnly)
+    
+While rstHeads.recordCount <> 0
+    headID = headID + 1
+    gDbTrans.SqlStmt = "SELECT headID from BankHeadIDs where HeadID= " & headID
+    Call gDbTrans.Fetch(rstHeads, adOpenForwardOnly)
+
+Wend
 If headID < ParentID Then headID = headID + ParentID
 
 ' Else create the head with given headID & parentiD

@@ -12,11 +12,20 @@ Begin VB.Form frmMMAcc
    ClientWidth     =   7785
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   7635
    ScaleWidth      =   7785
    ShowInTaskbar   =   0   'False
+   Begin VB.CommandButton cmdMemType 
+      Caption         =   "..."
+      Height          =   255
+      Left            =   4440
+      TabIndex        =   113
+      Top             =   7080
+      Width           =   375
+   End
    Begin VB.CommandButton cmdOK 
       Cancel          =   -1  'True
       Caption         =   "&OK"
@@ -25,527 +34,6 @@ Begin VB.Form frmMMAcc
       TabIndex        =   30
       Top             =   7020
       Width           =   1215
-   End
-   Begin VB.Frame fraReports 
-      Height          =   5985
-      Left            =   270
-      TabIndex        =   80
-      Top             =   720
-      Width           =   7245
-      Begin VB.Frame fraMemType 
-         Height          =   1980
-         Left            =   165
-         TabIndex        =   88
-         Top             =   3420
-         Width           =   6975
-         Begin VB.CommandButton cmdAdvance 
-            Caption         =   "&Advanced"
-            Height          =   430
-            Left            =   5640
-            TabIndex        =   99
-            Top             =   1400
-            Width           =   1215
-         End
-         Begin VB.TextBox txtDate1 
-            Enabled         =   0   'False
-            Height          =   315
-            Left            =   1590
-            TabIndex        =   93
-            Top             =   840
-            Width           =   1215
-         End
-         Begin VB.TextBox txtDate2 
-            Enabled         =   0   'False
-            Height          =   315
-            Left            =   5160
-            TabIndex        =   98
-            Top             =   810
-            Width           =   1305
-         End
-         Begin VB.CommandButton cmdDate1 
-            Caption         =   "..."
-            Height          =   315
-            Left            =   2850
-            TabIndex        =   92
-            Top             =   840
-            Width           =   315
-         End
-         Begin VB.CommandButton cmdDate2 
-            Caption         =   "..."
-            Height          =   315
-            Left            =   6540
-            TabIndex        =   97
-            Top             =   810
-            Width           =   315
-         End
-         Begin VB.ComboBox cmbRepMemType 
-            Height          =   315
-            Left            =   1590
-            TabIndex        =   95
-            Top             =   1440
-            Width           =   2415
-         End
-         Begin VB.OptionButton optName 
-            Caption         =   " By name "
-            Height          =   315
-            Left            =   3540
-            TabIndex        =   90
-            Top             =   330
-            Width           =   2115
-         End
-         Begin VB.OptionButton optMemId 
-            Caption         =   "By Member Id :"
-            Height          =   315
-            Left            =   360
-            TabIndex        =   89
-            Top             =   270
-            Value           =   -1  'True
-            Width           =   2250
-         End
-         Begin VB.Label lblDate2 
-            Caption         =   "and before (dd/mm/yyyy)"
-            Enabled         =   0   'False
-            Height          =   315
-            Left            =   3300
-            TabIndex        =   96
-            Top             =   870
-            Width           =   1845
-         End
-         Begin VB.Label lblDate1 
-            Caption         =   "after (dd/mm/yyyy)"
-            Enabled         =   0   'False
-            Height          =   315
-            Left            =   90
-            TabIndex        =   91
-            Top             =   870
-            Width           =   1485
-         End
-         Begin VB.Line Line1 
-            X1              =   120
-            X2              =   6900
-            Y1              =   690
-            Y2              =   690
-         End
-         Begin VB.Label lblMemType 
-            Caption         =   "Member Type"
-            Height          =   315
-            Left            =   90
-            TabIndex        =   94
-            Top             =   1470
-            Width           =   2775
-         End
-      End
-      Begin VB.CommandButton cmdView 
-         Caption         =   "&View"
-         Default         =   -1  'True
-         Height          =   430
-         Left            =   5910
-         TabIndex        =   44
-         Top             =   5500
-         Width           =   1215
-      End
-      Begin VB.Frame fraChooseReport 
-         Caption         =   "Choose a report"
-         Height          =   3345
-         Left            =   165
-         TabIndex        =   81
-         Top             =   195
-         Width           =   6975
-         Begin VB.OptionButton optReports 
-            Caption         =   "no-Loan members List"
-            Height          =   315
-            Index           =   11
-            Left            =   3630
-            TabIndex        =   110
-            Top             =   2760
-            Width           =   2850
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "Loan Memebr List"
-            Height          =   315
-            Index           =   10
-            Left            =   300
-            TabIndex        =   109
-            Top             =   2760
-            Width           =   3000
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "General Ledger"
-            Height          =   315
-            Index           =   9
-            Left            =   300
-            TabIndex        =   108
-            Top             =   1830
-            Width           =   2865
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "Show Monthly Balance"
-            Height          =   315
-            Index           =   8
-            Left            =   3630
-            TabIndex        =   107
-            Top             =   2310
-            Width           =   3000
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "Share Certificate List"
-            Height          =   315
-            Index           =   7
-            Left            =   3630
-            TabIndex        =   106
-            Top             =   1815
-            Width           =   3000
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "List of members as on"
-            Height          =   315
-            Index           =   1
-            Left            =   300
-            TabIndex        =   40
-            Top             =   2310
-            Width           =   2850
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "Member Balances where"
-            Height          =   315
-            Index           =   0
-            Left            =   300
-            TabIndex        =   37
-            Top             =   360
-            Value           =   -1  'True
-            Width           =   2865
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "Sub day book"
-            Height          =   315
-            Index           =   2
-            Left            =   300
-            TabIndex        =   38
-            Top             =   870
-            Width           =   2865
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "Sub Cash Book"
-            Height          =   315
-            Index           =   3
-            Left            =   300
-            TabIndex        =   39
-            Top             =   1350
-            Width           =   2865
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "Members Admitted"
-            Height          =   315
-            Index           =   4
-            Left            =   3630
-            TabIndex        =   41
-            Top             =   360
-            Width           =   2955
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "Members Cancelled"
-            Height          =   315
-            Index           =   5
-            Left            =   3630
-            TabIndex        =   42
-            Top             =   840
-            Width           =   2955
-         End
-         Begin VB.OptionButton optReports 
-            Caption         =   "Member/Share  Fee collected"
-            Height          =   315
-            Index           =   6
-            Left            =   3630
-            TabIndex        =   43
-            Top             =   1335
-            Width           =   3000
-         End
-      End
-   End
-   Begin VB.Frame fraProps 
-      Height          =   5985
-      Left            =   270
-      TabIndex        =   78
-      Top             =   720
-      Width           =   7245
-      Begin VB.CommandButton cmdApply 
-         Caption         =   "&Apply"
-         Enabled         =   0   'False
-         Height          =   415
-         Left            =   5790
-         TabIndex        =   74
-         Top             =   5490
-         Width           =   1215
-      End
-      Begin VB.Frame fraPropMemCharges 
-         Height          =   1125
-         Left            =   255
-         TabIndex        =   79
-         Top             =   225
-         Width           =   6735
-         Begin VB.TextBox txtPropShareValue 
-            Height          =   350
-            Left            =   5670
-            TabIndex        =   55
-            Text            =   "0.00"
-            Top             =   690
-            Width           =   855
-         End
-         Begin VB.TextBox txtPropShareFee 
-            Height          =   350
-            Left            =   5670
-            TabIndex        =   53
-            Text            =   "0.00"
-            Top             =   270
-            Width           =   855
-         End
-         Begin VB.TextBox txtPropMemFee 
-            Height          =   350
-            Left            =   2520
-            TabIndex        =   49
-            Text            =   "0.00"
-            Top             =   240
-            Width           =   705
-         End
-         Begin VB.TextBox txtPropMemCancel 
-            Height          =   350
-            Left            =   2520
-            TabIndex        =   51
-            Text            =   "0.00"
-            Top             =   660
-            Width           =   705
-         End
-         Begin VB.Label lblPropShareValue 
-            Caption         =   "Share Value :"
-            Height          =   300
-            Left            =   3540
-            TabIndex        =   54
-            Top             =   690
-            Width           =   1665
-         End
-         Begin VB.Label lblPropShareFee 
-            Caption         =   "Share Fee :"
-            Height          =   300
-            Left            =   3540
-            TabIndex        =   52
-            Top             =   300
-            Width           =   1545
-         End
-         Begin VB.Label lblPropMemFee 
-            Caption         =   "Membership Fee :"
-            Height          =   300
-            Left            =   180
-            TabIndex        =   48
-            Top             =   255
-            Width           =   1800
-         End
-         Begin VB.Label lblPropMemCancel 
-            Caption         =   "MemberShip Cancellation : "
-            Height          =   300
-            Left            =   165
-            TabIndex        =   50
-            Top             =   660
-            Width           =   2115
-         End
-      End
-      Begin VB.Frame fraPropDivedend 
-         Caption         =   "Divedend"
-         Height          =   3975
-         Left            =   240
-         TabIndex        =   56
-         Top             =   1425
-         Width           =   6765
-         Begin VB.TextBox txtPropNextDivedendOn 
-            Height          =   315
-            Left            =   5400
-            TabIndex        =   61
-            Top             =   690
-            Width           =   1245
-         End
-         Begin VB.CommandButton cmdDividend 
-            Caption         =   "Add Dividend"
-            Enabled         =   0   'False
-            Height          =   400
-            Left            =   4980
-            TabIndex        =   68
-            Top             =   1920
-            Width           =   1665
-         End
-         Begin VB.CommandButton cmdUndoInterests 
-            Caption         =   "Undo Dividend"
-            Enabled         =   0   'False
-            Height          =   400
-            Left            =   4110
-            TabIndex        =   71
-            Top             =   2580
-            Width           =   2535
-         End
-         Begin VB.TextBox txtUndoInterest 
-            Height          =   315
-            Left            =   2055
-            TabIndex        =   70
-            Top             =   2610
-            Width           =   1245
-         End
-         Begin VB.TextBox txtToDate 
-            Height          =   315
-            Left            =   5400
-            TabIndex        =   65
-            Top             =   1110
-            Width           =   1245
-         End
-         Begin VB.TextBox txtFromDate 
-            Height          =   315
-            Left            =   2055
-            TabIndex        =   63
-            Top             =   1155
-            Width           =   1245
-         End
-         Begin VB.TextBox txtPropDivedend 
-            Height          =   315
-            Left            =   2535
-            TabIndex        =   58
-            Text            =   "0.00"
-            Top             =   270
-            Width           =   735
-         End
-         Begin ComctlLib.ProgressBar prg 
-            Height          =   315
-            Left            =   120
-            TabIndex        =   67
-            Top             =   1980
-            Width           =   4215
-            _ExtentX        =   7435
-            _ExtentY        =   556
-            _Version        =   327682
-            Appearance      =   1
-         End
-         Begin VB.Line Line4 
-            X1              =   6720
-            X2              =   0
-            Y1              =   2460
-            Y2              =   2460
-         End
-         Begin VB.Label txtPropLastDivedendOn 
-            BackColor       =   &H80000005&
-            BorderStyle     =   1  'Fixed Single
-            Height          =   315
-            Left            =   2070
-            TabIndex        =   104
-            Top             =   690
-            Width           =   1215
-         End
-         Begin VB.Label txtFailAccID 
-            BackColor       =   &H80000005&
-            BorderStyle     =   1  'Fixed Single
-            Height          =   345
-            Left            =   90
-            TabIndex        =   73
-            Top             =   3510
-            Width           =   6555
-         End
-         Begin VB.Label lblUndoInterest 
-            Caption         =   "Undo interest added on: "
-            Height          =   300
-            Left            =   150
-            TabIndex        =   69
-            Top             =   2610
-            Width           =   2025
-         End
-         Begin VB.Label lblFailAccIDs 
-            Caption         =   "Accounts where undo was not possible:"
-            Height          =   300
-            Left            =   150
-            TabIndex        =   72
-            Top             =   3180
-            Width           =   5850
-         End
-         Begin VB.Label lblStatus 
-            Caption         =   "x"
-            Height          =   300
-            Left            =   180
-            TabIndex        =   66
-            Top             =   1590
-            Width           =   5535
-         End
-         Begin VB.Label lblToDate 
-            Caption         =   "ToDate :"
-            Height          =   300
-            Left            =   3510
-            TabIndex        =   64
-            Top             =   1170
-            Width           =   1785
-         End
-         Begin VB.Label lblFromDate 
-            Caption         =   "FromDate : "
-            Height          =   300
-            Left            =   120
-            TabIndex        =   62
-            Top             =   1185
-            Width           =   1815
-         End
-         Begin VB.Label lblpropDivedendRate 
-            Caption         =   "Divedend Rate :"
-            Height          =   300
-            Left            =   120
-            TabIndex        =   57
-            Top             =   330
-            Width           =   1515
-         End
-         Begin VB.Label lblPropLastDivedendOn 
-            Caption         =   "Last divedend debited on : "
-            Height          =   300
-            Left            =   105
-            TabIndex        =   59
-            Top             =   765
-            Width           =   1875
-         End
-         Begin VB.Label lblPropNextDivedendOn 
-            Caption         =   "Last divedend due on : "
-            Height          =   300
-            Left            =   3525
-            TabIndex        =   60
-            Top             =   750
-            Width           =   1815
-         End
-      End
-   End
-   Begin ComctlLib.TabStrip TabStrip 
-      Height          =   6630
-      Left            =   120
-      TabIndex        =   22
-      Top             =   240
-      Width           =   7575
-      _ExtentX        =   13361
-      _ExtentY        =   11695
-      _Version        =   327682
-      BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-         NumTabs         =   4
-         BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Transactions"
-            Key             =   "Transactions"
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "New / Modify Account"
-            Key             =   "AddModify"
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Reports"
-            Key             =   "Reports"
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Properties"
-            Key             =   "Properties"
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-      EndProperty
    End
    Begin VB.Frame fraTransact 
       Height          =   6000
@@ -1097,6 +585,527 @@ Begin VB.Form frmMMAcc
          Width           =   1230
       End
    End
+   Begin VB.Frame fraReports 
+      Height          =   5985
+      Left            =   270
+      TabIndex        =   80
+      Top             =   720
+      Width           =   7245
+      Begin VB.Frame fraMemType 
+         Height          =   1980
+         Left            =   165
+         TabIndex        =   88
+         Top             =   3420
+         Width           =   6975
+         Begin VB.CommandButton cmdAdvance 
+            Caption         =   "&Advanced"
+            Height          =   430
+            Left            =   5640
+            TabIndex        =   99
+            Top             =   1400
+            Width           =   1215
+         End
+         Begin VB.TextBox txtDate1 
+            Enabled         =   0   'False
+            Height          =   315
+            Left            =   1590
+            TabIndex        =   93
+            Top             =   840
+            Width           =   1215
+         End
+         Begin VB.TextBox txtDate2 
+            Enabled         =   0   'False
+            Height          =   315
+            Left            =   5160
+            TabIndex        =   98
+            Top             =   810
+            Width           =   1305
+         End
+         Begin VB.CommandButton cmdDate1 
+            Caption         =   "..."
+            Height          =   315
+            Left            =   2850
+            TabIndex        =   92
+            Top             =   840
+            Width           =   315
+         End
+         Begin VB.CommandButton cmdDate2 
+            Caption         =   "..."
+            Height          =   315
+            Left            =   6540
+            TabIndex        =   97
+            Top             =   810
+            Width           =   315
+         End
+         Begin VB.ComboBox cmbRepMemType 
+            Height          =   315
+            Left            =   1590
+            TabIndex        =   95
+            Top             =   1440
+            Width           =   2415
+         End
+         Begin VB.OptionButton optName 
+            Caption         =   " By name "
+            Height          =   315
+            Left            =   3540
+            TabIndex        =   90
+            Top             =   330
+            Width           =   2115
+         End
+         Begin VB.OptionButton optMemId 
+            Caption         =   "By Member Id :"
+            Height          =   315
+            Left            =   360
+            TabIndex        =   89
+            Top             =   270
+            Value           =   -1  'True
+            Width           =   2250
+         End
+         Begin VB.Label lblDate2 
+            Caption         =   "and before (dd/mm/yyyy)"
+            Enabled         =   0   'False
+            Height          =   315
+            Left            =   3300
+            TabIndex        =   96
+            Top             =   870
+            Width           =   1845
+         End
+         Begin VB.Label lblDate1 
+            Caption         =   "after (dd/mm/yyyy)"
+            Enabled         =   0   'False
+            Height          =   315
+            Left            =   90
+            TabIndex        =   91
+            Top             =   870
+            Width           =   1485
+         End
+         Begin VB.Line Line1 
+            X1              =   120
+            X2              =   6900
+            Y1              =   690
+            Y2              =   690
+         End
+         Begin VB.Label lblMemType 
+            Caption         =   "Member Type"
+            Height          =   315
+            Left            =   90
+            TabIndex        =   94
+            Top             =   1470
+            Width           =   2775
+         End
+      End
+      Begin VB.CommandButton cmdView 
+         Caption         =   "&View"
+         Default         =   -1  'True
+         Height          =   430
+         Left            =   5910
+         TabIndex        =   44
+         Top             =   5500
+         Width           =   1215
+      End
+      Begin VB.Frame fraChooseReport 
+         Caption         =   "Choose a report"
+         Height          =   3345
+         Left            =   165
+         TabIndex        =   81
+         Top             =   195
+         Width           =   6975
+         Begin VB.OptionButton optReports 
+            Caption         =   "no-Loan members List"
+            Height          =   315
+            Index           =   11
+            Left            =   3630
+            TabIndex        =   110
+            Top             =   2760
+            Width           =   2850
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "Loan Memebr List"
+            Height          =   315
+            Index           =   10
+            Left            =   300
+            TabIndex        =   109
+            Top             =   2760
+            Width           =   3000
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "General Ledger"
+            Height          =   315
+            Index           =   9
+            Left            =   300
+            TabIndex        =   108
+            Top             =   1830
+            Width           =   2865
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "Show Monthly Balance"
+            Height          =   315
+            Index           =   8
+            Left            =   3630
+            TabIndex        =   107
+            Top             =   2310
+            Width           =   3000
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "Share Certificate List"
+            Height          =   315
+            Index           =   7
+            Left            =   3630
+            TabIndex        =   106
+            Top             =   1815
+            Width           =   3000
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "List of members as on"
+            Height          =   315
+            Index           =   1
+            Left            =   300
+            TabIndex        =   40
+            Top             =   2310
+            Width           =   2850
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "Member Balances where"
+            Height          =   315
+            Index           =   0
+            Left            =   300
+            TabIndex        =   37
+            Top             =   360
+            Value           =   -1  'True
+            Width           =   2865
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "Sub day book"
+            Height          =   315
+            Index           =   2
+            Left            =   300
+            TabIndex        =   38
+            Top             =   870
+            Width           =   2865
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "Sub Cash Book"
+            Height          =   315
+            Index           =   3
+            Left            =   300
+            TabIndex        =   39
+            Top             =   1350
+            Width           =   2865
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "Members Admitted"
+            Height          =   315
+            Index           =   4
+            Left            =   3630
+            TabIndex        =   41
+            Top             =   360
+            Width           =   2955
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "Members Cancelled"
+            Height          =   315
+            Index           =   5
+            Left            =   3630
+            TabIndex        =   42
+            Top             =   840
+            Width           =   2955
+         End
+         Begin VB.OptionButton optReports 
+            Caption         =   "Member/Share  Fee collected"
+            Height          =   315
+            Index           =   6
+            Left            =   3630
+            TabIndex        =   43
+            Top             =   1335
+            Width           =   3000
+         End
+      End
+   End
+   Begin VB.Frame fraProps 
+      Height          =   5985
+      Left            =   270
+      TabIndex        =   78
+      Top             =   720
+      Width           =   7245
+      Begin VB.CommandButton cmdApply 
+         Caption         =   "&Apply"
+         Enabled         =   0   'False
+         Height          =   415
+         Left            =   5790
+         TabIndex        =   74
+         Top             =   5490
+         Width           =   1215
+      End
+      Begin VB.Frame fraPropMemCharges 
+         Height          =   1125
+         Left            =   255
+         TabIndex        =   79
+         Top             =   225
+         Width           =   6735
+         Begin VB.TextBox txtPropShareValue 
+            Height          =   350
+            Left            =   5670
+            TabIndex        =   55
+            Text            =   "0.00"
+            Top             =   690
+            Width           =   855
+         End
+         Begin VB.TextBox txtPropShareFee 
+            Height          =   350
+            Left            =   5670
+            TabIndex        =   53
+            Text            =   "0.00"
+            Top             =   270
+            Width           =   855
+         End
+         Begin VB.TextBox txtPropMemFee 
+            Height          =   350
+            Left            =   2520
+            TabIndex        =   49
+            Text            =   "0.00"
+            Top             =   240
+            Width           =   705
+         End
+         Begin VB.TextBox txtPropMemCancel 
+            Height          =   350
+            Left            =   2520
+            TabIndex        =   51
+            Text            =   "0.00"
+            Top             =   660
+            Width           =   705
+         End
+         Begin VB.Label lblPropShareValue 
+            Caption         =   "Share Value :"
+            Height          =   300
+            Left            =   3540
+            TabIndex        =   54
+            Top             =   690
+            Width           =   1665
+         End
+         Begin VB.Label lblPropShareFee 
+            Caption         =   "Share Fee :"
+            Height          =   300
+            Left            =   3540
+            TabIndex        =   52
+            Top             =   300
+            Width           =   1545
+         End
+         Begin VB.Label lblPropMemFee 
+            Caption         =   "Membership Fee :"
+            Height          =   300
+            Left            =   180
+            TabIndex        =   48
+            Top             =   255
+            Width           =   1800
+         End
+         Begin VB.Label lblPropMemCancel 
+            Caption         =   "MemberShip Cancellation : "
+            Height          =   300
+            Left            =   165
+            TabIndex        =   50
+            Top             =   660
+            Width           =   2115
+         End
+      End
+      Begin VB.Frame fraPropDivedend 
+         Caption         =   "Divedend"
+         Height          =   3975
+         Left            =   240
+         TabIndex        =   56
+         Top             =   1425
+         Width           =   6765
+         Begin VB.TextBox txtPropNextDivedendOn 
+            Height          =   315
+            Left            =   5400
+            TabIndex        =   61
+            Top             =   690
+            Width           =   1245
+         End
+         Begin VB.CommandButton cmdDividend 
+            Caption         =   "Add Dividend"
+            Enabled         =   0   'False
+            Height          =   400
+            Left            =   4980
+            TabIndex        =   68
+            Top             =   1920
+            Width           =   1665
+         End
+         Begin VB.CommandButton cmdUndoInterests 
+            Caption         =   "Undo Dividend"
+            Enabled         =   0   'False
+            Height          =   400
+            Left            =   4110
+            TabIndex        =   71
+            Top             =   2580
+            Width           =   2535
+         End
+         Begin VB.TextBox txtUndoInterest 
+            Height          =   315
+            Left            =   2055
+            TabIndex        =   70
+            Top             =   2610
+            Width           =   1245
+         End
+         Begin VB.TextBox txtToDate 
+            Height          =   315
+            Left            =   5400
+            TabIndex        =   65
+            Top             =   1110
+            Width           =   1245
+         End
+         Begin VB.TextBox txtFromDate 
+            Height          =   315
+            Left            =   2055
+            TabIndex        =   63
+            Top             =   1155
+            Width           =   1245
+         End
+         Begin VB.TextBox txtPropDivedend 
+            Height          =   315
+            Left            =   2535
+            TabIndex        =   58
+            Text            =   "0.00"
+            Top             =   270
+            Width           =   735
+         End
+         Begin ComctlLib.ProgressBar prg 
+            Height          =   315
+            Left            =   120
+            TabIndex        =   67
+            Top             =   1980
+            Width           =   4215
+            _ExtentX        =   7435
+            _ExtentY        =   556
+            _Version        =   327682
+            Appearance      =   1
+         End
+         Begin VB.Line Line4 
+            X1              =   6720
+            X2              =   0
+            Y1              =   2460
+            Y2              =   2460
+         End
+         Begin VB.Label txtPropLastDivedendOn 
+            BackColor       =   &H80000005&
+            BorderStyle     =   1  'Fixed Single
+            Height          =   315
+            Left            =   2070
+            TabIndex        =   104
+            Top             =   690
+            Width           =   1215
+         End
+         Begin VB.Label txtFailAccID 
+            BackColor       =   &H80000005&
+            BorderStyle     =   1  'Fixed Single
+            Height          =   345
+            Left            =   90
+            TabIndex        =   73
+            Top             =   3510
+            Width           =   6555
+         End
+         Begin VB.Label lblUndoInterest 
+            Caption         =   "Undo interest added on: "
+            Height          =   300
+            Left            =   150
+            TabIndex        =   69
+            Top             =   2610
+            Width           =   2025
+         End
+         Begin VB.Label lblFailAccIDs 
+            Caption         =   "Accounts where undo was not possible:"
+            Height          =   300
+            Left            =   150
+            TabIndex        =   72
+            Top             =   3180
+            Width           =   5850
+         End
+         Begin VB.Label lblStatus 
+            Caption         =   "x"
+            Height          =   300
+            Left            =   180
+            TabIndex        =   66
+            Top             =   1590
+            Width           =   5535
+         End
+         Begin VB.Label lblToDate 
+            Caption         =   "ToDate :"
+            Height          =   300
+            Left            =   3510
+            TabIndex        =   64
+            Top             =   1170
+            Width           =   1785
+         End
+         Begin VB.Label lblFromDate 
+            Caption         =   "FromDate : "
+            Height          =   300
+            Left            =   120
+            TabIndex        =   62
+            Top             =   1185
+            Width           =   1815
+         End
+         Begin VB.Label lblpropDivedendRate 
+            Caption         =   "Divedend Rate :"
+            Height          =   300
+            Left            =   120
+            TabIndex        =   57
+            Top             =   330
+            Width           =   1515
+         End
+         Begin VB.Label lblPropLastDivedendOn 
+            Caption         =   "Last divedend debited on : "
+            Height          =   300
+            Left            =   105
+            TabIndex        =   59
+            Top             =   765
+            Width           =   1875
+         End
+         Begin VB.Label lblPropNextDivedendOn 
+            Caption         =   "Last divedend due on : "
+            Height          =   300
+            Left            =   3525
+            TabIndex        =   60
+            Top             =   750
+            Width           =   1815
+         End
+      End
+   End
+   Begin ComctlLib.TabStrip TabStrip 
+      Height          =   6630
+      Left            =   120
+      TabIndex        =   22
+      Top             =   240
+      Width           =   7575
+      _ExtentX        =   13361
+      _ExtentY        =   11695
+      _Version        =   327682
+      BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
+         NumTabs         =   4
+         BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Transactions"
+            Key             =   "Transactions"
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "New / Modify Account"
+            Key             =   "AddModify"
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Reports"
+            Key             =   "Reports"
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Properties"
+            Key             =   "Properties"
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+      EndProperty
+   End
    Begin VB.Label lblMemberTypeName 
       Alignment       =   2  'Center
       AutoSize        =   -1  'True
@@ -1135,6 +1144,7 @@ Private m_MemberTypeName As String
 Private m_MemberTypeNameEnglish As String
 Private m_MemberLocked As Boolean
 Private M_ModuleID As wisModules
+Private m_multiMembers As Boolean
 
 Const CTL_MARGIN = 15
 Private m_accUpdatemode As wis_DBOperation
@@ -1150,10 +1160,37 @@ Attribute m_frmMMShare.VB_VarHelpID = -1
 Private m_frmdividend As frmIntPayble
 Public Event AccountChanged(ByVal AccId As Long)
 Public Event WindowClosed()
+Public Event SelectMemberType(memeberType As Integer, Cancel As Boolean)
 Public Event ShowReport(ReportType As wis_MemReports, ReportOrder As wis_ReportOrder, _
-        memberTYpe As wis_MemberType, fromDate As String, toDate As String, RepOptionClass As clsRepOption)
+        memberType As wis_MemberType, fromDate As String, toDate As String, RepOptionClass As clsRepOption)
        
-Public Property Let memberTYpe(NewValue As Integer)
+Private Sub LoadSetupValues()
+'Load the Setup values
+    Dim SetUp As New clsSetup
+    If SetUp Is Nothing Then Set SetUp = New clsSetup
+    Dim DefaultValue As String
+    DefaultValue = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "MemberShipFee", "0.00")
+    txtPropMemFee.Text = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "MemberShipFee", DefaultValue)
+    
+    DefaultValue = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "Cancellation", "0.00")
+    txtPropMemCancel.Text = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "Cancellation", DefaultValue)
+    DefaultValue = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "ShareFee", "0.00")
+    txtPropShareFee.Text = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "ShareFee", DefaultValue)
+    DefaultValue = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "ShareValue", "0.00")
+    txtPropShareValue.Text = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "ShareValue", DefaultValue)
+    DefaultValue = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "RateOfDivedend", "0.00")
+    txtPropDivedend.Text = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "RateOfDivedend", DefaultValue)
+    DefaultValue = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "LastDivedendOn", "")
+    txtPropLastDivedendOn = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "LastDivedendOn", DefaultValue)
+    DefaultValue = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "NextDivedendOn", "")
+    txtPropNextDivedendOn = SetUp.ReadSetupValue("MMAcc" & m_MemberType, "NextDivedendOn", DefaultValue)
+
+End Sub
+
+Public Property Let MultiMemberTypes(NewValue As Boolean)
+    m_multiMembers = NewValue
+End Property
+Public Property Let memberType(NewValue As Integer)
     
 If NewValue = 0 Or m_MemberType = NewValue Then Exit Property
     
@@ -1186,16 +1223,24 @@ Dim cmbIndex As Integer
         cmb(cmbIndex).Locked = True
         Call SetComboIndex(cmbRepMemType, , m_MemberType)
         cmbRepMemType.Locked = True
+        lblMemberTypeName.Left = (Me.Width - lblMemberTypeName.Width) / 2 - 100
+        cmdMemType.Left = lblMemberTypeName.Left + lblMemberTypeName.Width + 100
+        
+        LoadSetupValues
     End If
     
 End Property
 
-Public Property Get memberTYpe() As Integer
-    memberTYpe = m_MemberType
+Public Property Get memberType() As Integer
+    memberType = m_MemberType
 End Property
 Public Property Let SingleMemberModule(NewValue As Boolean)
     m_MemberLocked = NewValue
-    If m_MemberLocked Then lblMemberTypeName.Visible = False
+    MultiMemberTypes = Not NewValue
+    
+    'If m_MemberLocked Then lblMemberTypeName.Visible = False
+    lblMemberTypeName.Visible = Not NewValue
+    cmdMemType.Visible = Not NewValue
 End Property
 
 Public Property Get SingleMemberModule() As Boolean
@@ -1212,7 +1257,7 @@ Dim TransDate As Date
 Dim MemFee As Currency
 Dim PrevMemFee As Double
 Dim PrevTransDate As Date
-
+Dim headName As String
 Dim strAccNum As String
 
 ' Check for a valid Account number.
@@ -1295,7 +1340,7 @@ Dim strAccNum As String
     End With
     
     'Check if Member type is specified
-    Dim memberTYpe As Byte
+    Dim memberType As Byte
     If m_MemberType = 0 Then
         txtIndex = GetIndex("MemberType")
         With txtData(txtIndex)
@@ -1306,10 +1351,10 @@ Dim strAccNum As String
                 GoTo Exit_Line
             End If
             txtIndex = Val(ExtractToken(txtPrompt(txtIndex).Tag, "TextIndex"))
-            memberTYpe = cmb(txtIndex).ItemData(cmb(txtIndex).ListIndex)
+            memberType = cmb(txtIndex).ItemData(cmb(txtIndex).ListIndex)
         End With
     Else
-        memberTYpe = m_MemberType
+        memberType = m_MemberType
     End If
     
     'Check For Mebership Fee 'Code By Shashi on 18/2/2000
@@ -1428,9 +1473,11 @@ Dim strAccNum As String
     Dim bankClass As clsBankAcc
     Dim headID As Long
     Set bankClass = New clsBankAcc
+    headName = IIf(Len(m_MemberTypeName), m_MemberTypeName, GetResourceString(79)) & " " & GetResourceString(191)
     
-    headID = bankClass.GetHeadIDCreated(m_MemberTypeName & " " & GetResourceString(79, 191), _
-                m_MemberTypeNameEnglish & " " & LoadResourceStringS(79, 191), parBankIncome, 0, M_ModuleID)
+    headID = bankClass.GetHeadIDCreated(headName, _
+                IIf(Len(m_MemberTypeName), m_MemberTypeNameEnglish, LoadResourceStringS(79)) & " " & LoadResourceStringS(191), _
+                parBankIncome, 0, M_ModuleID)
     
     TransDate = GetSysFormatDate(GetVal("CreateDate"))
     
@@ -1451,7 +1498,7 @@ Dim strAccNum As String
                 Val(GetVal("IntroducerID")) & "," & _
                 AddQuotes(GetVal("LedgerNo"), True) & ", " & _
                 AddQuotes(GetVal("FolioNo"), True) & ", " & _
-                memberTYpe & "," & _
+                memberType & "," & _
                 GetAccGroupID & "," & gUserID & " )"
         'Build Sql To Insert values into MemTrans
         transType = wDeposit
@@ -1483,7 +1530,7 @@ Dim strAccNum As String
                 " IntroducerID = " & Val(GetVal("IntroducerID")) & "," & _
                 " LedgerNo = " & AddQuotes(GetVal("LedgerNo"), True) & "," & _
                 " FolioNo = " & AddQuotes(GetVal("FolioNo"), True) & ", " & _
-                " MemberType = " & memberTYpe & ", " & _
+                " MemberType = " & memberType & ", " & _
                 " CreateDate = #" & TransDate & "#," & _
                 " AccGroupId = " & GetAccGroupID & _
                 " where AccID = " & m_AccID
@@ -1528,15 +1575,15 @@ SaveAccount_error:
 End Function
 Private Function GetAccGroupID() As Byte
 
-Dim cmbIndex As Integer
-cmbIndex = GetIndex("AccGroup")
-If cmbIndex < 0 Then Exit Function
-cmbIndex = Val(ExtractToken(txtPrompt(cmbIndex).Tag, "TextIndex"))
-With cmb(cmbIndex)
-    If .ListCount = 1 Then .ListIndex = 0
-    If .ListIndex < 0 Then Exit Function
-    GetAccGroupID = .ItemData(.ListIndex)
-End With
+    Dim cmbIndex As Integer
+    cmbIndex = GetIndex("AccGroup")
+    If cmbIndex < 0 Then Exit Function
+    cmbIndex = Val(ExtractToken(txtPrompt(cmbIndex).Tag, "TextIndex"))
+    With cmb(cmbIndex)
+        If .ListCount = 1 Then .ListIndex = 0
+        If .ListIndex < 0 Then Exit Function
+        GetAccGroupID = .ItemData(.ListIndex)
+    End With
 End Function
 
 
@@ -1676,13 +1723,16 @@ Dim InTrans As Boolean
 'Perform DB Transactions
 gDbTrans.BeginTrans
 InTrans = True
-
+'  headID = bankClass.GetHeadIDCreated(m_MemberTypeName & " " & GetResourceString(79, 191), _
+                m_MemberTypeNameEnglish & " " & LoadResourceStringS(79, 191), parBankIncome, 0, M_ModuleID)
+   
 headName = m_MemberTypeName & " " & GetResourceString(53, 36) 'Share account
 headNameEnglish = m_MemberTypeNameEnglish & " " & LoadResourceStringS(53, 36) 'Share account
 headID = bankClass.GetHeadIDCreated(headName, headNameEnglish, parMemberShare, 0, M_ModuleID)
 'Create the share Fee
-headName = GetResourceString(53, 191) 'Share Fee
-headNameEnglish = LoadResourceStringS(53, 191) 'Share Fee
+Debug.Print "CHECK THE HEAD NAMES FOR SHARE and MEMBER FEE"
+headName = m_MemberTypeName & " " & GetResourceString(53, 191) 'Share Fee
+headNameEnglish = m_MemberTypeNameEnglish & " " & LoadResourceStringS(53, 191) 'Share Fee
 FeeHeadId = bankClass.GetHeadIDCreated(headName, headNameEnglish, parBankIncome, 0, M_ModuleID)
 
 'First perform the transaction for Share fee(charges)
@@ -1871,10 +1921,10 @@ Dim headID As Long
 Dim FeeHeadId As Long
 Dim headName As String
     
-headName = GetResourceString(53, 36) 'Share account
+headName = m_MemberTypeName & " " & GetResourceString(53, 36)  'Share account
 headID = GetIndexHeadID(headName)
 'Create the share Fee
-headName = GetResourceString(53, 191) 'Share Fee
+headName = m_MemberTypeName & " " & GetResourceString(53, 191) 'Share Fee
 FeeHeadId = GetIndexHeadID(headName)
 
   
@@ -2087,17 +2137,17 @@ End Function
 
 ' Returns the index of the control bound to "strDatasrc".
 Private Function GetIndex(strDataSrc As String) As Integer
-GetIndex = -1
-Dim strTmp As String
-Dim I As Integer
-For I = 0 To txtPrompt.count - 1
-    ' Get the data source for this control.
-    strTmp = ExtractToken(txtPrompt(I).Tag, "DataSource")
-    If StrComp(strDataSrc, strTmp, vbTextCompare) = 0 Then
-        GetIndex = I
-        Exit For
-    End If
-Next
+    GetIndex = -1
+    Dim strTmp As String
+    Dim I As Integer
+    For I = 0 To txtPrompt.count - 1
+        ' Get the data source for this control.
+        strTmp = ExtractToken(txtPrompt(I).Tag, "DataSource")
+        If StrComp(strDataSrc, strTmp, vbTextCompare) = 0 Then
+            GetIndex = I
+            Exit For
+        End If
+    Next
 End Function
 '****************************************************************************************
 'Returns a new account number
@@ -2123,15 +2173,15 @@ End Function
 ' Returns the text value from a control array
 ' bound the field "FieldName".
 Private Function GetVal(FieldName As String) As String
-Dim I As Integer
-Dim strTxt As String
-For I = 0 To txtData.count - 1
-    strTxt = ExtractToken(txtPrompt(I).Tag, "DataSource")
-    If StrComp(strTxt, FieldName, vbTextCompare) = 0 Then
-        GetVal = txtData(I).Text
-        Exit For
-    End If
-Next
+    Dim I As Integer
+    Dim strTxt As String
+    For I = 0 To txtData.count - 1
+        strTxt = ExtractToken(txtPrompt(I).Tag, "DataSource")
+        If StrComp(strTxt, FieldName, vbTextCompare) = 0 Then
+            GetVal = txtData(I).Text
+            Exit For
+        End If
+    Next
 End Function
 Private Function PassBookPageInitialize()
     Dim Offset As Single
@@ -2642,15 +2692,15 @@ End If
 End Sub
 
 Private Sub cmb_LostFocus(Index As Integer)
-'
-' Update the current text to the data text
-'
-
-Dim txtIndex As String
-txtIndex = ExtractToken(cmb(Index).Tag, "TextIndex")
-If txtIndex <> "" Then
-    txtData(Val(txtIndex)).Text = cmb(Index).Text
-End If
+    '
+    ' Update the current text to the data text
+    '
+    
+    Dim txtIndex As String
+    txtIndex = ExtractToken(cmb(Index).Tag, "TextIndex")
+    If txtIndex <> "" Then
+        txtData(Val(txtIndex)).Text = cmb(Index).Text
+    End If
 
 End Sub
 
@@ -2697,78 +2747,78 @@ txtIndex = ExtractToken(cmd(Index).Tag, "TextIndex")
 Dim strField As String
 strField = ExtractToken(txtPrompt(Val(txtIndex)).Tag, "DataSource")
 
-Select Case UCase$(strField)
-    Case "ACCNUM"
-        If m_accUpdatemode = Insert Then
-            txtData(txtIndex).Text = GetNewAccountNumber
-        End If
-
-    Case "ACCNAME"
-        m_CustReg.ModuleId = wis_Members
-        m_CustReg.ShowDialog
-        txtData(txtIndex).Text = m_CustReg.FullName
-
-    Case "CREATEDATE"
-        With Calendar
-            .Left = txtData(txtIndex).Left + Me.Left _
-                    + Me.picViewport.Left + fraNew.Left + 50
-            .Top = Me.Top + picViewport.Top + txtData(txtIndex).Top _
-                + fraNew.Top + 300
-            .Width = txtData(txtIndex).Width
-            If .Top + .Height > Screen.Height Then .Top = .Top - .Height - txtData(txtIndex).Height
-            .Height = .Width
-            .selDate = txtData(txtIndex).Text
-            .Show vbModal, Me
-            If .selDate <> "" Then txtData(txtIndex).Text = .selDate
-        End With
+    Select Case UCase$(strField)
+        Case "ACCNUM"
+            If m_accUpdatemode = Insert Then
+                txtData(txtIndex).Text = GetNewAccountNumber
+            End If
     
-    Case "INTRODUCERID"
-        ' Build a query for getting introducer details.
-        ' If an account number specified, exclude it from the list.
-        gDbTrans.SqlStmt = "SELECT MemMaster.AccID as [Acc No], " _
-                    & "Title + FirstName + Space(1) + Middlename " _
-                    & "+ space(1) + LastName as Name, HomeAddress, " _
-                    & "OfficeAddress FROM MemMaster, NameTab WHERE " _
-                    & "MemMaster.CustomerID = NameTab.CustomerID"
-        Dim intIndex As Integer
-        intIndex = GetIndex("AccNum")
-        If txtData(intIndex).Text <> "" And _
-                IsNumeric(txtData(intIndex).Text) Then
-            gDbTrans.SqlStmt = gDbTrans.SqlStmt & " AND " _
-                & "AccID <> " & txtData(intIndex).Text
-        End If
-        Dim Lret As Long
-        Lret = gDbTrans.Fetch(rst, adOpenDynamic)
-        If Lret <= 0 Then
-            'MsgBox "No accounts present!", vbExclamation, wis_MESSAGE_TITLE
-            MsgBox GetResourceString(525), vbExclamation, wis_MESSAGE_TITLE
-            Exit Sub
-        End If
-        'Fill the details to report dialog and display it.
-        If m_frmLookUp Is Nothing Then
-            Set m_frmLookUp = New frmLookUp
-        End If
-        If Not FillView(m_frmLookUp.lvwReport, rst) Then
-            'MsgBox "Error loading introducer accounts.", _
-                    vbCritical, wis_MESSAGE_TITLE
-            MsgBox "Error loading introducer accounts.", _
-                    vbCritical, wis_MESSAGE_TITLE
-            Exit Sub
-        End If
-        With m_frmLookUp
-            ' Hide the print and save buttons.
-            .cmdPrint.Visible = False
-            .cmdSave.Visible = False
-            ' Set the column widths.
-            .lvwReport.ColumnHeaders(2).Width = 3750
-            .lvwReport.ColumnHeaders(3).Width = 3750
-            .Title = "Select Introducer..."
-            .Show vbModal, Me
-          
-             txtData(txtIndex).Text = .lvwReport.SelectedItem.Text
-             txtData(txtIndex + 1).Text = .lvwReport.SelectedItem.SubItems(1)
-        End With
-End Select
+        Case "ACCNAME"
+            m_CustReg.ModuleId = wis_Members
+            m_CustReg.ShowDialog
+            txtData(txtIndex).Text = m_CustReg.FullName
+    
+        Case "CREATEDATE"
+            With Calendar
+                .Left = txtData(txtIndex).Left + Me.Left _
+                        + Me.picViewport.Left + fraNew.Left + 50
+                .Top = Me.Top + picViewport.Top + txtData(txtIndex).Top _
+                    + fraNew.Top + 300
+                .Width = txtData(txtIndex).Width
+                If .Top + .Height > Screen.Height Then .Top = .Top - .Height - txtData(txtIndex).Height
+                .Height = .Width
+                .selDate = txtData(txtIndex).Text
+                .Show vbModal, Me
+                If .selDate <> "" Then txtData(txtIndex).Text = .selDate
+            End With
+        
+        Case "INTRODUCERID"
+            ' Build a query for getting introducer details.
+            ' If an account number specified, exclude it from the list.
+            gDbTrans.SqlStmt = "SELECT MemMaster.AccID as [Acc No], " _
+                        & "Title + FirstName + Space(1) + Middlename " _
+                        & "+ space(1) + LastName as Name, HomeAddress, " _
+                        & "OfficeAddress FROM MemMaster, NameTab WHERE " _
+                        & "MemMaster.CustomerID = NameTab.CustomerID"
+            Dim intIndex As Integer
+            intIndex = GetIndex("AccNum")
+            If txtData(intIndex).Text <> "" And _
+                    IsNumeric(txtData(intIndex).Text) Then
+                gDbTrans.SqlStmt = gDbTrans.SqlStmt & " AND " _
+                    & "AccID <> " & txtData(intIndex).Text
+            End If
+            Dim Lret As Long
+            Lret = gDbTrans.Fetch(rst, adOpenDynamic)
+            If Lret <= 0 Then
+                'MsgBox "No accounts present!", vbExclamation, wis_MESSAGE_TITLE
+                MsgBox GetResourceString(525), vbExclamation, wis_MESSAGE_TITLE
+                Exit Sub
+            End If
+            'Fill the details to report dialog and display it.
+            If m_frmLookUp Is Nothing Then
+                Set m_frmLookUp = New frmLookUp
+            End If
+            If Not FillView(m_frmLookUp.lvwReport, rst) Then
+                'MsgBox "Error loading introducer accounts.", _
+                        vbCritical, wis_MESSAGE_TITLE
+                MsgBox "Error loading introducer accounts.", _
+                        vbCritical, wis_MESSAGE_TITLE
+                Exit Sub
+            End If
+            With m_frmLookUp
+                ' Hide the print and save buttons.
+                .cmdPrint.Visible = False
+                .cmdSave.Visible = False
+                ' Set the column widths.
+                .lvwReport.ColumnHeaders(2).Width = 3750
+                .lvwReport.ColumnHeaders(3).Width = 3750
+                .Title = "Select Introducer..."
+                .Show vbModal, Me
+              
+                 txtData(txtIndex).Text = .lvwReport.SelectedItem.Text
+                 txtData(txtIndex + 1).Text = .lvwReport.SelectedItem.SubItems(1)
+            End With
+    End Select
 End Sub
 Private Sub cmdAccept_Click()
 
@@ -2794,8 +2844,7 @@ Call m_Notes.DisplayNote(rtfNote)
 End Sub
 
 Private Sub cmdAdvance_Click()
-    If m_clsRepOption Is Nothing Then _
-            Set m_clsRepOption = New clsRepOption
+    If m_clsRepOption Is Nothing Then Set m_clsRepOption = New clsRepOption
     
     m_clsRepOption.ShowDialog
 
@@ -2854,13 +2903,13 @@ End If
 
 Dim SetUp As New clsSetup
 
-Call SetUp.WriteSetupValue("MMAcc", "MemberShipFee", Me.txtPropMemFee.Text)
-Call SetUp.WriteSetupValue("MMAcc", "Cancellation", txtPropMemCancel.Text)
-Call SetUp.WriteSetupValue("MMAcc", "ShareFee", txtPropShareFee.Text)
-Call SetUp.WriteSetupValue("MMAcc", "ShareValue", txtPropShareValue.Text)
-Call SetUp.WriteSetupValue("MMAcc", "RateOfDivedend", txtPropDivedend.Text)
-Call SetUp.WriteSetupValue("MMAcc", "LastDivedendOn", txtPropLastDivedendOn)
-Call SetUp.WriteSetupValue("MMAcc", "NextDivedendOn", txtPropNextDivedendOn)
+Call SetUp.WriteSetupValue("MMAcc" & m_MemberType, "MemberShipFee", Me.txtPropMemFee.Text)
+Call SetUp.WriteSetupValue("MMAcc" & m_MemberType, "Cancellation", txtPropMemCancel.Text)
+Call SetUp.WriteSetupValue("MMAcc" & m_MemberType, "ShareFee", txtPropShareFee.Text)
+Call SetUp.WriteSetupValue("MMAcc" & m_MemberType, "ShareValue", txtPropShareValue.Text)
+Call SetUp.WriteSetupValue("MMAcc" & m_MemberType, "RateOfDivedend", txtPropDivedend.Text)
+Call SetUp.WriteSetupValue("MMAcc" & m_MemberType, "LastDivedendOn", txtPropLastDivedendOn)
+Call SetUp.WriteSetupValue("MMAcc" & m_MemberType, "NextDivedendOn", txtPropNextDivedendOn)
 cmdApply.Enabled = False
 End Sub
 
@@ -2971,12 +3020,12 @@ gDbTrans.SqlStmt = "SELECT AccID,AccNum FROM MemMaster " & _
 
 If m_MemberType > 0 Then
     gDbTrans.SqlStmt = "SELECT AccID,AccNum,MemberTypeName FROM MemMaster A Inner Join MemberTypeTab B" & _
-        " On A.MemberType = b.MemberType " & _
-        " Where A.AccID in (Select Distinct AccID From MemTrans) ORDER BY MemberType, val(AccNum)"
+        " On A.MemberType = b.MemberType Where A.MemberType = " & m_MemberType & _
+        " AnD A.AccID in (Select Distinct AccID From MemTrans) ORDER BY B.MemberType, val(AccNum)"
 End If
 
 If gDbTrans.Fetch(rst_Main, adOpenStatic) <= 0 Then Exit Function
-MaxAccID = rst_Main.RecordCount
+MaxAccID = rst_Main.recordCount
                                                 
 lblStatus = "Collecting the account Information"
 prg.Max = MaxAccID + 1
@@ -3121,8 +3170,8 @@ Me.Refresh
 Dim bankClass As clsBankAcc
 
 Set bankClass = New clsBankAcc
-name = m_MemberTypeName & " " & GetResourceString(49, 200) 'Member Dividend
-nameEnglish = m_MemberTypeNameEnglish & " " & LoadResourceStringS(49, 200) 'Member Dividend
+name = IIf(Len(m_MemberTypeName), m_MemberTypeName, GetResourceString(49)) & " " & GetResourceString(200)  'Member Dividend
+nameEnglish = IIf(Len(m_MemberTypeName), m_MemberTypeNameEnglish, LoadResourceStringS(49)) & " " & LoadResourceStringS(49, 200) 'Member Dividend
 PayableAccID = bankClass.GetHeadIDCreated(name, nameEnglish, parPayAble, 0, M_ModuleID)
 
 name = name & " " & GetResourceString(267) 'Divedend Paid
@@ -3224,8 +3273,8 @@ Dim headName As String
 Dim headNameEnglish As String
 
 Set bankClass = New clsBankAcc
-headName = m_MemberTypeName & " " & GetResourceString(49, 200) 'Member Dividend
-headNameEnglish = m_MemberTypeNameEnglish & " " & LoadResourceStringS(49, 200) 'Member Dividend
+headName = IIf(Len(m_MemberTypeName), m_MemberTypeName, GetResourceString(49)) & " " & GetResourceString(200)  'Member Dividend
+headNameEnglish = IIf(Len(m_MemberTypeName), m_MemberTypeNameEnglish, LoadResourceStringS(49)) & " " & LoadResourceStringS(49, 200) 'Member Dividend
 PayableAccID = bankClass.GetHeadIDCreated(headName, headNameEnglish, parPayAble, 0, M_ModuleID)
 headName = headName & " " & GetResourceString(267) 'Diiveden Paid
 headNameEnglish = headNameEnglish & " " & LoadResString(267) 'Diiveden Paid
@@ -3290,7 +3339,7 @@ End If
             'FIll up the list box in the form
             Dim I As Long
             .lstCheque.Clear
-            For I = 1 To rst.RecordCount
+            For I = 1 To rst.recordCount
                 If FormatField(rst("ReturnTransID")) = 0 Then _
                 .lstCheque.AddItem FormatField(rst("CertNo"))
                 rst.MoveNext
@@ -3322,6 +3371,10 @@ End If
 
 End Sub
 
+Private Sub cmdMemType_Click()
+    Call lblMemberTypeName_DblClick
+End Sub
+
 Private Sub cmdNextTrans_Click()
 
 If m_rstPassBook Is Nothing Then Exit Sub
@@ -3332,7 +3385,7 @@ Dim CurPos As Integer
     If m_rstPassBook.EOF Then m_rstPassBook.MoveLast
     CurPos = m_rstPassBook.AbsolutePosition
     CurPos = 10 - (CurPos Mod 10)
-    If m_rstPassBook.AbsolutePosition + CurPos >= m_rstPassBook.RecordCount Then
+    If m_rstPassBook.AbsolutePosition + CurPos >= m_rstPassBook.recordCount Then
         Beep
         Exit Sub
     Else
@@ -3342,10 +3395,10 @@ Dim CurPos As Integer
 Call PassBookPageShow
 
 #If junk Then
-If m_rstPassBook.AbsolutePosition < m_rstPassBook.RecordCount - 10 Then
+If m_rstPassBook.AbsolutePosition < m_rstPassBook.recordCount - 10 Then
     If m_rstPassBook.AbsolutePosition Mod 10 <> 0 Then
         m_rstPassBook.Move 10 - m_rstPassBook.AbsolutePosition Mod 10
-        If m_rstPassBook.AbsolutePosition >= m_rstPassBook.RecordCount - 10 Then
+        If m_rstPassBook.AbsolutePosition >= m_rstPassBook.recordCount - 10 Then
             cmdNextTrans.Enabled = False
         End If
     End If
@@ -3353,7 +3406,7 @@ Else
     cmdNextTrans.Enabled = False
 End If
 Call ShowPassBookPage
-If m_rstPassBook.AbsolutePosition >= m_rstPassBook.RecordCount Then
+If m_rstPassBook.AbsolutePosition >= m_rstPassBook.recordCount Then
     cmdPrevTrans.Enabled = False
 Else
     cmdPrevTrans.Enabled = True
@@ -3944,8 +3997,7 @@ M_ModuleID = wis_Members
 Screen.MousePointer = vbHourglass
 Call CenterMe(Me)
 'Centre the form
- Me.Move (Screen.Width - Me.Width) \ 2, _
-            (Screen.Height - Me.Height) \ 2
+ Me.Move (Screen.Width - Me.Width) \ 2, (Screen.Height - Me.Height) \ 2
 'set icon for the form caption
 Me.Icon = LoadResPicture(161, vbResIcon)
 cmdSharePrev.Picture = LoadResPicture(101, vbResIcon)
@@ -4027,16 +4079,7 @@ If recCount > 1 Or rstMemType("MemberType") > 0 Then
     End With
 End If
 
-'Load the Setup values
-    Dim SetUp As New clsSetup
-    If SetUp Is Nothing Then Set SetUp = New clsSetup
-    txtPropMemFee.Text = SetUp.ReadSetupValue("MMAcc", "MemberShipFee", "0.00")
-    txtPropMemCancel.Text = SetUp.ReadSetupValue("MMAcc", "Cancellation", "0.00")
-    txtPropShareFee.Text = SetUp.ReadSetupValue("MMAcc", "ShareFee", "0.00")
-    txtPropShareValue.Text = SetUp.ReadSetupValue("MMAcc", "ShareValue", "0.00")
-    txtPropDivedend.Text = SetUp.ReadSetupValue("MMAcc", "RateOfDivedend", "0.00")
-    txtPropLastDivedendOn = SetUp.ReadSetupValue("MMAcc", "LastDivedendOn", "")
-    txtPropNextDivedendOn = SetUp.ReadSetupValue("MMAcc", "NextDivedendOn", "")
+    Call LoadSetupValues
     cmdApply.Enabled = False
 
 Dim rst As Recordset
@@ -4076,7 +4119,11 @@ RaiseEvent WindowClosed
 
 End Sub
 
-
+Private Sub lblMemberTypeName_DblClick()
+    Dim memType As Integer
+    Dim Cancel As Boolean
+    RaiseEvent SelectMemberType(memType, Cancel)
+End Sub
 
 Private Sub m_frmMMShare_ShareIssued(ShareNos() As String, Cancel As Boolean)
 Dim I As Long
@@ -4108,6 +4155,7 @@ Next I
 Dim SetupClass As New clsSetup
 Dim ShareValue As Currency
     ShareValue = Val(SetupClass.ReadSetupValue("MMAcc", "ShareValue", "10"))
+    ShareValue = Val(SetupClass.ReadSetupValue("MMAcc" & m_MemberType, "ShareValue", CStr(ShareValue)))
     txtAmount = ShareValue * (MaxI + 1)
 
 End Sub
@@ -4423,7 +4471,7 @@ Dim Dt1 As Boolean
 Dim Amt1 As Boolean
 Dim Amt2 As Boolean
 Dim Gender As Boolean
-Dim MemType As Boolean
+Dim memType As Boolean
 
 'Disable the Other Optiomn Buttons
 Select Case Index
@@ -4431,29 +4479,29 @@ Select Case Index
     Case 0
         Amt1 = True: Amt2 = True
         Gender = True
-        MemType = True
+        memType = True
     Case 1
         optMemId.Enabled = True
         optName.Enabled = True
         Gender = True
-        MemType = True
+        memType = True
     Case 2, 3
         Dt1 = True
         Gender = True
-        MemType = True
+        memType = True
     
     Case 4
         Dt1 = True
         Gender = True
-        MemType = True
+        memType = True
     Case 5
         Dt1 = True
         Gender = True
-        MemType = True
+        memType = True
     Case 6
         Dt1 = True
         Gender = True
-        MemType = True
+        memType = True
     Case 7
         'lblAmt1 = GetResourceString(147) & " " & _
                 GetResourceString(53) & " " & _
@@ -4463,10 +4511,10 @@ Select Case Index
                 GetResourceString(60)
         Amt1 = True: Amt2 = True: Dt1 = True
         Gender = True
-        MemType = True
+        memType = True
     Case 8
         Gender = False
-        MemType = False
+        memType = False
         Amt1 = False: Amt2 = False: Dt1 = False
     
     Case 8, 9
@@ -4474,7 +4522,7 @@ Select Case Index
     Case 10, 11
         Amt1 = False: Amt2 = False
         Gender = True
-        MemType = True
+        memType = True
     
     
     
@@ -4498,10 +4546,10 @@ End Select
 
 
     With cmbRepMemType
-        .Enabled = MemType
-        .BackColor = IIf(MemType, wisWhite, wisGray)
+        .Enabled = memType
+        .BackColor = IIf(memType, wisWhite, wisGray)
     End With
-    lblMemType.Enabled = MemType
+    lblMemType.Enabled = memType
     
 End Sub
 
@@ -4769,8 +4817,7 @@ End With
 With TabStrip2
     .Tabs(1).Caption = GetResourceString(219)
     .Tabs(2).Caption = GetResourceString(38)
-    .Tabs(3).Caption = GetResourceString(53) & " " & _
-            GetResourceString(295)  ' "Share Details"
+    .Tabs(3).Caption = GetResourceString(53, 295) ' "Share Details"
 End With
 
 'for general form
@@ -4836,7 +4883,7 @@ lblFromDate.Caption = GetResourceString(109)
 lblToDate.Caption = GetResourceString(110)
 cmdDividend.Caption = GetResourceString(200)
 
-lblUndoInterest.Caption = GetResourceString(228)
+lblUnDoInterest.Caption = GetResourceString(228)
 lblFailAccIDs.Caption = GetResourceString(190)
 cmdUndoInterests.Caption = GetResourceString(188)
 cmdAdvance.Caption = GetResourceString(491)    'Options

@@ -198,7 +198,51 @@ Public Function GetMemberNameCustIDByMemberNum(memNum As String, ByRef CustomerI
         End If
     End If
 End Function
+Public Function GetMemberTypeByAccID(ByVal AccId As Long, Optional ByRef MemberTypeName As String, Optional ByRef MemberTypeNameEnglish As String) As Integer
+    
+    GetMemberTypeByAccID = 0
+    
+    Dim rstMem As Recordset
+    gDbTrans.SqlStmt = "Select * from MemberTypeTab where MemberTYpe > 0"
+    If gDbTrans.Fetch(rstMem, adOpenDynamic) < 1 Then Exit Function
+    
+    gDbTrans.SqlStmt = "Select * from MemberTypeTab A Where MemberType = (Select MemberType From MemMaster where AccID= " & AccId & ")"
+    If gDbTrans.Fetch(rstMem, adOpenDynamic) < 1 Then Exit Function
+    
+    MemberTypeName = FormatField(rstMem("MemberTypeName"))
+    MemberTypeNameEnglish = FormatField(rstMem("MemberTypeNameEnglish"))
+    
+    GetMemberTypeByAccID = FormatField(rstMem("MemberType"))
+    
+End Function
+Public Function GetMemberTypeName(memberTYpe As Integer) As String
+    Dim DepName As String
+    Dim RstDep As Recordset
+    gDbTrans.SqlStmt = "Select * from MemberTypeTab where membertype = " & memberTYpe
+    DepName = ""
+    If gDbTrans.Fetch(RstDep, adOpenDynamic) > 0 Then
+        DepName = FormatField(RstDep("MemberTypeName"))
+    End If
+    GetMemberTypeName = DepName
+End Function
 
+Public Function GetMemberTypesList() As String()
+    Dim depNames() As String
+    Dim RstDep As Recordset
+    gDbTrans.SqlStmt = "Select * from MemberTypeTab where membertype > 0"
+    If gDbTrans.Fetch(RstDep, adOpenDynamic) > 0 Then
+        ReDim Preserve depNames(0)
+        While Not RstDep.EOF
+            ReDim Preserve depNames(UBound(depNames) + 1)
+            depNames(UBound(depNames) - 1) = FormatField(RstDep("MemberTypeName"))
+            RstDep.MoveNext
+        Wend
+    Else
+        ReDim Preserve depNames(1)
+        depNames(0) = GetResourceString(53, 36)
+    End If
+    GetMemberTypesList = depNames
+End Function
 Public Sub LoadMemberTypes(cmbMember As ComboBox)
     Dim recCount As Integer
     Dim rst As Recordset

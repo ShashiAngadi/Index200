@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F166A15E-AA26-47C4-9C7F-A61A5BECEDFF}#2.0#0"; "CURRTEXT.OCX"
+Object = "{F166A15E-AA26-47C4-9C7F-A61A5BECEDFF}#2.0#0"; "CurrText.ocx"
 Begin VB.Form frmRDClose 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "RDClose"
@@ -335,11 +335,21 @@ Private M_setUp As New clsSetup
 Private m_AccHeadId As Long
 Private m_RdPayableId As Long
 Private m_RdIntHeadId As Long
-
+Private m_DepositName As String
+Private m_depositNameInEnglish As String
+Private m_DepositType As Integer
 Private m_Transfer As Boolean
 
 Private m_ContraClass As clsContra
-'
+Public Property Let DepositType(NewValue As Integer)
+    m_DepositType = NewValue
+End Property
+Public Property Let DepositName(NewValue As String)
+    m_DepositName = NewValue
+End Property
+Public Property Let DepositNameEnglish(NewValue As String)
+    m_depositNameInEnglish = NewValue
+End Property
 Private Function RDClose() As Boolean
 
 On Error GoTo ErrLine
@@ -611,7 +621,7 @@ Dim PayableAmount As Currency
 Dim Balance As Currency
 'Dim IntBalance As Currency
 Dim PayableBalance As Currency
-Dim customerID As Long
+Dim CustomerID As Long
 
 Dim rst As Recordset
 
@@ -627,7 +637,7 @@ End If
 gDbTrans.SqlStmt = "Select * from RDTMaster " & _
                     " where AccID = " & p_AccID
 If gDbTrans.Fetch(rst, adOpenForwardOnly) Then _
-            customerID = FormatField(rst.Fields("CustomerID"))
+            CustomerID = FormatField(rst.Fields("CustomerID"))
 
 'get the Balance of the account
 gDbTrans.SqlStmt = "Select Balance From RDTrans where" & _
@@ -805,11 +815,10 @@ If MatAmount > 0 Then
     Dim SuspHeadID As Long
     SuspHeadID = GetIndexHeadID(GetResourceString(365))
     Debug.Assert MatAmount = 0
-    SuspHeadID = bankClass.GetHeadIDCreated(GetResourceString(365), LoadResString(365), _
-                                    parSuspAcc, 0, wis_SuspAcc)
+    SuspHeadID = bankClass.GetHeadIDCreated(GetResourceString(365), LoadResString(365), parSuspAcc, 0, wis_SuspAcc)
     
     Dim SuspClass As New clsSuspAcc
-    If SuspClass.DepositAmount(m_AccHeadId, p_AccID, customerID, "", _
+    If SuspClass.DepositAmount(m_AccHeadId, p_AccID, CustomerID, "", _
                         TransDate, MatAmount, TransID, VoucherNo) < 1 Then GoTo ErrLine
     
     
@@ -853,17 +862,18 @@ If m_AccHeadId = 0 Then
     Dim headNameEnglish As String
     Set ClsBank = New clsBankAcc
     gDbTrans.BeginTrans
-    headName = GetResourceString(424)
-    headNameEnglish = LoadResString(424)
-    m_AccHeadId = ClsBank.GetHeadIDCreated(headName, headNameEnglish, parMemberDeposit, 0, wis_RDAcc)
     
-    headName = GetResourceString(424, 487)
-    headNameEnglish = LoadResourceStringS(424, 487)
-    m_RdIntHeadId = ClsBank.GetHeadIDCreated(headName, headNameEnglish, parMemDepIntPaid, 0, wis_RDAcc)
+    headName = IIf(m_DepositType > 0, m_DepositName, GetResourceString(424))
+    headNameEnglish = IIf(m_DepositType > 0, m_depositNameInEnglish, LoadResourceStringS(424))
+    m_AccHeadId = ClsBank.GetHeadIDCreated(headName, headNameEnglish, parMemberDeposit, 0, wis_RDAcc + m_DepositType)
     
-    headName = GetResourceString(424, 375, 47)
-    headName = LoadResourceStringS(424, 375, 47)
-    m_RdPayableId = ClsBank.GetHeadIDCreated(headName, headNameEnglish, parDepositIntProv, 0, wis_RDAcc)
+    headName = IIf(m_DepositType > 0, m_DepositName, GetResourceString(424)) & " " & GetResourceString(487) 'GetResourceString(424, 487)
+    headNameEnglish = IIf(m_DepositType > 0, m_depositNameInEnglish, LoadResourceStringS(424)) & " " & LoadResourceStringS(487)  'LoadResourceStringS(424, 487)
+    m_RdIntHeadId = ClsBank.GetHeadIDCreated(headName, headNameEnglish, parMemDepIntPaid, 0, wis_RDAcc + m_DepositType)
+    
+    headName = IIf(m_DepositType > 0, m_DepositName, GetResourceString(424)) & " " & GetResourceString(375, 47)  'GetResourceString(424, 375, 47)
+    headName = IIf(m_DepositType > 0, m_depositNameInEnglish, LoadResourceStringS(424)) & " " & LoadResourceStringS(375, 47)  'LoadResourceStringS(424, 375, 47)
+    m_RdPayableId = ClsBank.GetHeadIDCreated(headName, headNameEnglish, parDepositIntProv, 0, wis_RDAcc + m_DepositType)
     gDbTrans.CommitTrans
     Set ClsBank = Nothing
 End If
@@ -1074,7 +1084,7 @@ End If
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 Set frmRDClose = Nothing
 End Sub
 

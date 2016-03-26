@@ -1,19 +1,18 @@
 [LoanIssue]
-Prop1=Prompt=Member Details;PropType=Heading;SubITems=2
+Prop1=Prompt=Member Details;PropType=Heading;SubITems=5
 Prop2=Prompt=Loan Account No;PropType=Editable;DescTitle=Account Number;Description=specify the loan account number.;DataSource=AccNum
 Prop3=Prompt=Member Type;PropType=Editable;LockEdit=True;Description=Identifies the type of member.;DescTitle=Member Type;DataSource=MemberType;DisplayType=List;ListData=Regular Member,Associate Member;Nominal Member
 Prop4=Prompt=Member ID;PropType=Editable;DescTitle=MemberID;Description=Member identificaiton number.;DisplayType=Browse;DataSource=MemberID;ButtonWidth=850;ButtonCaption=Lookup...;
 Prop5=Prompt=Member seeking loan;PropType=Editable;DescTitle=Member;Description=Identifies the member who is seeking the loan.;DataSource=MemberName;LockEdit=True
 Prop6=Prompt=Farmer Type;PropType=Editable;DescTitle=Farmer;Description=Identifies Small, Medium Or Big farmer.;DataSource=FarmerType;LockEdit=True;DisplayType=List;ListData=Small Farmer,Big Farmer,Medium Farmer
 
-Prop7=Prompt=Loan Details;PropType=Heading;SubItems=8
+Prop7=Prompt=Loan Details;PropType=Heading;SubItems=4
 Prop8=Prompt=Issue Date;PropType=Editable;Description=Date on which this loan is issued.;DescTitle=Issue Date;DataSource=IssueDate;DisplayType=Browse
 Prop9=Prompt=3 Year's Loan limit;PropType=Editable;Description=it Indicates the tempary loan limit of the member for  years;DescTitle=Loan limit;DataSource=SanctionAmount
 Prop10=Prompt=Current year Sanction;PropType=Editable;Description=the loan limit to be given for the current year;DescTitle=Current year Loan limit;DataSource=CurrentSanction
 Prop11=Prompt=Extra Limit;PropType=Editable;Description=the loan amount exceeds his loan limit;DescTitle=Extra Loan limit;DataSource=ExtraSanction
 Prop12=Prompt=Maximum Loan limit;PropType=Editable;Description=it Indicates the maximum loan limit of for  current years;DescTitle=Loan Max limit;DataSource=TotalAmount;LockEdit=True
-
-Prop13=Prompt=Card Details;PropType=Heading;SubItems=8
+Prop13=Prompt=Card Details;PropType=Heading;SubItems=4
 Prop14=Prompt=Loan Renewal date;PropType=Editable;Description=Date when the loan limit, due date etc,. will be verified.;DescTitle=Renewal;DataSource=RenewDate;DisplayType=Browse
 Prop15=Prompt=Rate of Interest;PropType=Editable;Description=The rate of interest to be applied for this loan.;DescTitle=Rate of Interest;DataSource=InterestRate
 Prop16=Prompt=Penal interest;PropType=Editable;Description=The rate of intererst for delayed repayments.;DescTitle=Rate of penal interest;DataSource=PenalInterestRate

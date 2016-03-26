@@ -1,0 +1,7 @@
+[Property Sheet]
+Prop1=Prompt=°ñˆÂğ ÆğÇğ³ğÊğô;PropType=Heading;SubItems=2;
+Prop2=Prompt=°ñ½ğ Íğ®²úå;PropType=Editable;Description=°ñˆÂğ Íğ®²úå®õğôÂğôá Íğ÷„ÍğôÀğŞÁú.;DescTitle=°ñ½ğ Íğ®²úå;DataSource=CardNo;
+Prop3=Prompt=°ñ½ğôÁñÇğÂğ ÎúÍğÇğô;LockEdit=True;PropType=Editable;Description=°ñ½ğôÁñÇğÂğ ÎúÍğÇğÂğôá Íğ÷„ÍğôÀğŞÁú.;DescTitle=°ñ½ğôÁñÇğÂğ ÎúÍğÇğô;DisplayType=Browse;DataSource=MemberName
+Prop4=Prompt=°ğô»ô®ÄÁğ ÍğÁğÍğåÇğ ÆğÇğ:;PropType=Heading;SubItems=2
+Prop5=Prompt=°ñˆÂğ‘çÇğôÆğ ÍğÁğÍğåÇğ Íğ®²úå;PropType=Editable;DataSource=MemberCount;DescTitle=ÍğÁğÍğåÇğ Íğ®²úå;Description=¤ °ñˆÂğ‘çÇğôÆğ «»ôÚ ÍğÁğÍğåÇğ Íğ®²úå.
+Prop6=Prompt=°ğô»ô®Ä ÍğÁğÍğåÇğ ÆğÇğ.;LockEdit=True;PropType=Editable;Description=°ñˆÂğ ÍğÁğÍğåÇğ ÎúÍğÇğô³ğÊğÂğôá ÂğÆğô÷Š•;DescTitle=°ğô»ô®ÄÁğ ÆğÇğ;DisplayType=Browse;DataSource=MemberList

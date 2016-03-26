@@ -281,7 +281,7 @@ Private Function SaveMembers() As Boolean
     m_Shown = False
     Dim count As Integer
     Dim CustomerID As Integer
-    Dim AccId  As Long
+    Dim AccID  As Long
     Dim AccNum  As String
     Dim headID As Long
     Dim TransDate As Date
@@ -323,7 +323,7 @@ Dim rst As Recordset
     ShareFaceValue = Val(txtShareValue.Text)
     
     gDbTrans.SqlStmt = "Select Max(AccID) from MemMaster"
-    If gDbTrans.Fetch(rst, adOpenDynamic) Then AccId = FormatField(rst(0))
+    If gDbTrans.Fetch(rst, adOpenDynamic) Then AccID = FormatField(rst(0))
         
     gDbTrans.BeginTrans
     headID = bankClass.GetHeadIDCreated(GetResourceString(79, 191), _
@@ -380,19 +380,19 @@ Dim rst As Recordset
         If DateValidate(grd.TextMatrix(count, 11), "/", True) Then CreateDate = GetSysFormatDate(grd.TextMatrix(count, 11))
         gDbTrans.BeginTrans
         
-        AccId = AccId + 1
+        AccID = AccID + 1
         
         gDbTrans.SqlStmt = "Insert into MemMaster (AccNum,AccID, CustomerID, " & _
                 " CreateDate,MemberType,AccGroupID, UserID" & _
                 ") " & _
                 "values (" & AddQuotes(AccNum, True) & "," & _
-                AccId & "," & _
+                AccID & "," & _
                 CustomerID & "," & _
                 "#" & CreateDate & "#,1, 1," & _
                 gUserID & " )"
         
         If Not gDbTrans.SQLExecute Then
-            AccId = AccId - 1
+            AccID = AccID - 1
             gDbTrans.RollBack
             GoTo NextCount
         End If
@@ -402,18 +402,18 @@ Dim rst As Recordset
         gDbTrans.SqlStmt = "Insert Into MemIntTrans(AccId,TransId,TransDate," & _
                 " Amount,TransType,Balance,Particulars,UserId)" & _
                 " Values(" & _
-                AccId & ", 1, " & _
+                AccID & ", 1, " & _
                 "#" & TransDate & "#" & _
                 ", " & MemFee & ", " & _
                 transType & ", 0,'Memberdhip Fee'," & gUserID & " ) "
         If Not gDbTrans.SQLExecute Then
-            AccId = AccId - 1
+            AccID = AccID - 1
             gDbTrans.RollBack
             GoTo NextCount
         End If
                 ''update the Member fee
         If Not bankClass.UpdateCashDeposits(headID, MemFee, TransDate) Then
-            AccId = AccId - 1
+            AccID = AccID - 1
             gDbTrans.RollBack
             'Exit Function
         End If
@@ -428,7 +428,7 @@ Dim rst As Recordset
             For transLoop = 1 To LeavesCount
                 gDbTrans.SqlStmt = "Insert into ShareTrans (AccID, SaleTransID, " & _
                     " CertNo, FaceValue) values (" & _
-                    AccId & ", " & _
+                    AccID & ", " & _
                     1 & ", " & _
                     AddQuotes(AccNum + CStr(transLoop)) & ", " & _
                     ShareFaceValue & ")"
@@ -445,7 +445,7 @@ Dim rst As Recordset
                 ShareFaceValue = Balance - (LeavesCount * ShareFaceValue)
                 gDbTrans.SqlStmt = "Insert into ShareTrans (AccID, SaleTransID, " & _
                     " CertNo, FaceValue) values (" & _
-                    AccId & ", " & _
+                    AccID & ", " & _
                     1 & ", " & _
                     AddQuotes(AccNum & "_" & CStr(transLoop)) & ", " & _
                     ShareFaceValue & ")"
@@ -462,7 +462,7 @@ Dim rst As Recordset
             'Insert into MemTrans Tab
             gDbTrans.SqlStmt = "INSERT INTO MemTrans (AccID, TransID, TransDate, " & _
                         " Leaves, Amount, TransType, Balance,UserID) values ( " & _
-                        AccId & ",1," & _
+                        AccID & ",1," & _
                         "#" & TransDate & "#, " & _
                         LeavesCount + LeavesCount_2 & ", " & _
                         Balance & ", " & _
@@ -495,7 +495,7 @@ Private Function SaveSavings() As Boolean
     m_Shown = False
     Dim count As Integer
     Dim CustomerID As Integer
-    Dim AccId  As Long
+    Dim AccID  As Long
     Dim AccNum  As String
     Dim headID As Long
     Dim TransDate As Date
@@ -515,7 +515,7 @@ Private Function SaveSavings() As Boolean
     End If
     
     gDbTrans.SqlStmt = "Select Max(AccID) from SBMaster"
-    If gDbTrans.Fetch(rst, adOpenDynamic) Then AccId = FormatField(rst(0))
+    If gDbTrans.Fetch(rst, adOpenDynamic) Then AccID = FormatField(rst(0))
         
     gDbTrans.BeginTrans
         headID = bankClass.GetHeadIDCreated(GetResourceString(79, 191), _
@@ -566,20 +566,20 @@ Private Function SaveSavings() As Boolean
                 + vbDefaultButton2, gAppName & " - Confirmation") = vbNo Then GoTo NextCount
         End If
         
-        AccId = AccId + 1
+        AccID = AccID + 1
         
         gDbTrans.SqlStmt = "Insert into SBMaster (AccNum,AccID, CustomerID, " & _
                 " CreateDate,AccGroupID, UserID" & _
                 ") " & _
                 "values (" & AddQuotes(AccNum, True) & "," & _
-                AccId & "," & _
+                AccID & "," & _
                 CustomerID & "," & _
                 "#" & TransDate & "#, 1," & _
                 gUserID & " )"
         
         gDbTrans.BeginTrans
         If Not gDbTrans.SQLExecute Then
-            AccId = AccId - 1
+            AccID = AccID - 1
             gDbTrans.RollBack
             GoTo NextCount
         End If
@@ -592,12 +592,12 @@ Private Function SaveSavings() As Boolean
             gDbTrans.SqlStmt = "Insert Into SBTrans(AccId,TransId,TransDate," & _
                     " Amount,TransType,Balance,Particulars,UserId)" & _
                     " Values(" & _
-                    AccId & ", 1, " & _
+                    AccID & ", 1, " & _
                     "#" & TransDate & "#" & _
                     ", " & Balance & ", " & _
                     transType & "," & Balance & ",'Opening Balance'," & gUserID & " ) "
             If Not gDbTrans.SQLExecute Then
-                AccId = AccId - 1
+                AccID = AccID - 1
                 gDbTrans.RollBack
                 GoTo NextCount
             End If
@@ -605,7 +605,7 @@ Private Function SaveSavings() As Boolean
         
         ''update the Member fee
         If Not bankClass.UpdateCashDeposits(headID, Balance, TransDate) Then
-            AccId = AccId - 1
+            AccID = AccID - 1
             gDbTrans.RollBack
             Exit Function
         End If
@@ -623,12 +623,12 @@ Exit_Line:
 m_Shown = True
 End Function
 
-Public Sub ShowForm(moduleId As wisModules)
+Public Sub ShowForm(ModuleID As wisModules)
 
-m_Module = moduleId
+m_Module = ModuleID
 
 m_TotalCols = 12
-If moduleId = wis_SBAcc Then m_TotalCols = 11
+If ModuleID = wis_SBAcc Then m_TotalCols = 11
 
 'Load the Column
 
@@ -720,7 +720,7 @@ End Sub
 Private Sub cmd_Click()
     If custReg(m_rowNo) Is Nothing Then custReg(m_rowNo) = New clsCustReg
     
-    custReg(m_rowNo).moduleId = wis_Members
+    custReg(m_rowNo).ModuleID = wis_Members
     If grd.RowData(m_rowNo) > 0 Then
         'm_CustReg.CustomerID = grd.RowData(m_rowNo)
         custReg(m_rowNo).LoadCustomerInfo (grd.RowData(m_rowNo))
@@ -817,6 +817,7 @@ On Error Resume Next
     
     If m_Module = wis_Members Then
         txtMemFee.Text = SetUp.ReadSetupValue("MMAcc", "MemberShipFee", "0.00")
+        'txtMemFee.Text = SetUp.ReadSetupValue("MMAcc", "MemberShipFee", "0.00")
         gDbTrans.SqlStmt = "Select top 1 AccNum from MemMaster order by AccID Desc"
         txtMemFee.Visible = True
         Label1.Visible = True

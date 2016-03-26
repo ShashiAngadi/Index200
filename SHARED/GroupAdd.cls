@@ -24,6 +24,7 @@ Public Enum wis_GroupType
     grpLoanPurpose = 8
     grpFarmer = 9
     grpMember = 10
+    grpAllDeposit = 11
 End Enum
 
 Private Enum RecordStatus
@@ -32,10 +33,12 @@ Private Enum RecordStatus
     recAdd = 2
     recDelete = 3
     recUpdate = 4
+    recInitialize = 5
 End Enum
 
 Private m_Status As RecordStatus
 Private m_GroupType As wis_GroupType
+Private M_ModuleID As wisModules
 Private m_AllowDuplicate As Boolean
 
 'Here we are declaring the Varible
@@ -54,7 +57,7 @@ Private m_GroupNameEnglish As String
 Private m_GroupID As Long
 
 Public Event ItemAdded(strAddItem As String, NewID As Long)
-Public Event ItemDeleting(strDelItem As String, Cancel As Integer)
+Public Event ItemDeleting(strDelItem As String, cancel As Integer)
 Public Event ItemDeleted(strDelItem As String)
 
 Private WithEvents m_frmGroup As frmAddGroup
@@ -106,9 +109,9 @@ If gDbTrans.Fetch(rst, adOpenDynamic) Then
     End If
 End If
 
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Sub
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Sub
     gDbTrans.SqlStmt = "Delete * from CasteTab " & _
         "where Caste = " & AddQuotes(m_GroupName, True)
     'MsgBox "Group Deleted", vbInformation
@@ -236,9 +239,9 @@ ElseIf m_Status = recDelete Then
         End If
     End If
     
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Sub
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Sub
     
     gDbTrans.SqlStmt = "Delete * from CustomerType " & _
         "where CustTypeName= " & AddQuotes(m_GroupName, True)
@@ -350,9 +353,9 @@ ElseIf m_Status = recDelete Then
         End If
     End If
     
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Sub
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Sub
     
     gDbTrans.SqlStmt = "Delete * from FarmerTypeTab " & _
         "where TypeName= " & AddQuotes(m_GroupName, True)
@@ -472,9 +475,9 @@ If m_Status = recAdd Then
     m_GroupID = NewID
     
 ElseIf m_Status = recDelete Then
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Sub
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Sub
     
     gDbTrans.SqlStmt = "Delete * from DepositName " & _
             "where DepositName = " & AddQuotes(m_GroupName, True)
@@ -491,7 +494,7 @@ ElseIf m_Status = recUpdate Then
     'Now make the same changes to the DepositLedger head,Interest ledger head
     'Deposit Loan Ledger Head
     'change the name of the ledger heads
-    If Not UPDateLedgerHeads Then GoTo Hell
+    If Not UpdateLedgerHeads Then GoTo Hell
     
     'MsgBox "Updated the Details ", vbInformation, wis_MESSAGE_TITLE
     strMsg = GetResourceString(707)
@@ -559,9 +562,9 @@ ElseIf m_Status = recDelete Then
         End If
     End If
     
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Sub
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Sub
     
     gDbTrans.SqlStmt = "Delete * from DepositName " & _
             "where DepositName = " & AddQuotes(m_GroupName, True)
@@ -582,7 +585,7 @@ ElseIf m_Status = recUpdate Then
     'Now make the same changes to the DepositLedger head,Interest ledger head
     'Deposit Loan Ledger Head
     'change the name of the ledger heads
-    If Not UPDateLedgerHeads Then GoTo Hell
+    If Not UpdateLedgerHeads Then GoTo Hell
     
     gDbTrans.SqlStmt = "UPDATE DepositName " & _
                 " SET DepositName = " & AddQuotes(m_GroupName, True) & _
@@ -602,8 +605,7 @@ End If
 If Len(strMsg) Then MsgBox strMsg, vbInformation, wis_MESSAGE_TITLE
 
 If m_Status = recUpdate Or m_Status = recDelete Then RaiseEvent ItemDeleted(m_PrevName)
-If m_Status = recAdd Or m_Status = recUpdate Then _
-        RaiseEvent ItemAdded(m_GroupName, m_GroupID)
+If m_Status = recAdd Or m_Status = recUpdate Then RaiseEvent ItemAdded(m_GroupName, m_GroupID)
 
 Hell:
     Call gDbTrans.RollBack
@@ -646,9 +648,9 @@ ElseIf m_Status = recDelete Then
         End If
     End If
     
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Sub
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Sub
     
     gDbTrans.SqlStmt = "Delete * from MemberTypeTab " & _
             " where MemberType = " & m_GroupID
@@ -667,7 +669,7 @@ ElseIf m_Status = recUpdate Then
     'Now make the same changes to the DepositLedger head,Interest ledger head
     'Deposit Loan Ledger Head
     'change the name of the ledger heads
-    If Not UPDateLedgerHeads Then GoTo Hell
+    If Not UpdateLedgerHeads Then GoTo Hell
     
     gDbTrans.SqlStmt = "UPDATE MemberTypeTab " & _
                 " SET MemberTypeName = " & AddQuotes(m_GroupName, True) & _
@@ -694,6 +696,206 @@ Hell:
     Call gDbTrans.RollBack
     
 End Sub
+
+
+Private Function AddDepositAccountType() As Boolean
+    
+    Dim rst As Recordset
+    Dim strPrevName As String
+    Dim Cumulative As Byte
+    Dim strMsg As String
+    Dim resStringID As Integer
+    Dim Deptype As Integer
+    Dim depTableName As String
+    Dim depTransTableName As String
+    Dim recordCount As Integer
+    
+    Call GetTableNameForModule(M_ModuleID, depTableName, depTransTableName, , , resStringID)
+
+    gDbTrans.BeginTrans
+    
+If m_Status = recNothing Then 'recInitialize
+    gDbTrans.SqlStmt = "Select * From DepositTypeTab where ModuleID = " & M_ModuleID
+    recordCount = gDbTrans.Fetch(rst, adOpenDynamic)
+    If recordCount = 0 Then
+        'There are no Deposit Types Before, Please check is there any Deposits are there
+        gDbTrans.SqlStmt = "Select CustomerID From " & depTableName
+        recordCount = gDbTrans.Fetch(rst, adOpenDynamic)
+        'If FormatField(rst("DepositType")) = 0 Then
+        If recordCount > 0 Then
+            If MsgBox("Existing Deposit types will be converted as module" & vbCrLf & _
+                "Do you want to continue?", vbYesNo + vbQuestion, wis_MESSAGE_TITLE) = vbNo Then
+                     AddDepositAccountType = False
+                     Exit Function
+            End If
+            If MsgBox("This will create new Ledger heads for each Deposit type" & vbCrLf & _
+                "Are you sure, you want to continue?", vbYesNo + vbQuestion + vbDefaultButton2, wis_MESSAGE_TITLE) = vbNo Then _
+                    AddDepositAccountType = False: Exit Function
+            ''Now Convert the Existing Accounts
+            gDbTrans.BeginTrans
+            ''Update Deposit Loans
+            Deptype = 0
+            Select Case M_ModuleID
+                Case wis_SBAcc
+                    Deptype = wisDeposit_SB
+                Case wis_CAAcc
+                    Deptype = wisDeposit_CA
+                Case wis_RDAcc
+                    Deptype = wisDeposit_RD
+                Case wis_PDAcc
+                    Deptype = wisDeposit_PD
+                Case wis_Deposits
+                    Deptype = wisDeposit_FD
+            End Select
+            gDbTrans.SqlStmt = "Update DepositLoanMaster Set DepositType = DepositType + " & 1 & " where DepositType = " & Deptype
+            Call gDbTrans.SQLExecute
+            gDbTrans.SqlStmt = "Update PledgeDeposit Set DepositType = DepositType + " & 1 & " where DepositType = " & Deptype
+            Call gDbTrans.SQLExecute
+            '
+            Deptype = Deptype + 1
+            ''Update the AccType in bankHeadID's
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + 1  where AccType = " & M_ModuleID
+            Call gDbTrans.SQLExecute
+            'Create the Deposit Type
+            gDbTrans.SqlStmt = "Update " & depTableName & " Set DepositType =  " & Deptype
+            Call gDbTrans.SQLExecute
+            
+            gDbTrans.SqlStmt = "Insert into DepositTypeTab " & _
+                " (DepositType, ModuleID, DepositTypeName,DepositTypeNameEnglish)" & _
+                " Values ( " & Deptype & "," & M_ModuleID & "," & _
+                AddQuotes(GetResourceString(102, resStringID)) & "," & _
+                AddQuotes(LoadResourceStringS(102, resStringID)) & ")"
+            Call gDbTrans.SQLExecute
+            
+            'Update the Head Name also
+            m_PrevName = GetResourceString(resStringID)
+            m_GroupName = GetResourceString(102, resStringID)
+            m_PrevNameEnglish = ""
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringID)
+            Call UpdateLedgerHeads(True)
+            
+            'Deposit Interest Paid
+            m_PrevName = GetResourceString(resStringID, 487)
+            m_GroupName = GetResourceString(102, resStringID, 487)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringID, 487)
+            Call UpdateLedgerHeads(True)
+            
+             'Payable Interest
+            m_PrevName = GetResourceString(resStringID, 375, 47)
+            m_GroupName = GetResourceString(102, resStringID, 375, 47)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringID, 375, 47)
+            Call UpdateLedgerHeads(True)
+            
+            'Interest Provision
+            m_PrevName = GetResourceString(resStringID, 450)
+            m_GroupName = GetResourceString(102, resStringID, 450)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringID, 450)
+            Call UpdateLedgerHeads(True)
+            
+            'Deposit Loan
+            m_PrevName = GetResourceString(resStringID, 58)
+            m_GroupName = GetResourceString(102, resStringID, 58)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringID, 58)
+            Call UpdateLedgerHeads(True)
+            
+            'Deposit Loan Interest
+            m_PrevName = GetResourceString(resStringID, 58, 483)
+            m_GroupName = GetResourceString(102, resStringID, 58, 483)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringID, 58, 483)
+            Call UpdateLedgerHeads(True)
+
+            gDbTrans.CommitTrans
+            
+            AddDepositAccountType = True
+            Exit Function
+            
+        End If
+    End If
+End If
+
+
+    gDbTrans.BeginTrans
+    
+    If m_Status = recAdd Then
+        Dim NewID As Integer
+        gDbTrans.SqlStmt = "SELECT Max(DepositType) From DepositTypeTab where ModuleID = " & M_ModuleID
+        
+        If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then NewID = FormatField(rst(0))
+        
+        Set rst = Nothing
+        NewID = NewID + 1
+        gDbTrans.SqlStmt = "Insert Into DepositTypeTab (" & _
+                " DepositType, ModuleID, DepositTypeName,DepositTypeNameEnglish) " & _
+                " Values (" & NewID & ", " & M_ModuleID & "," & _
+                AddQuotes(m_GroupName, True) & ", " & _
+                AddQuotes(m_GroupNameEnglish, True) & ")"
+        strMsg = GetResourceString(528)
+        m_GroupID = NewID
+        
+    ElseIf m_Status = recDelete Then
+        
+        gDbTrans.SqlStmt = "Select Count(*) from " & depTableName & " where DepositType = " & m_GroupID
+        If gDbTrans.Fetch(rst, adOpenDynamic) Then
+            If FormatField(rst(0)) > 0 Then
+                MsgBox GetResourceString(532), vbOKOnly, wis_MESSAGE_TITLE
+                Exit Function
+            End If
+        End If
+        
+        Dim cancel As Integer
+        RaiseEvent ItemDeleting(m_GroupName, cancel)
+        If cancel Then Exit Function
+        
+        gDbTrans.SqlStmt = "Delete * from DepositTypeTab " & _
+                " where DepositType = " & m_GroupID & " And ModuleId = " & M_ModuleID
+        strMsg = GetResourceString(677)
+    
+    ElseIf m_Status = recUpdate Then
+        
+        gDbTrans.SqlStmt = "Select * from DepositTypeTab where DepositType = " & m_GroupID & " And ModuleID = " & M_ModuleID
+        If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
+            m_PrevNameEnglish = FormatField(rst("DepositTypeNameEnglish"))
+        Else
+            MsgBox GetResourceString(532), vbOKOnly, wis_MESSAGE_TITLE
+            Exit Function
+        End If
+        
+        'Now make the same changes to the DepositLedger head,Interest ledger head
+        'Deposit Loan Ledger Head
+        'change the name of the ledger heads
+        If Not UpdateLedgerHeads Then GoTo Hell
+        
+        gDbTrans.SqlStmt = "UPDATE DepositTypeTab " & _
+                    " SET DepositTypeName = " & AddQuotes(m_GroupName, True) & _
+                    " ,MDepositTypeNameEnglish = " & AddQuotes(m_GroupNameEnglish, True) & _
+                    " WHERE DepositType = " & m_GroupID & " And ModuleID = " & M_ModuleID
+    
+        'MsgBox "Updated the Details ", vbInformation, wis_MESSAGE_TITLE
+        strMsg = GetResourceString(707)
+    End If
+    
+    If Len(gDbTrans.SqlStmt) > 0 Then
+        If gDbTrans.SQLExecute Then
+            gDbTrans.CommitTrans
+        Else
+            gDbTrans.RollBack
+        End If
+    Else
+        gDbTrans.RollBack
+    End If
+    
+    If Len(strMsg) Then MsgBox strMsg, vbInformation, wis_MESSAGE_TITLE
+    
+    If m_Status = recUpdate Or m_Status = recDelete Then RaiseEvent ItemDeleted(m_PrevName)
+    If m_Status = recAdd Or m_Status = recUpdate Then _
+            RaiseEvent ItemAdded(m_GroupName, m_GroupID)
+    
+AddDepositAccountType = True
+
+Hell:
+        Call gDbTrans.RollBack
+
+End Function
 
 Private Function AddNew()
 
@@ -873,39 +1075,88 @@ Select Case m_GroupType
         If intCumulative > 1 Then
             gDbTrans.SqlStmt = "Select * From MemberTypeTab"
             intCumulative = gDbTrans.Fetch(rst, adOpenDynamic)
-            If intCumulative = 1 Then
-            If FormatField(rst("MemberType")) = 0 Then
-                If MsgBox("Existing member types will be converted as module" & vbCrLf & _
-                    "Do you want to continue?", vbYesNo + vbQuestion, wis_MESSAGE_TITLE) = vbNo Then
+            If intCumulative <= 1 Then
+                If FormatField(rst("MemberType")) = 0 Then
+                    If MsgBox("Existing member types will be converted as module" & vbCrLf & _
+                        "Do you want to continue?", vbYesNo + vbQuestion, wis_MESSAGE_TITLE) = vbNo Then
+                            Exit Function
+                    End If
+                    If MsgBox("This will create new Ledger heads for each member type" & vbCrLf & _
+                        "Are you sure, you want to continue?", vbYesNo + vbQuestion + vbDefaultButton2, wis_MESSAGE_TITLE) = vbNo Then _
                         Exit Function
-                End If
-                If MsgBox("This will create new Ledger heads for each member type" & vbCrLf & _
-                    "Are you sure, you want to continue?", vbYesNo + vbQuestion + vbDefaultButton2, wis_MESSAGE_TITLE) = vbNo Then _
-                    Exit Function
-                '''Now COnvert the Existing mebere
-                gDbTrans.SqlStmt = "Select distinct(MemberType) From MemMaster"
-                intCumulative = gDbTrans.Fetch(rst, adOpenDynamic)
-        
-                gDbTrans.BeginTrans
-                gDbTrans.SqlStmt = "Delete * from MemberTypeTab"
-                Call gDbTrans.SQLExecute
-                While rst.EOF = False
-                    intCumulative = FormatField(rst(0))
-                    gDbTrans.SqlStmt = "Insert into MemberTypeTab " & _
-                        " (MemberType, MemberTypeName,MemberTypeNameEnglish)" & _
-                        " Values (" & intCumulative & "," & _
-                        AddQuotes(GetResourceString(101 + intCumulative, 49)) & "," & _
-                        AddQuotes(LoadResourceStringS(101 + intCumulative, 49)) & ")"
-                    
+                    '''Now COnvert the Existing mebere
+                    gDbTrans.SqlStmt = "Select distinct(MemberType) From MemMaster"
+                    intCumulative = gDbTrans.Fetch(rst, adOpenDynamic)
+            
+                    gDbTrans.BeginTrans
+                    gDbTrans.SqlStmt = "Delete * from MemberTypeTab"
                     Call gDbTrans.SQLExecute
-                    'Move to Next member Type
-                    rst.MoveNext
-                Wend
-                
-                gDbTrans.CommitTrans
-                
-                
-            End If
+                    
+                    While rst.EOF = False
+                        intCumulative = FormatField(rst(0))
+                        gDbTrans.SqlStmt = "Insert into MemberTypeTab " & _
+                            " (MemberType, MemberTypeName,MemberTypeNameEnglish)" & _
+                            " Values (" & intCumulative & "," & _
+                            AddQuotes(GetResourceString(101 + intCumulative, 49)) & "," & _
+                            AddQuotes(LoadResourceStringS(101 + intCumulative, 49)) & ")"
+                        
+                        Call gDbTrans.SQLExecute
+                        'Move to Next member Type
+                        rst.MoveNext
+                    Wend
+                    If rst.recordCount = 1 Then
+                        rst.MoveFirst
+                        intCumulative = FormatField(rst(0))
+                        'Share Account
+                        m_PrevName = GetResourceString(53, 36)
+                        m_GroupName = GetResourceString(101 + intCumulative, 49, 53, 36)
+                        m_PrevNameEnglish = "" 'LoadResourceStringS(53, 36)
+                        m_GroupNameEnglish = LoadResourceStringS(101 + intCumulative, 49, 53, 36)
+                        If Not UpdateLedgerHeads(True) Then
+                            gDbTrans.RollBack
+                            gDbTrans.BeginTrans
+                        End If
+                        'Membership  Fee
+                        m_PrevName = GetResourceString(79, 191)
+                        m_GroupName = GetResourceString(101 + intCumulative, 49, 191)
+                        'm_PrevNameEnglish = LoadResourceStringS(79, 191)
+                        m_GroupNameEnglish = LoadResourceStringS(101 + intCumulative, 49, 191)
+                        If Not UpdateLedgerHeads(True) Then
+                            gDbTrans.RollBack
+                            gDbTrans.BeginTrans
+                        End If
+                        
+                        'Share Fee
+                        m_PrevName = GetResourceString(53, 191)
+                        m_GroupName = GetResourceString(101 + intCumulative, 49, 53, 191)
+                        'm_PrevNameEnglish = LoadResourceStringS(53, 191)
+                        m_GroupNameEnglish = LoadResourceStringS(101 + intCumulative, 49, 53, 191)
+                        If Not UpdateLedgerHeads(True) Then
+                            gDbTrans.RollBack
+                            gDbTrans.BeginTrans
+                        End If
+                        
+                        'SHARE DIVEDEND
+                        m_PrevName = GetResourceString(49, 200)
+                        m_GroupName = GetResourceString(101 + intCumulative, 49, 200)
+                        'm_PrevNameEnglish = LoadResourceStringS(49, 200)
+                        m_GroupNameEnglish = LoadResourceStringS(101 + intCumulative, 49, 200)
+                        If Not UpdateLedgerHeads Then
+                            gDbTrans.RollBack
+                            gDbTrans.BeginTrans
+                        End If
+                        
+                        ''Update the AccTYpe in bankHeadID's
+                        gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + 1  where AccType = " & wis_Members
+                        Call gDbTrans.SQLExecute
+                    
+                    End If
+                    
+                    
+                    gDbTrans.CommitTrans
+                    
+                    
+                End If
             End If
         ElseIf intCumulative > 1 Then
         
@@ -921,27 +1172,47 @@ Select Case m_GroupType
             .lblList.Caption = GetResourceString(101)
             .chkCumulative.Visible = False
         End With
+        
+    Case grpAllDeposit
+        
+        If Not AddDepositAccountType Then Exit Function
+        Dim resStringID As Integer
+        Call GetTableNameForModule(M_ModuleID, , , , , resStringID)
+        
+        With m_frmGroup
+            .Caption = "Add/Remove member deposit Types"
+            .lblItem.Caption = GetResourceString(resStringID, 253)
+            .lblItemEnglish.Caption = GetResourceString(resStringID, 253, 468)
+            .lblList.Caption = GetResourceString(resStringID, 253) & GetResourceString(92)
+            .chkCumulative.Visible = False
+        End With
+        
+        'Dim rstMemType As ADODB.Recordset
+        
+        
+        m_TableName = "DepositTypeTab"
+        m_Fields(0) = "DepositType"
+        m_Fields(1) = "DepositTypeName"
+        
 End Select
 
 Restart:
 
     gDbTrans.SqlStmt = "SELECT " & m_Fields(0) & "," & m_Fields(1) & " From " & m_TableName
+    If m_GroupType = grpAllDeposit Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " Where ModuleID= " & M_ModuleID
     Call gDbTrans.Fetch(rst, adOpenForwardOnly)
     
-    With m_frmGroup
-        
-        With .cmbList
-            .Clear
-            .AddItem ""
-            .ItemData(.newIndex) = 0
-            If Not rst Is Nothing Then
-                While Not rst.EOF
-                    .AddItem FormatField(rst(1))
-                    .ItemData(.newIndex) = FormatField(rst(0))
-                    rst.MoveNext
-                Wend
-            End If
-        End With
+    With m_frmGroup.cmbList
+        .Clear
+        .AddItem ""
+        .ItemData(.newIndex) = 0
+        If Not rst Is Nothing Then
+            While Not rst.EOF
+                .AddItem FormatField(rst(1))
+                .ItemData(.newIndex) = FormatField(rst(0))
+                rst.MoveNext
+            Wend
+        End If
     End With
     
     Set rst = Nothing
@@ -985,6 +1256,9 @@ Select Case m_GroupType
     Case grpPlace
         Call AddPlace
         GoTo Restart
+    Case grpAllDeposit
+        Call AddDepositAccountType
+        GoTo Restart
 End Select
 
 Dim strMsg  As String
@@ -1025,9 +1299,9 @@ If m_Status = recAdd Then
     
 ElseIf m_Status = recDelete Then
     
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Function
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Function
     
     gDbTrans.SqlStmt = "Delete * from " & m_TableName & _
         " where " & m_Fields(1) & " = " & AddQuotes(m_GroupName, True)
@@ -1113,9 +1387,9 @@ If m_Status = recAdd Then
     strMsg = GetResourceString(528)
 ElseIf m_Status = recDelete Then
     
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Sub
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Sub
     
     gDbTrans.SqlStmt = "Delete * from AccountGroup " & _
         "where GroupName= " & AddQuotes(m_GroupName, True)
@@ -1219,9 +1493,9 @@ ElseIf m_Status = recDelete Then
         Exit Sub
     End If
     
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Sub
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Sub
     
     Debug.Print "Kannada"
     If MsgBox("Do you want to Delete this group ? ", _
@@ -1319,9 +1593,9 @@ If m_Status = recAdd Then
     strMsg = GetResourceString(528)
     
 ElseIf m_Status = recDelete Then
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Sub
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Sub
     
     Debug.Print "Kannada"
     If MsgBox("Do you want to Delete this Unit ? ", vbQuestion + vbYesNo + vbDefaultButton2) = vbNo Then Exit Sub
@@ -1363,13 +1637,14 @@ Public Property Get GroupType() As wis_GroupType
     GroupType = m_GroupType
 End Property
 
-Public Sub ShowAddGroup(GroupType As wis_GroupType, Optional AllowDuplicate As Boolean = False)
+Public Sub ShowAddGroup(GroupType As wis_GroupType, Optional ModuleID As wisModules = wis_None)
     m_GroupType = GroupType
-    m_AllowDuplicate = AllowDuplicate
+    m_AllowDuplicate = False 'AllowDuplicate , Optional AllowDuplicate As Boolean = False
+    M_ModuleID = ModuleID
     
     m_Status = recNothing
         
-    If m_frmGroup Is Nothing Then
+    If Not m_frmGroup Is Nothing Then
         Unload m_frmGroup
     Else
         Set m_frmGroup = New frmAddGroup
@@ -1441,9 +1716,9 @@ ElseIf m_Status = recDelete Then
         End If
     End If
 
-    Dim Cancel As Integer
-    RaiseEvent ItemDeleting(m_GroupName, Cancel)
-    If Cancel Then Exit Sub
+    Dim cancel As Integer
+    RaiseEvent ItemDeleting(m_GroupName, cancel)
+    If cancel Then Exit Sub
     
     gDbTrans.SqlStmt = "Delete * from PlaceTab " & _
             " where Place= " & AddQuotes(m_GroupName, True)
@@ -1494,7 +1769,9 @@ Exit_Line:
 
 End Sub
 
-Private Function UPDateLedgerHeads() As Boolean
+Private Function UpdateLedgerHeads(Optional searchExact As Boolean = False) As Boolean
+
+UpdateLedgerHeads = False
 
 'Get the Whether those heads are there are not
 Dim rst As Recordset
@@ -1505,18 +1782,28 @@ Dim OldName As String
 Dim OldNameEnglish As String
 Dim NewName As String
 Dim NewNameEnglish As String
-
+Dim TableName As String
 'Ledger Head
 OldName = Trim$(m_PrevName)
 NewName = Trim$(m_GroupName)
 
-
-
-gDbTrans.SqlStmt = "Select * From BankHeadIDs " & _
-    " WHERE HeadName like '%" & AddQuotes(OldName, False) & "%'"
+'gDbTrans.SqlStmt = "Select * From BankHeadIDs WHERE HeadName like '%" & AddQuotes(OldName, False) & "%'"
+gDbTrans.SqlStmt = "Select HeadID,HeadName,HeadNameEnglish, 'BankHeadIDs' as TableName From BankHeadIDs WHERE HeadName like '%" & AddQuotes(OldName, False) & "%'" & _
+    " UNION " & _
+    "Select HeadID,HeadName,HeadNameEnglish, 'Heads' as TableName From Heads WHERE HeadName like '%" & AddQuotes(OldName, False) & "%'"
     
-If gDbTrans.Fetch(rst, adOpenDynamic) < 1 Then GoTo LastLine
-AccType = FormatField(rst("AccType"))
+
+If searchExact Then
+    gDbTrans.SqlStmt = "Select * From BankHeadIDs WHERE HeadName = " & AddQuotes(OldName)
+    gDbTrans.SqlStmt = "Select HeadID,HeadName,HeadNameEnglish, 'BankHeadIDs' as TableName From BankHeadIDs WHERE HeadName =" & AddQuotes(OldName) & _
+    " UNION " & _
+    "Select HeadID,HeadName,HeadNameEnglish, 'Heads' as TableName From Heads WHERE HeadName = " & AddQuotes(OldName)
+
+    NewNameEnglish = m_GroupNameEnglish
+End If
+If gDbTrans.Fetch(rst, adOpenDynamic) < 1 Then UpdateLedgerHeads = True: Exit Function
+
+'AccType = FormatField(rst("AccType"))
     
 'All other heads
 'Change the name of the Head _
@@ -1525,121 +1812,82 @@ While Not rst.EOF
     headID = rst("HeadId")
     OldName = FormatField(rst("HeadName"))
     OldNameEnglish = FormatField(rst("HeadNameEnglish"))
+    TableName = FormatField(rst("TableName"))
     
     NewName = Replace$(OldName, m_PrevName, m_GroupName)
-    NewNameEnglish = Replace$(OldNameEnglish, m_PrevNameEnglish, m_GroupNameEnglish)
-    gDbTrans.SqlStmt = "Update BankHeadIDs Set " & _
-        " HeadName = " & AddQuotes(NewName, True) & _
-        " , HeadNameEnglish = " & AddQuotes(NewNameEnglish, True) & _
+    If Len(m_PrevNameEnglish) Then _
+        NewNameEnglish = Replace$(OldNameEnglish, m_PrevNameEnglish, m_GroupNameEnglish)
+    
+    gDbTrans.SqlStmt = "Update " & TableName & " Set " & _
+        " HeadName = " & AddQuotes(NewName, True) & "," & _
+        " HeadNameEnglish = " & AddQuotes(NewNameEnglish, True) & _
         " WHERE HeadID = " & headID
     
     If Not gDbTrans.SQLExecute Then Exit Function
     
     rst.MoveNext
 Wend
-
-gDbTrans.SqlStmt = "Select * From Heads " & _
-    " WHERE HeadName like '%" & AddQuotes(m_PrevName, False) & "%'"
-
-If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
-
-While Not rst.EOF
-    headID = rst("HeadId")
-    OldName = FormatField(rst("HeadName"))
-    OldNameEnglish = FormatField(rst("HeadNameEnglish"))
-    
-    NewName = Replace$(OldName, m_PrevName, m_GroupName)
-    NewNameEnglish = Replace$(OldNameEnglish, m_PrevNameEnglish, m_GroupNameEnglish)
-        
-    gDbTrans.SqlStmt = "Update Heads Set " & _
-        " HeadName = " & AddQuotes(NewName, True) & _
-        " ,HeadNameEnglish = " & AddQuotes(NewNameEnglish, True) & _
-        " WHERE HeadID = " & headID
-    
-    If Not gDbTrans.SQLExecute Then Exit Function
-    
-    rst.MoveNext
-Wend
-
-End If
 
 gDbTrans.SqlStmt = "Select * From ParentHeads " & _
-    " WHERE ParentName like '%" & AddQuotes(m_PrevName, False) & "%'"
-
-If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
-
-While Not rst.EOF
-    headID = rst("HeadId")
-    OldName = FormatField(rst("HeadName"))
-    OldNameEnglish = FormatField(rst("HeadNameEnglish"))
-    
-    NewName = Replace$(OldName, m_PrevName, m_GroupName)
-    NewNameEnglish = Replace$(OldNameEnglish, m_PrevNameEnglish, m_GroupNameEnglish)
-    
-    gDbTrans.SqlStmt = "Update Heads Set " & _
-        " ParentName = " & AddQuotes(NewName, True) & _
-        " HeadNameEnglish = " & AddQuotes(NewNameEnglish, True) & _
-        " WHERE ParentID = " & headID
-    
-    If Not gDbTrans.SQLExecute Then Exit Function
-    
-    rst.MoveNext
-Wend
-
+    " WHERE HeadName like '%" & AddQuotes(m_PrevName, False) & "%'"
+If searchExact Then
+    gDbTrans.SqlStmt = "Select * From ParentHeads WHERE ParentName = " & AddQuotes(OldName)
+    NewNameEnglish = m_GroupNameEnglish
 End If
-
-UPDateLedgerHeads = True
-
-LastLine:
+If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
     
+    While Not rst.EOF
+        headID = rst("ParentId")
+        OldName = FormatField(rst("ParentName"))
+        OldNameEnglish = FormatField(rst("ParentNameEnglish"))
+        
+        NewName = Replace$(OldName, m_PrevName, m_GroupName)
+        If Len(m_PrevNameEnglish) Then _
+            NewNameEnglish = Replace$(OldNameEnglish, m_PrevNameEnglish, m_GroupNameEnglish)
+                
+        gDbTrans.SqlStmt = "Update ParentHeads Set " & _
+            " ParentName = " & AddQuotes(NewName, True) & _
+            " , ParentNameEnglish = " & AddQuotes(NewNameEnglish, True) & _
+            " WHERE ParentID = " & headID
+        
+        If Not gDbTrans.SQLExecute Then Exit Function
+        rst.MoveNext
+    Wend
     
+ End If
+ UpdateLedgerHeads = True
 End Function
 
-Private Sub Class_Initialize()
-
-If m_frmGroup Is Nothing Then Set m_frmGroup = New frmAddGroup
-
-End Sub
-
-Private Sub Class_Terminate()
-Set m_frmGroup = Nothing
-
-End Sub
-
-Private Sub m_frmGroup_AddClick(StrName As String, Cancel As Integer, strNameEnglish As String)
-
-Dim count As Integer
-Dim MaxCount As Integer
-
-'else Add to the list
-
-With m_frmGroup.cmbList
-    If Not m_AllowDuplicate Then
-        MaxCount = .ListCount - 1
-        'Check FOr the Duplicate Entry
-        For count = 0 To MaxCount
-            If StrComp(.List(count), StrName, vbTextCompare) = 0 _
-                    Then Exit For
-        Next
-        If count <= MaxCount Then
-            Debug.Print "Kannada"
-            MsgBox "Duplicate record not allowed", vbInformation, wis_MESSAGE_TITLE
-            Exit Sub
+Private Sub m_frmGroup_AddClick(StrName As String, cancel As Integer, strNameEnglish As String)
+    
+    Dim count As Integer
+    Dim MaxCount As Integer
+    
+    With m_frmGroup.cmbList
+        If Not m_AllowDuplicate Then
+            MaxCount = .ListCount - 1
+            'Check FOr the Duplicate Entry
+            For count = 0 To MaxCount
+                If StrComp(.List(count), StrName, vbTextCompare) = 0 Then Exit For
+            Next
+            If count <= MaxCount Then
+                Debug.Print "Kannada"
+                MsgBox "Duplicate record not allowed", vbInformation, wis_MESSAGE_TITLE
+                Exit Sub
+            End If
         End If
-    End If
-End With
-
-m_Status = recAdd
-m_GroupName = StrName
-m_GroupNameEnglish = strNameEnglish
-'m_GroupId = Id
+    End With
+    
+    m_Status = recAdd
+    m_GroupName = StrName
+    m_GroupNameEnglish = strNameEnglish
 
 End Sub
 
-
-Private Sub m_frmGroup_CancelClick(Cancel As Boolean)
+Private Sub m_frmGroup_CancelClick(cancel As Boolean)
     m_Status = recCancel
 End Sub
+
 
 Private Sub m_frmGroup_ItemSelected(Id As Long)
 m_frmGroup.cmdAdd.Caption = GetResourceString(171)
@@ -1679,6 +1927,9 @@ ElseIf m_GroupType = grpDeposit Then
         End With
     End If
 Else
+    If m_GroupType = grpAllDeposit Then _
+        gDbTrans.SqlStmt = "Select DepositType,DepositTypeName, DepositTypeNameEnglish From DepositTypeTab " & _
+            " Where DepositType = " & Id & " And ModuleId = " & M_ModuleID
     If m_GroupType = grpAccount Then _
         gDbTrans.SqlStmt = "SELECT AccGroupId,GroupName,GroupNameEnglish From AccountGroup" & _
             " Where AccGroupId = " & Id
@@ -1704,11 +1955,11 @@ Else
     'If m_GroupType = grpFarmer Then Call AddFarmerType
     If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then m_frmGroup.txtItemEnglish.Text = FormatField(rst(2))
 End If
-
 End Sub
 
-Private Sub m_frmGroup_RemoveClick(StrName As String, Id As Long, Cancel As Integer)
 
+Private Sub m_frmGroup_RemoveClick(StrName As String, Id As Long, cancel As Integer)
+    
 gDbTrans.SqlStmt = ""
 
 If GroupType = grpCustomer Then
@@ -1732,6 +1983,11 @@ ElseIf GroupType = grpDeposit Then
             "DepositType = (Select DepositID From DepositName " & _
                 "Where DepositName = " & AddQuotes(StrName, True) & ")"
 
+ElseIf GroupType = grpAllDeposit Then
+    'gDbTrans.SqlStmt = "Select COUNT(*) From DepositTypeTab WHERE " & _
+            "DepositType = (Select DepositID From DepositName " & _
+                "Where DepositName = " & AddQuotes(StrName, True) & ")"
+
 ElseIf GroupType = grpProduct Then
     gDbTrans.SqlStmt = "Select COUNT(*) From RelationMaster WHERE " & _
             "GroupID = (Select GroupID From ProductGroup " & _
@@ -1745,19 +2001,19 @@ ElseIf GroupType = grpUnit Then
 End If
 
 If Len(gDbTrans.SqlStmt) Then
-Dim rstTemp As Recordset
+    Dim rstTemp As Recordset
     If gDbTrans.Fetch(rstTemp, adOpenDynamic) > 0 Then
         If FormatField(rstTemp(0)) > 0 Then
             Set rstTemp = Nothing
             MsgBox "This Group is in use ", vbInformation, wis_MESSAGE_TITLE
             Debug.Print "Kannada"
-            Cancel = True
+            cancel = True
             Exit Sub
         End If
     End If
 End If
 
-RaiseEvent ItemDeleting(StrName, Cancel)
+RaiseEvent ItemDeleting(StrName, cancel)
 
 m_GroupName = StrName
 m_PrevName = StrName
@@ -1765,15 +2021,14 @@ m_GroupID = Id
 
 'If the User has canceled this procedure then Exit the sub
 m_Status = recDelete
-If Cancel Then m_Status = recNothing
+If cancel Then m_Status = recNothing
 
 'Else Remove The Item
-
 End Sub
 
 
-Private Sub m_frmGroup_UpDateClick(StrName As String, Id As Long, Cancel As Integer, strNameEnglish As String)
-
+Private Sub m_frmGroup_UpDateClick(StrName As String, Id As Long, cancel As Integer, strNameEnglish As String)
+    
 Dim count As Integer
 Dim MaxCount As Integer
 m_PrevName = ""
@@ -1786,8 +2041,7 @@ With m_frmGroup.cmbList
           If Id = .ItemData(count) Then m_PrevName = .List(count)
           
           If count <> .ListIndex Then _
-            If StrComp(.List(count), StrName, _
-                    vbTextCompare) = 0 Then Exit For
+            If StrComp(.List(count), StrName, vbTextCompare) = 0 Then Exit For
         Next
         If count <= MaxCount Then
             m_PrevName = ""
@@ -1804,4 +2058,5 @@ m_GroupNameEnglish = strNameEnglish
 m_GroupID = Id
 
 End Sub
+
 

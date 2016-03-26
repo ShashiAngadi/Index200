@@ -272,6 +272,8 @@ With m_frmPurchase.grd
     '.Col = 3: .Text = "Total Amount": .CellFontBold = True
     '.MergeCells = flexMergeFree
     .Col = 7: .Text = FormatCurrency(TotalAmount + TotalTaxAmount): .CellFontBold = True
+    .Col = 6: .Text = TotalTaxAmount: .CellFontBold = True
+    .Col = 4: .Text = TotalAmount: .CellFontBold = True
 End With
 
 With m_frmPurchase
@@ -670,7 +672,7 @@ With m_frmPurchase
     USTransDate = GetSysFormatDate(.txtTransDate)
     InvoiceAmount = Val(.txtInvoiceAmount)
     
-    If .optRONo.Value Then
+    If .optROno.Value Then
         eInvoiceType = RONumber
     ElseIf .optSTANo.Value Then
         eInvoiceType = STANumber
@@ -975,6 +977,7 @@ Private Function LoadDetailsToUpdate() As Boolean
 If Not GetPurchaseTableDetails Then Exit Function
 If Not GetStockDetailsAddedToCollection Then Exit Function
 If Not GetDetailsFromAccTrans Then Exit Function
+Call GetCreditORCashFromAccTrans
 If AddToGridFromCollection <> Success Then Exit Function
 Call ClearControls
 
@@ -1016,7 +1019,7 @@ gDbTrans.SqlStmt = " SELECT A.HeadID,A.Credit,A.Debit,B.HeadName,B.ParentID,Acco
                   " WHERE ( " & StrSql & " )" & _
                   " AND B.ParentID=C.ParentID" & _
                   " AND A.HeadId=B.HeadID" & _
-                  " AND ( C.AccountType = 4 OR C.AccountType= 8 )"
+                  " AND ( C.AccountType = " & Loss & " OR C.AccountType = " & Profit & " )"
 
 Call gDbTrans.Fetch(rstAccTrans, adOpenStatic)
 
@@ -1049,6 +1052,54 @@ Set rstAccTrans = Nothing
 
 
 GetDetailsFromAccTrans = True
+End Function
+
+
+Private Function GetCreditORCashFromAccTrans() As Boolean
+'Declare the variables
+Dim arrTransID As Variant
+Dim loopCount As Integer
+
+Dim rstAccTrans As ADODB.Recordset
+
+Dim StrSql As String
+Dim headID As Long
+
+'Initialise the function
+GetCreditORCashFromAccTrans = False
+
+arrTransID = Split(m_TransIDString, ",")
+
+
+For loopCount = LBound(arrTransID) To UBound(arrTransID) - 1
+    StrSql = StrSql & "TransID =" & arrTransID(loopCount) & " OR "
+Next loopCount
+
+StrSql = StrSql & "TransID =" & arrTransID(loopCount)
+
+gDbTrans.SqlStmt = " SELECT A.HeadID,A.Credit,A.Debit,B.HeadName,B.ParentID,AccountType" & _
+                  " FROM AccTrans A,Heads B, ParentHeads C" & _
+                  " WHERE ( " & StrSql & " )" & _
+                  " AND B.ParentID=C.ParentID" & _
+                  " AND A.HeadId=B.HeadID"
+
+Call gDbTrans.Fetch(rstAccTrans, adOpenStatic)
+
+m_frmPurchase.optCredit.Value = True
+Do While Not rstAccTrans.EOF
+    headID = rstAccTrans.Fields("HeadID")
+    'Determine whether Transcation is credit or Cash
+    If headID = wis_CashHeadID Then
+        m_frmPurchase.optCash = True
+        rstAccTrans.MoveLast
+    End If
+    rstAccTrans.MoveNext
+Loop
+
+Set rstAccTrans = Nothing
+
+
+GetCreditORCashFromAccTrans = True
 End Function
 
 'This function will get Stock Details , by taking the ID of PurchaseTransID
@@ -1222,7 +1273,7 @@ With m_frmPurchase
         Case InvoiceNumber
             .optInvoiceNo.Value = True
         Case RONumber
-            .optRONo.Value = True
+            .optROno.Value = True
         Case STANumber
             .optSTANo.Value = True
     End Select
@@ -1311,6 +1362,7 @@ With m_frmPurchase
     'GroupNameEnglish = .cmbGroupEnglish.ItemData(.cmbGroup.ListIndex)
     IsCashPurchase = False
     If .optCash.Value Then IsCashPurchase = True
+    If .optCredit.Value = False Then IsCashPurchase = True
 End With
 
 If IsCashPurchase Then
@@ -1548,6 +1600,7 @@ End Function
 Private Function DeleteStockTableDetails() As Boolean
 'Declare the variables
 Dim USTransDate As String
+Dim rst As Recordset
 
 DeleteStockTableDetails = False
 If m_InvoiceNo = "" Then Exit Function

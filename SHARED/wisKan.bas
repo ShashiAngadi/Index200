@@ -122,7 +122,7 @@ Public Function LoadResourceStringS(ParamArray ResourceIDs() As Variant) As Stri
     Dim count As Integer
     retValue = LoadResString(ResourceIDs(0))
     
-    For count = 0 To UBound(ResourceIDs)
+    For count = 1 To UBound(ResourceIDs)
         retValue = retValue & " " & LoadResString(ResourceIDs(count))
     Next
     LoadResourceStringS = retValue

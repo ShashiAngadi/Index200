@@ -1,0 +1,7 @@
+[Property Sheet]
+Prop1=Prompt=Card Details;PropType=Heading;SubItems=2;
+Prop2=Prompt=Card Number;PropType=Editable;Description=Identifies the card number.;DescTitle=Card Number;DataSource=CardNo;
+Prop3=Prompt=Card holder name;LockEdit=True;PropType=Editable;Description=Identifies the name of the card holder.;DescTitle=Card holder name;DisplayType=Browse;DataSource=MemberName
+Prop4=Prompt=Family Member Details:;PropType=Heading;SubItems=2
+Prop5=Prompt=No. of Members;PropType=Editable;DataSource=MemberCount;DescTitle=Member Count;Description=No. of family members for this card holder.
+Prop6=Prompt=Family Members Details;LockEdit=True;PropType=Editable;Description=Name Of Family Members;DescTitle=Family;DisplayType=Browse;DataSource=MemberList

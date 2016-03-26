@@ -69,7 +69,7 @@ Begin VB.Form frmWeb
       NoFolders       =   0   'False
       Transparent     =   0   'False
       ViewID          =   "{0057D0E0-3573-11CF-AE69-08002B2E1262}"
-      Location        =   ""
+      Location        =   "http:///"
    End
 End
 Attribute VB_Name = "frmWeb"
@@ -259,13 +259,13 @@ With cmdCancel
     .Left = Me.ScaleWidth - Margin - .Width
     .Top = Me.ScaleHeight - Margin - .Height
 End With
-With cmdOK
+With cmdOk
     .Left = cmdCancel.Left - CTL_MARGIN - .Width
     .Top = cmdCancel.Top
 End With
 
 With cmdPageSet
-    .Left = cmdOK.Left - CTL_MARGIN - .Width
+    .Left = cmdOk.Left - CTL_MARGIN - .Width
     .Top = cmdCancel.Top
 End With
 With cmdGrid

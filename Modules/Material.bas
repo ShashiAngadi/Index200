@@ -48,6 +48,7 @@ End Function
 ' OutPut : Headid
 Public Function GetIndexHeadID(ByVal headName As String) As Long
 
+headName = Trim$(headName)
 'Trap an error
 On Error GoTo ErrLine
 
@@ -114,7 +115,7 @@ gDbTrans.SqlStmt = " SELECT HeadID FROM Heads " & _
 If gDbTrans.Fetch(rstHeads, adOpenForwardOnly) > 0 Then _
     GetHeadID = FormatField(rstHeads.Fields(0))
 
-If rstHeads.RecordCount > 1 Then GetHeadID = 0
+If rstHeads.recordCount > 1 Then GetHeadID = 0
 Set rstHeads = Nothing
 
 Exit Function

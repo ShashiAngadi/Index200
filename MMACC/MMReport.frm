@@ -159,7 +159,7 @@ gDbTrans.SqlStmt = SqlStmt & sqlSupport & " order by B.TransDate"
 If gDbTrans.Fetch(rst, adOpenDynamic) <= 0 Then Exit Sub
 SqlStmt = ""
 
-RaiseEvent Initialise(0, rst.RecordCount + 2)
+RaiseEvent Initialise(0, rst.recordCount + 2)
 RaiseEvent Processing("Aligning the data ", 0)
 
 Call InitGrid
@@ -191,7 +191,7 @@ While Not rst.EOF
     SlNo = SlNo + 1
     If gCancel Then rst.MoveLast
     rst.MoveNext
-    RaiseEvent Processing("Writing the records data ", SlNo / rst.RecordCount)
+    RaiseEvent Processing("Writing the records data ", SlNo / rst.recordCount)
     DoEvents
     
 Wend
@@ -375,8 +375,7 @@ With grd
         .Col = 3: .Text = GetResourceString(49, 60) '"memeber No
         .Col = 4: .Text = GetResourceString(302)  '"Share issued "
         .Col = 5: .Text = GetResourceString(303)  '"Share Returned "
-        '.Col = 6: .Text = GetResourceString(53) & " " & _
-                    GetResourceString(191) '"Share Fee"
+        '.Col = 6: .Text = GetResourceString(53,191) '"Share Fee"
         
         GoTo LastLine
     End If
@@ -445,7 +444,7 @@ gDbTrans.SqlStmt = SqlStmt
 If gDbTrans.Fetch(rst, adOpenDynamic) <= 0 Then Exit Sub
            
 'Initialize the grid
-RaiseEvent Initialise(0, rst.RecordCount)
+RaiseEvent Initialise(0, rst.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
  
 Dim count As Integer
@@ -472,7 +471,7 @@ nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
 
 Wend
@@ -505,7 +504,7 @@ gDbTrans.SqlStmt = SqlStmt & " order by CreateDate, AccNum"
 If gDbTrans.Fetch(rst, adOpenDynamic) <= 0 Then Exit Sub
 
 'Initialize the grid
-   RaiseEvent Initialise(0, rst.RecordCount)
+   RaiseEvent Initialise(0, rst.recordCount)
    RaiseEvent Processing(" Aligning the data ", 0)
    
     Dim count As Integer
@@ -531,7 +530,7 @@ nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then Exit Sub
-    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
 
 Wend
@@ -581,7 +580,7 @@ gDbTrans.SqlStmt = SqlStmt
 If gDbTrans.Fetch(rst, adOpenDynamic) <= 0 Then Exit Sub
 SqlStmt = ""
 
-RaiseEvent Initialise(0, rst.RecordCount)
+RaiseEvent Initialise(0, rst.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
     
 Dim count As Integer
@@ -610,7 +609,7 @@ nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.recordCount)
     
     rst.MoveNext
     
@@ -725,7 +724,7 @@ gDbTrans.SqlStmt = SqlStmt
 If gDbTrans.Fetch(rst, adOpenDynamic) <= 0 Then Exit Sub
 SqlStmt = ""
 
-RaiseEvent Initialise(0, rst.RecordCount)
+RaiseEvent Initialise(0, rst.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
     
 Dim count As Integer
@@ -754,7 +753,7 @@ nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.recordCount)
     
     rst.MoveNext
     
@@ -865,7 +864,7 @@ gDbTrans.SqlStmt = SqlStmt
 If gDbTrans.Fetch(rst, adOpenDynamic) <= 0 Then Exit Sub
 SqlStmt = ""
 
-RaiseEvent Initialise(0, rst.RecordCount)
+RaiseEvent Initialise(0, rst.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
     
 Dim count As Integer
@@ -900,7 +899,7 @@ nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.recordCount)
     
     rst.MoveNext
     
@@ -957,7 +956,7 @@ Dim GrandMemFee  As Currency, GrandShareFee As Currency
 Dim count As Integer
 Dim rowno As Long, colno As Byte
 
-RaiseEvent Initialise(0, rst.RecordCount)
+RaiseEvent Initialise(0, rst.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
 
 Call InitGrid
@@ -1006,7 +1005,7 @@ Do
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
 Loop
 
@@ -1079,7 +1078,7 @@ If gDbTrans.Fetch(rstMain, adOpenStatic) < 1 Then Exit Sub
 SqlStmt = ""
 
 count = DateDiff("M", fromDate, toDate) + 2
-totalCount = (count + 1) * rstMain.RecordCount
+totalCount = (count + 1) * rstMain.recordCount
 RaiseEvent Initialise(0, totalCount)
 
 Dim prmAccId As Parameter
@@ -1259,7 +1258,7 @@ Dim TransDate As Date
     Dim TotalWithDraw As Currency, TotalDeposit As Currency, TotalInterest As Currency, TotalCharges As Currency
     Dim Balance As Currency
 'Fire the query
-   RaiseEvent Initialise(0, rst.RecordCount)
+   RaiseEvent Initialise(0, rst.recordCount)
    RaiseEvent Processing("Aligning the data ", 0)
    
    'Get liability on a day before m_fromdate
@@ -1335,7 +1334,7 @@ nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.recordCount)
     
     rst.MoveNext
 Wend
@@ -1415,7 +1414,7 @@ End If
 gDbTrans.SqlStmt = SqlStmt: SqlStmt = ""
 If gDbTrans.Fetch(rst, adOpenDynamic) <= 0 Then Exit Sub
 
-RaiseEvent Initialise(0, rst.RecordCount)
+RaiseEvent Initialise(0, rst.recordCount)
 RaiseEvent Processing("Alignign the data ", 0)
 
 Dim count As Integer
@@ -1462,7 +1461,7 @@ nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
 Wend
 
@@ -1512,7 +1511,7 @@ If gDbTrans.Fetch(rst, adOpenDynamic) <= 0 Then Exit Sub
 'Initialize the grid
 Dim SubTotal(4 To 8) As Currency, GrandTotal(4 To 8) As Currency
 
-RaiseEvent Initialise(0, rst.RecordCount)
+RaiseEvent Initialise(0, rst.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
 
 Call InitGrid
@@ -1582,7 +1581,7 @@ nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
 Wend
 
@@ -1652,7 +1651,7 @@ If gDbTrans.Fetch(rst, adOpenDynamic) <= 0 Then Exit Sub
 'Initialize the grid
 Dim SubTotal(4 To 5) As Currency, GrandTotal(4 To 5) As Currency
 
-RaiseEvent Initialise(0, rst.RecordCount)
+RaiseEvent Initialise(0, rst.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
 
 Call InitGrid
@@ -1717,7 +1716,7 @@ nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
 Wend
 
@@ -1894,7 +1893,7 @@ Dim ColCount As Integer
 End Sub
 
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 Set frmMMReport = Nothing
 
 End Sub

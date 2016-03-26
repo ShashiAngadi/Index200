@@ -282,7 +282,7 @@ If rst Is Nothing Then
 End If
 
 'Search Module
-Dim HeadID As Long
+Dim headID As Long
 Dim custId As Long
 Dim NextRow As Boolean
 Dim showRow As Boolean
@@ -305,8 +305,8 @@ While Not rst.EOF
     NextRow = False
     For I = 2 To MaxI
         If grd.Rows <= rowno + 1 Then grd.Rows = rowno + 1
-        HeadID = grd.ColData(I)
-        Set rstBalance = GetCustRecordSet(HeadID, custId)
+        headID = grd.ColData(I)
+        Set rstBalance = GetCustRecordSet(headID, custId)
         If rstBalance Is Nothing Then GoTo NextAccType
         With grd
             '.Col = I
@@ -377,47 +377,47 @@ End Sub
 Private Sub ShowCustomerDetail(ByVal CustomerID As Long, ByVal AccHeadID As Long)
 
 
-Dim ModuleId As wisModules
+Dim ModuleID As wisModules
 
-ModuleId = GetModuleIDFromHeadID(AccHeadID)
-
-If ModuleId = wis_None Then Exit Sub
+ModuleID = GetModuleIDFromHeadID(AccHeadID)
+If ModuleID > 100 Then ModuleID = ModuleID - (ModuleID Mod 100)
+If ModuleID = wis_None Then Exit Sub
 
 
 'Members
-If ModuleId >= wis_Members And ModuleId < wis_Members + 100 Then
+If ModuleID >= wis_Members And ModuleID < wis_Members + 100 Then
     Set m_ClsObject = New clsMMAcc
 'Bkcc Account
-ElseIf ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then
+ElseIf ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Then
     Set m_ClsObject = New clsBkcc
     
-ElseIf ModuleId = wis_CAAcc Then
+ElseIf ModuleID = wis_CAAcc Then
     Set m_ClsObject = New ClsCAAcc
 
 'DepositLoans
-ElseIf ModuleId >= wis_DepositLoans And ModuleId < wis_DepositLoans + 100 Then
+ElseIf ModuleID >= wis_DepositLoans And ModuleID < wis_DepositLoans + 100 Then
     
     Set m_ClsObject = New clsDepLoan
     
 'Pigmy Accounts
-ElseIf ModuleId = wis_PDAcc Then
+ElseIf ModuleID = wis_PDAcc Then
     Set m_ClsObject = New clsPDAcc
     
 
 'Recurring Accounts
-ElseIf ModuleId = wis_RDAcc Then
+ElseIf ModuleID = wis_RDAcc Then
     Set m_ClsObject = New clsRDAcc
 
 'Deposit Accounts like Fd
-ElseIf ModuleId >= wis_Deposits And ModuleId < wis_Deposits + 100 Then
+ElseIf ModuleID >= wis_Deposits And ModuleID < wis_Deposits + 100 Then
     Set m_ClsObject = New clsFDAcc
     
 'Loan Accounts
-ElseIf ModuleId >= wis_Loans And ModuleId < wis_Loans + 100 Then
+ElseIf ModuleID >= wis_Loans And ModuleID < wis_Loans + 100 Then
     
     Set m_ClsObject = New clsLoan
     
-ElseIf ModuleId >= wis_SBAcc And ModuleId < wis_SBAcc Then
+ElseIf ModuleID >= wis_SBAcc And ModuleID < wis_SBAcc Then
     
     Set m_ClsObject = New clsSBAcc
 
@@ -427,7 +427,7 @@ Else
 End If
 
 m_ClsObject.CustomerID = CustomerID
-If ModuleId >= wis_Loans And ModuleId < wis_Loans + 100 Then
+If ModuleID >= wis_Loans And ModuleID < wis_Loans + 100 Then
     m_ClsObject.ShowCreateLoanAccount
 Else
     m_ClsObject.Show
@@ -463,29 +463,33 @@ Dim rstReturn As Recordset
 Dim SqlStr As String
 Dim pos As Long
 Dim sqlClause As String
-
+Dim DepType As Integer
+Dim subDepType As Integer
 Set rstReturn = Nothing
 On Error GoTo Exit_Line
 
-Dim ModuleId As wisModules
+Dim ModuleID As wisModules
 
-ModuleId = GetModuleIDFromHeadID(AccHeadID)
+ModuleID = GetModuleIDFromHeadID(AccHeadID)
+DepType = ModuleID Mod 100
+subDepType = ModuleID Mod 10
 
 Set rstReturn = Nothing
-If ModuleId = wis_None Then Exit Function
+If ModuleID = wis_None Then Exit Function
 
 'Members
-If ModuleId >= wis_Members And ModuleId < wis_Members + 100 Then
+If ModuleID >= wis_Members And ModuleID < wis_Members + 100 Then
     SqlStr = "Select AccNum, A.AccID as ID,Balance " & _
         " From MemMaster A,MemTrans B" & _
         " Where A.CustomerID = " & CustomerID & _
         " AND B.AccID = A.AccID AND TransID = " & _
             "(Select Max(TransID) From MemTrans D " & _
             " Where D.AccID = A.AccID ) "
-    If ModuleId Mod 100 > 0 Then _
-        SqlStr = SqlStr & " And A.MemberType= " & ModuleId - wis_Members
+    'If ModuleID Mod 100 > 0 Then _
+        SqlStr = SqlStr & " And A.MemberType= " & ModuleID - wis_Members
+    If DepType > 0 Then SqlStr = SqlStr & " AND A.MemberType = " & DepType
 'Bkcc Account
-ElseIf ModuleId = wis_BKCC Then
+ElseIf ModuleID = wis_BKCC Then
     SqlStr = "Select AccNum, A.LoanID as ID From BKCCMaster A"
     SqlStr = "Select AccNum, A.LoanID as ID,Balance * -1 as Balance " & _
         " From BKCCMaster A,BKCCTrans B" & _
@@ -494,7 +498,7 @@ ElseIf ModuleId = wis_BKCC Then
             "(Select Max(TransID) From BKCCTrans D " & _
             " Where D.LoanID = A.LoanID And Deposit = True ) "
 'Bkcc Loan Account
-ElseIf ModuleId = wis_BKCCLoan Then
+ElseIf ModuleID = wis_BKCCLoan Then
     SqlStr = "Select AccNum, A.LoanID as ID From BKCCMaster A"
     SqlStr = "Select AccNum, A.LoanID as ID,Balance " & _
         " From BKCCMaster A,BKCCTrans B" & _
@@ -503,7 +507,7 @@ ElseIf ModuleId = wis_BKCCLoan Then
             "(Select Max(TransID) From BKCCTrans D " & _
             " Where D.LoanID = A.LoanID And Deposit = False ) "
 'Current Account
-ElseIf ModuleId = wis_CAAcc Then
+ElseIf ModuleID = wis_CAAcc Then
     SqlStr = "Select AccNum, AccId as Id From CAMaster A"
     SqlStr = "Select AccNum, A.AccID as ID,Balance " & _
         " From CAMaster A,CATrans B" & _
@@ -511,23 +515,26 @@ ElseIf ModuleId = wis_CAAcc Then
         " AND B.AccID = A.AccID AND TransID = " & _
             "(Select Max(TransID) From CATrans D " & _
             " Where D.AccID = A.AccID ) "
-
+    If DepType > 0 Then SqlStr = SqlStr & " AND A.DepositType = " & DepType
+    
 'DepositLoans
-ElseIf ModuleId >= wis_DepositLoans And ModuleId < wis_DepositLoans + 100 Then
+ElseIf ModuleID >= wis_DepositLoans And ModuleID < wis_DepositLoans + 100 Then
     SqlStr = "Select AccNum, LoanId as ID From DepositLoanMaster A"
-    If ModuleId > wis_DepositLoans Then _
-        sqlClause = " ANd A.DepositType = " & ModuleId - wis_DepositLoans
+    If DepType > 0 Then sqlClause = " AND A.DepositType = " & DepType
+    'If ModuleID > wis_DepositLoans Then _
+        sqlClause = " ANd A.DepositType = " & ModuleID - wis_DepositLoans
     SqlStr = "Select AccNum, A.LoanID as ID,Balance " & _
         " From DepositLoanMaster A,DepositLoanTrans B" & _
         " Where A.CustomerID = " & CustomerID & _
         " AND B.LoanID = A.LoanID AND TransID = " & _
             "(Select Max(TransID) From DepositLoanTrans D " & _
             " Where D.LoanID = A.LoanID ) "
-    If ModuleId > wis_DepositLoans Then _
-        SqlStr = SqlStr & " ANd A.DepositType = " & ModuleId - wis_DepositLoans
+    If DepType > 0 Then SqlStr = SqlStr & " AND A.DepositType = " & DepType
+    'If ModuleID > wis_DepositLoans Then _
+        SqlStr = SqlStr & " ANd A.DepositType = " & ModuleID - wis_DepositLoans
 
 'Pigmy Accounts
-ElseIf ModuleId = wis_PDAcc Then
+ElseIf ModuleID >= wis_PDAcc And ModuleID < wis_PDAcc + 100 Then
     SqlStr = "Select AccNum, AccId as ID From PDMaster A"
     SqlStr = "Select AccNum, A.AccID as ID,Balance " & _
         " From PDMaster A,PDTrans B" & _
@@ -535,47 +542,47 @@ ElseIf ModuleId = wis_PDAcc Then
         " AND B.AccID = A.AccID AND TransID = " & _
             "(Select Max(TransID) From PDTrans D " & _
             " Where D.AccID = A.AccID ) "
-
+    If DepType > 0 Then SqlStr = SqlStr & " AND A.DepositType = " & DepType
 'Recurring Accounts
-ElseIf ModuleId = wis_RDAcc Then
-    SqlStr = "Select AccNum, AccId as ID From RDMaster A"
+ElseIf ModuleID >= wis_RDAcc And ModuleID < wis_RDAcc + 100 Then
+    
     SqlStr = "Select AccNum, A.AccID as ID,Balance " & _
         " From RDMaster A,RDTrans B" & _
         " Where A.CustomerID = " & CustomerID & _
         " AND B.AccID = A.AccID AND TransID = " & _
             "(Select Max(TransID) From RDTrans D " & _
             " Where D.AccID = A.AccID ) "
-
+    If DepType > 0 Then SqlStr = SqlStr & " AND A.DepositType = " & DepType
 
 'Deposit Accounts like Fd
-ElseIf ModuleId >= wis_Deposits And ModuleId < wis_Deposits + 100 Then
+ElseIf ModuleID >= wis_Deposits And ModuleID < wis_Deposits + 100 Then
     SqlStr = "Select AccNum, AccId as ID From FDMaster A"
-    If ModuleId > wis_Deposits Then _
-        sqlClause = " ANd A.DepositType = " & ModuleId - wis_Deposits
+    If ModuleID > wis_Deposits Then _
+        sqlClause = " ANd A.DepositType = " & ModuleID - wis_Deposits
     SqlStr = "Select AccNum, A.AccID as ID,Balance " & _
         " From FDMaster A,FDTrans B" & _
         " Where A.CustomerID = " & CustomerID & _
         " AND B.AccID = A.AccID AND TransID = " & _
             "(Select Max(TransID) From FDTrans D " & _
             " Where D.AccID = A.AccID ) "
-    If ModuleId > wis_Deposits Then _
-        SqlStr = SqlStr & " ANd A.DepositType = " & ModuleId - wis_Deposits
+    If ModuleID > wis_Deposits Then _
+        SqlStr = SqlStr & " ANd A.DepositType = " & ModuleID - wis_Deposits
 
 'Loan Accounts
-ElseIf ModuleId >= wis_Loans And ModuleId < wis_Loans + 100 Then
+ElseIf ModuleID >= wis_Loans And ModuleID < wis_Loans + 100 Then
     SqlStr = "Select AccNum, LoanId as ID From LoanMaster A"
-    If ModuleId > wis_Loans Then _
-        sqlClause = " AND A.SchemeID = " & ModuleId - wis_Loans
+    If ModuleID > wis_Loans Then _
+        sqlClause = " AND A.SchemeID = " & ModuleID - wis_Loans
     SqlStr = "Select AccNum, A.LoanID as ID,Balance " & _
         " From LoanMaster A,LoanTrans B" & _
         " Where A.CustomerID = " & CustomerID & _
         " AND B.LoanID = A.LOanID AND TransID = " & _
             "(Select Max(TransID) From LoanTrans D " & _
             " Where D.LoanID = A.LoanID ) "
-    If ModuleId > wis_Loans Then _
-        SqlStr = SqlStr & " AND A.SchemeID = " & ModuleId - wis_Loans
+    If ModuleID > wis_Loans Then _
+        SqlStr = SqlStr & " AND A.SchemeID = " & ModuleID - wis_Loans
 
-ElseIf ModuleId >= wis_SBAcc And ModuleId < wis_SBAcc + 100 Then
+ElseIf ModuleID >= wis_SBAcc And ModuleID < wis_SBAcc + 100 Then
     
     SqlStr = "Select AccNum, A.AccID as ID,Balance " & _
         " From SBMaster A,SBTrans B" & _
@@ -583,7 +590,8 @@ ElseIf ModuleId >= wis_SBAcc And ModuleId < wis_SBAcc + 100 Then
         " AND B.AccID = A.AccID AND TransID = " & _
             "(Select Max(TransID) From SBTrans D " & _
             " Where D.AccID = A.AccID ) "
-
+    If DepType > 0 Then SqlStr = SqlStr & " AND A.DepositType = " & DepType
+    
 Else
 '    MsgBox "Plese select the account type", vbInformation, wis_MESSAGE_TITLE
     Exit Function
@@ -607,7 +615,7 @@ End Function
 
 Private Sub Form_Load()
 Dim rst As Recordset
-Dim HeadID As Long
+Dim headID As Long
 
 Call CenterMe(Me)
 
@@ -624,9 +632,9 @@ With cmbAccType
     If gDbTrans.Fetch(rst, adOpenDynamic) > 1 Then
         While rst.EOF = False
             .AddItem FormatField(rst("MemberTypeName"))
-            HeadID = GetIndexHeadID(FormatField(rst("MemberTypeName")))
-            If HeadID = 0 Then HeadID = GetIndexHeadID(FormatField(rst("MemberTypeName")) & " " & GetResourceString(53, 36))
-            .ItemData(.newIndex) = HeadID
+            headID = GetIndexHeadID(FormatField(rst("MemberTypeName")))
+            If headID = 0 Then headID = GetIndexHeadID(FormatField(rst("MemberTypeName")) & " " & GetResourceString(53, 36))
+            .ItemData(.newIndex) = headID
             'Move to next record
             rst.MoveNext
         Wend
@@ -687,7 +695,7 @@ End With
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 Set frmCustSearch = Nothing
 End Sub
 

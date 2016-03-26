@@ -565,14 +565,14 @@ ElseIf ModuleId >= wis_Loans And ModuleId < wis_Loans + 100 Then
         sqlClause = " AND A.SchemeID = " & ModuleId - wis_Loans
 
 'Pigmy Accounts
-ElseIf ModuleId = wis_PDAcc Then
+ElseIf ModuleId >= wis_PDAcc And ModuleId < wis_PDAcc + 100 Then
     SqlStr = "Select AccNum, AccId as ID," & _
             " Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
             " From PDMaster A, NameTab B WHERE B.CustomerID = A.CustomerID " & _
             " And Accid = " & AccId
 
 'Recurring Accounts
-ElseIf ModuleId = wis_RDAcc Then
+ElseIf ModuleId >= wis_RDAcc And ModuleId < wis_RDAcc + 100 Then
     SqlStr = "Select AccNum, AccId as ID ," & _
             " Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
             " From RDMaster A, NameTab B WHERE B.CustomerID = A.CustomerID " & _

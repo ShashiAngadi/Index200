@@ -1,8 +1,8 @@
 [Language]
-Language=kannada
-1LanguageTool=NUDI
-LanguageTool=SAMHITA
-FontName=SUCHI-KAN-0850
+Language=Kannada
+LanguageTool=NUDI
+1LanguageTool=SAMHITA
+1FontName=SUCHI-KAN-0850
 [DBPath]
 Path=C:\Projects\Index 2000 Total New\APPMAIN
 [CONFIG]

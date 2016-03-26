@@ -395,7 +395,7 @@ Dim rstTransID As ADODB.Recordset
 GetMaxTransID = 0
 
 'Get the Last Transaction of the realtionid
-gDbTrans.SqlStmt = " SELECT MAX(TransID) AS MaxTransID FROM Stock "
+gDbTrans.SqlStmt = "SELECT MAX(TransID) AS MaxTransID FROM Stock"
                 
 If gDbTrans.Fetch(rstTransID, adOpenForwardOnly) < 1 Then Exit Function
 
@@ -864,8 +864,8 @@ Public Sub FixDailyAccTransHeads(AsOnDate As Date)
 
 Dim CashDeposit As Currency
 Dim cashWithdraw As Currency
-Dim contraDeposit As Currency
-Dim contraWithdraw As Currency
+Dim ContraDeposit As Currency
+Dim ContraWithDraw As Currency
 
 Dim Deposit As Currency
 Dim WithDraw As Currency
@@ -888,8 +888,8 @@ Dim headID As Long
             If PrevTransID <> rstTrans("TransID") Then
                 If PrevTransID > 0 Then
                     If isCOntra Then
-                        contraDeposit = contraDeposit + Deposit
-                        contraWithdraw = contraWithdraw + WithDraw
+                        ContraDeposit = ContraDeposit + Deposit
+                        ContraWithDraw = ContraWithDraw + WithDraw
                     Else
                         CashDeposit = CashDeposit + Deposit
                         cashWithdraw = cashWithdraw + WithDraw

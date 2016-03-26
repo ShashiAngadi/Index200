@@ -186,6 +186,7 @@ Begin VB.Form frmPDAcc
             _ExtentX        =   11192
             _ExtentY        =   3942
             _Version        =   393217
+            Enabled         =   -1  'True
             TextRTF         =   $"PDacc.frx":0004
          End
          Begin VB.CommandButton cmdAgentNote 
@@ -1029,6 +1030,7 @@ Begin VB.Form frmPDAcc
             _ExtentX        =   11351
             _ExtentY        =   3942
             _Version        =   393217
+            Enabled         =   -1  'True
             TextRTF         =   $"PDacc.frx":008A
          End
       End
@@ -1795,10 +1797,10 @@ Set bankClass = New clsBankAcc
 Dim headName As String
 'Noew ge the Ledger head id of the Pigmy deposit payble
 headName = GetResourceString(425, 450)        'PIgmy INterest provision
-PayableHeadID = bankClass.GetHeadIDCreated(headName, LoadResString(425) & " " & LoadResString(450), parDepositIntProv, 0, wis_PDAcc)
+IntHeadID = bankClass.GetHeadIDCreated(headName, LoadResString(425) & " " & LoadResString(450), parMemDepIntPaid, 0, wis_PDAcc)
 
 headName = GetResourceString(425, 375, 47)       'PIgmy Payble INterest
-IntHeadID = bankClass.GetHeadIDCreated(headName, LoadResString(425) & " " & LoadResString(375) & " " & LoadResString(47), parMemDepIntPaid, 0, wis_PDAcc)
+PayableHeadID = bankClass.GetHeadIDCreated(headName, LoadResString(425) & " " & LoadResourceStringS(375, 47), parDepositIntProv, 0, wis_PDAcc)
 
 'Now Make the same transaction to the ledger heads
 If Not bankClass.UndoContraTrans(IntHeadID, PayableHeadID, Amount, OnDate) Then _
@@ -1876,7 +1878,7 @@ If gDbTrans.Fetch(m_rstAgent, adOpenDynamic) > 0 Then
     'Position to first record of last page
     With m_rstAgent
         '.MoveFirst
-        .Move -(.RecordCount Mod 10)
+        .Move -(.recordCount Mod 10)
         If .AbsolutePosition < 0 Then .MoveFirst
     End With
     
@@ -2206,7 +2208,7 @@ End If
 
 
 'Start Transactions to Data base
-    m_CustReg.ModuleId = wis_PDAcc
+    m_CustReg.ModuleID = wis_PDAcc
     gDbTrans.BeginTrans
     
     'Save the customer (or Update the customer to set to current reference)
@@ -3012,7 +3014,7 @@ Dim rst As Recordset
     Dim custReg As clsCustReg
     Set custReg = New clsCustReg
     
-    For I = 1 To rst.RecordCount
+    For I = 1 To rst.recordCount
         If Val(rst("Permissions")) And Perms Then
             'CustReg.LoadCustomerInfo (Val(Rst("CustomerID")))
             cmbAgents.AddItem custReg.CustomerName(Val(rst("CustomerId")))
@@ -3458,9 +3460,9 @@ With grd
     .Row = 1
 End With
 
-If m_rstPassBook.EOF = False And m_rstPassBook.RecordCount = m_rstPassBook.AbsolutePosition Then m_rstPassBook.MoveNext
+If m_rstPassBook.EOF = False And m_rstPassBook.recordCount = m_rstPassBook.AbsolutePosition Then m_rstPassBook.MoveNext
 cmdNextTrans.Enabled = IIf(m_rstPassBook.EOF, False, True)
-If m_rstPassBook.EOF And m_rstPassBook.RecordCount > 10 Then
+If m_rstPassBook.EOF And m_rstPassBook.recordCount > 10 Then
     cmdPrevTrans.Enabled = True
 Else
     cmdPrevTrans.Enabled = m_rstPassBook.AbsolutePosition > 10
@@ -3794,7 +3796,7 @@ Select Case UCase$(strField)
         End If
 
     Case "ACCNAME"
-        m_CustReg.ModuleId = wis_PDAcc
+        m_CustReg.ModuleID = wis_PDAcc
         m_CustReg.ShowDialog
         txtData(txtIndex).Text = m_CustReg.FullName
 
@@ -3870,7 +3872,7 @@ Select Case UCase$(strField)
             ' Set the column widths.
          '   .lvwReport.ColumnHeaders(2).Width = 3750
           '  .lvwReport.ColumnHeaders(3).Width = 3750
-            m_CustReg.ModuleId = wis_PDAcc
+            m_CustReg.ModuleID = wis_PDAcc
             m_CustReg.ShowDialog
             txtData(txtIndex).Text = m_CustReg.FullName
             
@@ -3903,7 +3905,7 @@ TabStrip2.Tabs(2).Selected = True
 End Sub
 '
 Private Sub cmdAddNote_Click()
-If m_Notes.ModuleId = 0 Then
+If m_Notes.ModuleID = 0 Then
     Exit Sub
 End If
 
@@ -4007,7 +4009,7 @@ Dim CurPos As Integer
     If m_rstAgent.EOF Then m_rstAgent.MoveLast
     CurPos = m_rstAgent.AbsolutePosition
     CurPos = 10 - (CurPos Mod 10)
-    If m_rstAgent.AbsolutePosition + CurPos >= m_rstAgent.RecordCount Then
+    If m_rstAgent.AbsolutePosition + CurPos >= m_rstAgent.recordCount Then
         Beep
         Exit Sub
     Else
@@ -4020,7 +4022,7 @@ End Sub
 
 Private Sub cmdAgentNote_Click()
 
-If m_AgentNotes.ModuleId = 0 Then Exit Sub
+If m_AgentNotes.ModuleID = 0 Then Exit Sub
 
 Call m_AgentNotes.Show
 Call m_AgentNotes.DisplayNote(rtfNote)
@@ -4418,8 +4420,7 @@ Load frmIntPayble
 
 With frmIntPayble
     Call .LoadContorls(UserCount + count + 1, 20)
-    .lblTitle.Caption = GetResourceString(425) & " " & _
-                    GetResourceString(375, 47)
+    .lblTitle.Caption = GetResourceString(425) & " " & GetResourceString(375, 47)
     .PutTotal = True
     .Title(0) = GetResourceString(36)
     .Title(1) = GetResourceString(35)
@@ -4629,11 +4630,11 @@ Set bankClass = New clsBankAcc
 Dim headName As String
 'Noew ge the Ledger head id of the Pigmy deposit payble
 headName = GetResourceString(425, 450)        'PIgmy INterest provision
-PayableHeadID = bankClass.GetHeadIDCreated(headName, LoadResString(425) & " " & LoadResString(450), parDepositIntProv, 0, wis_PDAcc)
+IntHeadID = bankClass.GetHeadIDCreated(headName, LoadResString(425) & " " & LoadResString(450), parMemDepIntPaid, 0, wis_PDAcc)
 
 headName = GetResourceString(425, 375, 47)       'PIgmy Payble INterest
-IntHeadID = bankClass.GetHeadIDCreated(headName, _
-        LoadResString(425) & " " & LoadResString(375) & " " & LoadResString(47), parMemDepIntPaid, 0, wis_PDAcc)
+PayableHeadID = bankClass.GetHeadIDCreated(headName, _
+        LoadResString(425) & " " & LoadResString(375) & " " & LoadResString(47), parDepositIntProv, 0, wis_PDAcc)
 
 'Now Make the same transaction to the ledger heads
 Call bankClass.UpdateContraTrans(IntHeadID, PayableHeadID, TotalIntPayable, TransDate)
@@ -4733,7 +4734,7 @@ Dim CurPos As Integer
     CurPos = m_rstPassBook.AbsolutePosition
     CurPos = 10 - (CurPos Mod 10)
     If CurPos = 10 Then CurPos = 0
-    If m_rstPassBook.AbsolutePosition + CurPos >= m_rstPassBook.RecordCount Then
+    If m_rstPassBook.AbsolutePosition + CurPos >= m_rstPassBook.recordCount Then
         Beep
         Exit Sub
     Else
@@ -4744,10 +4745,10 @@ m_rstPassBook.MoveNext
 Call PassBookPageShow
 
 #If junk Then
-If m_rstPassBook.AbsolutePosition < m_rstPassBook.RecordCount - 10 Then
+If m_rstPassBook.AbsolutePosition < m_rstPassBook.recordCount - 10 Then
     If m_rstPassBook.AbsolutePosition Mod 10 <> 0 Then
         m_rstPassBook.Move 10 - m_rstPassBook.AbsolutePosition Mod 10
-        If m_rstPassBook.AbsolutePosition >= m_rstPassBook.RecordCount - 10 Then
+        If m_rstPassBook.AbsolutePosition >= m_rstPassBook.recordCount - 10 Then
             cmdNextTrans.Enabled = False
         End If
     End If
@@ -4755,7 +4756,7 @@ Else
     cmdNextTrans.Enabled = False
 End If
 Call ShowPassBookPage
-If m_rstPassBook.AbsolutePosition >= m_rstPassBook.RecordCount Then
+If m_rstPassBook.AbsolutePosition >= m_rstPassBook.recordCount Then
     cmdPrevTrans.Enabled = False
 Else
     cmdPrevTrans.Enabled = True
@@ -4765,7 +4766,7 @@ End If
 End Sub
 
 Private Sub cmdOk_Click()
-Dim Cancel As Boolean
+Dim cancel As Boolean
 
 Unload Me
 End Sub
@@ -5074,6 +5075,8 @@ gDbTrans.SqlStmt = "Select Top 1 TransId,TransDate,AMount " & _
 If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
     Dim PayableHeadID As Long
     'HeadName = GetResourceString(425,450)
+    Debug.Assert 10 <> 10
+    Debug.Assert 10 = 10
     headName = GetResourceString(425, 375, 47)
     PayableHeadID = GetHeadID(headName, parDepositIntProv)
     PayableAmount = FormatField(rst("Amount"))
@@ -5375,7 +5378,7 @@ If AccId <= 0 Then GoTo DisableUserInterface
         With m_rstPassBook
             Dim transid1 As Long
             transid1 = m_rstPassBook("TransID")
-            If .RecordCount > 10 Then
+            If .recordCount > 10 Then
                 If transid1 Mod 10 = 0 Then transid1 = transid1 - 10
                 .Find "TransiD > " & transid1 - transid1 Mod 10
                 'If .RecordCount = 10 Then .Move -1 Else .Move -1 * ((.AbsolutePosition Mod 10) - 1)
@@ -5632,7 +5635,7 @@ cmdAgentPrint.Picture = LoadResPicture(120, vbResBitmap)
     Call SetKannadaCaption
  
 'Intialize the custreg Calss
-    m_CustReg.ModuleId = wis_PDAcc
+    m_CustReg.ModuleID = wis_PDAcc
 
 'Fill up transaction Types
     With cmbTrans
@@ -5731,12 +5734,12 @@ cmdAgentNextTrans.Picture = LoadResPicture(102, vbResIcon)
 
 End Sub
 
-Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+Private Sub Form_QueryUnload(cancel As Integer, UnloadMode As Integer)
 gWindowHandle = 0
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 
 ' Report form.
 If Not m_frmLookUp Is Nothing Then

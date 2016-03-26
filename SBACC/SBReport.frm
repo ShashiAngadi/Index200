@@ -85,6 +85,7 @@ Dim m_Gender As wis_Gender
 Dim m_ReportType As wis_SBReports
 Dim m_ReportOrder As wis_ReportOrder
 Dim m_AccGroup As Integer
+Dim m_DepositType As Integer
 
 Private WithEvents m_grdPrint As WISPrint
 Attribute m_grdPrint.VB_VarHelpID = -1
@@ -94,6 +95,10 @@ Private m_frmCancel As frmCancel
 Public Event Initialise(Min As Long, Max As Long)
 Public Event Processing(strMessage As String, Ratio As Single)
 Public Event WindowClosed()
+Public Property Let DepositType(NewValue As Integer)
+    m_DepositType = NewValue
+    
+End Property
 Public Property Let AccountGroup(NewValue As Integer)
     m_AccGroup = NewValue
 End Property
@@ -155,7 +160,7 @@ Private Sub SetKannadaCaption()
 Call SetFontToControls(Me)
 
 'Me.chkDetails.Caption = GetResourceString(295)  ' Details
-Me.cmdOK.Caption = GetResourceString(11)  '
+Me.cmdOk.Caption = GetResourceString(11)  '
 cmdPrint.Caption = GetResourceString(23)
 End Sub
 
@@ -173,6 +178,7 @@ SqlStmt = "Select AccId,AccNum, CreateDate, Name, " & _
     " Where ClosedDate  <= #" & m_ToDate & "#" & _
     " AND ClosedDate >= #" & m_FromDate & "#"
 
+If m_DepositType > 0 Then SqlStmt = SqlStmt & " And DepositType = " & m_DepositType
 If m_Caste <> "" Then _
     SqlStmt = SqlStmt & " AND Caste = " & AddQuotes(m_Caste, True)
 If m_Place <> "" Then _
@@ -204,7 +210,7 @@ End If
         .Col = 3: .Text = GetResourceString(282)  '"Closed Date"
     End With
     
-    RaiseEvent Initialise(0, rst.RecordCount)
+    RaiseEvent Initialise(0, rst.recordCount)
     RaiseEvent Processing("Reading  Data", 0)
     'Dim SlNo As Long
     Dim rowno As Integer, colno As Integer
@@ -225,7 +231,7 @@ End If
 nextRecord:
         DoEvents
         If gCancel Then rst.MoveLast
-        RaiseEvent Processing("Reading record", rst.AbsolutePosition / rst.RecordCount)
+        RaiseEvent Processing("Reading record", rst.AbsolutePosition / rst.recordCount)
         rst.MoveNext
     Wend
     
@@ -253,6 +259,7 @@ SqlStmt = "Select AccNum,AccId,Name," & _
     " Where CreateDate  <= #" & m_ToDate & "#" & _
     " AND CreateDate >= #" & m_FromDate & "#"
 
+If m_DepositType > 0 Then SqlStmt = SqlStmt & " And DepositType = " & m_DepositType
 If m_Caste <> "" Then _
     SqlStmt = SqlStmt & " AND Caste = " & AddQuotes(m_Caste, True)
 If m_Place <> "" Then _
@@ -279,7 +286,7 @@ DoEvents
  RaiseEvent Processing("Verifying records", 0)
  
 'Initialize the grid
-    RaiseEvent Initialise(0, rst.RecordCount)
+    RaiseEvent Initialise(0, rst.recordCount)
     With grd
         .Cols = 4: .FixedCols = 1
         .Row = 0
@@ -305,7 +312,7 @@ DoEvents
 nextRecord:
         DoEvents
         If gCancel Then rst.MoveLast
-        RaiseEvent Processing("Verifying records", rst.AbsolutePosition / rst.RecordCount)
+        RaiseEvent Processing("Verifying records", rst.AbsolutePosition / rst.recordCount)
         rst.MoveNext
     Wend
 
@@ -335,6 +342,7 @@ SqlStr = "SELECT AccId,AccNum, Name" & _
     " On A.CustomerID = B.CustomerID " & _
     " Where ACCID in (" & SqlStr & ")"
 
+If m_DepositType > 0 Then SqlStr = SqlStr & " And DepositType = " & m_DepositType
 If m_Caste <> "" Then SqlStr = SqlStr & " AND Caste = " & AddQuotes(m_Caste, True)
 If m_Place <> "" Then SqlStr = SqlStr & " AND Place = " & AddQuotes(m_Place, True)
 If m_Gender <> wisNoGender Then SqlStr = SqlStr & " AND Gender = " & m_Gender
@@ -447,7 +455,7 @@ Dim SqlStmt As String
 Dim OpeningDate As Date
 Dim OpeningBalance As Currency
 Dim rst As ADODB.Recordset
-Dim transdate As String
+Dim TransDate As String
 
 'Get liability on a day before fromdate ---siddu
 OpeningDate = DateAdd("d", -1, m_FromDate)
@@ -496,18 +504,18 @@ With grd
     .Col = 5: .Text = GetResourceString(285) '"Closing Balance" 'GetResourceString(42) '"Closing Balance" Credit
 End With
 
-RaiseEvent Initialise(0, rst.RecordCount)
+RaiseEvent Initialise(0, rst.recordCount)
 grd.Row = 0
 SubTotal = 0: GrandTotal = 0
 WithDraw = 0: Deposit = 0
 'ContraWithDraw = 0: ContraDeposit = 0
-transdate = ""
+TransDate = ""
 grd.Row = 0
 
 TotalDeposit = 0: TotalWithDraw = 0
 'TotalContraDeposit = 0: TotalContraWithDraw = 0
 
-transdate = FormatField(rst("TransDate"))
+TransDate = FormatField(rst("TransDate"))
 SlNo = 0
 
 'FIll Up THe Opening balance
@@ -524,13 +532,13 @@ rowno = grd.Row: colno = grd.Col
 
 'Fill the grid
 While Not rst.EOF
-    If transdate <> FormatField(rst("TransDate")) Then
+    If TransDate <> FormatField(rst("TransDate")) Then
         With grd
             SlNo = SlNo + 1
             If .Rows = rowno + 1 Then .Rows = .Rows + 1
             rowno = rowno + 1
             colno = 0: .TextMatrix(rowno, colno) = Format(SlNo, "00")
-            colno = 1: .TextMatrix(rowno, colno) = transdate
+            colno = 1: .TextMatrix(rowno, colno) = TransDate
             colno = 2: .TextMatrix(rowno, colno) = FormatCurrency(OpeningBalance)
             colno = 3: .CellAlignment = 7: .TextMatrix(rowno, colno) = FormatCurrency(Deposit)
             .Row = rowno
@@ -549,12 +557,12 @@ While Not rst.EOF
     Else 'If TransType = wDeposit or TransType = wcontraDeposit Then
         Deposit = Deposit + FormatField(rst("TotalAmount"))
     End If
-    transdate = FormatField(rst("TransDate"))
+    TransDate = FormatField(rst("TransDate"))
 nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Formatting the Data ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Formatting the Data ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
 Wend
 
@@ -571,7 +579,7 @@ With grd
     OpeningBalance = OpeningBalance + Deposit - WithDraw
    
     .Col = 0: .Text = Format(SlNo, "00")
-    .Col = 1: .Text = transdate
+    .Col = 1: .Text = TransDate
     .Col = 3: .CellAlignment = 7: .Text = FormatCurrency(Deposit)
     .Col = 4: .CellAlignment = 7: .Text = FormatCurrency(WithDraw)
     .Col = 5: .CellAlignment = 7: .Text = FormatCurrency(OpeningBalance)
@@ -633,7 +641,7 @@ SqlStmt = "SELECT A.CustomerID,Name,A.AccId,AccNum,Balance " & _
     Dim sqlClause As String
     'sqlClause = GetReportFilter(m_Place, m_Caste, "B")
     'sqlClause = IIf(Len(sqlClause) > 0, " AND ", "") & sqlClause
-    
+    If m_DepositType > 0 Then sqlClause = sqlClause & " And DepositType = " & m_DepositType
     If m_Place <> "" Then sqlClause = sqlClause & " And Place = " & AddQuotes(m_Place, True)
     If m_Caste <> "" Then sqlClause = sqlClause & " And Caste = " & AddQuotes(m_Caste, True)
     
@@ -724,7 +732,7 @@ nextRecord:
     End If
     DoEvents
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Reading records", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Reading records", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
 Wend
 
@@ -769,9 +777,7 @@ fromDate = GetSysLastDate(m_FromDate)
 
 
 'Set the Title for the Report.
-lblReportTitle.Caption = GetResourceString(463) & " " & _
-        GetResourceString(67) & " " & _
-        GetResourceString(42) & " " & _
+lblReportTitle.Caption = GetResourceString(463, 67, 42) & " " & _
         GetFromDateString(GetMonthString(Month(fromDate)), GetMonthString(Month(toDate)))
 
 SqlStmt = "SELECT A.AccNum,A.AccID, A.CustomerID, Name as CustName " & _
@@ -779,7 +785,7 @@ SqlStmt = "SELECT A.AccNum,A.AccID, A.CustomerID, Name as CustName " & _
     " WHERE A.CreateDate <= #" & toDate & "#" & _
     " AND (A.ClosedDate Is NULL OR A.Closeddate >= #" & fromDate & "#)"
 
-
+If m_DepositType > 0 Then SqlStmt = SqlStmt & " And DepositType = " & m_DepositType
 If m_AccGroup Then SqlStmt = SqlStmt & " And A.AccGroupId = " & m_AccGroup
 SqlStmt = SqlStmt & " Order By " & _
         IIf(m_ReportOrder = wisByAccountNo, "val(A.ACCNUM)", "IsciName")
@@ -788,7 +794,7 @@ gDbTrans.SqlStmt = SqlStmt
 If gDbTrans.Fetch(rstMain, adOpenStatic) < 1 Then Exit Sub
 'Set rstMain = gDBTrans.Rst.Clone
 count = DateDiff("M", fromDate, toDate) + 2
-totalCount = (count + 1) * rstMain.RecordCount
+totalCount = (count + 1) * rstMain.recordCount
 RaiseEvent Initialise(0, totalCount)
 
 Dim prmAccId As Parameter
@@ -978,8 +984,10 @@ ReDim Total(0)
 'Get the Record setfor the a/c holdeer name
 gDbTrans.SqlStmt = "Select AccId,AccNum, Name " & _
     " FROM SBMaster A Inner Join QryName B On A.CustomerId = B.CustomerId " & _
-    " WHERE A.AccID In ( Select Distinct AccID from SbTrans)" & _
-    " ORDER BY A.AccID"
+    " WHERE A.AccID In ( Select Distinct AccID from SbTrans)"
+If m_DepositType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And A.DepositType = " & m_DepositType
+    
+gDbTrans.SqlStmt = gDbTrans.SqlStmt & " ORDER BY A.AccID"
 If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Sub
 
 Dim SetUp As New clsSetup
@@ -996,7 +1004,7 @@ While DateDiff("m", This_date, m_ToDate) >= 0
     Yr = Year(This_date)
     
     'Call ComputeSBProducts_New(AccIDs(), Mn, Yr, Products(), 16,noIntOnMin )
-    Call ComputeSBProducts_Daily(AccIDs(), Products(), This_date, m_ToDate, Rate, noIntOnMin)
+    Call ComputeSBProducts_Daily(AccIDs(), Products(), This_date, m_ToDate, Rate, noIntOnMin, m_DepositType)
     'NOTE:
     'I have deliberately put the full 3 separate loops to minimize switching
     'between columns and to make code more readable. GIRISH
@@ -1158,7 +1166,7 @@ Private Sub ShowSubDayBook()
 Dim SqlStmt As String
 Dim TmpStr As String
 Dim rst As ADODB.Recordset
-Dim transdate As Date
+Dim TransDate As Date
 Dim SBClass As clsSBAcc
 
 '.Clear
@@ -1171,6 +1179,7 @@ SqlStmt = "Select A.Accid,AccNum,TransID,Particulars,Balance,TransDate, " & _
         " Where TransDate >= #" & m_FromDate & "# " & _
         " AND Transdate  <= #" & m_ToDate & "# "
 
+If m_DepositType > 0 Then SqlStmt = SqlStmt & " And DepositType = " & m_DepositType
 If m_FromAmt > 0 Then SqlStmt = SqlStmt & " AND Amount >= " & m_FromAmt
 If m_ToAmt > 0 Then SqlStmt = SqlStmt & " AND Amount <= " & m_ToAmt
 
@@ -1193,7 +1202,7 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then Exit Sub
 'Initialize the grid
     Dim SubTotal As Currency, GrandTotal As Currency
     Dim WithDraw As Currency, Deposit As Currency
-    Dim contraWithdraw As Currency, contraDeposit As Currency
+    Dim ContraWithDraw As Currency, ContraDeposit As Currency
     Dim TotalWithDraw As Currency, TotalDeposit As Currency
     Dim TotalContraWithDraw As Currency, TotalContraDeposit As Currency
     Dim TotalBankBalance As Currency
@@ -1238,7 +1247,7 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then Exit Sub
         .MergeCol(3) = True
         .MergeCol(4) = True
         .MergeCol(5) = True
-         RaiseEvent Initialise(0, rst.RecordCount)
+         RaiseEvent Initialise(0, rst.recordCount)
          RaiseEvent Processing("Aliging the data ", 0)
         .ColAlignment(0) = 0
         .ColAlignment(6) = 7
@@ -1253,20 +1262,20 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then Exit Sub
     End With
    
     SubTotal = 0: GrandTotal = 0
-    WithDraw = 0: Deposit = 0: contraWithdraw = 0: contraDeposit = 0
+    WithDraw = 0: Deposit = 0: ContraWithDraw = 0: ContraDeposit = 0
 
 Dim PrintSubTotal As Boolean
 Dim rowno As Integer, colno As Integer
 
-transdate = m_FromDate
+TransDate = m_FromDate
 rst.MoveFirst
-transdate = rst("TransDate")
+TransDate = rst("TransDate")
 grd.Row = 1: SlNo = 0
 rowno = 1
 While Not rst.EOF
     With grd
         'Set next row
-        If transdate <> rst("TransDate") Then
+        If TransDate <> rst("TransDate") Then
             PrintSubTotal = True
             If .Rows = rowno + 1 Then .Rows = .Rows + 1
             rowno = rowno + 1
@@ -1274,13 +1283,13 @@ While Not rst.EOF
             .Col = 3: .Text = GetResourceString(304) '"Sub Total "
             .CellAlignment = 4: .CellFontBold = True
             .Col = 6: .CellFontBold = True: .Text = FormatCurrency(Deposit): .CellAlignment = 7
-            .Col = 7: .CellFontBold = True: .Text = FormatCurrency(contraDeposit): .CellAlignment = 7
+            .Col = 7: .CellFontBold = True: .Text = FormatCurrency(ContraDeposit): .CellAlignment = 7
             .Col = 8: .CellFontBold = True: .Text = FormatCurrency(WithDraw): .CellAlignment = 7
-            .Col = 9: .CellFontBold = True: .Text = FormatCurrency(contraWithdraw): .CellAlignment = 7
+            .Col = 9: .CellFontBold = True: .Text = FormatCurrency(ContraWithDraw): .CellAlignment = 7
             
             TotalWithDraw = TotalWithDraw + WithDraw: TotalDeposit = TotalDeposit + Deposit
-            TotalContraDeposit = TotalContraDeposit + contraDeposit: TotalContraWithDraw = TotalContraWithDraw + contraWithdraw
-            WithDraw = 0: Deposit = 0: contraWithdraw = 0: contraDeposit = 0
+            TotalContraDeposit = TotalContraDeposit + ContraDeposit: TotalContraWithDraw = TotalContraWithDraw + ContraWithDraw
+            WithDraw = 0: Deposit = 0: ContraWithDraw = 0: ContraDeposit = 0
             If .Rows = .Row + 1 Then .Rows = .Rows + 1
             rowno = rowno + 1
         End If
@@ -1300,21 +1309,21 @@ While Not rst.EOF
         If transType = wDeposit Then
             colno = 6: Deposit = Deposit + Amount
         ElseIf transType = wContraDeposit Then
-            colno = 7: contraDeposit = contraDeposit + Amount
+            colno = 7: ContraDeposit = ContraDeposit + Amount
         ElseIf transType = wWithdraw Then
             colno = 8: WithDraw = WithDraw + Amount
         ElseIf transType = wContraWithdraw Then
-            colno = 9: contraWithdraw = contraWithdraw + Amount
+            colno = 9: ContraWithDraw = ContraWithDraw + Amount
         End If
         If Amount > 0 Then .TextMatrix(rowno, colno) = FormatCurrency(Amount)
 
     End With
-    transdate = rst("TransDate")
+    TransDate = rst("TransDate")
 nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
 Wend
 
@@ -1327,11 +1336,11 @@ With grd
     .Row = .Row + 1
     .Col = 3: .CellAlignment = 4: .CellFontBold = True: .Text = GetResourceString(304) '"Sub Total "
     .Col = 6: .CellFontBold = True: .Text = FormatCurrency(Deposit): .CellAlignment = 7
-    .Col = 7: .CellFontBold = True: .Text = FormatCurrency(contraDeposit): .CellAlignment = 7
+    .Col = 7: .CellFontBold = True: .Text = FormatCurrency(ContraDeposit): .CellAlignment = 7
     .Col = 8: .CellFontBold = True: .Text = FormatCurrency(WithDraw): .CellAlignment = 7
-    .Col = 9: .CellFontBold = True: .Text = FormatCurrency(contraWithdraw): .CellAlignment = 7
+    .Col = 9: .CellFontBold = True: .Text = FormatCurrency(ContraWithDraw): .CellAlignment = 7
     TotalWithDraw = TotalWithDraw + WithDraw: TotalDeposit = TotalDeposit + Deposit
-    TotalContraDeposit = TotalContraDeposit + contraDeposit: TotalContraWithDraw = TotalContraWithDraw + contraWithdraw
+    TotalContraDeposit = TotalContraDeposit + ContraDeposit: TotalContraWithDraw = TotalContraWithDraw + ContraWithDraw
         
 'Show Grand Total
     If PrintSubTotal Then
@@ -1359,7 +1368,7 @@ Private Sub ShowSubCashBook()
 Dim SqlStmt As String
 Dim TmpStr As String
 Dim rst As ADODB.Recordset
-Dim transdate As Date
+Dim TransDate As Date
 Dim SBClass As clsSBAcc
 ''Clear
 RaiseEvent Processing("Verifyinng records", 0)
@@ -1371,6 +1380,7 @@ SqlStmt = "Select A.Accid,AccNum,TransID,Particulars,Balance," & _
         " Where TransDate >= #" & m_FromDate & "# " & _
         " AND Transdate  <= #" & m_ToDate & "# "
 
+If m_DepositType > 0 Then SqlStmt = SqlStmt & " And DepositType = " & m_DepositType
 If m_FromAmt > 0 Then SqlStmt = SqlStmt & " AND Amount >= " & m_FromAmt
 If m_ToAmt > 0 Then SqlStmt = SqlStmt & " AND Amount <= " & m_ToAmt
 
@@ -1393,7 +1403,7 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then Exit Sub
 'Initialize the grid
     Dim SubTotal As Currency, GrandTotal As Currency
     Dim WithDraw As Currency, Deposit As Currency
-    Dim contraWithdraw As Currency, contraDeposit As Currency
+    Dim ContraWithDraw As Currency, ContraDeposit As Currency
     Dim TotalWithDraw As Currency, TotalDeposit As Currency
     Dim TotalContraWithDraw As Currency, TotalContraDeposit As Currency
     Dim TotalBankBalance As Currency
@@ -1424,7 +1434,7 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then Exit Sub
         .MergeCol(1) = True
         .MergeCol(2) = True
         .MergeCol(3) = True
-         RaiseEvent Initialise(0, rst.RecordCount)
+         RaiseEvent Initialise(0, rst.recordCount)
          RaiseEvent Processing("Aliging the data ", 0)
         .ColAlignment(0) = 0
         .ColAlignment(4) = 7
@@ -1439,12 +1449,12 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then Exit Sub
     End With
     
     SubTotal = 0: GrandTotal = 0
-    WithDraw = 0: Deposit = 0: contraWithdraw = 0: contraDeposit = 0
+    WithDraw = 0: Deposit = 0: ContraWithDraw = 0: ContraDeposit = 0
 
 Dim PrintSubTotal As Boolean
-transdate = m_FromDate
+TransDate = m_FromDate
 rst.MoveFirst
-transdate = rst("TransDate")
+TransDate = rst("TransDate")
 grd.Row = 0: SlNo = 0
 
 On Error Resume Next
@@ -1456,7 +1466,7 @@ rowno = grd.Row
 While Not rst.EOF
     With grd
         'Set next row
-        If transdate <> rst("TransDate") Then
+        If TransDate <> rst("TransDate") Then
             PrintSubTotal = True
             If .Rows = rowno + 1 Then .Rows = .Rows + 1
             rowno = rowno + 1
@@ -1493,12 +1503,12 @@ While Not rst.EOF
         
         
     End With
-    transdate = rst("TransDate")
+    TransDate = rst("TransDate")
 nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
   
 Wend
@@ -1640,8 +1650,8 @@ On Error Resume Next
     fra.Left = Me.Width - fra.Width
     grd.Height = Me.ScaleHeight - fra.Height - lblReportTitle.Height - 100
     grd.Width = Me.ScaleWidth - 100
-    cmdOK.Left = fra.Width - cmdOK.Width - (cmdOK.Width / 4)
-    cmdPrint.Left = cmdOK.Left - cmdPrint.Width - (cmdPrint.Width / 4)
+    cmdOk.Left = fra.Width - cmdOk.Width - (cmdOk.Width / 4)
+    cmdPrint.Left = cmdOk.Left - cmdPrint.Width - (cmdPrint.Width / 4)
     cmdWeb.Top = cmdPrint.Top
     cmdWeb.Left = cmdPrint.Left - cmdPrint.Width - (cmdPrint.Width / 4)
     
@@ -1659,7 +1669,7 @@ Next
 End Sub
 
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 
 RaiseEvent WindowClosed
 End Sub

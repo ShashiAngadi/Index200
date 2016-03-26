@@ -12,13 +12,17 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+
 Dim m_rstAcc As ADODB.Recordset
+Private m_AccID As Long
+Private m_DepositType As Integer
+Private m_DepositTypeName As String
+Private m_DepositTypeNameEnglish As String
 
 Private WithEvents m_frmRDAcc As frmRDAcc
 Attribute m_frmRDAcc.VB_VarHelpID = -1
 Private WithEvents m_frmRDReport As frmRDReport
 Attribute m_frmRDReport.VB_VarHelpID = -1
-Private m_AccID As Long
 Private m_ParentHandle As Long
 
 Public Property Let CustomerID(NewValue As Long)
@@ -46,42 +50,41 @@ m_AccID = NewValue
 End Property
 
 
-
-Public Function CashDeposits(fromDate As Date, toDate As Date) As Currency
+Public Function CashDeposits(fromDate As Date, toDate As Date, Optional DepositType As Integer) As Currency
 ' Total recurring Deposit deposited where physical cash handled
 Dim transType As wisTransactionTypes
 CashDeposits = 0
 
 transType = wDeposit
-CashDeposits = TransactionDetails(fromDate, toDate, transType)
+CashDeposits = TransactionDetails(fromDate, toDate, transType, DepositType)
 
 End Function
 
 
-Public Function CashWithdrawls(fromDate As Date, toDate As Date) As Currency
+Public Function CashWithdrawls(fromDate As Date, toDate As Date, Optional DepositType As Integer) As Currency
 'Recurring Deposit Given back to the customer in the form of cash
 CashWithdrawls = 0
 
 Dim transType As wisTransactionTypes
 
 transType = wWithdraw
-CashWithdrawls = TransactionDetails(fromDate, toDate, transType)
+CashWithdrawls = TransactionDetails(fromDate, toDate, transType, DepositType)
 
 End Function
 
-Public Function ContraDeposits(fromDate As Date, toDate As Date) As Currency
+Public Function ContraDeposits(fromDate As Date, toDate As Date, Optional DepositType As Integer) As Currency
 ' Total Fixed Deposit flown in the bank between 2 given dates
 
 Dim transType As wisTransactionTypes
 ContraDeposits = 0
 
 transType = wContraDeposit
-ContraDeposits = TransactionDetails(fromDate, toDate, transType)
+ContraDeposits = TransactionDetails(fromDate, toDate, transType, DepositType)
 
 End Function
 
 
-Public Function ContraWithdrawls(fromDate As Date, toDate As Date) As Currency
+Public Function ContraWithdrawls(fromDate As Date, toDate As Date, Optional DepositType As Integer) As Currency
 'Recurring Deposit transferred to other accounts
 'Where cash ha not gone out of the bank
 
@@ -89,11 +92,11 @@ ContraWithdrawls = 0
 
 Dim transType As wisTransactionTypes
 transType = wContraWithdraw
-ContraWithdrawls = TransactionDetails(fromDate, toDate, transType)
+ContraWithdrawls = TransactionDetails(fromDate, toDate, transType, DepositType)
 
 End Function
 
-Public Function InterestOnDeposits(AsOnDate As Date) As Currency
+Public Function InterestOnDeposits(AsOnDate As Date, Optional DepositType As Integer) As Currency
    On Error GoTo ErrLine
   'declare the variables necessary
   
@@ -117,8 +120,10 @@ gDbTrans.SqlStmt = " SELECT Balance, A.AccId,  CreateDate, MaturityDate, TransDa
     "  And (ClosedDate is NULL or ClosedDate >= #" & AsOnDate & "#)" & _
     "  And CreateDate < #" & AsOnDate & "# And TransID =  " & _
         " ( Select max(TransID) From RDTrans C Where A.AccId = C.AccId  " & _
-        " and transDate <= #" & AsOnDate & "# ) " & _
-    " Order By A.AccId "
+        " and transDate <= #" & AsOnDate & "# ) "
+
+If DepositType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " A.DepositType = " & DepositType
+gDbTrans.SqlStmt = gDbTrans.SqlStmt & " Order By A.AccId "
  
 Retval = gDbTrans.Fetch(rstMain, adOpenForwardOnly)
 If Retval < 1 Then GoTo ExitLine
@@ -212,10 +217,12 @@ Public Function DepositAmount(ByVal AccId As Long, ByVal Amount As Currency, _
                         Optional CashTransaction As Boolean = False, Optional ContraTransID As Long = 0) As Integer
 
 Dim rst As ADODB.Recordset
-
+Dim Deptype As Integer
 'Check Whether Account Exist or Closed
-gDbTrans.SqlStmt = "Select AccID From RDMAster WHERE Accid = " & AccId
+gDbTrans.SqlStmt = "Select AccID,DepositType From RDMaster WHERE Accid = " & AccId
 If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then GoTo ErrLine
+'Get the DepositTYpe
+Deptype = FormatField(rst("DepositTYpe"))
 
 gDbTrans.SqlStmt = "Select TransId,Balance,TransDate From RDTrans where " & _
     " AccId = " & AccId & " And TransID = (SELECT MAX(TransID) " & _
@@ -255,7 +262,11 @@ gDbTrans.SqlStmt = "INSERT INTO RDTrans " & _
 If Not gDbTrans.SQLExecute Then GoTo ErrLine
 
 Dim AccHeadID As Long
-AccHeadID = GetIndexHeadID(GetResourceString(424)) '"Recurrring Deposit
+Dim headName As String
+Dim headNameEnglish As String
+
+headName = GetDepositName(wis_RDAcc, Deptype, headNameEnglish)
+AccHeadID = GetIndexHeadID(headName) 'GetIndexHeadID(GetResourceString(424)) '"Recurrring Deposit
 
 If Not CashTransaction Then
     'Get the Contra Transaction ID
@@ -404,9 +415,17 @@ If Not gDbTrans.SQLExecute Then GoTo ErrLine
 
 Dim ClsBank As clsBankAcc
 Dim AccHeadID As Long
+Dim headName As String
+Dim headNameEnglish As String
+Dim Deptype As Integer
 
+gDbTrans.SqlStmt = "Select DepoistTYpe from RDMAster where AccID = " & AccId
+Call gDbTrans.Fetch(rst, adOpenDynamic)
+Deptype = FormatField(rst("DepositType"))
+
+headName = GetDepositName(wis_RDAcc, Deptype, headNameEnglish)
 Set ClsBank = New clsBankAcc
-AccHeadID = ClsBank.GetHeadIDCreated(GetResourceString(424))
+AccHeadID = ClsBank.GetHeadIDCreated(headName, headNameEnglish, parMemberDeposit, 0, wis_RDAcc + Deptype) 'ClsBank.GetHeadIDCreated(GetResourceString(424))
 Set ClsBank = Nothing
 If Not CashTransaction Then
     'Get the Contra Transaction ID
@@ -433,7 +452,7 @@ ErrLine:
 
 End Function
 
-Public Function NextBalance(retAccNum As String) As Currency
+Public Function NextBalance(retAccNum As String, Optional DepositType As Integer) As Currency
 'To trap an error
 On Error GoTo ErrLine
 
@@ -459,13 +478,13 @@ ErrLine:
 
 End Function
 
-Public Function CustomerBalance(CustomerID As Long, retAccNum As String, AsOnDate As Date) As Currency
+Public Function CustomerBalance(CustomerID As Long, retAccNum As String, AsOnDate As Date, Optional retDepositType As Integer) As Currency
 'To trap an error
 On Error GoTo ErrLine
 
 CustomerBalance = 0
 'Sql stmt to get Accid
-gDbTrans.SqlStmt = "Select A.Accid,AccNum,Balance from RDMaster A Inner Join RDTrans B " & _
+gDbTrans.SqlStmt = "Select A.Accid,AccNum,Balance,DepositType from RDMaster A Inner Join RDTrans B " & _
         " On A.AccID = B.AccID Where " & _
         " Customerid = " & CustomerID & _
         " AND TransID = (select MAx(transID) From RdTrans C Where " & _
@@ -479,7 +498,8 @@ End If
 
 retAccNum = FormatField(m_rstAcc("AccNum"))
 CustomerBalance = FormatField(m_rstAcc("Balance"))
- 
+retDepositType = FormatField(m_rstAcc("DepositType"))
+
 ExitLine:
     Exit Function
 ErrLine:
@@ -491,7 +511,7 @@ ErrLine:
 
 End Function
 
-Public Function Liability(AsOnDate As Date) As Currency
+Public Function Liability(AsOnDate As Date, Optional DepositType As Integer) As Currency
 ' Computes the Liability (Deposit plus interest on Deposit)
 Dim SetUp As New clsSetup
 Dim LiabBeforeInterest As Currency
@@ -507,7 +527,7 @@ Liability = ComputeRDInterest(LiabBeforeInterest, InterestOnDeposit)
 
 End Function
 
-Private Function ProfitLossDetails(fromDate As Date, toDate As Date, transType As wisTransactionTypes) As Currency
+Private Function ProfitLossDetails(fromDate As Date, toDate As Date, transType As wisTransactionTypes, DepositType As Integer) As Currency
 ProfitLossDetails = 0
 
 Dim SqlStr As String
@@ -517,15 +537,19 @@ SqlStr = "Select Sum(Amount) as Deposits from RDIntTrans where " & _
                 " TransType = " & transType & _
                 " And TransDate >= #" & fromDate & "#" & _
                 " And TransDate <=#" & toDate & "#"
+
+If DepositType > 0 Then _
+    SqlStr = SqlStr & " And Accid in (Select distinct Accid from RDMaster where DepoistType =" & DepositType & " )"
                 
 gDbTrans.SqlStmt = SqlStr
+    
     If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Function
 
     ProfitLossDetails = Val(FormatField(rst("Deposits")))
 
 End Function
 
-Private Function TransactionDetails(fromDate As Date, toDate As Date, transType As wisTransactionTypes) As Currency
+Private Function TransactionDetails(fromDate As Date, toDate As Date, transType As wisTransactionTypes, DepositType As Integer) As Currency
 TransactionDetails = 0
 
 Dim SqlStr As String
@@ -535,11 +559,43 @@ SqlStr = "Select Sum(Amount) as Deposits from RDTrans where " & _
                 " TransType = " & transType & _
                 " And TransDate >= #" & fromDate & "#" & _
                 " And TransDate <=#" & toDate & "#"
+If DepositType > 0 Then _
+    SqlStr = SqlStr & " And Accid in (Select distinct Accid from RDMaster where DepoistType =" & DepositType & " )"
 
 gDbTrans.SqlStmt = SqlStr
 If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Function
     TransactionDetails = Val(FormatField(rst("Deposits")))
 
+End Function
+
+Private Function SelectRDDepositType() As Integer
+    If m_frmRDAcc Is Nothing Then Set m_frmRDAcc = New frmRDAcc
+    
+    Dim selectFD As New clsSelectDeposit
+    Dim multiDeposit As Boolean
+    Dim Cancel As Boolean
+    Dim Deptype As Integer
+    Deptype = selectFD.SelectDeposit(wis_RDAcc, grpAllDeposit, multiDeposit, Cancel)
+    Set selectFD = Nothing
+    
+    If Cancel Then
+        'User Has cancelled the selection' so no changes
+    Else
+    
+        If Deptype > -1 Then
+            m_frmRDAcc.DepositType = Deptype
+            m_frmRDAcc.MultipleDeposit = multiDeposit
+            If m_DepositType <> Deptype And m_frmRDAcc.IsFormLoaded Then m_frmRDAcc.txtAccNo = ""
+            m_DepositTypeName = GetDepositName(wis_RDAcc, Deptype, m_DepositTypeNameEnglish)
+            m_DepositType = Deptype
+        Else
+            
+        End If
+    End If
+    
+    m_DepositType = Deptype
+    SelectRDDepositType = Deptype
+    
 End Function
 
 Public Sub Show()
@@ -565,44 +621,50 @@ If gCurrUser Is Nothing Then Set gCurrUser = New clsUsers
         If gWindowHandle Then m_ParentHandle = gWindowHandle
         gWindowHandle = m_frmRDAcc.hwnd
         m_frmRDAcc.Show 'vbModal
-        If m_AccID Then m_frmRDAcc.AccountLoad (m_AccID)
+        If m_AccID Then
+            m_frmRDAcc.AccountLoad (m_AccID)
+        Else
+            If SelectRDDepositType < 0 Then
+                Unload m_frmRDAcc
+                gWindowHandle = 0
+                Exit Sub
+            End If
+        End If
     Else
         MsgBox "You have no permission to operate this account", vbInformation, wis_MESSAGE_TITLE
     End If
     
 End Sub
 
-Public Function Deposits(fromDate As Date, toDate As Date) As Currency
-' Total Fixed Deposit flown in the bank between 2 given dates
-
-Dim transType As wisTransactionTypes
-Dim DepAmount As Currency
-Deposits = 0
-
-
-transType = wDeposit
-DepAmount = TransactionDetails(fromDate, toDate, transType)
-transType = wContraDeposit
-DepAmount = DepAmount + TransactionDetails(fromDate, toDate, transType)
-Deposits = DepAmount
+Public Function Deposits(fromDate As Date, toDate As Date, Optional DepositType As Integer) As Currency
+    ' Total Fixed Deposit flown in the bank between 2 given dates
+    Dim transType As wisTransactionTypes
+    Dim DepAmount As Currency
+    Deposits = 0
+    
+    transType = wDeposit
+    DepAmount = TransactionDetails(fromDate, toDate, transType, DepositType)
+    transType = wContraDeposit
+    DepAmount = DepAmount + TransactionDetails(fromDate, toDate, transType, DepositType)
+    Deposits = DepAmount
 End Function
 
-Public Function Loss(fromDate As Date, toDate As Date) As Currency
+Public Function Loss(fromDate As Date, toDate As Date, Optional DepositType As Integer) As Currency
 
 Loss = 0
 Dim transType As wisTransactionTypes
 Dim Amount As Currency
 
 transType = wWithdraw
-Amount = ProfitLossDetails(fromDate, toDate, transType)
+Amount = ProfitLossDetails(fromDate, toDate, transType, DepositType)
 transType = wContraWithdraw
-Amount = Amount + ProfitLossDetails(fromDate, toDate, transType)
+Amount = Amount + ProfitLossDetails(fromDate, toDate, transType, DepositType)
 
 Loss = Amount
 
 End Function
 
-Public Function WithDrawls(fromDate As Date, toDate As Date) As Currency
+Public Function WithDrawls(fromDate As Date, toDate As Date, Optional DepositType As Integer) As Currency
 
 'Recurring Deposit Given back to the customer
 WithDrawls = 0
@@ -610,15 +672,15 @@ Dim transType As wisTransactionTypes
 Dim Amount As Currency
 
 transType = wWithdraw
-Amount = TransactionDetails(fromDate, toDate, transType)
+Amount = TransactionDetails(fromDate, toDate, transType, DepositType)
 transType = wContraWithdraw
-Amount = Amount + TransactionDetails(fromDate, toDate, transType)
+Amount = Amount + TransactionDetails(fromDate, toDate, transType, DepositType)
 
 WithDrawls = Amount
 
 End Function
 
-Public Function Profit(fromDate As Date, toDate As Date) As Currency
+Public Function Profit(fromDate As Date, toDate As Date, Optional DepositType As Integer) As Currency
 
 ' profit to bank thru deposits
 
@@ -628,34 +690,36 @@ Public Function Profit(fromDate As Date, toDate As Date) As Currency
     Dim ProfitAmount As Currency
     
     transType = wContraDeposit
-    ProfitAmount = ProfitLossDetails(fromDate, toDate, transType)
+    ProfitAmount = ProfitLossDetails(fromDate, toDate, transType, DepositType)
     transType = wDeposit
-    ProfitAmount = ProfitAmount + ProfitLossDetails(fromDate, toDate, transType)
+    ProfitAmount = ProfitAmount + ProfitLossDetails(fromDate, toDate, transType, DepositType)
     
     Profit = ProfitAmount
     
 End Function
 
-Public Function Balance(AsOnDate As Date) As Currency
+Public Function Balance(AsOnDate As Date, Optional DepositType As Integer) As Currency
 ' fixed deposits in the bank as on the given date
 Balance = 0
-Balance = ComputeTotalRDLiability(AsOnDate)
+Balance = ComputeTotalRDLiability(AsOnDate, DepositType)
 End Function
-Public Sub TotalDepositTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Public Sub TotalDepositTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency, Optional ByVal DepositType As Integer)
 
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
 
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
 SqlStr = "Select Sum(Amount) as TotalAmount,TransType from RDTrans where " & _
                    " TransDate >= #" & fromDate & "#" & _
-                   " And TransDate <= #" & toDate & "#" & _
-                   " Group By TransType"
+                   " And TransDate <= #" & toDate & "#"
+                   
+If DepositType > 0 Then _
+    SqlStr = SqlStr & " And Accid in (Select distinct Accid from RDMaster where DepoistType =" & DepositType & " )"
 
-gDbTrans.SqlStmt = SqlStr
+gDbTrans.SqlStmt = SqlStr & " Group By TransType "
 If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Sub
 
 Dim TotalAmount As Currency
@@ -663,29 +727,31 @@ While rst.EOF = False
     TotalAmount = Val(FormatField(rst("TotalAmount")))
     If rst("TransType") = wDeposit Then CashDeposit = TotalAmount
     If rst("TransType") = wWithdraw Then cashWithdraw = TotalAmount
-    If rst("TransType") = wContraDeposit Then contraDeposit = TotalAmount
-    If rst("TransType") = wContraWithdraw Then contraWithdraw = TotalAmount
+    If rst("TransType") = wContraDeposit Then ContraDeposit = TotalAmount
+    If rst("TransType") = wContraWithdraw Then ContraWithDraw = TotalAmount
     
     rst.MoveNext
 Wend
 
 Set rst = Nothing
 End Sub
-Public Sub TotalDepositIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Public Sub TotalDepositIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency, Optional ByVal DepositType As Integer)
 
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
 
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
 SqlStr = "Select Sum(Amount) as TotalAmount,TransType from RDIntTrans where " & _
                    " TransDate >= #" & fromDate & "#" & _
-                   " And TransDate <= #" & toDate & "#" & _
-                   " Group By TransType"
+                   " And TransDate <= #" & toDate & "#"
+                   
+If DepositType > 0 Then _
+    SqlStr = SqlStr & " And Accid in (Select distinct Accid from RDMaster where DepoistType =" & DepositType & " )"
 
-gDbTrans.SqlStmt = SqlStr
+gDbTrans.SqlStmt = SqlStr & " Group by TransType"
 If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Sub
 
 Dim TotalAmount As Currency
@@ -693,8 +759,8 @@ While rst.EOF = False
     TotalAmount = Val(FormatField(rst("TotalAmount")))
     If rst("TransType") = wDeposit Then CashDeposit = TotalAmount
     If rst("TransType") = wWithdraw Then cashWithdraw = TotalAmount
-    If rst("TransType") = wContraDeposit Then contraDeposit = TotalAmount
-    If rst("TransType") = wContraWithdraw Then contraWithdraw = TotalAmount
+    If rst("TransType") = wContraDeposit Then ContraDeposit = TotalAmount
+    If rst("TransType") = wContraWithdraw Then ContraWithDraw = TotalAmount
     
     rst.MoveNext
 Wend
@@ -702,14 +768,14 @@ Wend
 Set rst = Nothing
 End Sub
 
-Public Sub TotalLoanTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Public Sub TotalLoanTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency, Optional ByVal DepositType As Integer)
     Dim depLoan As New clsDepLoan
-    Call depLoan.TotalLoanTransactions(fromDate, toDate, CashDeposit, contraDeposit, cashWithdraw, contraWithdraw, wis_RDAcc)
+    Call depLoan.TotalLoanTransactions(fromDate, toDate, CashDeposit, ContraDeposit, cashWithdraw, ContraWithDraw, wis_RDAcc + DepositType)
     Set depLoan = Nothing
 End Sub
-Public Sub TotalLoanIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Public Sub TotalLoanIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency, Optional ByVal DepositType As Integer)
     Dim depLoan As New clsDepLoan
-    Call depLoan.TotalLoanIntTransactions(fromDate, toDate, CashDeposit, contraDeposit, cashWithdraw, contraWithdraw, wis_RDAcc)
+    Call depLoan.TotalLoanIntTransactions(fromDate, toDate, CashDeposit, ContraDeposit, cashWithdraw, ContraWithDraw, wis_RDAcc + DepositType)
     Set depLoan = Nothing
 End Sub
 
@@ -729,6 +795,13 @@ Private Sub m_frmRDAcc_AccountChanged(ByVal AccId As Long)
 m_AccID = AccId
 End Sub
 
+Private Sub m_frmRDAcc_SelectDeposit(DepositType As Integer, Cancel As Boolean)
+    Dim Deptype As Integer
+    Deptype = SelectRDDepositType
+    If Deptype <> DepositType Then m_frmRDAcc.txtAccNo = ""
+    
+End Sub
+
 Private Sub m_frmRDAcc_ShowReport(ReportType As wis_RDReports, ReportOrder As wis_ReportOrder, _
             fromDate As String, toDate As String, _
             RepOption As clsRepOption)
@@ -738,6 +811,7 @@ Private Sub m_frmRDAcc_ShowReport(ReportType As wis_RDReports, ReportOrder As wi
     
     If Not m_frmRDReport Is Nothing Then Unload m_frmRDReport
     Set m_frmRDReport = New frmRDReport
+    m_frmRDReport.DepositType = m_DepositType
     
     With m_frmRDReport
         .ReportType = ReportType

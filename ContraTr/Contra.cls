@@ -57,7 +57,7 @@ Else
         gWindowHandle = m_frmTrans.hwnd
         If m_FromAmount Then
             m_InitLoad = True
-            Dim Cancel As Integer
+            Dim cancel As Integer
             'Call m_frmTrans.InitialiseValue(m_TransDate, m_VoucherNo, m_FromAccType, m_fromAccNum, m_FromAmount, Cancel)
         End If
         m_frmTrans.Show vbModal
@@ -87,7 +87,7 @@ Dim IntAmount As Currency
 Dim PenalAmount As Currency
 Dim BalanceAmount As Currency
 
-Dim ModuleId As wisModules
+Dim ModuleID As wisModules
 Dim FromModuleID As wisModules
 Dim ParentID As Long
 Dim ContraID As Long
@@ -127,11 +127,11 @@ Set bankClass = New clsBankAcc
 
 MaxCount = UBound(m_AccID)
 
-ModuleId = GetModuleIDFromHeadID(m_AccHeadId(0))
+ModuleID = GetModuleIDFromHeadID(m_AccHeadId(0))
 ParentID = GetParentID(m_AccHeadId(0))
-If ModuleId > 100 Then ModuleId = ModuleId - (ModuleId Mod 100)
+If ModuleID > 100 Then ModuleID = ModuleID - (ModuleID Mod 100)
 'Assign from head values
-FromModuleID = ModuleId
+FromModuleID = ModuleID
 FromHeadID = m_AccHeadId(0)
 FromParentID = ParentID
 
@@ -141,7 +141,7 @@ If Not m_InitLoad Then
     ContraID = GetMaxContraTransID + 1
 
     m_NoOfAccounts = 1: NoOfWithDraws = 1
-    If ModuleId = 0 And (ParentID = parBankAccount Or ParentID = parBankLoanAccount) Then
+    If ModuleID = 0 And (ParentID = parBankAccount Or ParentID = parBankLoanAccount) Then
         exteranlAccount = True
         'Here we need not do the transction for the sub heads of account
         'Insert the Details in the Contra Table
@@ -156,11 +156,11 @@ If Not m_InitLoad Then
         
         If Not gDbTrans.SQLExecute Then GoTo Exit_Line
         
-    ElseIf ModuleId = wis_SBAcc Or ModuleId = wis_CAAcc Or ModuleId = wis_SuspAcc Then
+    ElseIf ModuleID = wis_SBAcc Or ModuleID = wis_CAAcc Or ModuleID = wis_SuspAcc Then
         internalAccount = True
-        If ModuleId = wis_CAAcc Then Set ClsObject = New ClsCAAcc
-        If ModuleId = wis_SBAcc Then Set ClsObject = New clsSBAcc
-        If ModuleId = wis_SuspAcc Then
+        If ModuleID = wis_CAAcc Then Set ClsObject = New ClsCAAcc
+        If ModuleID = wis_SBAcc Then Set ClsObject = New clsSBAcc
+        If ModuleID = wis_SuspAcc Then
             Set ClsObject = New clsSuspAcc
             'Dim Cls As clsSuspAcc
             Call ClsObject.WithdrawAmount(m_AccHeadId(0), m_AccID(0), 0, "", _
@@ -213,7 +213,7 @@ Dim tmpModuleId As wisModules
 Dim TransferAmount As Currency
 
 'Assign the Module ID if We have transferred from any module ID
-FromModuleID = ModuleId
+FromModuleID = ModuleID
 'For Count = NoOfWithDraws To MaxCount 'm_NoOfAccounts To MaxCount
 For count = m_NoOfAccounts To MaxCount
     If m_Amount(count) <= 0 Then GoTo NextAmount
@@ -226,12 +226,12 @@ For count = m_NoOfAccounts To MaxCount
     'on this loan account
     'or He is making the two transcation to any account
     I = count
-    ModuleId = GetModuleIDFromHeadID(m_AccHeadId(count))
+    ModuleID = GetModuleIDFromHeadID(m_AccHeadId(count))
     ParentID = GetParentID(m_AccHeadId(count))
     Do
         If I > MaxCount Then Exit Do
         tmpModuleId = GetModuleIDFromHeadID(m_AccHeadId(I))
-        If m_AccID(count) = m_AccID(I) And ModuleId = tmpModuleId Then
+        If m_AccID(count) = m_AccID(I) And ModuleID = tmpModuleId Then
             ToHeadID = m_AccHeadId(I)
             TransferAmount = m_Amount(I)
             If m_AmountType(I) = wisPrincipal And PrincAmount = 0 Then
@@ -279,9 +279,9 @@ For count = m_NoOfAccounts To MaxCount
     Loop
 
     
-    If ModuleId > 100 Then ModuleId = ModuleId - (ModuleId Mod 100)
+    If ModuleID > 100 Then ModuleID = ModuleID - (ModuleID Mod 100)
     
-    If ModuleId = 0 And (ParentID = parBankAccount Or ParentID = parBankLoanAccount) Then
+    If ModuleID = 0 And (ParentID = parBankAccount Or ParentID = parBankLoanAccount) Then
         'Here we need not do the transction for the sub heads of account
         'Insert the Details in the Contra Table
         If ContraID Then
@@ -307,16 +307,16 @@ For count = m_NoOfAccounts To MaxCount
         
         BalanceAmount = BalanceAmount - PrincAmount
         
-    ElseIf ModuleId = wis_CAAcc Or ModuleId = wis_SBAcc Or _
-                    ModuleId = wis_PDAcc Or ModuleId = wis_BKCC Or _
-                    ModuleId = wis_Deposits Or ModuleId = wis_RDAcc Then
+    ElseIf ModuleID = wis_CAAcc Or ModuleID = wis_SBAcc Or _
+                    ModuleID = wis_PDAcc Or ModuleID = wis_BKCC Or _
+                    ModuleID = wis_Deposits Or ModuleID = wis_RDAcc Then
         internalAccount = True
-        If ModuleId = wis_BKCC Then Set ClsObject = New clsBkcc
-        If ModuleId = wis_SBAcc Then Set ClsObject = New clsSBAcc
-        If ModuleId = wis_Deposits Then Set ClsObject = New clsFDAcc
-        If ModuleId = wis_PDAcc Then Set ClsObject = New clsPDAcc
-        If ModuleId = wis_CAAcc Then Set ClsObject = New ClsCAAcc
-        If ModuleId = wis_RDAcc Then Set ClsObject = New clsRDAcc
+        If ModuleID = wis_BKCC Then Set ClsObject = New clsBkcc
+        If ModuleID = wis_SBAcc Then Set ClsObject = New clsSBAcc
+        If ModuleID = wis_Deposits Then Set ClsObject = New clsFDAcc
+        If ModuleID = wis_PDAcc Then Set ClsObject = New clsPDAcc
+        If ModuleID = wis_CAAcc Then Set ClsObject = New ClsCAAcc
+        If ModuleID = wis_RDAcc Then Set ClsObject = New clsRDAcc
         
         BalanceAmount = BalanceAmount - PrincAmount
         
@@ -326,7 +326,7 @@ For count = m_NoOfAccounts To MaxCount
                 If ClsObject.WithdrawAmount(m_AccID(count), PrincAmount, _
                          "Tfr From ", TransDate, m_VoucherNo, False, ContraID) = 0 Then GoTo Exit_Line
         Else
-            If ModuleId = wis_BKCC Then
+            If ModuleID = wis_BKCC Then
                 If ClsObject.DepositAmount(m_AccID(count), PrincAmount, 0, 0, _
                          "Tfr From ", TransDate, m_VoucherNo, False, ContraID) = 0 Then GoTo Exit_Line
             Else
@@ -334,25 +334,25 @@ For count = m_NoOfAccounts To MaxCount
                          "Tfr From ", TransDate, m_VoucherNo, False, ContraID) = 0 Then GoTo Exit_Line
             End If
         End If
-    ElseIf ModuleId = wis_DepositLoans Or _
-            ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Or ModuleId = wis_Loans Or _
-            ModuleId = wis_Members Then
+    ElseIf ModuleID = wis_DepositLoans Or _
+            ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Or ModuleID = wis_Loans Or _
+            ModuleID = wis_Members Then
         
-        If ModuleId > 100 Then ModuleId = ModuleId - (ModuleId Mod 100)
+        If ModuleID > 100 Then ModuleID = ModuleID - (ModuleID Mod 100)
         
         internalAccount = True
         
-        If ModuleId = wis_DepositLoans Then
+        If ModuleID = wis_DepositLoans Then
             If PenalAmount Then GoTo Exit_Line
             Set ClsObject = New clsDepLoan
             If ClsObject.DepositAmount(m_AccID(count), PrincAmount, _
                 IntAmount, "Tfr From ", TransDate, m_VoucherNo) = 0 Then GoTo Exit_Line
             BalanceAmount = BalanceAmount - PrincAmount - IntAmount
         
-        ElseIf (ModuleId = wis_Loans And ModuleId < wis_Loans + 100) Or ModuleId = wis_BKCCLoan Or ModuleId = wis_BKCC Then
+        ElseIf (ModuleID = wis_Loans And ModuleID < wis_Loans + 100) Or ModuleID = wis_BKCCLoan Or ModuleID = wis_BKCC Then
         
-            If ModuleId = wis_Loans Then Set ClsObject = New clsLoan
-            If ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then _
+            If ModuleID = wis_Loans Then Set ClsObject = New clsLoan
+            If ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Then _
                                     Set ClsObject = New clsBkcc
             
             
@@ -366,16 +366,16 @@ For count = m_NoOfAccounts To MaxCount
             
             BalanceAmount = BalanceAmount - PrincAmount - IntAmount - PenalAmount
         
-        ElseIf ModuleId = wis_Members Then
+        ElseIf ModuleID = wis_Members Then
             Set ClsObject = New clsMMAcc
             If ClsObject.DepositAmount(CLng(m_AccID(count)), PrincAmount, _
-                        IntAmount, "Tfr From ", TransDate, m_VoucherNo, ContraID) = 0 Then
+                        IntAmount, "Tfr From ", TransDate, m_VoucherNo, False, ContraID) = 0 Then
                 GoTo Exit_Line
             End If
             BalanceAmount = BalanceAmount - PrincAmount - IntAmount - PenalAmount
         End If
     
-    ElseIf ModuleId = wis_SuspAcc Then
+    ElseIf ModuleID = wis_SuspAcc Then
         Set ClsObject = New clsSuspAcc
         
         If ClsObject.DepositAmount(m_AccHeadId(0), m_AccID(I), 0, "", m_TransDate, _
@@ -552,7 +552,7 @@ If gDbTrans.Fetch(rstTrans, adOpenDynamic) < 0 Then GoTo Exit_Line
 Dim count As Integer
 Dim transType As wisTransactionTypes
 Dim TotalToAmount As Currency
-Dim ModuleId As wisModules
+Dim ModuleID As wisModules
 
 Dim TransID() As Long
 ReDim TransID(0)
@@ -626,8 +626,8 @@ Dim tmpModuleId As wisModules
 
 Set bankClass = New clsBankAcc
 
-ModuleId = GetModuleIDFromHeadID(m_AccHeadId(0))
-If ModuleId > 100 Then ModuleId = ModuleId - (ModuleId Mod 100)
+ModuleID = GetModuleIDFromHeadID(m_AccHeadId(0))
+If ModuleID > 100 Then ModuleID = ModuleID - (ModuleID Mod 100)
     
     'IF there is more than one accountHead where the amount has been withdrwan
     'then it is difficult to undo the Contra transaction
@@ -679,7 +679,7 @@ For count = StartCount To EndCount 'm_NoOfAccounts To MaxCount
         BalanceAmount = BalanceAmount + PrinAmount
     End If
     
-    ModuleId = GetModuleIDFromHeadID(m_AccHeadId(count))
+    ModuleID = GetModuleIDFromHeadID(m_AccHeadId(count))
 
      'Now search whether he is Paying any Interest Amount
      'on this loan account
@@ -693,7 +693,7 @@ For count = StartCount To EndCount 'm_NoOfAccounts To MaxCount
          ' One transaction is of interest then and otheris of principal
          'in such case  only on undo will take place to that module
          tmpModuleId = GetModuleIDFromHeadID(m_AccHeadId(I))
-         If m_AccID(count) = m_AccID(I) And ModuleId = tmpModuleId Then
+         If m_AccID(count) = m_AccID(I) And ModuleID = tmpModuleId Then
              PrinAmount = m_Amount(I)
              If DepositTrans Then
                  If Not bankClass.UndoContraTrans(m_AccHeadId(0), _
@@ -708,27 +708,27 @@ For count = StartCount To EndCount 'm_NoOfAccounts To MaxCount
          I = I + 1
      Loop
      
-     If ModuleId > 100 Then ModuleId = ModuleId - (ModuleId Mod 100)
+     If ModuleID > 100 Then ModuleID = ModuleID - (ModuleID Mod 100)
 
-     If ModuleId = wis_BKCC Then Set ClsObject = New clsBkcc
-     If ModuleId = wis_SBAcc Then Set ClsObject = New clsSBAcc
-     If ModuleId = wis_Deposits Then Set ClsObject = New clsFDAcc
-     If ModuleId = wis_PDAcc Then Set ClsObject = New clsPDAcc
-     If ModuleId = wis_CAAcc Then Set ClsObject = New ClsCAAcc
-     If ModuleId = wis_RDAcc Then Set ClsObject = New clsRDAcc
-     If ModuleId = wis_SuspAcc Then Set ClsObject = New clsSuspAcc
-     If (ModuleId >= wis_BankAccounts And ModuleId < wis_BankAccounts + 100) Then ClsObject = New clsClearing
+     If ModuleID = wis_BKCC Then Set ClsObject = New clsBkcc
+     If ModuleID = wis_SBAcc Then Set ClsObject = New clsSBAcc
+     If ModuleID = wis_Deposits Then Set ClsObject = New clsFDAcc
+     If ModuleID = wis_PDAcc Then Set ClsObject = New clsPDAcc
+     If ModuleID = wis_CAAcc Then Set ClsObject = New ClsCAAcc
+     If ModuleID = wis_RDAcc Then Set ClsObject = New clsRDAcc
+     If ModuleID = wis_SuspAcc Then Set ClsObject = New clsSuspAcc
+     If (ModuleID >= wis_BankAccounts And ModuleID < wis_BankAccounts + 100) Then ClsObject = New clsClearing
     
-     If ModuleId = wis_SuspAcc Then Set ClsObject = New clsSuspAcc
-     If ModuleId = wis_DepositLoans Then Set ClsObject = New clsDepLoan
-     If ModuleId = wis_Loans Then Set ClsObject = New clsLoan
-     If ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then Set ClsObject = New clsBkcc
-     If ModuleId = wis_Members Then Set ClsObject = New clsMMAcc
+     If ModuleID = wis_SuspAcc Then Set ClsObject = New clsSuspAcc
+     If ModuleID = wis_DepositLoans Then Set ClsObject = New clsDepLoan
+     If ModuleID = wis_Loans Then Set ClsObject = New clsLoan
+     If ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Then Set ClsObject = New clsBkcc
+     If ModuleID = wis_Members Then Set ClsObject = New clsMMAcc
      
     'If THe transaction is of Bank Account or Bank loan Account
     'then need not do any transaction deletion
     'In case of Bank a/c transction the moduleid will be 0
-     If ModuleId Then
+     If ModuleID Then
         If Not ClsObject.UndoTransaction(m_AccID(count), TransID(count)) Then GoTo Exit_Line
      End If
      Set ClsObject = Nothing
@@ -968,7 +968,7 @@ Dim GrdRow As Integer
 Dim ArrNo As Integer
 
 Dim AccHeadID As Long
-Dim ModuleId As wisModules
+Dim ModuleID As wisModules
 Dim ParentID As Long
 Dim IntHeadID As Long
 Dim headName As String
@@ -1021,7 +1021,7 @@ If UBound(m_AccID) < ArrNo Then
     ReDim Preserve m_Amount(ArrNo)
 End If
 
-ModuleId = GetModuleIDFromHeadID(AccHeadID)
+ModuleID = GetModuleIDFromHeadID(AccHeadID)
 ParentID = GetParentID(AccHeadID)
 
 'Id we do not have the unique Id of the account type then
@@ -1029,10 +1029,10 @@ ParentID = GetParentID(AccHeadID)
 Dim RstAcc As Recordset
 'First Check for the Bank & bank Loan Account
 'If ParentID = parBankAccount Or ParentID = parBankLoanAccount Then
-If ModuleId = wis_None Then
+If ModuleID = wis_None Then
     'Here need not to get the account number
     'the head name itself is the account number
-ElseIf ModuleId = wis_SuspAcc Then
+ElseIf ModuleID = wis_SuspAcc Then
     With m_frmTrans
         Set RstAcc = GetAccRecordSet(.cmbFrom.ItemData(.cmbFrom.ListIndex), .txtFromAccNo)
     End With
@@ -1074,7 +1074,9 @@ If m_frmTrans.optRegInt Then
         'Head NAme already slected in the top
         'while seleting the grid row
     ElseIf ParentID = parMemberShare Then
-        headName = GetResourceString(53, 191)
+        headName = ""
+        If ModuleID Mod 100 > 0 Then headName = GetMemberTypeName(ModuleID Mod 100)
+        headName = headName & " " & GetResourceString(53, 191)
         ParentID = parBankIncome
     ElseIf ParentID = parMemberDeposit Then
         headName = GetHeadName(AccHeadID) & " " & GetResourceString(487)
@@ -1204,7 +1206,7 @@ End With
 End Sub
 
 
-Private Sub InitialiseValue(ByVal TransDate As Date, ByVal VoucherNo As String, ByVal AccHeadID As Long, ByVal AccNum As String, ByVal Amount As Currency, Cancel As Integer, Optional AmountType As wis_AmountType = wisPrincipal)
+Private Sub InitialiseValue(ByVal TransDate As Date, ByVal VoucherNo As String, ByVal AccHeadID As Long, ByVal AccNum As String, ByVal Amount As Currency, cancel As Integer, Optional AmountType As wis_AmountType = wisPrincipal)
 'Public Sub InitialiseValue(ByVal TransDate As Date, ByVal VoucherNo As String, ByVal Module As wisModules, ByVal AccNum As String, ByVal Amount As Currency, Cancel As Integer, Optional AmountType As Wis_AmountType = wisPrincipal)
 Dim StrAcctype As String
 
@@ -1213,7 +1215,7 @@ If AccHeadID = 0 Then GoTo Exit_Line
 
 'If transferring amount already loaded
 'then exit the sub
-Cancel = True
+cancel = True
 
 If m_frmTrans.fraTo.Enabled Then GoTo Exit_Line
 m_InitLoad = True
@@ -1277,7 +1279,7 @@ With m_frmTrans
     .cmdFrom.Enabled = False
 End With
 
-Cancel = False
+cancel = False
 
 Exit_Line:
 
@@ -1485,7 +1487,7 @@ With m_frmTrans.grd
     
 End With
 
-Dim Cancel As Integer
+Dim cancel As Integer
 Dim TransDate As Date
 
 TransDate = GetSysFormatDate(m_frmTrans.txtTransDate)

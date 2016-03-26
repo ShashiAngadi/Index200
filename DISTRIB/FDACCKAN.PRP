@@ -1,0 +1,28 @@
+[Particulars]
+Key0=Apple
+Key1=By Cheque
+Key2=By Interest
+
+[Property Sheet]
+Prop1=Prompt=”Ñ³Ù·Ñ¤Ð¤Ð ÁÀÐ¤Ð ;PropType=Heading;SubItems=2
+Prop2=Prompt=”Ñ³Ù ÊÐ”Ùô;PropType=Editable;Description=”Ñ³Ù·Ñ¤Ð¹Ð ”Ñ³Ù ÊÐ”Ùô¦ÐÔ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=”Ñ³Ù·Ñ¤Ð;DataSource=AccID;DisplayType=Browse
+Prop3=Prompt=”Ñ³Ù·Ñ¤Ð¹Ð ÌÙÊÐ¤ÐÔ;LockEdit=True;PropType=Editable;Description=”Ñ³Ù·Ñ¤Ð¹Ð ÌÙÊÐ¤Ð¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=”Ñ³Ù·Ñ¤Ð¹Ð ÌÙÊÐ¤ÐÔ;DisplayType=Browse;DataSource=AccName
+Prop4=Prompt=¡« ”Ñ³Ù·Ñ¤Ð¤Ð ÁÀÐ¤Ð;LockEdit=True;PropType=Editable;Description=¡« ”Ñ³Ù·Ñ¤Ð¤Ð ÌÙÊÐ¤Ð¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=”Ñ³Ù·Ñ¤Ð¹Ð ÌÙÊÐ¤ÐÔ;DisplayType=Browse;DataSource=JointHolder
+Prop5=Prompt=¹ÑÀÐÔ º·ÙþÓÇ³Ð;PropType=Heading;SubItems=3
+Prop6=Prompt=–ÑõÌÐ‘Ð ÊÐ”Ùô;PropType=Editable;Description=¹ÑÀÐÔ º·ÙþÓÇ³Ð¹Ð –ÑõÌÐ‘Ð¹Ð ÊÐ”Ùô¦ÐÔ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=ÀÐ¦ÐÔÊÐÔú;DataSource=NomineeID
+Prop7=Prompt=ÌÙÊÐ¤ÐÔ;PropType=Editable;Description=¹ÑÀÐÔ º·ÙþÓÇ³Ð¹Ð ÌÙÊÐ¤Ð¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=¹ÑÀÐÔ º·ÙþÓÆÐ¹Ð;DataSource=NomineeName;DisplayType=Browse
+Prop8=Prompt=ÊÐ½·°Ð;PropType=Editable;LockEdit=True;Description=”Ñ³Ù·Ñ¤Ð¹ÙÖ¸–Ù ¹ÑÀÐÔº·ÙþÓÇ³Ð¹Ð ÊÐ½·ÐÀÐ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù;DescTitle=ÊÐ½·°Ð;DataSource=NomineeRelation;DisplayType=List;ListData=³Ð·Ù,³ÑÂÔ,ÊÐÌÙÖÓ·Ð¤Ð,ÊÐÌÙÖÓ·Ð§,»Ð´,»Ð´î,…³Ð¤Ù
+Prop9=Prompt=¬ÙÓÀÐÕ »Ð´õ‘Ù ÁÀÐ¤ÐÐ;PropType=Heading;SubItems=3
+Prop10=Prompt=”Ñ³Ù ³Ù¤Ù¦ÐÔÔÀÐ ¸¹Ñ‘Ð;PropType=Editable;DescTitle=”Ñ³Ù ³Ù¤Ù¦ÐÔÔÀÐ ¸¹Ñ‘Ð;Description=”Ñ³Ù ³Ù¤Ù¦ÐÔÔÀÐ ¸¹Ñ‘ÐÀÐ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DataSource=CreateDate
+Prop11=Prompt=¬ÙÓÀÐÕ »Ð´õ‘Ù ÊÐ”Ùô;PropType=Editable;DescTitle=¬ÙÓÀÐÕ »Ð´õ‘Ù ÊÐ”Ùô;Description=†–Ð …¤ÐÔÀÐ ¬ÙÓÀÐÕ »Ð´õ‘Ù¦ÐÔ ÊÐ”Ùô¦ÐÔ¹ÐÔî ºÓÀÐÕ …Åö ½·ÐÅÊÐ½ÌÐÔ·ÐÔ.
+Prop12=Prompt=¬ÙÓÀÐ±Ò ÌÐ±;PropType=Editable;DescTitle=¬ÙÓÀÐ±Ò ÀÙÖ½Ã–ÐÔ;Description=† ÊÐ«þ¼‘ÙÓ©¹ÐÅö ¬ÙÓÀÐ±Ò ÀÐ¦Ñ¯·Ð ÌÐ±;DataSource=DepAmount
+Prop13=Prompt=¬ÙÓÀÐ±Ò¦ÐÔ ½¯ç ·Ð¤Ð;PropType=Editable;DescTitle=½¯ç¦ÐÔ ·Ð¤Ð;Description=† ¬ÙÓÀÐ±Ò¦ÐÔ ½¯ç¦ÐÔ ·Ð¤ÐÀÐ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù. †–Ð …¤ÐÔÀÐ ¬ÙÓÀÐÕ ½¯ç ·Ð¤ÐÀÐ¹ÐÔî ºÓÀÐÕ …Åö ½·ÐÅÊÐ½ÌÐÔ·ÐÔ;DataSource=IntRate
+Prop14=Prompt=ÀÐ¦Ñô›ÐÔ§« ÌÐ±;PropType=Editable;DescTitle=ÀÐ¦Ñô›ÐÔ§« ÌÐ±;Description=…·ÐÔ ¬ÙÓÀÐ±Ò ÀÐ¦Ñô›ÐÔ§« „·Ð ÀÙÔÓÄÙ ·ÙÖ¤Ð‘ÐÔÀÐ ÌÐ±ÀÐ¹ÐÔî ³ÙÖÓ§ÊÐÔ³Ðê·Ù. …·Ð¹ÐÔî …Åö ½·ÐÄÑÂÔÊÐ½ÌÐÔ·ÐÔ;DataSource=MatAmount
+Prop15=Prompt=»Ð§›ÐÂÔÊÐÔÀÐÀÐ¤ÐÔ;PropType=Heading;SubItems=2;
+Prop16=Prompt=”Ñ³Ù ÊÐ”Ùô;PropType=Editable;Description=»Ð§›ÐÂÔÊÐÔÀÐÀÐ¤Ð ”Ñ³Ù ÊÐ”Ùô¦ÐÔ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DescTitle=»Ð§›ÐÂÔÊÐÔÀÐÀÐ¤Ð –ÑõÌÐ‘Ð ÊÐ”ÙÚ.;DataSource=IntroducerID;DisplayType=Browse
+Prop17=Prompt=ÌÙÊÐ¤ÐÔ;PropType=Editable;DescTitle=»Ð§›ÐÂÔÊÐÔÀÐÀÐ¤Ð ÌÙÊÐ¤ÐÔ;Description=»Ð§›ÐÂÔÊÐÔÀÐÀÐ¤Ð ÌÙÊÐ¤Ð¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;Datasource=IntroducerName;LockEdit=True
+Prop18=Prompt=ÄÙ®Ðâ¤Ð ÁÀÐ¤Ð;PropType=Heading;SubItems=3
+Prop19=Prompt=ÄÙ®Ðâ¤Ð ÊÐ”Ùô;PropType=Editable;DescTitle=ÄÙ®Ðâ¤Ð ÊÐ”Ùô;Description=ÄÙ®Ðâ¤Ð ÊÐ”Ùô¦ÐÔ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DataSource=LedgerNo
+Prop20=Prompt=»°Ù×Å¦ÙÖ ÊÐ”Ùô;PropType=Editable;DescTitle=»°Ù×Å¦ÙÖ ÊÐ”Ùô;Description=”Ñ³Ù¦ÐÔ »°Ù×Å¦ÙÖ ÊÐ“ô¦ÐÔ¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù.;DataSource=FolioNo
+Prop21=Prompt=”Ñ³Ù¦ÐÔ –ÐÔõ»ý;PropType=Editable;DescTitle=”Ñ³Ù¦ÐÔ –ÐÔõ»ý;Description=† ”Ñ³Ù¦ÐÔÔ ¦Ð¦ÑÀÐ –ÐÔ¼–Ù ÊÙÓ¤ÐÔ³Ðê·Ù Š½Ô·Ð¹ÐÔî ÊÐÖœÊÐÔ³Ðê·Ù;DataSource=AccGroup;DisplayType=List;DataList=ÊÑÀÐ¦Ñ¹Ðô
+Prop22=Prompt=ÀÐ¦Ñôœ§«¦Ð¦Ñ·Ñ–Ð ÊÐÖœÊÐÔ;PropType=Editable;DescTitle=ÀÐ¦Ñô›ÐÔ§« ÊÐÖ›Ð¹Ù ;Description=¬ÙÓÀÐ±Ò ÀÐ¦Ñô›ÐÔ¤Ð „·Ñ–Ð ”Ñ³Ù·Ñ¤Ðº–Ù ´ÏÊÐÃÔ ÊÐÖ›Ð¹Ù.;DisplayType=Boolean

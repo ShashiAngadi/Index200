@@ -144,13 +144,13 @@ If gDbTrans.Fetch(rstMain, adOpenDynamic) < 1 Then Exit Sub
 
 Dim SlNo As Long
 Dim count As Long
-Dim MaxCount As Long
+Dim maxCount As Long
 
 count = DateDiff("m", fromDate, toDate)
 count = count + 2
-MaxCount = rstMain.RecordCount * count
+maxCount = rstMain.recordCount * count
 
-RaiseEvent Initialise(0, MaxCount)
+RaiseEvent Initialise(0, maxCount)
 
 With grd
     .Clear
@@ -174,7 +174,7 @@ While Not rstMain.EOF
         .TextMatrix(rowno, 2) = FormatField(rstMain("CustName"))
     End With
     count = count + 1
-    RaiseEvent Processing("Collecting Information ", count / MaxCount)
+    RaiseEvent Processing("Collecting Information ", count / maxCount)
     rstMain.MoveNext
 Wend
 With grd
@@ -220,7 +220,7 @@ While DateDiff("d", fromDate, toDate) >= 0
             TotalBalance = TotalBalance + Val(.TextMatrix(rowno, colno))
         End If
         count = count + 1
-        RaiseEvent Processing("Calulating monthly Balance", count / MaxCount)
+        RaiseEvent Processing("Calulating monthly Balance", count / maxCount)
         rstMain.MoveNext
     Loop
     rowno = rowno + 2
@@ -310,7 +310,7 @@ Private Sub SetKannadaCaption()
 Call SetFontToControls(Me)
 
 'Set kannada caption for the all the controls
-Me.cmdOK.Caption = GetResourceString(11)
+Me.cmdOk.Caption = GetResourceString(11)
 Me.cmdPrint.Caption = GetResourceString(23)
 End Sub
 
@@ -449,7 +449,7 @@ With grd
         .CellAlignment = 4
         .CellFontBold = True
     Next
-    RaiseEvent Initialise(0, rst.RecordCount)
+    RaiseEvent Initialise(0, rst.recordCount)
     
     .Row = 0
     SubTotal = 0: GrandTotal = 0
@@ -504,7 +504,7 @@ While Not rst.EOF
 nextRecord:
     
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Formatting the Data ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Formatting the Data ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
     DoEvents
     Me.Refresh
@@ -674,7 +674,7 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then Exit Sub
         '.Col = 7: .Text = GetResourceString(279) '"Withdrawn"
         '.Col = 8: .Text = GetResourceString(279) '"Withdrawn"
         .Col = 6: .Text = GetResourceString(279) '"Withdrawn"
-         RaiseEvent Initialise(0, rst.RecordCount)
+         RaiseEvent Initialise(0, rst.recordCount)
          RaiseEvent Processing("Aliging the data ", 0)
         .ColAlignment(0) = 0
         .Row = 0
@@ -746,7 +746,7 @@ nextRecord:
     DoEvents
     Me.Refresh
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / rst.recordCount)
     
     rst.MoveNext
 Wend
@@ -862,12 +862,12 @@ End If
 'Call InitGrid
 Dim rowno As Long, colno As Byte
 
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Alignig the data tobe written into the grid.", 0)
 With grd
     .Visible = False
     .Clear
-    .Rows = rptRS.RecordCount + 1
+    .Rows = rptRS.recordCount + 1
     .Cols = 9
     If .Rows < 20 Then .Rows = 20
     .FixedRows = 2
@@ -999,7 +999,7 @@ nextRecord:
     If gCancel Then rptRS.MoveLast
     Me.Refresh
     RaiseEvent Processing("Writing the data to the grid.", _
-                rptRS.AbsolutePosition / rptRS.RecordCount)
+                rptRS.AbsolutePosition / rptRS.recordCount)
     rptRS.MoveNext
 Loop
 rptRS.MoveLast
@@ -1103,7 +1103,7 @@ End If
 Dim rowno As Long, colno As Byte
 
 'Raise event to access frmcancel.
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
 
 ' Initialize the grid.
@@ -1171,7 +1171,7 @@ nextRecord:
         
         DoEvents
         If gCancel Then .MoveLast
-        RaiseEvent Processing("Writing the data ", .AbsolutePosition / .RecordCount)
+        RaiseEvent Processing("Writing the data ", .AbsolutePosition / .recordCount)
         
         .MoveNext
     Loop
@@ -1261,7 +1261,7 @@ ElseIf Lret = 0 Then
 End If
 
 'Raise event to access frmcancel.
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
 
 ' Initialize the grid.
@@ -1350,7 +1350,7 @@ nextRecord:
        'Move to next row.
         DoEvents
         If gCancel Then .MoveLast
-        RaiseEvent Processing("Writing the data ", .AbsolutePosition / .RecordCount)
+        RaiseEvent Processing("Writing the data ", .AbsolutePosition / .recordCount)
         
         .MoveNext
 
@@ -1428,13 +1428,12 @@ With grd
     .FixedCols = 1
     .Rows = 20
     
-    RaiseEvent Initialise(0, rst.RecordCount)
+    RaiseEvent Initialise(0, rst.recordCount)
     RaiseEvent Processing("Aligning the data ", 0)
     
     .Row = 0
     .Col = 0: .Text = GetResourceString(33)
-    .Col = 1: .Text = GetResourceString(36) & " " & _
-                GetResourceString(60)  '" Loan Id "
+    .Col = 1: .Text = GetResourceString(36, 60) '" Loan Id "
     .ColAlignment(1) = 7
     .Col = 2: .Text = GetResourceString(35)
     .ColAlignment(2) = 1
@@ -1483,7 +1482,7 @@ While Not rst.EOF
     SlNo = SlNo + 1
     DoEvents
     If gCancel Then rst.MoveNext
-    RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / rst.recordCount)
     End If
     rst.MoveNext
 Wend
@@ -1513,8 +1512,8 @@ grd.Width = Me.Width - 150
 fra.Top = Me.ScaleHeight - fra.Height
 fra.Left = Me.Width - fra.Width
 grd.Height = Me.ScaleHeight - fra.Height - lblReportTitle.Height
-cmdOK.Left = fra.Width - cmdOK.Width - (cmdOK.Width / 4)
-cmdPrint.Left = cmdOK.Left - cmdPrint.Width - (cmdPrint.Width / 4)
+cmdOk.Left = fra.Width - cmdOk.Width - (cmdOk.Width / 4)
+cmdPrint.Left = cmdOk.Left - cmdPrint.Width - (cmdPrint.Width / 4)
 cmdWeb.Top = cmdPrint.Top
 cmdWeb.Left = cmdPrint.Left - cmdPrint.Width - (cmdPrint.Width / 4)
 
@@ -1535,8 +1534,8 @@ Dim ColCount As Integer
 End Sub
 
 
-Private Sub m_grdPrint_MaxProcessCount(MaxCount As Long)
-m_TotalCount = MaxCount
+Private Sub m_grdPrint_MaxProcessCount(maxCount As Long)
+m_TotalCount = maxCount
 Set m_frmCancel = New frmCancel
 m_frmCancel.Show
 m_frmCancel.PicStatus.Visible = True

@@ -31,14 +31,14 @@ Attribute m_frmMMShare.VB_VarHelpID = -1
 Private WithEvents m_frmMMReport As frmMMReport
 Attribute m_frmMMReport.VB_VarHelpID = -1
 Private m_Share() As String
-Public Function GetMemberNameCustIDByMemberNum(memNum As String, ByRef CustomerID As Long, Optional memberTYpe As Integer) As String
+Public Function GetMemberNameCustIDByMemberNum(memNum As String, ByRef CustomerID As Long, Optional MemberType As Integer) As String
     GetMemberNameCustIDByMemberNum = ""
     CustomerID = 0
     If Len(Trim$(memNum)) < 1 Then Exit Function
     Dim rstName As Recordset
     gDbTrans.SqlStmt = "Select MemberNum + ' - ' +  MemberTypeName as MemberNum,Name, CustomerID From QryMemName A " & _
         " Left Join MemberTypeTab B On A.MemberType = B.MemberType  Where MemberNum = " & AddQuotes(Trim(memNum))
-    If memberTYpe > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And MemberType = " & memberTYpe
+    If MemberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And MemberType = " & MemberType
                 
     Dim recCount As Integer
     
@@ -107,11 +107,11 @@ End Function
 
 Public Function CustomerBalance(ByVal CustomerID As Long, retAccNum As String, Optional AsOnDate As Date) As Currency
 
-Dim memberTypeName As String
+Dim MemberTypeName As String
 
 If IsMissing(AsOnDate) Then AsOnDate = CDate(gStrDate)
 
-CustomerBalance = CustomerBalanceNew(CustomerID, retAccNum, memberTypeName, AsOnDate)
+CustomerBalance = CustomerBalanceNew(CustomerID, retAccNum, MemberTypeName, AsOnDate)
 
 End Function
 
@@ -180,10 +180,10 @@ Public Property Get ObjectName()
 End Property
 
 
-Public Function Balance(AsOnDate As Date, Optional memberTYpe As Integer) As Currency
+Public Function Balance(AsOnDate As Date, Optional MemberType As Integer) As Currency
 Balance = 0
-If IsMissing(memberTYpe) Then memberTYpe = 0
-Balance = ComputeTotalMMLiability(AsOnDate, memberTYpe)
+If IsMissing(MemberType) Then MemberType = 0
+Balance = ComputeTotalMMLiability(AsOnDate, MemberType)
 End Function
 
 Public Property Let CustomerID(NewValue As Long)
@@ -199,12 +199,12 @@ Set rst = Nothing
 End Property
 
 Public Function CustomerNextBalance(retAccNum As String) As Currency
-    Dim memberTYpe As String
+    Dim MemberType As String
     
-    CustomerNextBalance = CustomerNextBalanceNew(retAccNum, memberTYpe)
+    CustomerNextBalance = CustomerNextBalanceNew(retAccNum, MemberType)
     
 End Function
-Public Function CustomerNextBalanceNew(ByRef retAccNum As String, ByRef memberTypeName) As Currency
+Public Function CustomerNextBalanceNew(ByRef retAccNum As String, ByRef MemberTypeName) As Currency
     CustomerNextBalanceNew = 0
     retAccNum = ""
     If m_rstAccDet Is Nothing Then Exit Function
@@ -214,7 +214,7 @@ Public Function CustomerNextBalanceNew(ByRef retAccNum As String, ByRef memberTy
     
     retAccNum = FormatField(m_rstAccDet("AccNum"))
     CustomerNextBalanceNew = FormatField(m_rstAccDet("Balance"))
-    memberTypeName = FormatField(m_rstAccDet("memberTypeName"))
+    MemberTypeName = FormatField(m_rstAccDet("memberTypeName"))
     
 End Function
 
@@ -227,7 +227,15 @@ Dim I As Long
 Dim MaxI As Integer
 Dim FaceValue As Currency
 Dim rst As ADODB.Recordset
+Dim UserID As Integer
+Dim AccHeadID As Long
 
+Dim MemberType As Integer
+Dim MemberTypeName As String
+Dim MemberTypeNameEnglish As String
+
+'Get the MemberTYpe for the AccID
+MemberType = GetMemberTypeByAccID(AccId, MemberTypeName, MemberTypeNameEnglish)
 'Get the Transaction Type
 Dim transType As wisTransactionTypes
 transType = IIf(CashTransaction, wDeposit, wContraDeposit)
@@ -244,6 +252,7 @@ transType = IIf(CashTransaction, wDeposit, wContraDeposit)
     Dim ShareValue As Currency
     
     ShareValue = Val(SetupClass.ReadSetupValue("MMAcc", "ShareValue", "10"))
+    ShareValue = Val(SetupClass.ReadSetupValue("MMAcc" & MemberType, "ShareValue", CStr(ShareValue)))
     
     'Temporay message if he has not having any share value
     If ShareValue = 0 Then
@@ -327,9 +336,8 @@ End If
 'Obtain the Face Value from current settings
     Dim SetUp As New clsSetup
     FaceValue = Val(SetUp.ReadSetupValue("MMAcc", "ShareValue", "10.00"))
+    FaceValue = Val(SetUp.ReadSetupValue("MMAcc" & MemberType, "ShareValue", CStr(FaceValue)))
 
-Dim UserID As Integer
-Dim AccHeadID As Long
 
 UserID = gCurrUser.UserID
 
@@ -347,7 +355,7 @@ UserID = gCurrUser.UserID
         Balance & "," & UserID & ")"
     
     If ShareFee > 0 Then
-        AccHeadID = GetIndexHeadID(GetResourceString(53, 191))
+        AccHeadID = GetIndexHeadID(MemberTypeName & " " & GetResourceString(53, 191)) 'Share Fee
         If Not gDbTrans.SQLExecute Then
             'MsgBox "Unable to perform transaction !", vbExclamation, gAppName & " - Error"
             MsgBox GetResourceString(535), vbExclamation, gAppName & " - Error"
@@ -357,7 +365,7 @@ UserID = gCurrUser.UserID
         If Not CashTransaction Then
             'update it to te Contra Trans table
             gDbTrans.SqlStmt = "Insert INTO ContraTrans " & _
-                    "(ContraID,AccHeadID,AccID" & _
+                    "(ContraID,AccHeadID,AccID," & _
                     "TransType, TransID,Amount,VoucherNo,UserID)" & _
                     " Values (" & ContraID & "," & AccHeadID & "," & _
                     AccId & ", " & transType & ", " & TransID & "," & ShareFee & ", " & _
@@ -408,8 +416,7 @@ UserID = gCurrUser.UserID
     
     If Not CashTransaction Then
         'update it to te Contra Trans table
-        AccHeadID = GetIndexHeadID(GetResourceString(53) & " " & _
-                GetResourceString(36))
+        AccHeadID = GetIndexHeadID(MemberTypeName & " " & GetResourceString(53, 36))
         gDbTrans.SqlStmt = "Insert INTO ContraTrans" & _
             " (ContraID,AccHeadID,AccID," & _
             "TransType, TransID,Amount,VoucherNo,UserId)" & _
@@ -432,9 +439,9 @@ End If
 
 End Function
 
-Public Function MemberName(AccNum As String, Optional memberTYpe As Integer) As String
+Public Function MemberName(AccNum As String, Optional MemberType As Integer) As String
 
-If IsMissing(memberTYpe) Then memberTYpe = 0
+If IsMissing(MemberType) Then MemberType = 0
 
 Dim Lret As Long
 gDbTrans.SqlStmt = "Select Title + Space(1) + FirstName + " & _
@@ -442,7 +449,7 @@ gDbTrans.SqlStmt = "Select Title + Space(1) + FirstName + " & _
         " from NameTab, MemMaster where MemMaster.AccNum  = " & AddQuotes(AccNum, True) & _
         " And  NameTab.CustomerID =  MemMaster.CustomerId"
 
-If memberTYpe > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And memberType = " & memberTYpe
+If MemberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And memberType = " & MemberType
 
 Dim rst As ADODB.Recordset
 Lret = gDbTrans.Fetch(rst, adOpenStatic)
@@ -574,6 +581,13 @@ Dim FaceValue As Currency
 Dim ShareAmount As Currency
 Dim rst As ADODB.Recordset
 
+Dim MemberType As Integer
+Dim MemberTypeName As String
+Dim MemberTypeNameEnglish As String
+
+'Get the MemberTYpe for the AccID
+MemberType = GetMemberTypeByAccID(AccId, MemberTypeName, MemberTypeNameEnglish)
+
 'Get the Transaction Type
 Dim transType As wisTransactionTypes
 
@@ -582,10 +596,11 @@ Dim ClsBank As clsBankAcc
 Dim AccHeadID As Long
 Dim FeeHeadId As Long
 
-Set ClsBank = New clsBankAcc
-AccHeadID = ClsBank.GetHeadIDCreated(GetResourceString(49, 53))
 
-FeeHeadId = ClsBank.GetHeadIDCreated(GetResourceString(49, 53, 191))
+Set ClsBank = New clsBankAcc
+AccHeadID = ClsBank.GetHeadIDCreated(MemberTypeName & " " & GetResourceString(53, 36)) 'ClsBank.GetHeadIDCreated(GetResourceString(49, 53))
+
+FeeHeadId = ClsBank.GetHeadIDCreated(MemberTypeName & " " & GetResourceString(53, 191)) 'GetResourceString(49, 53, 191))  ' SHARE Fee
 
 Set ClsBank = Nothing
 'Get the Contra Transaction ID
@@ -613,7 +628,7 @@ With m_frmMMShare
     
     'FIll up the list box in the form
     .lstCheque.Clear
-    For I = 1 To rst.RecordCount
+    For I = 1 To rst.recordCount
         If FormatField(rst("ReturnTransID")) = 0 Then _
         .lstCheque.AddItem FormatField(rst("CertNo"))
         rst.MoveNext
@@ -823,7 +838,7 @@ ShareFee = Val(FormatField(rst("Deposit")))
 
 End Function
 
-Public Function MembershipFee(fromDate As Date, toDate As Date, Optional memberTYpe As Integer) As Currency
+Public Function MembershipFee(fromDate As Date, toDate As Date, Optional MemberType As Integer) As Currency
 MembershipFee = 0
 
 Dim TransID As Long
@@ -836,8 +851,8 @@ gDbTrans.SqlStmt = "Select sum(Amount) as deposit from MemIntTrans " & _
     " WHERE TransId = " & TransID & " And TransDate >= #" & fromDate & "#" & _
     " And TransDate <= #" & toDate & "# "
     
-If memberTYpe > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & _
-    " And AccId in (Select Distinct AccId from MemMaster where memberType = " & memberTYpe & ")"
+If MemberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & _
+    " And AccId in (Select Distinct AccId from MemMaster where memberType = " & MemberType & ")"
     
 Dim rst As ADODB.Recordset
 Lret = gDbTrans.Fetch(rst, adOpenDynamic)
@@ -872,7 +887,7 @@ If gCurrUser Is Nothing Then Set gCurrUser = New clsUsers: Exit Sub
         recCount = gDbTrans.Fetch(rstMemType, adOpenDynamic)
         
         'TEMPCODE
-        If recCount = 0 Then
+        If recCount = 0 Then  ' THERE IS NO MEMBER TYPES
             gDbTrans.SqlStmt = "Select count(*) From MemMaster"
             Call gDbTrans.Fetch(rst, adOpenDynamic)
             If FormatField(rst(0)) > 0 Then
@@ -888,23 +903,6 @@ If gCurrUser Is Nothing Then Set gCurrUser = New clsUsers: Exit Sub
             Else
                 MsgBox "Please create the member type before proceeding", vbInformation + vbOKOnly, wis_MESSAGE_TITLE
                 Exit Sub
-                
-                gDbTrans.BeginTrans
-                gDbTrans.SqlStmt = "Select distinct MemberType From MemMaster"
-                Call gDbTrans.Fetch(rst, adOpenDynamic)
-                While rst.EOF = False
-                    m_MemberType = FormatField(rst(0))
-                    gDbTrans.SqlStmt = "Insert into MemberTypeTab " & _
-                        " (MemberType, MemberTypeName,MemberTypeNameEnglish)" & _
-                        " Values (" & m_MemberType & "," & _
-                        AddQuotes(GetResourceString(101 + m_MemberType, 49)) & "," & _
-                        AddQuotes(LoadResourceStringS(101 + m_MemberType, 49)) & ")"
-                    
-                    Call gDbTrans.SQLExecute
-                    'Move to Next memebr Type
-                    rst.MoveNext
-                Wend
-                gDbTrans.CommitTrans
             End If
                     
         End If
@@ -923,7 +921,7 @@ If gCurrUser Is Nothing Then Set gCurrUser = New clsUsers: Exit Sub
             If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then m_MemberType = rst("MemberType")
             
             With m_FrmMemAcc
-                .memberTYpe = m_MemberType
+                .MemberType = m_MemberType
                 .AccountLoad (m_AccID)
                 .cmdLoad.Enabled = False
                 .txtAccNo.Locked = True
@@ -935,15 +933,25 @@ If gCurrUser Is Nothing Then Set gCurrUser = New clsUsers: Exit Sub
             'Set Default Value to the memeber
            
             If recCount > 1 Then
-                If m_frmSelectMemType Is Nothing Then Set m_frmSelectMemType = New frmSelectFD
-                m_frmSelectMemType.GroupType = grpMember
-                m_frmSelectMemType.Show 1
-                Unload m_frmSelectMemType
+                Dim cancel As Boolean
+                Dim memType As Integer
+                memType = SelectMemberType 'selectFD.SelectDeposit(wis_Members, grpMember, multiDeposit, Cancel)
+                'Set selectFD = Nothing
+                If memType < 0 Then
+                    Unload m_FrmMemAcc
+                    gWindowHandle = 0
+                    Exit Sub
+                End If
+                m_MemberType = memType
+                'If m_frmSelectMemType Is Nothing Then Set m_frmSelectMemType = New frmSelectFD
+                'm_frmSelectMemType.groupType = grpMember
+                'm_frmSelectMemType.Show 1
+                'Unload m_frmSelectMemType
             End If
             
-            Set m_frmSelectMemType = Nothing
+            'Set m_frmSelectMemType = Nothing
             
-            m_FrmMemAcc.memberTYpe = m_MemberType
+            m_FrmMemAcc.MemberType = m_MemberType
         End If
 
         m_FrmMemAcc.SingleMemberModule = recCount < 2
@@ -956,6 +964,26 @@ If gCurrUser Is Nothing Then Set gCurrUser = New clsUsers: Exit Sub
 
 
 End Sub
+
+Private Function SelectMemberType() As Integer
+    If m_FrmMemAcc Is Nothing Then Set m_FrmMemAcc = New frmMMAcc
+    
+    Dim selectMem As New clsSelectDeposit
+    Dim multiDeposit As Boolean
+    Dim cancel As Boolean
+    Dim memType As Integer
+    memType = selectMem.SelectDeposit(wis_Members, grpMember, multiDeposit, cancel)
+    Set selectMem = Nothing
+    
+    If memType > -1 Then
+        m_FrmMemAcc.MemberType = memType
+        m_FrmMemAcc.SingleMemberModule = Not multiDeposit
+        If m_MemberType <> memType Then m_FrmMemAcc.txtAccNo = ""
+    End If
+    m_MemberType = memType
+    SelectMemberType = memType
+    
+End Function
 
 Public Function ContraDeposits(fromDate As Date, toDate As Date) As Currency
 ContraDeposits = 0
@@ -1126,8 +1154,13 @@ m_AccID = AccId
 
 End Sub
 
+Private Sub m_FrmMemAcc_SelectMemberType(memeberType As Integer, cancel As Boolean)
+     Call SelectMemberType
+End Sub
+
+
 Private Sub m_FrmMemAcc_ShowReport(ReportType As wis_MemReports, _
-                ReportOrder As wis_ReportOrder, memberTYpe As wis_MemberType, _
+                ReportOrder As wis_ReportOrder, MemberType As wis_MemberType, _
                 fromDate As String, toDate As String, _
                 RepOption As clsRepOption)
 gCancel = 0
@@ -1144,7 +1177,7 @@ With m_frmMMReport
     
     .ReportOrder = ReportOrder
     .ReportType = ReportType
-    .memberTYpe = memberTYpe
+    .MemberType = MemberType
     .Place = RepOption.Place
     .Caste = RepOption.Caste
     .Gender = RepOption.Gender
@@ -1198,7 +1231,7 @@ With frmCancel
 End With
 End Sub
 
-Private Sub m_frmMMShare_ShareIssued(ShareNos() As String, Cancel As Boolean)
+Private Sub m_frmMMShare_ShareIssued(ShareNos() As String, cancel As Boolean)
 Dim I As Long
 Dim MaxI As Integer
 Dim rst As Recordset
@@ -1215,7 +1248,7 @@ For I = 0 To MaxI
         MsgBox GetResourceString(589) & _
             "The Shares are already given to Member No. : " & _
             FormatField(rst("AccNum")), vbExclamation, gAppName & " - Error"
-        Cancel = True
+        cancel = True
         Exit Sub
     End If
 Next I

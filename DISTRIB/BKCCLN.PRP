@@ -1,0 +1,34 @@
+[LoanTypes]
+Prop1=Prompt=Loan Types;PropType=Heading;SubItems=7
+Prop2=Prompt=Loan Name;PropType=Editable;Locked=True;Description=Identifies the name of the loan type;DescTitle=Loan Name;DataSource=LoanName
+Prop3=Prompt=Loan Category;PropType=Editable;Lockedit=True;DescTitle=Loan Category;Description=Identifies the category of loan.Category can be Agricultural or Non-agricultural.;DisplayType=List;DataSource=Category
+Prop4=Prompt=Term type;PropType=Editable;Lockedit=True;DescTitle=Term type;Description=Loan duration type. It can be Short, Mid or Long.;DisplayType=List;DataSource=TermType
+Prop5=Prompt=Max Repayment Time;PropType=Editable;Description=Identifies the maximum repayment time in number of years, for this loan type.;DescTitle=Max Repayment Time;DataSource=MaxRepaymentTime
+Prop6=Prompt=Rate of Interest;PropType=Editable;Description=The rate of interest to be applied for this loan.;DescTitle=Rate of Interest;DataSource=InterestRate
+Prop7=Prompt=Penal interest;PropType=Editable;Description=The rate of intererst for delayed repayments.;DescTitle=Rate of penal interest;DataSource=PenalInterestRate
+Prop8=Prompt=Insurance Fees;PropType=Editable;Description=Insurance fee required incase of pledged items against this loan;DescTitle=Insurance Fee;DataSource=InsuranceFee
+Prop9=Prompt=Legal Fees;PropType=Editable;Description=Legal charges to be levied, in case of default in payment of loan.;DescTitle=Legal Fees;DataSource=LegalFee;
+Prop10=Prompt=Creation Date;PropType=Editable;LockEdit=False;Description=Date on which this loan type is created.;DescTitle=Creation Date;DataSource=CreateDate;DisplayType=Browse
+Prop11=Prompt=Description;PropType=Editable;Description=Brief notes about this loan type.;DescTitle=Description;DataSource=Description;
+
+[LoanIssue]
+Prop1=Prompt=Member Details;PropType=Heading;SubITems=2
+Prop2=Prompt=Member ID;PropType=Editable;DescTitle=MemberID;Description=Member identificaiton number.;DisplayType=Browse;DataSource=MemberID;ButtonWidth=850;ButtonCaption=Lookup...;
+Prop3=Prompt=Member seeking loan;PropType=Editable;DescTitle=Member;Description=Identifies the member who is seeking the loan.;DataSource=MemberName;LockEdit=True
+Prop4=Prompt=Pledge Details;PropType=Heading;SubItems=4
+Prop5=Prompt=Pledge Item;PropType=Editable;Description=Identifies the item that is being pledged against this loan.;DescTitle=Pledge Item;DataSource=PledgeDescription;
+Prop6=Prompt=Pledge Value;PropType=Editable;Description=Worth of the item being pledged.;DescTitle=Pledge Value;DataSource=PledgeValue
+Prop7=Prompt=Evaluator, if any;PropType=Editable;Description=Name of the peron, evaluating the worth of the pledged items.;DescTitle=Evaluator;DataSource=Evaluator;
+Prop8=Prompt=Loan Details;PropType=Heading;SubItems=8
+Prop9=Prompt=Loan Installment;PropType=Editable;Description=No Of Installments To Issue Loans;DescTitle=Loan Installment;DataSource=LoanInstalment;
+Prop10=Prompt=Maximum Limit of Loan;PropType=Editable;Description=Maximum Amount of Loan to be given to this Member;DescTitle=Maximum Limit of Loan;DataSource=SanctionAmount;DisplayType=Browse;
+Prop11=Prompt=Loan Amount;PropType=Editable;Description=Amount of loan to be issued as first instalment;DescTitle=Loan Amount;DataSource=LoanAmount;DisplayType=Browse;
+Prop12=Prompt=Loan due date;PropType=Editable;Description=Name of the peron, evaluating the worth of the pledged items.;DescTitle=Evaluator;DataSource=LoanDueDate;DisplayType=Browse
+Prop13=Prompt=Rate of Interest;PropType=Editable;Description=The rate of interest to be applied for this loan.;DescTitle=Rate of Interest;DataSource=InterestRate
+Prop14=Prompt=Penal interest;PropType=Editable;Description=The rate of intererst for delayed repayments.;DescTitle=Rate of penal interest;DataSource=PenalInterestRate
+Prop15=Prompt=Guarantors;PropType=Heading;SubItems=2
+Prop16=Prompt=Guarantor 1;PropType=Editable;LockEdit=True;Description=First Guarantor for this loan account;DescTitle=Guarantor1;DataSource=Guarantor1;DisplayType=Browse
+Prop17=Prompt=Guarantor 2;PropType=Editable;LockEdit=True;Description=Second Guarantor for this loan account;DescTitle=Guarantor2;DataSource=Guarantor2;DisplayType=Browse
+Prop18=Prompt=Miscellaneous;PropType=Heading;SubItems=2
+Prop19=Prompt=Issue Date;PropType=Editable;Description=Date on which this loan is issued.;DescTitle=Issue Date;DataSource=IssueDate;DisplayType=Browse;LockEdit=True
+Prop20=Prompt=Remarks;PropType=Editable;Description=A brief description about this loan;DescTitle=Remarks;DataSource=Remarks;

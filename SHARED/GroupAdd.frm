@@ -1,22 +1,22 @@
 VERSION 5.00
 Begin VB.Form frmAddGroup 
    Caption         =   "Add Group of Place,Caste,Account,Customer"
-   ClientHeight    =   2580
+   ClientHeight    =   2940
    ClientLeft      =   3045
    ClientTop       =   2550
-   ClientWidth     =   5580
+   ClientWidth     =   6825
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True
    MaxButton       =   0   'False
-   ScaleHeight     =   2580
-   ScaleWidth      =   5580
+   ScaleHeight     =   2940
+   ScaleWidth      =   6825
    ShowInTaskbar   =   0   'False
    Begin VB.TextBox txtItemEnglish 
       Height          =   350
-      Left            =   2415
+      Left            =   3015
       TabIndex        =   3
       Top             =   600
-      Width           =   2955
+      Width           =   3555
    End
    Begin VB.ComboBox cmbCumulative 
       Height          =   315
@@ -25,56 +25,56 @@ Begin VB.Form frmAddGroup
       Text            =   "Combo1"
       Top             =   1980
       Visible         =   0   'False
-      Width           =   2385
+      Width           =   3105
    End
    Begin VB.CheckBox chkCumulative 
       Caption         =   "Cumulative"
       Height          =   300
-      Left            =   150
+      Left            =   270
       TabIndex        =   6
       Top             =   1530
       Visible         =   0   'False
-      Width           =   2325
+      Width           =   3165
    End
    Begin VB.CommandButton cmdCancel 
       Cancel          =   -1  'True
       Caption         =   "&Cancel"
-      Height          =   400
-      Left            =   4320
+      Height          =   525
+      Left            =   5280
       TabIndex        =   9
-      Top             =   2130
-      Width           =   1080
+      Top             =   2250
+      Width           =   1320
    End
    Begin VB.ComboBox cmbList 
       Height          =   315
-      Left            =   2235
+      Left            =   2835
       TabIndex        =   5
       Top             =   1110
-      Width           =   3165
+      Width           =   3765
    End
    Begin VB.CommandButton cmdAdd 
       Caption         =   "&Add"
       Default         =   -1  'True
-      Height          =   400
-      Left            =   4335
+      Height          =   525
+      Left            =   5295
       TabIndex        =   7
       Top             =   1575
-      Width           =   1050
+      Width           =   1290
    End
    Begin VB.CommandButton cmdRemove 
       Caption         =   "&Remove"
-      Height          =   400
-      Left            =   3060
+      Height          =   525
+      Left            =   3660
       TabIndex        =   8
       Top             =   1590
-      Width           =   1050
+      Width           =   1290
    End
    Begin VB.TextBox txtItem 
       Height          =   350
-      Left            =   2340
+      Left            =   2940
       TabIndex        =   1
       Top             =   105
-      Width           =   3075
+      Width           =   3675
    End
    Begin VB.Label lblItemEnglish 
       Caption         =   "Label1"
@@ -82,7 +82,7 @@ Begin VB.Form frmAddGroup
       Left            =   240
       TabIndex        =   2
       Top             =   600
-      Width           =   1800
+      Width           =   2280
    End
    Begin VB.Label lblList 
       Caption         =   "Label1"
@@ -90,7 +90,7 @@ Begin VB.Form frmAddGroup
       Left            =   165
       TabIndex        =   4
       Top             =   1005
-      Width           =   1815
+      Width           =   2295
    End
    Begin VB.Label lblItem 
       Caption         =   "Label1"
@@ -98,7 +98,7 @@ Begin VB.Form frmAddGroup
       Left            =   165
       TabIndex        =   0
       Top             =   105
-      Width           =   1800
+      Width           =   2280
    End
 End
 Attribute VB_Name = "frmAddGroup"
@@ -108,10 +108,10 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 'Public Event AddClick(strName As String, Cancel As Integer)
-Public Event AddClick(StrName As String, Cancel As Integer, strNameEnglish As String)
-Public Event UpDateClick(StrName As String, Id As Long, Cancel As Integer, strNameEnglish As String)
-Public Event RemoveClick(StrName As String, Id As Long, Cancel As Integer)
-Public Event CancelClick(Cancel As Boolean)
+Public Event AddClick(StrName As String, cancel As Integer, strNameEnglish As String)
+Public Event UpDateClick(StrName As String, Id As Long, cancel As Integer, strNameEnglish As String)
+Public Event RemoveClick(StrName As String, Id As Long, cancel As Integer)
+Public Event CancelClick(cancel As Boolean)
 Public Event ItemSelected(Id As Long)
 Private Sub SetKannadaCaption()
     
@@ -168,19 +168,19 @@ If Me.cmbCumulative.Visible = True And Me.chkCumulative.Value = vbChecked And cm
     Exit Sub
 End If
 
-Dim Cancel As Integer
+Dim cancel As Integer
 
 If gLangOffSet = 0 Then txtItemEnglish.Text = txtItem.Text
 
 With cmbList
     If .ListIndex > 0 Then
-        RaiseEvent UpDateClick(txtItem, .ItemData(.ListIndex), Cancel, txtItemEnglish.Text)
+        RaiseEvent UpDateClick(txtItem, .ItemData(.ListIndex), cancel, txtItemEnglish.Text)
     Else
-        RaiseEvent AddClick(txtItem, Cancel, txtItemEnglish.Text)
+        RaiseEvent AddClick(txtItem, cancel, txtItemEnglish.Text)
     End If
 End With
 
-If Cancel = 0 Then Me.Hide
+If cancel = 0 Then Me.Hide
 
 End Sub
 
@@ -193,7 +193,7 @@ End Sub
 Private Sub cmdRemove_Click()
 
     If Trim$(txtItem.Text) = "" Then Exit Sub
-    Dim Cancel As Integer
+    Dim cancel As Integer
     Dim Id As Long
     With cmbList
         If .ListIndex = -1 Then
@@ -202,8 +202,8 @@ Private Sub cmdRemove_Click()
         End If
         Id = IIf(.ListIndex >= 0, .ItemData(.ListIndex), 0)
     End With
-    RaiseEvent RemoveClick(txtItem.Text, Id, Cancel)
-    If Cancel = 0 Then Me.Hide
+    RaiseEvent RemoveClick(txtItem.Text, Id, cancel)
+    If cancel = 0 Then Me.Hide
     
 End Sub
 
@@ -244,7 +244,7 @@ End With
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
  RaiseEvent CancelClick(True)
 
 End Sub

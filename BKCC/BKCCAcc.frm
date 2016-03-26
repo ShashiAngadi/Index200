@@ -10,20 +10,21 @@ Begin VB.Form frmBKCCAcc
    ClientHeight    =   8985
    ClientLeft      =   3915
    ClientTop       =   465
-   ClientWidth     =   8010
+   ClientWidth     =   8895
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   8985
-   ScaleWidth      =   8010
+   ScaleWidth      =   8895
    ShowInTaskbar   =   0   'False
    Begin VB.CommandButton cmdOK 
       Cancel          =   -1  'True
       Caption         =   "&OK"
       Height          =   400
-      Left            =   6480
-      TabIndex        =   39
+      Left            =   7440
+      TabIndex        =   41
       Top             =   8520
       Width           =   1215
    End
@@ -32,49 +33,67 @@ Begin VB.Form frmBKCCAcc
       Left            =   240
       TabIndex        =   1
       Top             =   540
-      Width           =   7425
+      Width           =   8265
+      Begin VB.ComboBox cmbMemberType 
+         Height          =   315
+         Left            =   3840
+         TabIndex        =   5
+         Text            =   "Combo1"
+         Top             =   290
+         Visible         =   0   'False
+         Width           =   2175
+      End
+      Begin VB.ComboBox cmbSb 
+         Height          =   315
+         Left            =   1440
+         TabIndex        =   36
+         Text            =   "Combo1"
+         Top             =   4020
+         Visible         =   0   'False
+         Width           =   2055
+      End
       Begin VB.ComboBox cmbTrans 
          Height          =   315
-         Left            =   1890
-         TabIndex        =   17
+         Left            =   2130
+         TabIndex        =   18
          Top             =   2925
          Width           =   1725
       End
       Begin VB.CommandButton cmdMisc 
          Caption         =   "..."
          Height          =   315
-         Left            =   6750
-         TabIndex        =   109
+         Left            =   7590
+         TabIndex        =   111
          Top             =   2505
          Width           =   315
       End
       Begin VB.CommandButton cmdAbn 
          Caption         =   "..."
          Height          =   315
-         Left            =   3300
-         TabIndex        =   108
+         Left            =   3540
+         TabIndex        =   110
          Top             =   1575
          Width           =   315
       End
       Begin VB.TextBox txtVoucherNo 
          Height          =   315
-         Left            =   5400
-         TabIndex        =   38
+         Left            =   6240
+         TabIndex        =   40
          Top             =   4020
          Width           =   1395
       End
       Begin VB.CommandButton cmdCheque 
          Caption         =   "..."
          Height          =   315
-         Left            =   6810
-         TabIndex        =   107
+         Left            =   7770
+         TabIndex        =   109
          Top             =   4020
          Width           =   315
       End
       Begin VB.ComboBox cmbCheque 
          Height          =   315
-         Left            =   5430
-         TabIndex        =   106
+         Left            =   6270
+         TabIndex        =   108
          Top             =   4020
          Visible         =   0   'False
          Width           =   1365
@@ -82,8 +101,8 @@ Begin VB.Form frmBKCCAcc
       Begin VB.TextBox txtRepayDate 
          BackColor       =   &H00FFFFFF&
          Height          =   345
-         Left            =   1890
-         TabIndex        =   101
+         Left            =   2130
+         TabIndex        =   103
          Top             =   2505
          Width           =   1335
       End
@@ -91,48 +110,48 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "..."
          Enabled         =   0   'False
          Height          =   315
-         Left            =   6750
-         TabIndex        =   7
+         Left            =   7830
+         TabIndex        =   8
          Top             =   300
          Width           =   330
       End
       Begin VB.TextBox txtMemberID 
          Height          =   350
-         Left            =   5385
+         Left            =   6825
          MaxLength       =   9
-         TabIndex        =   6
+         TabIndex        =   7
          Top             =   300
-         Width           =   1200
+         Width           =   840
       End
       Begin VB.CommandButton cmdSb 
          Caption         =   "..."
          Enabled         =   0   'False
          Height          =   315
-         Left            =   3480
-         TabIndex        =   35
+         Left            =   4320
+         TabIndex        =   37
          Top             =   4020
          Width           =   315
       End
       Begin VB.TextBox txtSbAccNum 
          Enabled         =   0   'False
          Height          =   315
-         Left            =   2790
-         TabIndex        =   36
+         Left            =   3630
+         TabIndex        =   38
          Top             =   4020
          Width           =   645
       End
       Begin VB.ComboBox cmbParticulars 
          Height          =   315
-         Left            =   1665
-         TabIndex        =   19
+         Left            =   1785
+         TabIndex        =   20
          Top             =   3465
          Width           =   2115
       End
       Begin VB.CommandButton cmdRepayDate 
          Caption         =   "..."
          Height          =   315
-         Left            =   3270
-         TabIndex        =   15
+         Left            =   3510
+         TabIndex        =   16
          Top             =   2505
          Width           =   315
       End
@@ -154,18 +173,17 @@ Begin VB.Form frmBKCCAcc
          Width           =   840
       End
       Begin VB.CheckBox chkSb 
-         Alignment       =   1  'Right Justify
          Caption         =   "Credit To SB Account"
          Height          =   285
          Left            =   120
-         TabIndex        =   34
-         Top             =   3930
+         TabIndex        =   35
+         Top             =   4020
          Width           =   2355
       End
       Begin WIS_Currency_Text_Box.CurrText txtRegInterest 
          Height          =   345
-         Left            =   5520
-         TabIndex        =   24
+         Left            =   6360
+         TabIndex        =   25
          Top             =   1605
          Width           =   1545
          _ExtentX        =   2725
@@ -177,8 +195,8 @@ Begin VB.Form frmBKCCAcc
       End
       Begin WIS_Currency_Text_Box.CurrText txtPenalInterest 
          Height          =   345
-         Left            =   5520
-         TabIndex        =   27
+         Left            =   6360
+         TabIndex        =   28
          Top             =   2085
          Width           =   1545
          _ExtentX        =   2725
@@ -190,8 +208,8 @@ Begin VB.Form frmBKCCAcc
       End
       Begin WIS_Currency_Text_Box.CurrText txtMiscAmount 
          Height          =   345
-         Left            =   5520
-         TabIndex        =   29
+         Left            =   6360
+         TabIndex        =   30
          Top             =   2505
          Width           =   1185
          _ExtentX        =   2090
@@ -203,8 +221,8 @@ Begin VB.Form frmBKCCAcc
       End
       Begin WIS_Currency_Text_Box.CurrText txtRepayAmt 
          Height          =   345
-         Left            =   5520
-         TabIndex        =   33
+         Left            =   6360
+         TabIndex        =   34
          Top             =   2925
          Width           =   1575
          _ExtentX        =   2778
@@ -216,8 +234,8 @@ Begin VB.Form frmBKCCAcc
       End
       Begin WIS_Currency_Text_Box.CurrText txtTotal 
          Height          =   345
-         Left            =   5400
-         TabIndex        =   31
+         Left            =   6240
+         TabIndex        =   32
          Top             =   3465
          Width           =   1665
          _ExtentX        =   2937
@@ -229,8 +247,8 @@ Begin VB.Form frmBKCCAcc
       End
       Begin WIS_Currency_Text_Box.CurrText txtIntBalance 
          Height          =   315
-         Left            =   5520
-         TabIndex        =   21
+         Left            =   6360
+         TabIndex        =   22
          Top             =   1200
          Width           =   1545
          _ExtentX        =   2725
@@ -245,14 +263,14 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Frame13"
          Height          =   2595
          Left            =   270
-         TabIndex        =   40
+         TabIndex        =   42
          Top             =   4890
-         Width           =   6975
+         Width           =   7695
          Begin VB.CommandButton cmdNotice 
             Caption         =   "Notice"
             Height          =   400
             Left            =   0
-            TabIndex        =   142
+            TabIndex        =   144
             Top             =   2160
             Visible         =   0   'False
             Width           =   1215
@@ -261,24 +279,24 @@ Begin VB.Form frmBKCCAcc
             Caption         =   "Undo Last"
             Enabled         =   0   'False
             Height          =   400
-            Left            =   3960
-            TabIndex        =   141
+            Left            =   4680
+            TabIndex        =   143
             Top             =   2160
             Width           =   1545
          End
          Begin VB.CommandButton cmdAccept 
             Caption         =   "&Accept"
             Height          =   400
-            Left            =   5640
-            TabIndex        =   140
+            Left            =   6360
+            TabIndex        =   142
             Top             =   2160
             Width           =   1215
          End
          Begin VB.CommandButton cmdPrint 
             Height          =   375
-            Left            =   6330
+            Left            =   7170
             Style           =   1  'Graphical
-            TabIndex        =   99
+            TabIndex        =   101
             Top             =   1710
             Width           =   435
          End
@@ -286,9 +304,9 @@ Begin VB.Form frmBKCCAcc
             Caption         =   "<"
             Enabled         =   0   'False
             Height          =   495
-            Left            =   6330
+            Left            =   7170
             Style           =   1  'Graphical
-            TabIndex        =   42
+            TabIndex        =   44
             Top             =   105
             Width           =   435
          End
@@ -296,19 +314,19 @@ Begin VB.Form frmBKCCAcc
             Caption         =   ">"
             Enabled         =   0   'False
             Height          =   495
-            Left            =   6330
+            Left            =   7170
             Style           =   1  'Graphical
-            TabIndex        =   55
+            TabIndex        =   57
             Top             =   630
             Width           =   435
          End
          Begin MSFlexGridLib.MSFlexGrid grd 
             Height          =   2010
             Left            =   60
-            TabIndex        =   41
+            TabIndex        =   43
             Top             =   90
-            Width           =   6225
-            _ExtentX        =   10980
+            Width           =   6945
+            _ExtentX        =   12250
             _ExtentY        =   3545
             _Version        =   393216
             Rows            =   10
@@ -320,23 +338,21 @@ Begin VB.Form frmBKCCAcc
       Begin ComctlLib.TabStrip TabStrip2 
          Height          =   2985
          Left            =   120
-         TabIndex        =   139
+         TabIndex        =   141
          Top             =   4560
-         Width           =   7185
-         _ExtentX        =   12674
+         Width           =   7905
+         _ExtentX        =   13944
          _ExtentY        =   5265
          _Version        =   327682
          BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
             NumTabs         =   2
             BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Instructions"
-               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
             BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Pass book"
-               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
@@ -345,11 +361,11 @@ Begin VB.Form frmBKCCAcc
       Begin VB.Frame fraInstructions 
          BorderStyle     =   0  'None
          Caption         =   "Frame14"
-         Height          =   2505
+         Height          =   2550
          Left            =   240
-         TabIndex        =   143
+         TabIndex        =   145
          Top             =   4920
-         Width           =   6975
+         Width           =   7695
          Begin VB.CommandButton cmdAddNote 
             BeginProperty Font 
                Name            =   "MS Sans Serif"
@@ -361,19 +377,19 @@ Begin VB.Form frmBKCCAcc
                Strikethrough   =   0   'False
             EndProperty
             Height          =   405
-            Left            =   6360
+            Left            =   7200
             Style           =   1  'Graphical
-            TabIndex        =   144
+            TabIndex        =   146
             Top             =   90
             Width           =   405
          End
          Begin RichTextLib.RichTextBox rtfNote 
             Height          =   2325
             Left            =   60
-            TabIndex        =   145
+            TabIndex        =   147
             Top             =   120
-            Width           =   6195
-            _ExtentX        =   10927
+            Width           =   7035
+            _ExtentX        =   12409
             _ExtentY        =   4101
             _Version        =   393217
             Enabled         =   -1  'True
@@ -384,7 +400,7 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Trans"
          Height          =   315
          Left            =   150
-         TabIndex        =   16
+         TabIndex        =   17
          Top             =   2925
          Width           =   1755
       End
@@ -394,27 +410,27 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "qqq"
          Height          =   345
          Left            =   5445
-         TabIndex        =   104
+         TabIndex        =   106
          Top             =   5355
          Visible         =   0   'False
-         Width           =   1695
+         Width           =   2415
       End
       Begin VB.Label lblIssueDate 
          AutoSize        =   -1  'True
          Caption         =   "Issued On :"
          Height          =   315
          Left            =   3930
-         TabIndex        =   11
+         TabIndex        =   12
          Top             =   5265
          Visible         =   0   'False
-         Width           =   1245
+         Width           =   1965
       End
       Begin VB.Label txtLoanAmt 
          BackColor       =   &H00FFFFFF&
          BorderStyle     =   1  'Fixed Single
          Height          =   345
-         Left            =   1890
-         TabIndex        =   105
+         Left            =   2130
+         TabIndex        =   107
          Top             =   1200
          Width           =   1695
       End
@@ -422,8 +438,8 @@ Begin VB.Form frmBKCCAcc
          BackColor       =   &H00FFFFFF&
          BorderStyle     =   1  'Fixed Single
          Height          =   345
-         Left            =   1890
-         TabIndex        =   103
+         Left            =   2130
+         TabIndex        =   105
          Top             =   1605
          Width           =   1365
       End
@@ -431,8 +447,8 @@ Begin VB.Form frmBKCCAcc
          BackColor       =   &H00FFFFFF&
          BorderStyle     =   1  'Fixed Single
          Height          =   345
-         Left            =   1890
-         TabIndex        =   102
+         Left            =   2130
+         TabIndex        =   104
          Top             =   2085
          Width           =   1695
       End
@@ -440,8 +456,8 @@ Begin VB.Form frmBKCCAcc
          BorderColor     =   &H80000006&
          BorderStyle     =   6  'Inside Solid
          BorderWidth     =   2
-         X1              =   7200
-         X2              =   60
+         X1              =   8040
+         X2              =   100
          Y1              =   3330
          Y2              =   3330
       End
@@ -455,25 +471,26 @@ Begin VB.Form frmBKCCAcc
       Begin VB.Label lblChequeNo 
          Caption         =   "Cheque No"
          Height          =   315
-         Left            =   3840
-         TabIndex        =   37
+         Left            =   5040
+         TabIndex        =   39
          Top             =   4080
          Width           =   1485
       End
       Begin VB.Label lblMemberId 
+         Alignment       =   1  'Right Justify
          AutoSize        =   -1  'True
          Caption         =   "Member Number :"
          Height          =   315
          Left            =   3840
-         TabIndex        =   5
+         TabIndex        =   6
          Top             =   315
-         Width           =   1260
+         Width           =   2820
       End
       Begin VB.Label lblLastInt 
          Caption         =   "Last Int Paid date"
          Height          =   315
          Left            =   150
-         TabIndex        =   13
+         TabIndex        =   14
          Top             =   2085
          Width           =   1755
          WordWrap        =   -1  'True
@@ -482,8 +499,8 @@ Begin VB.Form frmBKCCAcc
          AutoSize        =   -1  'True
          Caption         =   "Total Amount :"
          Height          =   315
-         Left            =   4140
-         TabIndex        =   30
+         Left            =   4980
+         TabIndex        =   31
          Top             =   3465
          Width           =   1530
       End
@@ -491,7 +508,7 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Particulars"
          Height          =   315
          Left            =   150
-         TabIndex        =   18
+         TabIndex        =   19
          Top             =   3465
          Width           =   1455
       End
@@ -500,13 +517,13 @@ Begin VB.Form frmBKCCAcc
          BorderStyle     =   1  'Fixed Single
          Height          =   345
          Left            =   1650
-         TabIndex        =   9
+         TabIndex        =   10
          Top             =   690
-         Width           =   5445
+         Width           =   6285
       End
       Begin VB.Line Line2 
          X1              =   60
-         X2              =   7200
+         X2              =   8100
          Y1              =   1080
          Y2              =   1080
       End
@@ -522,8 +539,8 @@ Begin VB.Form frmBKCCAcc
       Begin VB.Label lblIntBalance 
          Caption         =   "Interest Balance :"
          Height          =   315
-         Left            =   3810
-         TabIndex        =   20
+         Left            =   4650
+         TabIndex        =   21
          Top             =   1200
          Width           =   1440
       End
@@ -531,8 +548,8 @@ Begin VB.Form frmBKCCAcc
          AutoSize        =   -1  'True
          Caption         =   "Regular Interest :"
          Height          =   315
-         Left            =   3810
-         TabIndex        =   23
+         Left            =   4650
+         TabIndex        =   24
          Top             =   1605
          Width           =   1410
       End
@@ -540,8 +557,8 @@ Begin VB.Form frmBKCCAcc
          AutoSize        =   -1  'True
          Caption         =   "Penal Interest :"
          Height          =   315
-         Left            =   3810
-         TabIndex        =   26
+         Left            =   4650
+         TabIndex        =   27
          Top             =   2085
          Width           =   1410
       End
@@ -549,8 +566,8 @@ Begin VB.Form frmBKCCAcc
          AutoSize        =   -1  'True
          Caption         =   "Misc Amount"
          Height          =   315
-         Left            =   3810
-         TabIndex        =   28
+         Left            =   4650
+         TabIndex        =   29
          Top             =   2505
          Width           =   1410
       End
@@ -559,7 +576,7 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Date of repayment : "
          Height          =   315
          Left            =   150
-         TabIndex        =   14
+         TabIndex        =   15
          Top             =   2505
          Width           =   1785
       End
@@ -567,8 +584,8 @@ Begin VB.Form frmBKCCAcc
          AutoSize        =   -1  'True
          Caption         =   "Repaid amount :"
          Height          =   315
-         Left            =   3810
-         TabIndex        =   32
+         Left            =   4650
+         TabIndex        =   33
          Top             =   2925
          Width           =   1410
       End
@@ -577,7 +594,7 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Balance amount :"
          Height          =   315
          Left            =   150
-         TabIndex        =   12
+         TabIndex        =   13
          Top             =   1605
          Width           =   1605
       End
@@ -586,7 +603,7 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Loan amount :"
          Height          =   315
          Left            =   150
-         TabIndex        =   10
+         TabIndex        =   11
          Top             =   1200
          Width           =   1245
       End
@@ -595,7 +612,7 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Name :"
          Height          =   315
          Left            =   180
-         TabIndex        =   8
+         TabIndex        =   9
          Top             =   720
          Width           =   1440
       End
@@ -604,14 +621,14 @@ Begin VB.Form frmBKCCAcc
       Caption         =   "Loan Accounts..."
       Height          =   7725
       Left            =   240
-      TabIndex        =   98
+      TabIndex        =   100
       Top             =   540
-      Width           =   7425
+      Width           =   8265
       Begin VB.CommandButton cmdPhoto 
          Caption         =   "P&hoto"
          Height          =   400
-         Left            =   6000
-         TabIndex        =   138
+         Left            =   6840
+         TabIndex        =   140
          Top             =   5160
          Width           =   1215
       End
@@ -619,24 +636,24 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "&Update"
          Enabled         =   0   'False
          Height          =   400
-         Left            =   6030
-         TabIndex        =   53
+         Left            =   6870
+         TabIndex        =   55
          Top             =   6270
          Width           =   1215
       End
       Begin VB.CommandButton cmdLoanClear 
          Caption         =   "&Clear"
          Height          =   400
-         Left            =   6030
-         TabIndex        =   54
+         Left            =   6870
+         TabIndex        =   56
          Top             =   6855
          Width           =   1215
       End
       Begin VB.CommandButton cmdLoanSave 
          Caption         =   "C&reate"
          Height          =   400
-         Left            =   6030
-         TabIndex        =   52
+         Left            =   6870
+         TabIndex        =   54
          Top             =   5700
          Width           =   1215
       End
@@ -645,11 +662,11 @@ Begin VB.Form frmBKCCAcc
          Height          =   1110
          Left            =   270
          ScaleHeight     =   1050
-         ScaleWidth      =   5595
-         TabIndex        =   100
+         ScaleWidth      =   6315
+         TabIndex        =   102
          TabStop         =   0   'False
          Top             =   465
-         Width           =   5655
+         Width           =   6375
          Begin VB.Image Image2 
             Height          =   405
             Left            =   135
@@ -663,9 +680,9 @@ Begin VB.Form frmBKCCAcc
             BorderStyle     =   1  'Fixed Single
             Height          =   555
             Left            =   960
-            TabIndex        =   44
+            TabIndex        =   46
             Top             =   450
-            Width           =   4590
+            Width           =   5310
          End
          Begin VB.Label lblLoanIssueHeading 
             AutoSize        =   -1  'True
@@ -682,7 +699,7 @@ Begin VB.Form frmBKCCAcc
             EndProperty
             Height          =   315
             Left            =   990
-            TabIndex        =   43
+            TabIndex        =   45
             Top             =   45
             Width           =   135
          End
@@ -692,26 +709,26 @@ Begin VB.Form frmBKCCAcc
          Height          =   5640
          Left            =   270
          ScaleHeight     =   5580
-         ScaleWidth      =   5610
-         TabIndex        =   45
+         ScaleWidth      =   6330
+         TabIndex        =   47
          TabStop         =   0   'False
          Top             =   1620
-         Width           =   5670
+         Width           =   6390
          Begin VB.PictureBox picLoanIssueSlider 
             Height          =   1740
             Left            =   -15
             ScaleHeight     =   1680
-            ScaleWidth      =   5280
-            TabIndex        =   46
+            ScaleWidth      =   6000
+            TabIndex        =   48
             TabStop         =   0   'False
             Top             =   15
-            Width           =   5340
+            Width           =   6060
             Begin VB.CommandButton cmdLoanIssue 
                Caption         =   "..."
                Height          =   345
                Index           =   0
-               Left            =   4890
-               TabIndex        =   50
+               Left            =   5650
+               TabIndex        =   52
                Top             =   0
                Visible         =   0   'False
                Width           =   315
@@ -719,12 +736,12 @@ Begin VB.Form frmBKCCAcc
             Begin VB.ComboBox cmb 
                Height          =   315
                Index           =   0
-               Left            =   2880
+               Left            =   3240
                Style           =   2  'Dropdown List
-               TabIndex        =   49
+               TabIndex        =   51
                Top             =   -30
                Visible         =   0   'False
-               Width           =   1635
+               Width           =   1875
             End
             Begin VB.TextBox txtLoanIssue 
                BorderStyle     =   0  'None
@@ -739,10 +756,10 @@ Begin VB.Form frmBKCCAcc
                EndProperty
                Height          =   350
                Index           =   0
-               Left            =   2685
-               TabIndex        =   48
+               Left            =   3165
+               TabIndex        =   50
                Top             =   0
-               Width           =   2580
+               Width           =   2820
             End
             Begin VB.Label lblLoanIssue 
                Appearance      =   0  'Flat
@@ -761,15 +778,15 @@ Begin VB.Form frmBKCCAcc
                Height          =   345
                Index           =   0
                Left            =   30
-               TabIndex        =   47
+               TabIndex        =   49
                Top             =   0
-               Width           =   2610
+               Width           =   3090
             End
          End
          Begin VB.VScrollBar vscLoanIssue 
             Height          =   1755
-            Left            =   5355
-            TabIndex        =   51
+            Left            =   6075
+            TabIndex        =   53
             TabStop         =   0   'False
             Top             =   0
             Visible         =   0   'False
@@ -781,64 +798,64 @@ Begin VB.Form frmBKCCAcc
       Caption         =   "Properties"
       Height          =   7725
       Left            =   240
-      TabIndex        =   110
+      TabIndex        =   112
       Top             =   540
-      Width           =   7425
+      Width           =   8265
       Begin VB.TextBox txtNabardRate 
          Height          =   315
-         Left            =   4020
-         TabIndex        =   158
+         Left            =   5340
+         TabIndex        =   160
          Top             =   5520
          Width           =   705
       End
       Begin VB.TextBox txtRebateRate2 
          Height          =   315
-         Left            =   4020
-         TabIndex        =   156
+         Left            =   5340
+         TabIndex        =   158
          Top             =   6600
          Width           =   705
       End
       Begin VB.TextBox txtRebateRate1 
          Height          =   315
-         Left            =   4020
-         TabIndex        =   154
+         Left            =   5340
+         TabIndex        =   156
          Top             =   6180
          Width           =   705
       End
       Begin VB.TextBox txtSubsidyRate 
          Height          =   315
-         Left            =   4020
-         TabIndex        =   153
+         Left            =   5340
+         TabIndex        =   155
          Top             =   4800
          Width           =   705
       End
       Begin VB.TextBox txtRebateRate 
          Height          =   315
-         Left            =   4020
-         TabIndex        =   151
+         Left            =   5340
+         TabIndex        =   153
          Top             =   5160
          Width           =   705
       End
       Begin VB.TextBox txtEffectiveDate 
          Height          =   345
-         Left            =   1770
-         TabIndex        =   22
+         Left            =   2850
+         TabIndex        =   23
          Top             =   7110
-         Width           =   1545
+         Width           =   1905
       End
       Begin VB.CommandButton cmdApply 
          Caption         =   "Apply"
          Height          =   400
-         Left            =   3600
-         TabIndex        =   25
+         Left            =   4920
+         TabIndex        =   26
          Top             =   7080
          Width           =   1215
       End
       Begin VB.TextBox txtLoanIntRate 
          Height          =   345
          Index           =   7
-         Left            =   4020
-         TabIndex        =   137
+         Left            =   5340
+         TabIndex        =   139
          ToolTipText     =   "Rate of Inteest for Loan limit"
          Top             =   4230
          Width           =   705
@@ -846,8 +863,8 @@ Begin VB.Form frmBKCCAcc
       Begin VB.TextBox txtLoanIntRate 
          Height          =   345
          Index           =   6
-         Left            =   4020
-         TabIndex        =   134
+         Left            =   5340
+         TabIndex        =   136
          ToolTipText     =   "Rate of Inteest for Loan limit"
          Top             =   3750
          Width           =   705
@@ -855,8 +872,8 @@ Begin VB.Form frmBKCCAcc
       Begin VB.TextBox txtLoanIntRate 
          Height          =   345
          Index           =   5
-         Left            =   4020
-         TabIndex        =   131
+         Left            =   5340
+         TabIndex        =   133
          ToolTipText     =   "Rate of Inteest for Loan limit"
          Top             =   3300
          Width           =   705
@@ -864,8 +881,8 @@ Begin VB.Form frmBKCCAcc
       Begin VB.TextBox txtLoanIntRate 
          Height          =   345
          Index           =   4
-         Left            =   4020
-         TabIndex        =   128
+         Left            =   5340
+         TabIndex        =   130
          ToolTipText     =   "Rate of Inteest for Loan limit"
          Top             =   2790
          Width           =   705
@@ -873,8 +890,8 @@ Begin VB.Form frmBKCCAcc
       Begin VB.TextBox txtLoanIntRate 
          Height          =   345
          Index           =   3
-         Left            =   4020
-         TabIndex        =   125
+         Left            =   5340
+         TabIndex        =   127
          ToolTipText     =   "Rate of Inteest for Loan limit"
          Top             =   2340
          Width           =   705
@@ -882,8 +899,8 @@ Begin VB.Form frmBKCCAcc
       Begin VB.TextBox txtLoanIntRate 
          Height          =   345
          Index           =   2
-         Left            =   4020
-         TabIndex        =   122
+         Left            =   5340
+         TabIndex        =   124
          ToolTipText     =   "Rate of Inteest for Loan limit"
          Top             =   1860
          Width           =   705
@@ -891,8 +908,8 @@ Begin VB.Form frmBKCCAcc
       Begin VB.TextBox txtLoanIntRate 
          Height          =   345
          Index           =   1
-         Left            =   4020
-         TabIndex        =   119
+         Left            =   5340
+         TabIndex        =   121
          ToolTipText     =   "Rate of Inteest for Loan limit"
          Top             =   1410
          Width           =   705
@@ -900,8 +917,8 @@ Begin VB.Form frmBKCCAcc
       Begin VB.TextBox txtLoanIntRate 
          Height          =   345
          Index           =   0
-         Left            =   4020
-         TabIndex        =   116
+         Left            =   5340
+         TabIndex        =   118
          ToolTipText     =   "Rate of Inteest for Loan limit"
          Top             =   900
          Width           =   705
@@ -909,11 +926,11 @@ Begin VB.Form frmBKCCAcc
       Begin WIS_Currency_Text_Box.CurrText txtMaxLimit 
          Height          =   345
          Index           =   0
-         Left            =   1770
-         TabIndex        =   115
+         Left            =   2850
+         TabIndex        =   117
          Top             =   900
-         Width           =   1395
-         _ExtentX        =   2461
+         Width           =   1755
+         _ExtentX        =   3096
          _ExtentY        =   609
          CurrencySymbol  =   ""
          TeenString      =   "eleven,twelwe,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,ninteen"
@@ -923,11 +940,11 @@ Begin VB.Form frmBKCCAcc
       Begin WIS_Currency_Text_Box.CurrText txtMaxLimit 
          Height          =   345
          Index           =   1
-         Left            =   1770
-         TabIndex        =   118
+         Left            =   2850
+         TabIndex        =   120
          Top             =   1410
-         Width           =   1395
-         _ExtentX        =   2461
+         Width           =   1755
+         _ExtentX        =   3096
          _ExtentY        =   609
          CurrencySymbol  =   ""
          TeenString      =   "eleven,twelwe,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,ninteen"
@@ -937,11 +954,11 @@ Begin VB.Form frmBKCCAcc
       Begin WIS_Currency_Text_Box.CurrText txtMaxLimit 
          Height          =   345
          Index           =   2
-         Left            =   1770
-         TabIndex        =   121
+         Left            =   2850
+         TabIndex        =   123
          Top             =   1860
-         Width           =   1395
-         _ExtentX        =   2461
+         Width           =   1755
+         _ExtentX        =   3096
          _ExtentY        =   609
          CurrencySymbol  =   ""
          TeenString      =   "eleven,twelwe,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,ninteen"
@@ -951,11 +968,11 @@ Begin VB.Form frmBKCCAcc
       Begin WIS_Currency_Text_Box.CurrText txtMaxLimit 
          Height          =   345
          Index           =   3
-         Left            =   1770
-         TabIndex        =   124
+         Left            =   2850
+         TabIndex        =   126
          Top             =   2340
-         Width           =   1395
-         _ExtentX        =   2461
+         Width           =   1755
+         _ExtentX        =   3096
          _ExtentY        =   609
          CurrencySymbol  =   ""
          TeenString      =   "eleven,twelwe,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,ninteen"
@@ -965,11 +982,11 @@ Begin VB.Form frmBKCCAcc
       Begin WIS_Currency_Text_Box.CurrText txtMaxLimit 
          Height          =   345
          Index           =   4
-         Left            =   1770
-         TabIndex        =   127
+         Left            =   2850
+         TabIndex        =   129
          Top             =   2790
-         Width           =   1395
-         _ExtentX        =   2461
+         Width           =   1755
+         _ExtentX        =   3096
          _ExtentY        =   609
          CurrencySymbol  =   ""
          TeenString      =   "eleven,twelwe,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,ninteen"
@@ -979,11 +996,11 @@ Begin VB.Form frmBKCCAcc
       Begin WIS_Currency_Text_Box.CurrText txtMaxLimit 
          Height          =   345
          Index           =   5
-         Left            =   1770
-         TabIndex        =   130
+         Left            =   2850
+         TabIndex        =   132
          Top             =   3300
-         Width           =   1395
-         _ExtentX        =   2461
+         Width           =   1755
+         _ExtentX        =   3096
          _ExtentY        =   609
          CurrencySymbol  =   ""
          TeenString      =   "eleven,twelwe,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,ninteen"
@@ -993,11 +1010,11 @@ Begin VB.Form frmBKCCAcc
       Begin WIS_Currency_Text_Box.CurrText txtMaxLimit 
          Height          =   345
          Index           =   6
-         Left            =   1770
-         TabIndex        =   133
+         Left            =   2850
+         TabIndex        =   135
          Top             =   3750
-         Width           =   1395
-         _ExtentX        =   2461
+         Width           =   1755
+         _ExtentX        =   3096
          _ExtentY        =   609
          CurrencySymbol  =   ""
          TeenString      =   "eleven,twelwe,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,ninteen"
@@ -1007,11 +1024,11 @@ Begin VB.Form frmBKCCAcc
       Begin WIS_Currency_Text_Box.CurrText txtMaxLimit 
          Height          =   345
          Index           =   7
-         Left            =   1770
-         TabIndex        =   136
+         Left            =   2850
+         TabIndex        =   138
          Top             =   4260
-         Width           =   1395
-         _ExtentX        =   2461
+         Width           =   1755
+         _ExtentX        =   3096
          _ExtentY        =   609
          CurrencySymbol  =   ""
          TeenString      =   "eleven,twelwe,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,ninteen"
@@ -1022,52 +1039,52 @@ Begin VB.Form frmBKCCAcc
          Alignment       =   1  'Right Justify
          Caption         =   "Nabard Rebate Rate of Interest"
          Height          =   315
-         Left            =   240
-         TabIndex        =   159
+         Left            =   1320
+         TabIndex        =   161
          Top             =   5520
-         Width           =   2895
+         Width           =   3255
       End
       Begin VB.Label lblRebateRate2 
          Alignment       =   1  'Right Justify
          Caption         =   "Rebate Rate of Interest"
          Height          =   315
-         Left            =   240
-         TabIndex        =   157
+         Left            =   1320
+         TabIndex        =   159
          Top             =   6600
-         Width           =   2895
+         Width           =   3255
       End
       Begin VB.Label lblRebateRate1 
          Alignment       =   1  'Right Justify
          Caption         =   "Rebate Rate of Interest"
          Height          =   315
-         Left            =   360
-         TabIndex        =   155
+         Left            =   1440
+         TabIndex        =   157
          Top             =   6240
-         Width           =   2895
+         Width           =   3255
       End
       Begin VB.Label lblSubsidyRate 
          Alignment       =   1  'Right Justify
          Caption         =   "Quarterly Subsidy Rate of Interest"
          Height          =   315
-         Left            =   240
-         TabIndex        =   152
+         Left            =   1320
+         TabIndex        =   154
          Top             =   4800
-         Width           =   2895
+         Width           =   3255
       End
       Begin VB.Label lblRebateRate 
          Alignment       =   1  'Right Justify
          Caption         =   "Quarterly Rebate Rate of Interest"
          Height          =   315
-         Left            =   240
-         TabIndex        =   150
+         Left            =   1320
+         TabIndex        =   152
          Top             =   5160
-         Width           =   2895
+         Width           =   3255
       End
       Begin VB.Label lblEffectiveDate 
          Caption         =   "Effective Date"
          Height          =   255
-         Left            =   180
-         TabIndex        =   96
+         Left            =   780
+         TabIndex        =   98
          Top             =   7140
          Width           =   1815
       End
@@ -1078,10 +1095,10 @@ Begin VB.Form frmBKCCAcc
          ForeColor       =   &H80000008&
          Height          =   345
          Index           =   7
-         Left            =   210
-         TabIndex        =   135
+         Left            =   570
+         TabIndex        =   137
          Top             =   4230
-         Width           =   1395
+         Width           =   1755
       End
       Begin VB.Label txtMinLimit 
          Alignment       =   1  'Right Justify
@@ -1090,10 +1107,10 @@ Begin VB.Form frmBKCCAcc
          ForeColor       =   &H80000008&
          Height          =   345
          Index           =   6
-         Left            =   210
-         TabIndex        =   132
+         Left            =   570
+         TabIndex        =   134
          Top             =   3750
-         Width           =   1395
+         Width           =   1755
       End
       Begin VB.Label txtMinLimit 
          Alignment       =   1  'Right Justify
@@ -1102,10 +1119,10 @@ Begin VB.Form frmBKCCAcc
          ForeColor       =   &H80000008&
          Height          =   345
          Index           =   5
-         Left            =   210
-         TabIndex        =   129
+         Left            =   570
+         TabIndex        =   131
          Top             =   3300
-         Width           =   1395
+         Width           =   1755
       End
       Begin VB.Label txtMinLimit 
          Alignment       =   1  'Right Justify
@@ -1114,10 +1131,10 @@ Begin VB.Form frmBKCCAcc
          ForeColor       =   &H80000008&
          Height          =   345
          Index           =   4
-         Left            =   210
-         TabIndex        =   126
+         Left            =   570
+         TabIndex        =   128
          Top             =   2790
-         Width           =   1395
+         Width           =   1755
       End
       Begin VB.Label txtMinLimit 
          Alignment       =   1  'Right Justify
@@ -1126,10 +1143,10 @@ Begin VB.Form frmBKCCAcc
          ForeColor       =   &H80000008&
          Height          =   345
          Index           =   3
-         Left            =   210
-         TabIndex        =   123
+         Left            =   570
+         TabIndex        =   125
          Top             =   2340
-         Width           =   1395
+         Width           =   1755
       End
       Begin VB.Label txtMinLimit 
          Alignment       =   1  'Right Justify
@@ -1138,10 +1155,10 @@ Begin VB.Form frmBKCCAcc
          ForeColor       =   &H80000008&
          Height          =   345
          Index           =   2
-         Left            =   210
-         TabIndex        =   120
+         Left            =   570
+         TabIndex        =   122
          Top             =   1860
-         Width           =   1395
+         Width           =   1755
       End
       Begin VB.Label txtMinLimit 
          Alignment       =   1  'Right Justify
@@ -1150,18 +1167,18 @@ Begin VB.Form frmBKCCAcc
          ForeColor       =   &H80000008&
          Height          =   345
          Index           =   1
-         Left            =   210
-         TabIndex        =   117
+         Left            =   570
+         TabIndex        =   119
          Top             =   1410
-         Width           =   1395
+         Width           =   1755
       End
       Begin VB.Label lblMaxLimit 
          Caption         =   "Loan Maximum Limit"
          Height          =   255
-         Left            =   1770
-         TabIndex        =   112
+         Left            =   2850
+         TabIndex        =   114
          Top             =   450
-         Width           =   1695
+         Width           =   2055
       End
       Begin VB.Label txtMinLimit 
          Alignment       =   1  'Right Justify
@@ -1171,48 +1188,48 @@ Begin VB.Form frmBKCCAcc
          ForeColor       =   &H80000008&
          Height          =   345
          Index           =   0
-         Left            =   210
-         TabIndex        =   114
+         Left            =   570
+         TabIndex        =   116
          Top             =   900
-         Width           =   1395
+         Width           =   1755
       End
       Begin VB.Label lblLoanIntRate 
          Caption         =   "Loan Interest Rate"
          Height          =   285
-         Left            =   4020
-         TabIndex        =   113
+         Left            =   5340
+         TabIndex        =   115
          Top             =   450
          Width           =   1785
       End
       Begin VB.Label lblMinLimit 
          Caption         =   "Loan minimum limit"
          Height          =   315
-         Left            =   120
-         TabIndex        =   111
+         Left            =   480
+         TabIndex        =   113
          Top             =   450
-         Width           =   1455
+         Width           =   1815
       End
    End
    Begin VB.Frame fraReports 
       Caption         =   "Reports..."
       Height          =   7725
       Left            =   240
-      TabIndex        =   56
+      TabIndex        =   58
       Top             =   540
-      Width           =   7425
+      Width           =   8265
       Begin VB.Frame fraDepReports 
          Height          =   4575
-         Left            =   1200
-         TabIndex        =   146
-         Top             =   1680
+         Left            =   2040
+         TabIndex        =   148
+         Top             =   1080
          Visible         =   0   'False
-         Width           =   7215
+         Width           =   7935
          Begin VB.OptionButton optReports 
             Caption         =   "Deposit Balance"
             Height          =   315
             Index           =   8
             Left            =   400
-            TabIndex        =   82
+            TabIndex        =   84
             Top             =   120
             Value           =   -1  'True
             Width           =   3165
@@ -1222,7 +1239,7 @@ Begin VB.Form frmBKCCAcc
             Height          =   315
             Index           =   9
             Left            =   400
-            TabIndex        =   83
+            TabIndex        =   85
             Top             =   753
             Width           =   3165
          End
@@ -1231,7 +1248,7 @@ Begin VB.Form frmBKCCAcc
             Height          =   315
             Index           =   11
             Left            =   400
-            TabIndex        =   86
+            TabIndex        =   88
             Top             =   2655
             Width           =   3165
          End
@@ -1239,8 +1256,8 @@ Begin VB.Form frmBKCCAcc
             Caption         =   "Deposit's Daily Cash Book"
             Height          =   315
             Index           =   12
-            Left            =   3900
-            TabIndex        =   88
+            Left            =   4380
+            TabIndex        =   90
             Top             =   753
             Width           =   3165
          End
@@ -1248,8 +1265,8 @@ Begin VB.Form frmBKCCAcc
             Caption         =   "Deposits' General Ledger"
             Height          =   315
             Index           =   13
-            Left            =   3900
-            TabIndex        =   87
+            Left            =   4380
+            TabIndex        =   89
             Top             =   120
             Width           =   3165
          End
@@ -1258,7 +1275,7 @@ Begin VB.Form frmBKCCAcc
             Height          =   315
             Index           =   14
             Left            =   400
-            TabIndex        =   84
+            TabIndex        =   86
             Top             =   1386
             Width           =   3165
          End
@@ -1267,7 +1284,7 @@ Begin VB.Form frmBKCCAcc
             Height          =   315
             Index           =   15
             Left            =   400
-            TabIndex        =   85
+            TabIndex        =   87
             Top             =   2019
             Width           =   3165
          End
@@ -1275,8 +1292,8 @@ Begin VB.Form frmBKCCAcc
             Caption         =   "Guarntor List"
             Height          =   315
             Index           =   10
-            Left            =   3900
-            TabIndex        =   89
+            Left            =   4380
+            TabIndex        =   91
             Top             =   1386
             Width           =   3165
          End
@@ -1284,8 +1301,8 @@ Begin VB.Form frmBKCCAcc
             Caption         =   "Monthy Deposit Receipt && Paymet"
             Height          =   315
             Index           =   20
-            Left            =   3900
-            TabIndex        =   90
+            Left            =   4380
+            TabIndex        =   92
             Top             =   2019
             Width           =   3225
          End
@@ -1295,7 +1312,7 @@ Begin VB.Form frmBKCCAcc
          Height          =   315
          Index           =   25
          Left            =   480
-         TabIndex        =   66
+         TabIndex        =   68
          Top             =   4800
          Width           =   3165
       End
@@ -1303,14 +1320,14 @@ Begin VB.Form frmBKCCAcc
          BorderStyle     =   0  'None
          Height          =   350
          Left            =   80
-         TabIndex        =   147
+         TabIndex        =   149
          Top             =   300
          Width           =   7095
          Begin VB.OptionButton optLoanReports 
             Caption         =   "Loan Reports"
             Height          =   300
             Left            =   400
-            TabIndex        =   149
+            TabIndex        =   151
             Top             =   0
             Value           =   -1  'True
             Width           =   2775
@@ -1318,8 +1335,8 @@ Begin VB.Form frmBKCCAcc
          Begin VB.OptionButton optDepositReports 
             Caption         =   "Deposit Reports"
             Height          =   300
-            Left            =   3900
-            TabIndex        =   148
+            Left            =   4380
+            TabIndex        =   150
             Top             =   30
             Width           =   3015
          End
@@ -1328,8 +1345,8 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Loan &advanced"
          Height          =   315
          Index           =   22
-         Left            =   3990
-         TabIndex        =   70
+         Left            =   4470
+         TabIndex        =   72
          Top             =   1939
          Width           =   3075
       End
@@ -1337,8 +1354,8 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Loans &Recovery"
          Height          =   315
          Index           =   23
-         Left            =   3990
-         TabIndex        =   74
+         Left            =   4470
+         TabIndex        =   76
          Top             =   3807
          Width           =   3165
       End
@@ -1346,8 +1363,8 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Other Receivables"
          Height          =   315
          Index           =   21
-         Left            =   3990
-         TabIndex        =   72
+         Left            =   4470
+         TabIndex        =   74
          Top             =   2873
          Width           =   3075
       End
@@ -1356,7 +1373,7 @@ Begin VB.Form frmBKCCAcc
          Height          =   315
          Index           =   19
          Left            =   480
-         TabIndex        =   64
+         TabIndex        =   66
          Top             =   4290
          Width           =   3285
       End
@@ -1364,8 +1381,8 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Schedule &1"
          Height          =   315
          Index           =   18
-         Left            =   3990
-         TabIndex        =   73
+         Left            =   4470
+         TabIndex        =   75
          Top             =   3340
          Width           =   3015
       End
@@ -1373,8 +1390,8 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Monthly Register "
          Height          =   315
          Index           =   17
-         Left            =   3990
-         TabIndex        =   68
+         Left            =   4470
+         TabIndex        =   70
          Top             =   1005
          Width           =   3165
       End
@@ -1383,7 +1400,7 @@ Begin VB.Form frmBKCCAcc
          Height          =   315
          Index           =   16
          Left            =   480
-         TabIndex        =   63
+         TabIndex        =   65
          Top             =   3807
          Width           =   3285
       End
@@ -1392,7 +1409,7 @@ Begin VB.Form frmBKCCAcc
          Height          =   315
          Index           =   7
          Left            =   480
-         TabIndex        =   62
+         TabIndex        =   64
          Top             =   3330
          Width           =   3075
       End
@@ -1401,7 +1418,7 @@ Begin VB.Form frmBKCCAcc
          Height          =   315
          Index           =   5
          Left            =   480
-         TabIndex        =   59
+         TabIndex        =   61
          Top             =   1899
          Width           =   3075
       End
@@ -1409,8 +1426,8 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "SUb Cash Book"
          Height          =   315
          Index           =   4
-         Left            =   3990
-         TabIndex        =   69
+         Left            =   4470
+         TabIndex        =   71
          Top             =   1472
          Width           =   3075
       End
@@ -1419,7 +1436,7 @@ Begin VB.Form frmBKCCAcc
          Height          =   315
          Index           =   6
          Left            =   480
-         TabIndex        =   61
+         TabIndex        =   63
          Top             =   2853
          Width           =   3075
       End
@@ -1428,7 +1445,7 @@ Begin VB.Form frmBKCCAcc
          Height          =   315
          Index           =   3
          Left            =   480
-         TabIndex        =   60
+         TabIndex        =   62
          Top             =   2376
          Width           =   3075
       End
@@ -1436,8 +1453,8 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Over due Loans"
          Height          =   315
          Index           =   2
-         Left            =   3990
-         TabIndex        =   71
+         Left            =   4470
+         TabIndex        =   73
          Top             =   2406
          Width           =   3075
       End
@@ -1446,7 +1463,7 @@ Begin VB.Form frmBKCCAcc
          Height          =   315
          Index           =   1
          Left            =   480
-         TabIndex        =   58
+         TabIndex        =   60
          Top             =   1422
          Width           =   3075
       End
@@ -1455,7 +1472,7 @@ Begin VB.Form frmBKCCAcc
          Height          =   315
          Index           =   0
          Left            =   480
-         TabIndex        =   57
+         TabIndex        =   59
          Top             =   945
          Value           =   -1  'True
          Width           =   3075
@@ -1463,59 +1480,59 @@ Begin VB.Form frmBKCCAcc
       Begin VB.CommandButton cmdView 
          Caption         =   "View"
          Height          =   400
-         Left            =   5910
-         TabIndex        =   97
+         Left            =   6870
+         TabIndex        =   99
          Top             =   7200
          Width           =   1215
       End
       Begin VB.Frame fraOrder 
          Height          =   1815
          Left            =   120
-         TabIndex        =   75
+         TabIndex        =   77
          Top             =   5370
-         Width           =   7155
+         Width           =   7995
          Begin VB.CommandButton cmdAdvance 
             Caption         =   "&Advanced"
             Height          =   400
-            Left            =   5700
-            TabIndex        =   95
+            Left            =   6540
+            TabIndex        =   97
             Top             =   1250
             Width           =   1215
          End
          Begin VB.ComboBox cmbFarmer 
             Height          =   315
-            Left            =   1740
-            TabIndex        =   79
+            Left            =   1860
+            TabIndex        =   81
             Top             =   1350
-            Width           =   1770
+            Width           =   2370
          End
          Begin VB.TextBox txtStartDate 
             Height          =   345
-            Left            =   1725
-            TabIndex        =   91
+            Left            =   1845
+            TabIndex        =   93
             Top             =   800
-            Width           =   1350
+            Width           =   1470
          End
          Begin VB.TextBox txtEndDate 
             Height          =   345
-            Left            =   5235
-            TabIndex        =   94
+            Left            =   6075
+            TabIndex        =   96
             Top             =   800
             Width           =   1290
          End
          Begin VB.CommandButton cmdStDate 
             Caption         =   "..."
             Height          =   315
-            Left            =   3180
-            TabIndex        =   81
+            Left            =   3540
+            TabIndex        =   83
             Top             =   800
             Width           =   315
          End
          Begin VB.CommandButton cmdEndDate 
             Caption         =   "..."
             Height          =   315
-            Left            =   6585
-            TabIndex        =   93
+            Left            =   7425
+            TabIndex        =   95
             Top             =   800
             Width           =   315
          End
@@ -1523,7 +1540,7 @@ Begin VB.Form frmBKCCAcc
             Caption         =   "By Account No"
             Height          =   375
             Left            =   510
-            TabIndex        =   76
+            TabIndex        =   78
             Top             =   180
             Value           =   -1  'True
             Width           =   1905
@@ -1531,8 +1548,8 @@ Begin VB.Form frmBKCCAcc
          Begin VB.OptionButton optName 
             Caption         =   "By Name"
             Height          =   375
-            Left            =   3900
-            TabIndex        =   77
+            Left            =   4380
+            TabIndex        =   79
             Top             =   210
             Width           =   1905
          End
@@ -1540,13 +1557,13 @@ Begin VB.Form frmBKCCAcc
             Caption         =   "Farmer"
             Height          =   315
             Left            =   150
-            TabIndex        =   78
+            TabIndex        =   80
             Top             =   1380
             Width           =   1215
          End
          Begin VB.Line Line4 
             BorderWidth     =   2
-            X1              =   6930
+            X1              =   7830
             X2              =   60
             Y1              =   720
             Y2              =   720
@@ -1556,7 +1573,7 @@ Begin VB.Form frmBKCCAcc
             Caption         =   "Starting date :"
             Height          =   315
             Left            =   120
-            TabIndex        =   80
+            TabIndex        =   82
             Top             =   850
             Width           =   1440
          End
@@ -1564,9 +1581,9 @@ Begin VB.Form frmBKCCAcc
             AutoSize        =   -1  'True
             Caption         =   "Ending date :"
             Height          =   315
-            Left            =   3840
-            TabIndex        =   92
-            Top             =   850
+            Left            =   4440
+            TabIndex        =   94
+            Top             =   855
             Width           =   1305
          End
       End
@@ -1574,8 +1591,8 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Claim Bill"
          Height          =   315
          Index           =   24
-         Left            =   3990
-         TabIndex        =   65
+         Left            =   4470
+         TabIndex        =   67
          Top             =   4320
          Width           =   3165
       End
@@ -1583,14 +1600,14 @@ Begin VB.Form frmBKCCAcc
          Caption         =   "Claim Bill"
          Height          =   315
          Index           =   26
-         Left            =   3990
-         TabIndex        =   67
+         Left            =   4470
+         TabIndex        =   69
          Top             =   4800
          Width           =   3165
       End
       Begin VB.Line Line5 
          X1              =   120
-         X2              =   7440
+         X2              =   8130
          Y1              =   720
          Y2              =   720
       End
@@ -1600,8 +1617,8 @@ Begin VB.Form frmBKCCAcc
       Left            =   120
       TabIndex        =   0
       Top             =   90
-      Width           =   7695
-      _ExtentX        =   13573
+      Width           =   8535
+      _ExtentX        =   15055
       _ExtentY        =   14684
       _Version        =   327682
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
@@ -2206,8 +2223,7 @@ If Not DateValidate(txtRepayDate.Text, "/", True) Then
     MsgBox GetResourceString(501), vbInformation, wis_MESSAGE_TITLE
     Exit Sub
 End If
-If MsgBox(GetResourceString(38) & " " & _
-        GetResourceString(37) & " = " & txtRepayDate.Text & _
+If MsgBox(GetResourceString(38, 37) & " = " & txtRepayDate.Text & _
         vbCrLf & GetResourceString(541), _
         vbQuestion + vbYesNo, wis_MESSAGE_TITLE) = vbNo Then Exit Sub
          
@@ -2546,9 +2562,15 @@ If chkSb.Value = vbChecked And SelectedTransType = wWithdraw Then
 
     Set SBClass = New clsSBAcc
     
-    SbHeadID = GetIndexHeadID(GetResourceString(421))
+    If cmbSB.Visible Then
+        SbHeadID = GetIndexHeadID(cmbSB.Text)
+    Else
+        SbHeadID = GetIndexHeadID(GetResourceString(421))
+    End If
     'Check For the SB Number Existace
-    SbACCID = SBClass.GetAccountID(txtSbAccNum)
+    SbACCID = 0
+    If cmbSB.Visible Then SbACCID = cmbSB.ItemData(cmbSB.ListIndex)
+    SbACCID = SBClass.GetAccountID(txtSbAccNum, SbACCID)
     If Len(Trim(txtSbAccNum)) = 0 Or SbACCID = 0 Then
         'MsgBox "Account not existance", vbInformation, "SB Account"
         MsgBox GetResourceString(421, 525), _
@@ -3195,7 +3217,7 @@ Const FIELD_MARGIN = 1.5
 ' Check if there are any records in the recordset.
 rs.MoveLast
 rs.MoveFirst
-If rs.RecordCount = 0 Then
+If rs.recordCount = 0 Then
     FillMembers = True
     GoTo Exit_Line
 End If
@@ -3344,7 +3366,7 @@ Dim rstTemp As Recordset
 Dim TransDate As Date
 Dim I As Integer
 Dim SqlStr As String
-Dim memberTYpe As Integer
+Dim memberType As Integer
 Dim MemberName As String
 
 
@@ -3408,7 +3430,7 @@ If Lret > 0 Then 'GoTo LoanLoad_Error
     Lret = gDbTrans.Fetch(m_rstLoanTrans, adOpenDynamic)
     If Lret <= 0 Then GoTo LoanLoad_Error
     
-    If m_rstLoanTrans.RecordCount = 1 Then _
+    If m_rstLoanTrans.recordCount = 1 Then _
                 cmdUndo.Caption = GetResourceString(14) ' "Delete"
     m_rstLoanTrans.MoveLast
     m_TransID = m_rstLoanTrans("TransID")
@@ -3493,7 +3515,7 @@ txtLoanAmt.Caption = Val(FormatField(m_rstLoanMast("CurrentSanction"))) + Val(Fo
 txtIssueDate.Caption = FormatField(m_rstLoanMast("IssueDate"))
 
 'Get the Loan Account.
-Call GetMemberNameNumberByCustID(m_rstLoanMast("CustomerID"), MemberName, memberTYpe)
+Call GetMemberNameNumberByCustID(m_rstLoanMast("CustomerID"), MemberName, memberType)
 txtIndex = GetIndex("AccNum")
 txtLoanIssue(txtIndex).Text = FormatField(m_rstLoanMast("AccNum"))
 txtLoanIssue(txtIndex + 1).Text = MemberName 'MemClass.memberName(FormatField(m_rstLoanMast("AccNum")))
@@ -3501,7 +3523,7 @@ txtLoanIssue(txtIndex + 1).Text = MemberName 'MemClass.memberName(FormatField(m_
 txtIndex = GetIndex("MemberType")
 CtrlIndex = Val(ExtractToken(lblLoanIssue(txtIndex).Tag, "TextIndex"))
 If cmb(CtrlIndex).ListCount > 1 Then
-    Call SetComboIndex(cmb(CtrlIndex), , CLng(memberTYpe))
+    Call SetComboIndex(cmb(CtrlIndex), , CLng(memberType))
     txtLoanIssue(txtIndex).Text = cmb(CtrlIndex).Text
 End If
 'Check for member details.
@@ -3640,7 +3662,7 @@ If m_rstLoanTrans Is Nothing Then Exit Sub
 'If Not NextClick Then Rst.MoveLast
 
 ' If no records, exit.
-If m_rstLoanTrans.RecordCount = 0 Then Exit Sub
+If m_rstLoanTrans.recordCount = 0 Then Exit Sub
 
 'Show 10 records or till eof of the page being pointed to
 With grd
@@ -3926,7 +3948,7 @@ If gDbTrans.Fetch(rst, adOpenDynamic) Then
     Else
         LoanAmount = FormatField(rst("Amount"))
     End If
-    If rst.RecordCount > 1 Then
+    If rst.recordCount > 1 Then
         rst.MoveNext
         boolDeposit = FormatField(rst("Deposit"))
         If boolDeposit Then
@@ -4882,7 +4904,6 @@ Next
 Err_line:
 End Function
 
-
 Private Sub chkSb_Click()
 
 If cmbTrans.ListIndex = 0 Then
@@ -4897,15 +4918,15 @@ If cmbTrans.ListIndex = 0 Then
 End If
 If chkSb.Value = vbChecked And cmbTrans.ListIndex = 1 Then
     'Add Intrest transaction
-    cmdSB.Enabled = True
+    cmdSb.Enabled = True
+    cmbSB.Enabled = True
     txtSbAccNum.Enabled = True
     txtSbAccNum.BackColor = wisWhite
 Else
     'Add Intrest transaction
-    cmdSB.Enabled = False
+    cmdSb.Enabled = False
     txtSbAccNum.Enabled = False
     txtSbAccNum.BackColor = wisGray
-    
     Exit Sub
 End If
 
@@ -4920,13 +4941,35 @@ cmbCheque.Visible = False
 txtVoucherNo.Visible = True
 txtVoucherNo.ZOrder 0
 Dim rst As Recordset
-gDbTrans.SqlStmt = "SELECT AccNum From SBMASTER " & _
+gDbTrans.SqlStmt = "SELECT AccNum,DepositTYpe From SBMASTER " & _
     " WHERE CustomerId = (SELECT CustomerID From BKCCMAster " & _
         " WHERE LoanID = " & m_LoanID & ");"
 
-If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then _
-                        txtSbAccNum = FormatField(rst(0))
-
+Dim recCount As Integer
+    recCount = gDbTrans.Fetch(rst, adOpenForwardOnly)
+    If recCount = 1 Then
+        txtSbAccNum = FormatField(rst(0))
+        If cmbSB.Visible Then Call SetComboIndex(cmbSB, , FormatField(rst("DepositTYpe")))
+        
+    End If
+    If recCount > 1 Then
+        If Not cmbSB.Visible Then
+            txtSbAccNum = FormatField(rst(0))
+            Exit Sub
+        End If
+        
+        If cmbSB.ListIndex < 0 Then
+            MsgBox "Please select deposit type", , wis_MESSAGE_TITLE
+            Exit Sub
+        Else
+            gDbTrans.SqlStmt = "SELECT AccNum From SBMASTER " & _
+                " WHERE DepositType = " & cmbSB.ItemData(cmbSB.ListIndex) & _
+                " And CustomerId = (SELECT CustomerID From BKCCMAster " & _
+                " WHERE LoanID = " & m_LoanID & ")"
+            recCount = gDbTrans.Fetch(rst, adOpenForwardOnly)
+            If recCount > 0 Then txtSbAccNum = FormatField(rst(0))
+        End If
+    End If
 End Sub
 
 Private Sub cmb_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -4951,6 +4994,10 @@ End Sub
 
 
 
+Private Sub cmbMember_Change()
+
+End Sub
+
 Private Sub cmbTrans_Click()
 
 If cmbTrans.ListIndex < 0 Then Exit Sub
@@ -4961,45 +5008,44 @@ cmdAccept.Enabled = True
 txtRegInterest.Enabled = True
 txtTotal.Enabled = True
 
-lblChequeNo.Caption = GetResourceString(41) & _
-                    " " & GetResourceString(60) '"Voucher Num
+lblChequeNo.Caption = GetResourceString(41, 60) '"Voucher Num
 lblRegInterest.Caption = GetResourceString(344)
 With cmbTrans
     chkSb.Enabled = False
+    cmbSB.Enabled = False
     cmbCheque.Visible = False
     txtVoucherNo.ZOrder 0
     If .ListIndex = 0 Then 'Receipt
         .Tag = 1
-        lblTotInst.Caption = GetResourceString(52) & _
-                        " " & GetResourceString(40)
-        chkSb.Caption = GetResourceString(47) & _
-                    " " & GetResourceString(10) 'Interest add
+        lblTotInst.Caption = GetResourceString(52, 40)
+        chkSb.Caption = GetResourceString(47, 10) 'Interest add
         chkSb.TabIndex = cmbParticulars.TabIndex + 1
+        '//HIDE THE SB COMOBO BOX
+        cmbSB.Visible = False
         'Now Check the Receivable Amount
         txtMiscAmount = GetReceivAbleAmount(m_LoanHeadID, m_LoanID)
         If txtMiscAmount.Value > 0 Then _
             Set m_clsReceivable = LoadReceivableAmounts(m_LoanHeadID, m_LoanID)
         
         chkSb.Enabled = True
+        cmbSB.Enabled = True
         txtSbAccNum.Enabled = False
         txtSbAccNum.BackColor = wisGray
-        cmdSB.Enabled = False
+        cmdSb.Enabled = False
         cmdMisc.Enabled = True
 
     ElseIf .ListIndex = 1 Then 'Payment
         .Tag = "-1"
-        lblTotInst.Caption = GetResourceString(375) & _
-                            " " & GetResourceString(40)
-        chkSb.Caption = GetResourceString(421) & _
-                        " " & GetResourceString(271) ' Savings bank receipt
-        lblChequeNo.Caption = GetResourceString(275) & _
-                    " " & GetResourceString(60) '"Sb acc NUm
+        lblTotInst.Caption = GetResourceString(375, 40)
+        Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271) ' Savings bank receipt
+        lblChequeNo.Caption = GetResourceString(275, 60) '"Sb acc NUm
         chkSb.TabIndex = 34
         chkSb.Enabled = True
+        If cmbSB.Visible Then cmbSB.TabIndex = 34
         txtSbAccNum.Enabled = True
         lblChequeNo.Enabled = True
         txtSbAccNum.BackColor = wisWhite
-        cmdSB.Enabled = True
+        cmdSb.Enabled = True
         'cmdCheque.Enabled = True
         If UCase(cmbCheque.Tag) = "VISIBLE" Then
             cmbCheque.Visible = True
@@ -5009,10 +5055,10 @@ With cmbTrans
     'If .ListIndex = 2 Then 'interest on deposit
         .Tag = 1
         lblRegInterest.Caption = GetResourceString(233)
-        chkSb.Enabled = False
+        chkSb.Enabled = False: cmbSB.Enabled = False
         txtSbAccNum.Enabled = False
         txtSbAccNum.BackColor = wisGray
-        cmdSB.Enabled = False
+        cmdSb.Enabled = False
         txtMiscAmount.Locked = False
     End If
     If Not chkSb.Enabled Then chkSb.Value = vbUnchecked
@@ -5151,7 +5197,7 @@ End Sub
 
 Private Sub cmdAddNote_Click()
 
-If m_Notes.ModuleId = 0 Then Exit Sub
+If m_Notes.ModuleID = 0 Then Exit Sub
 
 If m_Notes.AccId = 0 Then Exit Sub
 
@@ -5511,10 +5557,11 @@ Me.MousePointer = vbHourglass
 Dim LoanID As Long
 Dim rst As Recordset
 Dim AccNum As String
-Dim memberTYpe As Integer
+Dim memberType As Integer
 
 'Get the Member details
-Call GetMemberNameCustIDByMemberNum(Trim(txtMemberID.Text), LoanID, memberTYpe)
+If cmbMemberType.ListIndex >= 0 Then memberType = cmbMemberType.ItemData(cmbMemberType.ListIndex)
+Call GetMemberNameCustIDByMemberNum(Trim(txtMemberID.Text), LoanID, memberType)
 
 'gDbTrans.SqlStmt = "SELECT * From BKCCMaster Where " & _
         " MemID = (SELECT AccID From MemMaster Where AccNum = '" & Trim$(txtMemberID.Text) & "')"
@@ -5536,7 +5583,7 @@ txtMemberName.Visible = True
 txtMemberName = m_CustReg.FullName
 
 LoanID = FormatField(rst("LoanId"))
-txtAccNo = FormatField(rst("accNum"))
+txtAccNo = FormatField(rst("AccNum"))
 
 If LoanLoad(LoanID) Then fraLoanGrid.Visible = True
 'txtRepayDate.SetFocus
@@ -5738,7 +5785,7 @@ Screen.MousePointer = vbNormal
 
 End Sub
 Private Sub cmdOk_Click()
-Dim Cancel As Boolean
+Dim cancel As Boolean
 Call ResetUserIntereface
 
 Unload Me
@@ -6226,6 +6273,16 @@ cmb(cmbIndex).Clear
 Call LoadMemberTypes(cmb(cmbIndex))
 If cmb(cmbIndex).ListCount <= 1 Then cmb(cmbIndex).Locked = True
 
+cmbMemberType.Clear
+Call LoadMemberTypes(cmbMemberType)
+If cmbMemberType.ListCount > 1 Then
+    cmbMemberType.Visible = True
+    lblMemberId.Caption = GetResourceString(60)
+Else
+    cmbMemberType.Visible = False
+    lblMemberId.Caption = GetResourceString(49, 60)
+End If
+
 'Report Combo
 With cmbFarmer
     .Clear
@@ -6326,7 +6383,7 @@ optReports(0).Value = True
 optReports(8).Value = True
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 ' Report form.
 If Not m_LookUp Is Nothing Then
     Unload m_LookUp
@@ -7410,7 +7467,7 @@ Dim strDataSrc As String
 Dim Lret As Long
 Dim txtIndex As Integer
 Dim rst As Recordset
-Dim memberTYpe As Integer
+Dim memberType As Integer
 Dim cmbIndex As Integer
 
 ' Get the name of the data source bound to this control.
@@ -7423,9 +7480,9 @@ Select Case UCase(strDataSrc)
 ' fill in the corresponding member name.
     txtIndex = GetIndex("MemberType")
     cmbIndex = Val(ExtractToken(lblLoanIssue(txtIndex).Tag, "TextIndex"))
-    If cmb(cmbIndex).ListIndex >= 0 Then memberTYpe = cmb(cmbIndex).ItemData(cmb(cmbIndex).ListIndex)
+    If cmb(cmbIndex).ListIndex >= 0 Then memberType = cmb(cmbIndex).ItemData(cmb(cmbIndex).ListIndex)
     ' Get the name of the member for the given memberid.
-    txtLoanIssue(Index + 1).Text = MMObj.MemberName(txtLoanIssue(Index).Text, memberTYpe)
+    txtLoanIssue(Index + 1).Text = MMObj.MemberName(txtLoanIssue(Index).Text, memberType)
       
   Case "GUARANTOR1", "GUARANTOR2"
     ' Get the index of the textbox bound to thisfield.
@@ -7658,8 +7715,7 @@ cmdOk.Caption = GetResourceString(1)
 
 'Set captions for the all the tabs
 TabStrip.Tabs(1).Caption = GetResourceString(216)
-TabStrip.Tabs(2).Caption = GetResourceString(80) & " " & _
-                            GetResourceString(36) & GetResourceString(92)
+TabStrip.Tabs(2).Caption = GetResourceString(80, 36, 92)
 TabStrip.Tabs(3).Caption = GetResourceString(283) & GetResourceString(92)
 TabStrip.Tabs(4).Caption = GetResourceString(213)
 
@@ -7668,10 +7724,8 @@ TabStrip2.Tabs(2).Caption = GetResourceString(218)
     
 'Set Kannada/English captions for the Repayments
 lblMisc.Caption = GetResourceString(327)
-lblLoanAccNo.Caption = GetResourceString(58) & " " & _
-    GetResourceString(60) 'Loan No
-lblMemberId.Caption = GetResourceString(49) & " " & _
-    GetResourceString(60)
+lblLoanAccNo.Caption = GetResourceString(58, 60) 'Loan No
+lblMemberId.Caption = GetResourceString(49, 60)
 cmdLoad.Caption = GetResourceString(3)
 lblName.Caption = GetResourceString(35)
 lblLoanAmount.Caption = GetResourceString(58)
@@ -7688,7 +7742,7 @@ lblParticulars.Caption = GetResourceString(39)  '"Particulars
 cmdUndo.Caption = GetResourceString(5)
 'cmdInstalment.Caption = GetResourceString(57)
 cmdAccept.Caption = GetResourceString(4)
-chkSb.Caption = GetResourceString(421, 271)
+Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271)
 lblChequeNo.Caption = GetResourceString(275, 60) '"Sb acc NUm
 
 lblfarmer.Caption = GetResourceString(378, 253)

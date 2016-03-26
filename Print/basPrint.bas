@@ -47,7 +47,6 @@ SqlStr = "SELECT A.Name,B.AccNum FROM QryName A, " & _
             " WHERE A.CustomerId = B.CustomerId " & _
             " AND B.AccId = " & AccId
             
-            
 gDbTrans.SqlStmt = SqlStr
 If gDbTrans.Fetch(metaRst, adOpenDynamic) < 1 Then
     MsgBox GetResourceString(676), vbInformation, wis_MESSAGE_TITLE

@@ -1,26 +1,26 @@
-[Property Sheet] 
-Prop1=Prompt=Ááâ³çá#|#| °¤|#|;PropType=Heading;SubItems=2 
-Prop2=Prompt=Ááâ³ }|…Á³Ø;PropType=Editable;Description=Ááâ³çá#|ë| Ááâ³ }|…Á³Ø…ä|äë|äÓ }|å“}|äâ|Ïç³.;DescTitle=Ááâ³çá#|;DataSource=AccNum;DisplayType=Browse 
-Prop3=Prompt=Ááâ³çá#|ë| ~³}|#|ä;LockEdit=True;PropType=Editable;Description=Ááâ³çá#|ë| ~³}|#|ë|äÓ }|å“}|â|Ïç³.;DescTitle=Ááâ³çá#|ë| ~³}|#|ä;DisplayType=Browse;DataSource=AccName 
-Prop4=Prompt=‡…› Ááâ³çá#|#| ~³}|#|ä;PropType=Editable;Description=Òâ³çá#|#|ë|äÓ ~³å#|â|äí|ßµ,‡…› Ááâ³çá#|#|ë|äÓ }|å“}|äâ|Ïç³.;DescTitle=‡…› Ááâ³çá#|#|ä;DisplayType=Browse;DataSource=JointHolder 
-Prop5=Prompt=ëá¤|ä ¢‘ç³‚ã²â|;PropType=Heading;SubItems=3 
-Prop6=Prompt=ëá¤|ä ¢‘ç³‚ã²â| }|…Á³Ø;PropType=Editable;Description=ëá¤|ä ¢ç³‚ã²â|ë| }|…Á³Ø }|å“}|äâ|Ïç³;DescTitle=}|…Á³Ø;DataSource=NomineeID 
-Prop7=Prompt=~³}|#|ä;PropType=Editable;Description=ëá¤|ä ¢ç³‚ã²â|ë| ~³}|#|ë|äÓ }|å“}|äâ|Ïç³;DescTitle=ëá¤|ä ¢ç³‚ã²â|ë| ~³}|#|ä;DataSource=NomineeName;DisplayType=Browse 
-Prop8=Prompt=}|…•…‘ç|;PropType=Editable;LockEdit=True;Description=Ááâ³çá#|ë³å…¡Â³ ëá¤|ä¢ç³‚ã²â|ë| }|…•…ç|¤|ë|äÓ }|å“}|äâ|Ïç³;DescTitle=}|…•…‘ç|;DataSource=NomineeRelation;DisplayType=List;ListData=â|…ç³,âá¬ä,}|~³åãç|#|,}|~³åãç|«,í|ş,í|şÓ,òâ|#³. 
-Prop9=Prompt=}|…“â| ‹#³ã¤|×©;PropType=Heading;SubItems=4 
-Prop10=Prompt=}|…“â| ‹#³ã¤|×© ¤³åâ|Ï;PropType=Editable;Description=}|…“â| ‹#³ã¤|×©…ä|ä ş…Â|¶|ä ÿ|…şë| ¤³åâ|Ï.;DescTitle=ÿ|…şë| ¤³åâ|Ï;DataSource=RDAmount 
-Prop11=Prompt=ÿ|…â|äÂ|¶| }|…Á³Ø;PropType=Editable;Description=‹#³ã¤|×© ¤|ºá¾|™ä ş…Â|¶|äÂ|¶| }|…Á³Ø.;DescTitle=úŠäÊ ÿ|…â|äÂ|¶|ä.;DataSource=NoOfInst 
-Prop12=Prompt=•ßÌ…ä|ä ‘ç|#|;PropType=Editable;Description=•ßÌ…ä|ä ‘ç|#|.;DescTitle=}|…“â| ‹#³ã¤|×©Â³ ıáØ…ÿ»  °‘¡}|ä¤| •ßÌ…ä|ä ‘ç|#|.;DataSource=RateOfInterest 
-Prop13=Prompt=í|ÿ|Û¤áÂ|ä¤| ¡ëá…ÿ|;PropType=Editable;Description=}|…“â| ‹#³ã¤|×©Â³ í|ÿ|Û¤áÂ|ä¤| ¡ëá…ÿ|.;DescTitle=í|ÿ|Ûâ³…ä|ä ¡ëá…ÿ|¤|ë|äÓ }|å“}|äâ|Ïç³.;DataSource=MaturityDate;DisplayType=Browse 
-Prop14=Prompt=ÿ|äØ¤|ää§³›¤|;PropType=Editable;DisplayType=List;Description=ÿ|äØ¤|ää§³›¤| ğšç|¤á }áŒá#|× ‹#³ã¤|×©…ä|äë|äÓ }|å“}|äâ|ÏŒ³.;DescTitle=ÿ|äØ¤|ää§³›¤| ‹#³ã¤|×©e.;DataSource=Cumulative;DataList=General;LockEdit=Truee 
-Prop15=Prompt=í|«¨|¬ä}|ä¤|¤|#|ä;PropType=Heading;SubItems=2; 
-Prop16=Prompt=ÂáÙ~|ÿ| }|…Á³Ø;PropType=Editable;Description=í|«¨|¬ä}|ä¤|¤|#| Ááâ³ }|…Á³Ø…ä|äë|äÓ }|å“}|äâ|Ïç³.;DescTitle=í|«¨|¬ä}|ä¤|¤|#| Ááâ³}|…Á³Ø.;DataSource=IntroducerID 
-Prop17=Prompt=~³}|#|ä;PropType=Editable;DescTitle=í|«¨|¬ä}|ä¤|¤|#| ~³}|#|ä;Description=í|«¨|¬ä}|ä¤|¤|#| ~³}|#|ë|äÓ }|å“}|äâ|Ïç³.;Datasource=IntroducerName;LockEdit=True;DisplayType=Browse 
-Prop18=Prompt=§³¾|Ç#| °¤|#|;PropType=Heading;SubItems=3 
-Prop19=Prompt=§³¾|Ç#| }|…Á³Ø;PropType=Editable;DescTitle=§³¾|Ç#| }|…Á³Ø;Description=ó Ááâ³…ä|ä §³¾|Ç#| }|…Á³Ø…ä|äë|äÓ }|å“}|äâ|Ïç³.;DataSource=LedgerNo 
-Prop20=Prompt=í³’ã®—³å }|…Á³Ø;PropType=Editable;DescTitle=í³’ã®—³å }|…Á³Ø;Description=ó Ááâ³…ä|ä í³’ã®—³å }|…Á³Ø…ä|äë|äÓ }|å“}|äâ|Ïç³.;DataSource=FolioNo 
-Prop21=Prompt=Ááâ³ â³#³…ä|ää¤| ¡ëá…ÿ|;PropType=Editable;DescTitle=Ááâ³ â³#³…ä|ää¤|  ¡ëá…ÿ|;Description=ó Ááâ³…ä|ä íáÙ#|…‘ı|ç| ¡ëá…ÿ|¤|ë|äÓ }|å“}|äâ|Ïç³.;DataSource=CreateDate;DisplayType=Browse 
-Prop22=Prompt=Ááâ³…ä|ä Â|äÙí»;PropType=Editable;DescTitle=Ááâ³…ä|ä Â|äÙí»;Description=ó Ááâ³…ä|ää …ä|ºá¤| Â|ä…¦Â³ }³ã#|äâ|Ïç³ ÷…•äç|ë|äÓ }|å“}|äâ|Ïç³;DataSource=AccGroup;DisplayType=List;DataList=}á¤|ºáë|Ø 
-Prop23=Prompt=¤|ºáØ“«›…ä|ºáçáÂ| }|å“}|ä;PropType=Editable;DescTitle=¤|ºáØ¨|ä«› }|å¨|ë³;Description=‹#³ã¤|×© ¤|ºáØ¨|ä#| ñçáÂ| Ááâ³çá#|¢Â³ ş¹}|™ä }|å¨|ë³.;DisplayType=Boolean;DataSource=Notify 
-Prop24=Prompt=InOperative Account;PropType=Editable;DescTitle=Inoperative Account }|å¨|ë³;Description=Identifies whether account is operative or not.;DisplayType=Boolean;DataSource=Operative 
+[Property Sheet]
+Prop1=Prompt=”Ñ³Ù·Ñ¤Ğ¤Ğ ÁÀĞ¤Ğ;PropType=Heading;SubItems=2
+Prop2=Prompt=”Ñ³Ù ÊĞ”Ùô;PropType=Editable;Description=”Ñ³Ù·Ñ¤Ğ¹Ğ ”Ñ³Ù ÊĞ”Ùô¦ĞÔ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·Ù.;DescTitle=”Ñ³Ù·Ñ¤Ğ;DataSource=AccNum;DisplayType=Browse
+Prop3=Prompt=”Ñ³Ù·Ñ¤Ğ¹Ğ ÌÙÊĞ¤ĞÔ;LockEdit=True;PropType=Editable;Description=”Ñ³Ù·Ñ¤Ğ¹Ğ ÌÙÊĞ¤Ğ¹ĞÔî ÊĞÖœÊĞ³Ğê·Ù.;DescTitle=”Ñ³Ù·Ñ¤Ğ¹Ğ ÌÙÊĞ¤ĞÔ;DisplayType=Browse;DataSource=AccName
+Prop4=Prompt=¡« ”Ñ³Ù·Ñ¤Ğ¤Ğ ÌÙÊĞ¤ĞÔ;PropType=Editable;Description=“³Ù·Ñ¤Ğ¤Ğ¹ĞÔî ÌÙÖ¤Ğ³ĞÔ»Ğ¯Ë,¡« ”Ñ³Ù·Ñ¤Ğ¤Ğ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·Ù.;DescTitle=¡« ”Ñ³Ù·Ñ¤Ğ¤ĞÔ;DisplayType=Browse;DataSource=JointHolder
+Prop5=Prompt=¹ÑÀĞÔ º·°ÙşÓÇ³Ğ;PropType=Heading;SubItems=3
+Prop6=Prompt=¹ÑÀĞÔ º·°ÙşÓÇ³Ğ ÊĞ”Ùô;PropType=Editable;Description=¹ÑÀĞÔ º·ÙşÓÇ³Ğ¹Ğ ÊĞ”Ùô ÊĞÖœÊĞÔ³Ğê·Ù;DescTitle=ÊĞ”Ùô;DataSource=NomineeID
+Prop7=Prompt=ÌÙÊĞ¤ĞÔ;PropType=Editable;Description=¹ÑÀĞÔ º·ÙşÓÇ³Ğ¹Ğ ÌÙÊĞ¤Ğ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·Ù;DescTitle=¹ÑÀĞÔ º·ÙşÓÇ³Ğ¹Ğ ÌÙÊĞ¤ĞÔ;DataSource=NomineeName;DisplayType=Browse
+Prop8=Prompt=ÊĞ½·°Ğ;PropType=Editable;LockEdit=True;Description=”Ñ³Ù·Ñ¤Ğ¹ÙÖ¸–Ù ¹ÑÀĞÔº·ÙşÓÇ³Ğ¹Ğ ÊĞ½·ĞÀĞ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·Ù;DescTitle=ÊĞ½·°Ğ;DataSource=NomineeRelation;DisplayType=List;ListData=³Ğ·Ù,³ÑÂÔ,ÊĞÌÙÖÓ·Ğ¤Ğ,ÊĞÌÙÖÓ·Ğ§,»Ğ´,»Ğ´î,…³Ğ¤Ù.
+Prop9=Prompt=ÊĞœ³Ğ ¬ÙÓÀĞ±Ò;PropType=Heading;SubItems=4
+Prop10=Prompt=ÊĞœ³Ğ ¬ÙÓÀĞ±Ò ÀÙÖ³Ğê;PropType=Editable;Description=ÊĞœ³Ğ ¬ÙÓÀĞ±Ò¦ĞÔ ´–ĞÎĞÔ ‘Ğ´¹Ğ ÀÙÖ³Ğê.;DescTitle=‘Ğ´¹Ğ ÀÙÖ³Ğê;DataSource=RDAmount
+Prop11=Prompt=‘Ğ³ĞÔ–ĞÎĞ ÊĞ”Ùô;PropType=Editable;Description=¬ÙÓÀĞ±Ò ÀĞ¦Ñ®ĞÃÔ ´–ĞÎĞÔ–ĞÎĞ ÊĞ”Ùô.;DescTitle=©Ôå ‘Ğ³ĞÔ–ĞÎĞÔ.;DataSource=NoOfInst
+Prop12=Prompt=½¯ç¦ĞÔ ·°Ğ¤Ğ;PropType=Editable;Description=½¯ç¦ĞÔ ·°Ğ¤Ğ.;DescTitle=ÊĞœ³Ğ ¬ÙÓÀĞ±Ò–Ù ¾Ñô‘ı Á¶ÊĞÔÀĞ ½¯ç¦ĞÔ ·°Ğ¤Ğ.;DataSource=RateOfInterest
+Prop13=Prompt=»Ğ‘Ğ÷ÀÑ–ĞÔÀĞ ¸¹Ñ‘Ğ;PropType=Editable;Description=ÊĞœ³Ğ ¬ÙÓÀĞ±Ò–Ù »Ğ‘Ğ÷ÀÑ–ĞÔÀĞ ¸¹Ñ‘Ğ.;DescTitle=»Ğ‘Ğ÷³Ù¦ĞÔ ¸¹Ñ‘ĞÀĞ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·Ù.;DataSource=MaturityDate;DisplayType=Browse
+Prop14=Prompt=‘ĞÔôÀĞÔÔÄÙ«ÀĞ;PropType=Editable;DisplayType=List;Description=‘ĞÔôÀĞÔÔÄÙ«ÀĞ ƒµĞÀÑ ÊÑ•Ñ¤Ğ± ¬ÙÓÀĞ±Ò¦ĞÔ¹ĞÔî ÊĞÖœÊĞÔ³Ğê•Ù.;DescTitle=‘ĞÔôÀĞÔÔÄÙ«ÀĞ ¬ÙÓÀĞ±Òe.;DataSource=Cumulative;DataList=General;LockEdit=Truee
+Prop15=Prompt=»Ğ§›ĞÂÔÊĞÔÀĞÀĞ¤ĞÔ;PropType=Heading;SubItems=2;
+Prop16=Prompt=–ÑõÌĞ‘Ğ ÊĞ”Ùô;PropType=Editable;Description=»Ğ§›ĞÂÔÊĞÔÀĞÀĞ¤Ğ ”Ñ³Ù ÊĞ”Ùô¦ĞÔ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·Ù.;DescTitle=»Ğ§›ĞÂÔÊĞÔÀĞÀĞ¤Ğ ”Ñ³ÙÊĞ”Ùô.;DataSource=IntroducerID
+Prop17=Prompt=ÌÙÊĞ¤ĞÔ;PropType=Editable;DescTitle=»Ğ§›ĞÂÔÊĞÔÀĞÀĞ¤Ğ ÌÙÊĞ¤ĞÔ;Description=»Ğ§›ĞÂÔÊĞÔÀĞÀĞ¤Ğ ÌÙÊĞ¤Ğ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·Ù.;Datasource=IntroducerName;LockEdit=True;DisplayType=Browse
+Prop18=Prompt=ÄÙ®Ğâ¤Ğ ÁÀĞ¤Ğ;PropType=Heading;SubItems=3
+Prop19=Prompt=ÄÙ®Ğâ¤Ğ ÊĞ”Ùô;PropType=Editable;DescTitle=ÄÙ®Ğâ¤Ğ ÊĞ”Ùô;Description=† ”Ñ³Ù¦ĞÔ ÄÙ®Ğâ¤Ğ ÊĞ”Ùô¦ĞÔ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·Ù.;DataSource=LedgerNo
+Prop20=Prompt=»Ù×ÓÅ¦ÙÖ ÊĞ”Ùô;PropType=Editable;DescTitle=»Ù×ÓÅ¦ÙÖ ÊĞ”Ùô;Description=† ”Ñ³Ù¦ĞÔ »Ù×ÓÅ¦ÙÖ ÊĞ”Ùô¦ĞÔ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·.;DataSource=FolioNo
+Prop21=Prompt=”Ñ³Ù ³Ù¤Ù¦ĞÔÔÀĞ ¸¹Ñ‘Ğ;PropType=Editable;DescTitle=”Ñ³Ù ³Ù¤Ù¦ĞÔÔÀĞ  ¸¹Ñ‘Ğ;Description=† ”Ñ³Ù¦ĞÔ »Ñõ¤Ğ¾°Ğ·Ğ ¸¹Ñ‘ĞÀĞ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·Ù.;DataSource=CreateDate;DisplayType=Browse
+Prop22=Prompt=”Ñ³Ù¦ĞÔ –ĞÔõ»ı;PropType=Editable;DescTitle=”Ñ³Ù¦ĞÔ –ĞÔõ»ı;Description=† ”Ñ³Ù¦ĞÔÔ ¦Ğ¦ÑÀĞ –ĞÔ¼–Ù ÊÙÓ¤ĞÔ³Ğê·Ù Š½Ô·Ğ¹ĞÔî ÊĞÖœÊĞÔ³Ğê·Ù;DataSource=AccGroup;DisplayType=List;DataList=ÊÑÀĞ¦Ñ¹Ğô
+Prop23=Prompt=ÀĞ¦Ñôœ§«¦Ğ¦Ñ·Ñ–Ğ ÊĞÖœÊĞÔ;PropType=Editable;DescTitle=ÀĞ¦Ñô›ĞÔ§« ÊĞÖ›Ğ¹Ù;Description=¬ÙÓÀĞ±Ò ÀĞ¦Ñô›ĞÔ¤Ğ „·Ñ–Ğ ”Ñ³Ù·Ñ¤Ğº–Ù ´ÏÊĞÃÔ ÊĞÖ›Ğ¹Ù.;DisplayType=Boolean;DataSource=Notify
+Prop24=Prompt=InOperative Account;PropType=Editable;DescTitle=Inoperative Account ÊĞÖ›Ğ¹Ù;Description=Identifies whether account is operative or not.;DisplayType=Boolean;DataSource=Operative
 

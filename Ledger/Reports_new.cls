@@ -157,7 +157,7 @@ End With
 End Sub
 
 Private Function InsertCashBookTotals(CurrentTable As HTMLTable, NewBook As Boolean, SlNo As Integer, name As String, _
-    Deposit As Currency, contraDeposit As Currency, WithDraw As Currency, contraWithdraw As Currency, Optional ShowTotal As Boolean = True)
+    Deposit As Currency, ContraDeposit As Currency, WithDraw As Currency, ContraWithDraw As Currency, Optional ShowTotal As Boolean = True)
 
 
         Dim CurrentRow As HTMLTableRow
@@ -181,15 +181,15 @@ Private Function InsertCashBookTotals(CurrentTable As HTMLTable, NewBook As Bool
             .Align = "Right"
         End With
         End If
-        If contraDeposit Then
+        If ContraDeposit Then
         With CurrentRow.cells(IIf(NewBook, 1, 4))
-            .innerText = FormatCurrency(contraDeposit)
+            .innerText = FormatCurrency(ContraDeposit)
             .Align = "Right"
         End With
         End If
-        If NewBook And ShowTotal And (contraDeposit Or Deposit) Then
+        If NewBook And ShowTotal And (ContraDeposit Or Deposit) Then
             With CurrentRow.cells(0)
-                .innerText = FormatCurrency(Deposit + contraDeposit)
+                .innerText = FormatCurrency(Deposit + ContraDeposit)
                 .Align = "Right"
             End With
         End If
@@ -200,20 +200,20 @@ Private Function InsertCashBookTotals(CurrentTable As HTMLTable, NewBook As Bool
             .Align = "Right"
         End With
         End If
-        If contraWithdraw Then
+        If ContraWithDraw Then
         With CurrentRow.cells(IIf(NewBook, 7, 6))
-            .innerText = FormatCurrency(contraWithdraw)
+            .innerText = FormatCurrency(ContraWithDraw)
             .Align = "Right"
         End With
         End If
-        If NewBook And ShowTotal And (WithDraw Or contraWithdraw) Then
+        If NewBook And ShowTotal And (WithDraw Or ContraWithDraw) Then
             With CurrentRow.cells(8)
-                .innerText = FormatCurrency(WithDraw + contraWithdraw)
+                .innerText = FormatCurrency(WithDraw + ContraWithDraw)
                 .Align = "Right"
             End With
         End If
 
-        Deposit = 0: contraDeposit = 0: WithDraw = 0: contraWithdraw = 0
+        Deposit = 0: ContraDeposit = 0: WithDraw = 0: ContraWithDraw = 0
         
 End Function
 
@@ -661,7 +661,7 @@ Hell:
     
 End Function
 
-Public Function GetAccountBalance(ByVal AccHeadID As Long, ByVal AsOnDate As Date) As Currency
+Private Function GetAccountBalance(ByVal AccHeadID As Long, ByVal AsOnDate As Date) As Currency
 
 On Error Resume Next
 
@@ -672,30 +672,34 @@ Dim pos As Long
 Set rst = Nothing
 On Error GoTo Exit_Line
 
-Dim ModuleId As wisModules
+Dim ModuleID As wisModules
+Dim Deptype As Integer
 
-ModuleId = GetModuleIDFromHeadID(AccHeadID)
+Deptype = ModuleID Mod 10
+ModuleID = GetModuleIDFromHeadID(AccHeadID)
+
+Debug.Assert Deptype <> 0
+Debug.Assert Deptype = 0
 
 Set rst = Nothing
 
 SqlStr = ""
 'Members
-If ModuleId >= wis_Members And ModuleId < wis_Members + 100 Then
+If ModuleID >= wis_Members And ModuleID < wis_Members + 100 Then
     SqlStr = "Select Sum(Balance) as AcountBalance " & _
         " From MemMaster A,MemTrans B Where " & _
         " A.AccID = B.AccID And TransID = (Select " & _
             " Max(TransID) From MemTrans C Where C.AccID= A.AccID)"
-            
-
+    If Deptype > 0 Then SqlStr = SqlStr & " And A.MemberType = " & Deptype
 'BKcc Account
-ElseIf ModuleId = wis_BKCCLoan Then
+ElseIf ModuleID = wis_BKCCLoan Then
     SqlStr = "Select Sum(Balance) as AcountBalance " & _
         " From BKCCMaster A,BKCCTrans B Where " & _
         " A.LoanID = B.LoanID And Deposit = " & False & _
         " And TransID = (Select Max(TransID) From BKCCTrans C " & _
             "Where C.LoanID= A.LoanID And Deposit = " & False & ")"
 
-ElseIf ModuleId = wis_BKCC Then
+ElseIf ModuleID = wis_BKCC Then
     SqlStr = "Select Sum(Balance) * -1 as AcountBalance " & _
         " From BKCCMaster A,BKCCTrans B Where " & _
         " A.LoanID = B.LoanID And Deposit = True " & _
@@ -703,17 +707,17 @@ ElseIf ModuleId = wis_BKCC Then
             "Where C.LoanID= A.LoanID And Deposit = true )"
 
 'Current Account
-ElseIf ModuleId = wis_CAAcc Then
+ElseIf ModuleID = wis_CAAcc Then
     SqlStr = "Select Sum(Balance) as AcountBalance " & _
         " From CAMaster A,CATrans B Where " & _
         " A.AccID = B.AccID And TransID = (Select " & _
             " Max(TransID) From CATrans C Where C.AccID= A.AccID)"
-
+    
 'DepositLoans
-ElseIf ModuleId >= wis_DepositLoans And ModuleId < wis_DepositLoans + 100 Then
+ElseIf ModuleID >= wis_DepositLoans And ModuleID < wis_DepositLoans + 100 Then
     SqlStr = ""
-    If ModuleId > wis_DepositLoans Then _
-        SqlStr = " ANd A.DepositType = " & ModuleId - wis_DepositLoans
+    If ModuleID > wis_DepositLoans Then _
+        SqlStr = " ANd A.DepositType = " & ModuleID - wis_DepositLoans
     SqlStr = "Select Sum(Balance) * -1 as AcountBalance " & _
         " From DepositLoanMaster A,DepositLoanTrans B Where " & _
         " A.LoanID = B.LoanID " & SqlStr & _
@@ -721,19 +725,19 @@ ElseIf ModuleId >= wis_DepositLoans And ModuleId < wis_DepositLoans + 100 Then
             "Where C.LoanID= A.LoanID )"
 
 'Deposit Accounts like Fd
-ElseIf ModuleId >= wis_Deposits And ModuleId < wis_Deposits + 100 Then
+ElseIf ModuleID >= wis_Deposits And ModuleID < wis_Deposits + 100 Then
     SqlStr = ""
-    If ModuleId > wis_Deposits Then _
-        SqlStr = " ANd A.DepositType = " & ModuleId - wis_Deposits
+    If ModuleID > wis_Deposits Then _
+        SqlStr = " ANd A.DepositType = " & ModuleID - wis_Deposits
     SqlStr = "Select Sum(Balance) as AcountBalance " & _
         " From FDMaster A,FDTrans B Where " & _
         " A.AccID = B.AccID And TransID = (Select " & _
             " Max(TransID) From FDTrans C Where C.AccID= A.AccID)" & SqlStr
-
+    'if deptype > 0 then sqlstr = sqlstr  & " And A.DepositType = " & deptype
 'Loan Accounts
-ElseIf ModuleId = wis_Loans And ModuleId < wis_Loans + 100 Then
-    If ModuleId > wis_Loans Then _
-        SqlStr = " AND A.SchemeID = " & ModuleId - wis_Loans
+ElseIf ModuleID = wis_Loans And ModuleID < wis_Loans + 100 Then
+    If ModuleID > wis_Loans Then _
+        SqlStr = " AND A.SchemeID = " & ModuleID - wis_Loans
     SqlStr = "Select Sum(Balance) * -1 as AcountBalance " & _
         " From LoanMaster A, LoanTrans B Where " & _
         " A.LoanID = B.LoanID " & SqlStr & _
@@ -741,25 +745,25 @@ ElseIf ModuleId = wis_Loans And ModuleId < wis_Loans + 100 Then
             "Where C.LoanID = A.LoanID )"
 
 'Pigmy Accounts
-ElseIf ModuleId = wis_PDAcc Then
+ElseIf ModuleID >= wis_PDAcc And ModuleID < wis_PDAcc + 100 Then
     SqlStr = "Select Sum(Balance) as AcountBalance " & _
         " From PDMaster A,PDTrans B Where " & _
         " A.AccID = B.AccID And TransID = (Select " & _
             " Max(TransID) From PDTrans C Where C.AccID= A.AccID)"
-
+    If Deptype > 0 Then SqlStr = SqlStr & " And A.DepositType = " & Deptype
 'Recurring Accounts
-ElseIf ModuleId = wis_RDAcc Then
+ElseIf ModuleID >= wis_RDAcc And ModuleID < wis_RDAcc + 100 Then
     SqlStr = "Select Sum(Balance) as AcountBalance " & _
         " From RDMaster A,RDTrans B Where " & _
         " A.AccID = B.AccID And TransID = (Select " & _
             " Max(TransID) From RDTrans C Where C.AccID= A.AccID)"
-
-ElseIf ModuleId >= wis_SBAcc And ModuleId < wis_SBAcc + 100 Then
+    If Deptype > 0 Then SqlStr = SqlStr & " And A.DepositType = " & Deptype
+ElseIf ModuleID >= wis_SBAcc And ModuleID < wis_SBAcc + 100 Then
     SqlStr = "Select Sum(Balance) as AcountBalance " & _
         " From SBMaster A,SBTrans B Where " & _
         " A.AccID = B.AccID And TransID = (Select " & _
             " Max(TransID) From SBTrans C Where C.AccID= A.AccID)"
-
+    If Deptype > 0 Then SqlStr = SqlStr & " And A.DepositType = " & Deptype
 Else
     'MsgBox "Plese select the account type", vbInformation, wis_MESSAGE_TITLE
     Exit Function
@@ -2577,7 +2581,7 @@ Do While Not rstParents.EOF
         .Filter = adFilterNone
         .Filter = "ParentID=" & ParentID
 
-        If rstRPDetails.RecordCount > 0 Or rstRPNoTrans.RecordCount > 0 Then
+        If rstRPDetails.recordCount > 0 Or rstRPNoTrans.recordCount > 0 Then
             Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, totalCols)
 
             CurrentRow.Style.fontWeight = "Bold"
@@ -2800,7 +2804,7 @@ Do While Not rstParents.EOF
         .Filter = adFilterNone
         .Filter = "ParentID=" & ParentID
 
-        If rstRPDetails.RecordCount > 0 Then
+        If rstRPDetails.recordCount > 0 Then
             Set CurrentRow = InsertRowAndCellSToTable(CurrentTable)
 
             CurrentRow.Style.fontWeight = "Bold"
@@ -4034,7 +4038,7 @@ rstOBHeads.Filter = adFilterNone
 rstOBHeads.Filter = "ParentID=" & ParentID
 
 ' This is total count
-HeadsCount = rstHeads.RecordCount
+HeadsCount = rstHeads.recordCount
 
 RepeatLine:
 
@@ -4043,7 +4047,7 @@ ParentAmount = 0
 ParentOPAmount = 0
 Repeat = False
 
-If rstSumParents.RecordCount > 0 Then _
+If rstSumParents.recordCount > 0 Then _
     If gDbTrans.FindRecord(rstSumParents, "ParentID=" & ParentID) Then _
                 ParentAmount = FormatField(rstSumParents.Fields("SumAmount"))
 
@@ -4052,13 +4056,13 @@ ParentAmount = ParentAmount + opBalance
 If ParentAmount <= 0 And FirstLoop Then
     Dim NegativeNos As Integer
     
-    If rstOBHeads.RecordCount = 0 Then ShowNegative = True
+    If rstOBHeads.recordCount = 0 Then ShowNegative = True
     NegativeNos = 1
     Do
         If rstOBHeads.EOF Then Exit Do
         Amount = FormatField(rstOBHeads.Fields("opAmount"))
         If Not rstHeads Is Nothing Then
-            If rstHeads.RecordCount Then
+            If rstHeads.recordCount Then
                 rstHeads.MoveFirst
                 rstHeads.Find "HeadID = " & rstOBHeads("opHeadID")
                 If Not rstHeads.EOF Then Amount = FormatField(rstHeads("Amount")) + Amount
@@ -4104,7 +4108,7 @@ Do While Not rstOBHeads.EOF
     If Amount = 0 And opBalance = 0 Then GoTo NextHead
     
     Amount = Amount + opBalance:    currentBalance = Amount + opBalance
-    'Debug.Assert Amount > -1
+    
     If Amount - opBalance < 0 And Amount > 0 Then NegativeNos = NegativeNos - 1
     If (Amount < 0 Or opBalance < 0) And FirstLoop Then Repeat = True
     
@@ -4261,7 +4265,7 @@ rstOBHeads.Filter = adFilterNone
 rstOBHeads.Filter = "ParentID=" & ParentID
 
 ' This is total count
-HeadsCount = rstHeads.RecordCount
+HeadsCount = rstHeads.recordCount
 
 RepeatLine:
 
@@ -4269,7 +4273,7 @@ RepeatLine:
 ParentAmount = 0
 Repeat = False
 
-If rstSumParents.RecordCount > 0 Then _
+If rstSumParents.recordCount > 0 Then _
     If gDbTrans.FindRecord(rstSumParents, "ParentID=" & ParentID) Then _
                 ParentAmount = FormatField(rstSumParents.Fields("SumAmount"))
 
@@ -4278,13 +4282,13 @@ ParentAmount = ParentAmount + opBalance
 If ParentAmount <= 0 And FirstLoop Then
     Dim NegativeNos As Integer
     
-    If rstOBHeads.RecordCount = 0 Then ShowNegative = True
+    If rstOBHeads.recordCount = 0 Then ShowNegative = True
     NegativeNos = 1
     Do
         If rstOBHeads.EOF Then Exit Do
         Amount = FormatField(rstOBHeads.Fields("opAmount"))
         If Not rstHeads Is Nothing Then
-        If rstHeads.RecordCount Then
+        If rstHeads.recordCount Then
             rstHeads.MoveFirst
             rstHeads.Find "HeadID = " & rstOBHeads("opHeadID")
             If Not rstHeads.EOF Then Amount = FormatField(rstHeads("Amount")) + Amount
@@ -5099,7 +5103,7 @@ With CurrentRow.cells(0)
 End With
 
 With CurrentRow.cells(1)
-    .innerText = GetResourceString(52)    '"Head Total"
+    .innerText = GetResourceString(40)    'Amount
     .Align = "Left"
     .Width = IIf(m_OtherDetail, "20%", "32%")
     .Style.fontWeight = "Bold"
@@ -5108,7 +5112,7 @@ With CurrentRow.cells(1)
 End With
 If m_OtherDetail Then
     With CurrentRow.cells(2)
-        .innerText = GetResourceString(40) '"Amount"
+        .innerText = GetResourceString(52) 'Head Total
         .Align = "Left"
         .Width = "23%"
         .Style.fontWeight = "Bold"
@@ -5572,14 +5576,15 @@ Dim rstParents As ADODB.Recordset
 Dim rstRPDetails As ADODB.Recordset
 Dim rstDeposits As Recordset
 Dim rstMemType As Recordset
-Dim DepName As String
+Dim depName As String
 
 'Shashi June 2013 Added for Total amount display
 Dim rstTotal As ADODB.Recordset
 Dim rstTrans As ADODB.Recordset
-''
 
+Dim boolGoNext As Boolean
 Dim DepositType As Integer
+Dim sqlClause As String
 Dim Receipts As Currency
 Dim Payments As Currency
 Dim opBalance As Currency
@@ -5658,7 +5663,7 @@ End If
 
 SlNo = 0
 
-'Get the Member TYpes
+'Get the Member Types
 gDbTrans.SqlStmt = "SELECT * From MemberTypeTab"
 Call gDbTrans.Fetch(rstMemType, adOpenDynamic)
 
@@ -5779,6 +5784,8 @@ End If
 
 'Deposit Loans
 gDbTrans.SqlStmt = "SELECT * From DepositName"
+gDbTrans.SqlStmt = "SELECT DepositTYpe as DepositID, DepositTypeName as DepositName From DepositTypeTab" & _
+            " UNION SELECT DepositID, DepositName From DepositName "
 If gDbTrans.Fetch(rstDeposits, adOpenDynamic) < 1 Then Set rstDeposits = Nothing
 
 If CheckAndAddTransTotal("DepositLoanTrans") Then
@@ -5789,8 +5796,8 @@ If CheckAndAddTransTotal("DepositLoanTrans") Then
     If Not rstDeposits Is Nothing Then
         rstDeposits.MoveFirst
         While Not rstDeposits.EOF
-            DepName = FormatField(rstDeposits("DepositName")) & " " & GetResourceString(58)
-            Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, rstDeposits(0), DepName, wisPrincipal)
+            depName = FormatField(rstDeposits("DepositName")) & " " & GetResourceString(58)
+            Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, rstDeposits(0), depName, wisPrincipal)
             rstDeposits.MoveNext
         Wend
     End If
@@ -5799,16 +5806,16 @@ End If
 'Interest on deposit loan
 If CheckAndAddTransTotal("DepositLoanIntTrans") Then
     'Get the details of RD deposit Loans
-    DepName = GetResourceString(424, 58, 47)
-    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_RD, DepName, wisRegularInt)
+    depName = GetResourceString(424, 58, 47)
+    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_RD, depName, wisRegularInt)
     
-    DepName = GetResourceString(425, 58, 47)
-    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_PD, DepName, wisRegularInt)
+    depName = GetResourceString(425, 58, 47)
+    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_PD, depName, wisRegularInt)
     If Not rstDeposits Is Nothing Then
         rstDeposits.MoveFirst
         While Not rstDeposits.EOF
-            DepName = FormatField(rstDeposits("DepositName")) & " " & GetResourceString(58, 47)
-            Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, rstDeposits(0), DepName, wisRegularInt)
+            depName = FormatField(rstDeposits("DepositName")) & " " & GetResourceString(58, 47)
+            Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, rstDeposits(0), depName, wisRegularInt)
             rstDeposits.MoveNext
         Wend
     End If
@@ -5817,16 +5824,16 @@ End If
 If CheckAndAddTransTotal_FieldName("DepositLoanIntTrans", "PenalAmount") Then
 
     'Get the details of RD deposit Loans
-    DepName = GetResourceString(424, 58, 345)
-    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_RD, DepName, wisPenalInt)
+    depName = GetResourceString(424, 58, 345)
+    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_RD, depName, wisPenalInt)
     
-    DepName = GetResourceString(425, 58, 345)
-    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_PD, DepName, wisPenalInt)
+    depName = GetResourceString(425, 58, 345)
+    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_PD, depName, wisPenalInt)
     If Not rstDeposits Is Nothing Then
         rstDeposits.MoveFirst
         While Not rstDeposits.EOF
-            DepName = FormatField(rstDeposits("DepositName")) & " " & GetResourceString(58, 345)
-            Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, rstDeposits(0), DepName, wisPenalInt)
+            depName = FormatField(rstDeposits("DepositName")) & " " & GetResourceString(58, 345)
+            Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, rstDeposits(0), depName, wisPenalInt)
             rstDeposits.MoveNext
         Wend
     End If
@@ -5834,16 +5841,16 @@ End If
 'Penal Interest on deposit loan
 If CheckAndAddTransTotal_FieldName("DepositLoanIntTrans", "MisCAmount") Then
     'Get the details of RD deposit Loans
-    DepName = GetResourceString(424, 58, 327)
-    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_RD, DepName, wisMisc)
+    depName = GetResourceString(424, 58, 327)
+    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_RD, depName, wisMisc)
     
-    DepName = GetResourceString(425, 58, 327)
-    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_PD, DepName, wisMisc)
+    depName = GetResourceString(425, 58, 327)
+    Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, wisDeposit_PD, depName, wisMisc)
     If Not rstDeposits Is Nothing Then
         rstDeposits.MoveFirst
         While Not rstDeposits.EOF
-            DepName = FormatField(rstDeposits("DepositName")) & " " & GetResourceString(58, 327)
-            Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, rstDeposits(0), DepName, wisMisc)
+            depName = FormatField(rstDeposits("DepositName")) & " " & GetResourceString(58, 327)
+            Call ShowDailyCashBook_DepositLoan(CurrentTable, SlNo, NewBook, rstDeposits(0), depName, wisMisc)
             rstDeposits.MoveNext
         Wend
     End If
@@ -6014,76 +6021,135 @@ If gDbTrans.Fetch(rstParents, adOpenDynamic) > 0 Then
 End If
 
 'Savings Bank
-If CheckAndAddTransTotal("SbTrans") Then
-    gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
-            " FROM SbTrans A,SBMaster B,QryName C " & _
-            " WHERE TransDate = #" & m_ToUSDate & "#" & _
-            " And A.AccID = B.AccID " & _
-            " And C.CustomerId = B.CustomerID ORDER BY Transdate,val(AccNum)"
-    
-    If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
-        Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
-        CurrentRow.Style.fontWeight = "Bold"
-        With CurrentRow.cells(IIf(NewBook, 4, 1))
-            .innerText = GetResourceString(421)
-            .Align = "Left"
-        End With
-        Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
-    End If
-End If
-If CheckAndAddTransTotal("SbPLTrans") Then
-    gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
-            " FROM SbPLTrans A,SBMaster B,QryName C " & _
-            " WHERE TransDate = #" & m_ToUSDate & "#" & _
-            " And A.AccID = B.AccID " & _
-            " And C.CustomerId = B.CustomerID ORDER BY Transdate,val(AccNum)"
-    
-    If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
-        Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
-        CurrentRow.Style.fontWeight = "Bold"
-        With CurrentRow.cells(IIf(NewBook, 4, 1))
-            .innerText = GetResourceString(421, 47)
-            .Align = "Left"
-        End With
-        Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
-    End If
+
+boolGoNext = False
+gDbTrans.SqlStmt = "Select * From DepositTypeTab where moduleid = " & wis_SBAcc
+If gDbTrans.Fetch(rstParents, adOpenDynamic) > 0 Then
+    headName = FormatField(rstParents("DepositTypeName"))
+    DepositType = FormatField(rstParents("DepositType"))
+Else
+    Set rstParents = Nothing
+    headName = GetResourceString(421)
+    DepositType = 0
 End If
 
+Do
+    sqlClause = ""
+    If DepositType > 0 Then sqlClause = " And B.DepositType = " & DepositType
+    
+    If CheckAndAddTransTotal("SbTrans", True, DepositType) Then
+        gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
+                " FROM SbTrans A,SBMaster B,QryName C " & _
+                " WHERE TransDate = #" & m_ToUSDate & "#" & _
+                " And A.AccID = B.AccID " & _
+                " And C.CustomerId = B.CustomerID " & _
+                sqlClause & " ORDER BY Transdate,val(AccNum)"
+        
+        If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
+            Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
+            CurrentRow.Style.fontWeight = "Bold"
+            With CurrentRow.cells(IIf(NewBook, 4, 1))
+                .innerText = headName
+                .Align = "Left"
+            End With
+            Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+        End If
+    End If
+    If CheckAndAddTransTotal("SbPLTrans", True, DepositType) Then
+        gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
+                " FROM SbPLTrans A,SBMaster B,QryName C " & _
+                " WHERE TransDate = #" & m_ToUSDate & "#" & _
+                " And A.AccID = B.AccID " & _
+                " And C.CustomerId = B.CustomerID " & _
+                sqlClause & " ORDER BY Transdate,val(AccNum)"
+        
+        If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
+            Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
+            CurrentRow.Style.fontWeight = "Bold"
+            With CurrentRow.cells(IIf(NewBook, 4, 1))
+                .innerText = headName & " " & GetResourceString(47)
+                .Align = "Left"
+            End With
+            Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+        End If
+    End If
+    
+    boolGoNext = False
+    If Not rstParents Is Nothing Then
+        rstParents.MoveNext
+        If Not rstParents.EOF Then
+            boolGoNext = True
+            headName = FormatField(rstParents("DepositTypeName"))
+            DepositType = FormatField(rstParents("DepositTYpe"))
+        End If
+    End If
+    If Not boolGoNext Then Exit Do
+Loop
+'While boolGoNext
+'END SAVINGs
+
+
 'Current account Bank
-If CheckAndAddTransTotal("CATrans") Then
-    gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType, Name" & _
-            " FROM CATrans A,CAMaster B,QryName C " & _
-            " WHERE TransDate = #" & m_ToUSDate & "#" & _
-            " And A.AccID = B.AccID " & _
-            " And C.CustomerId = B.CustomerID ORDER BY Transdate, val(AccNum)"
-    
-    If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
-        Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
-        CurrentRow.Style.fontWeight = "Bold"
-        With CurrentRow.cells(IIf(NewBook, 4, 1))
-            .innerText = GetResourceString(422)
-            .Align = "Left"
-        End With
-        Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
-    End If
+boolGoNext = False
+gDbTrans.SqlStmt = "Select * From DepositTypeTab where moduleid = " & wis_CAAcc
+If gDbTrans.Fetch(rstParents, adOpenDynamic) > 0 Then
+    headName = FormatField(rstParents("DepositTypeName"))
+    DepositType = FormatField(rstParents("DepositType"))
+Else
+    Set rstParents = Nothing
+    headName = GetResourceString(422)
+    DepositType = 0
 End If
-If CheckAndAddTransTotal("CAPLTrans") Then
-    gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType, Name" & _
-            " FROM CAPLTrans A,CAMaster B,QryName C " & _
-            " WHERE TransDate = #" & m_ToUSDate & "#" & _
-            " And A.AccID = B.AccID " & _
-            " And C.CustomerId = B.CustomerID ORDER BY Transdate, val(AccNum)"
-    
-    If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
-        Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
-        CurrentRow.Style.fontWeight = "Bold"
-        With CurrentRow.cells(IIf(NewBook, 4, 1))
-            .innerText = GetResourceString(422) & " Interest"
-            .Align = "Left"
-        End With
-        Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+
+Do
+    sqlClause = ""
+    If DepositType > 0 Then sqlClause = " And B.DepositType = " & DepositType
+    If CheckAndAddTransTotal("CATrans", True, DepositType) Then
+        gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType, Name" & _
+                " FROM CATrans A,CAMaster B,QryName C " & _
+                " WHERE TransDate = #" & m_ToUSDate & "#" & _
+                " And A.AccID = B.AccID " & sqlClause & _
+                " And C.CustomerId = B.CustomerID ORDER BY Transdate, val(AccNum)"
+        
+        If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
+            Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
+            CurrentRow.Style.fontWeight = "Bold"
+            With CurrentRow.cells(IIf(NewBook, 4, 1))
+                .innerText = headName
+                .Align = "Left"
+            End With
+            Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+        End If
     End If
-End If
+    If CheckAndAddTransTotal("CAPLTrans", True, DepositType) Then
+        gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType, Name" & _
+                " FROM CAPLTrans A,CAMaster B,QryName C " & _
+                " WHERE TransDate = #" & m_ToUSDate & "#" & _
+                " And A.AccID = B.AccID " & sqlClause & _
+                " And C.CustomerId = B.CustomerID ORDER BY Transdate, val(AccNum)"
+        
+        If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
+            Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
+            CurrentRow.Style.fontWeight = "Bold"
+            With CurrentRow.cells(IIf(NewBook, 4, 1))
+                .innerText = headName & GetResourceString(47)
+                .Align = "Left"
+            End With
+            Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+        End If
+    End If
+    boolGoNext = False
+    If Not rstParents Is Nothing Then
+        rstParents.MoveNext
+        If Not rstParents.EOF Then
+            boolGoNext = True
+            headName = FormatField(rstParents("DepositTypeName"))
+            DepositType = FormatField(rstParents("DepositTYpe"))
+        End If
+    End If
+    If Not boolGoNext Then Exit Do
+Loop
+'END CURRENT ACCOUNT
 
 'Fd Account
 'Check is there any transaction happened in FD
@@ -6095,6 +6161,9 @@ isModuleHasTrans = isModuleHasTrans Or CheckAndAddTransTotal("MatFDTrans")
 
 If isModuleHasTrans Then
   gDbTrans.SqlStmt = "Select * From DepositName"
+  'gDbTrans.SqlStmt = "SELECT DepositTYpe as DepositID, DepositTypeName as DepositName From DepositTypeTab" & _
+            " UNION SELECT DepositID, DepositName From DepositName "
+
   If gDbTrans.Fetch(rstParents, adOpenDynamic) > 0 Then
     While Not rstParents.EOF
         headName = FormatField(rstParents("DepositName"))
@@ -6168,62 +6237,92 @@ If isModuleHasTrans Then
 End If
 
 'recurring Deposit
-If CheckAndAddTransTotal("RDTrans") Then
-    gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
-            " FROM RDTrans A,RDMaster B,QryName C " & _
-            " WHERE TransDate = #" & m_ToUSDate & "#" & _
-            " And A.AccID = B.AccID " & _
-            " And C.CustomerId = B.CustomerID ORDER BY Transdate, val(AccNum)"
-    
-    If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
-        Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
-        CurrentRow.Style.fontWeight = "Bold"
-        With CurrentRow.cells(IIf(NewBook, 4, 1))
-            .innerText = GetResourceString(424)
-            .Align = "Left"
-        End With
-        Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+boolGoNext = False
+gDbTrans.SqlStmt = "Select * From DepositTypeTab where moduleid = " & wis_RDAcc
+If gDbTrans.Fetch(rstParents, adOpenDynamic) > 0 Then
+    headName = FormatField(rstParents("DepositTypeName"))
+    DepositType = FormatField(rstParents("DepositType"))
+Else
+    Set rstParents = Nothing
+    headName = GetResourceString(424)
+    DepositType = 0
+End If
+Do
+    sqlClause = ""
+    If DepositType > 0 Then sqlClause = " And B.DepositType = " & DepositType
+
+    If CheckAndAddTransTotal("RDTrans", True, DepositType) Then
+        gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
+                " FROM RDTrans A,RDMaster B,QryName C " & _
+                " WHERE TransDate = #" & m_ToUSDate & "#" & _
+                " And A.AccID = B.AccID " & _
+                " And C.CustomerId = B.CustomerID " & _
+                sqlClause & " ORDER BY Transdate,val(AccNum)"
+        
+        If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
+            Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
+            CurrentRow.Style.fontWeight = "Bold"
+            With CurrentRow.cells(IIf(NewBook, 4, 1))
+                .innerText = headName 'GetResourceString(424)
+                .Align = "Left"
+            End With
+            Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+        End If
     End If
-End If
 
-If CheckAndAddTransTotal("RDIntTrans") Then
-    gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
-            " FROM RDIntTrans A,RDMaster B,QryName C " & _
-            " WHERE TransDate = #" & m_ToUSDate & "#" & _
-            " And A.AccID = B.AccID " & _
-            " And C.CustomerId = B.CustomerID ORDER BY Transdate, val(AccNum)"
-    
-     If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
-        Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
-        CurrentRow.Style.fontWeight = "Bold"
-        With CurrentRow.cells(IIf(NewBook, 4, 1))
-            .innerText = GetResourceString(424, 27)
-            .Align = "Left"
-        End With
-        Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
-     End If
-End If
-
-
-'RD interest payble
-If CheckAndAddTransTotal("RDIntPayable") Then
-    gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
-            " FROM RDIntPayable A,RDMaster B,QryName C " & _
-            " WHERE TransDate = #" & m_ToUSDate & "#" & _
-            " And A.AccID = B.AccID " & _
-            " And C.CustomerId = B.CustomerID ORDER BY Transdate, val(AccNum)"
-    
-    If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
-        Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
-        CurrentRow.Style.fontWeight = "Bold"
-        With CurrentRow.cells(IIf(NewBook, 4, 1))
-            .innerText = GetResourceString(424) & " " & _
-                    GetResourceString(450)
-            .Align = "Left"
-        End With
-        Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+    If CheckAndAddTransTotal("RDIntTrans") Then
+        gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
+                " FROM RDIntTrans A,RDMaster B,QryName C " & _
+                " WHERE TransDate = #" & m_ToUSDate & "#" & _
+                " And A.AccID = B.AccID " & _
+                " And C.CustomerId = B.CustomerID " & _
+                sqlClause & " ORDER BY Transdate,val(AccNum)"
+        
+         If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
+            Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
+            CurrentRow.Style.fontWeight = "Bold"
+            With CurrentRow.cells(IIf(NewBook, 4, 1))
+                .innerText = headName & " " & GetResourceString(47) 'GetResourceString(424, 27)
+                .Align = "Left"
+            End With
+            Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+         End If
     End If
-End If
+
+
+    'RD interest payble
+    If CheckAndAddTransTotal("RDIntPayable") Then
+        gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
+                " FROM RDIntPayable A,RDMaster B,QryName C " & _
+                " WHERE TransDate = #" & m_ToUSDate & "#" & _
+                " And A.AccID = B.AccID " & _
+                " And C.CustomerId = B.CustomerID " & _
+                sqlClause & " ORDER BY Transdate,val(AccNum)"
+        
+        If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
+            Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
+            CurrentRow.Style.fontWeight = "Bold"
+            With CurrentRow.cells(IIf(NewBook, 4, 1))
+                .innerText = headName & " " & GetResourceString(450)
+                .Align = "Left"
+            End With
+            Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+        End If
+    End If
+    
+     boolGoNext = False
+    If Not rstParents Is Nothing Then
+        rstParents.MoveNext
+        If Not rstParents.EOF Then
+            boolGoNext = True
+            headName = FormatField(rstParents("DepositTypeName"))
+            DepositType = FormatField(rstParents("DepositTYpe"))
+        End If
+    End If
+    If Not boolGoNext Then Exit Do
+Loop
+
+'END RECURRING
 
 'Pigmy Agent commision
 If CheckAndAddTransTotal("AgentTrans") Then
@@ -6249,69 +6348,99 @@ If CheckAndAddTransTotal("AgentTrans") Then
 End If
 Receipts = m_depositTotal
 Payments = m_contraDepositTotal
+
 'Pigmy Transaction
-
-If CheckAndAddTransTotal("PDTrans") Then
-    ''Put back Deplosit totals other wise Pigmy Deposit Transaction becomes double
-        m_depositTotal = Receipts
-        m_contraDepositTotal = Payments
-    gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType, Name" & _
-            " FROM PDTrans A,PDMaster B,QryName C " & _
-            " WHERE TransDate = #" & m_ToUSDate & "#" & _
-            " And A.AccID = B.AccID " & _
-            " And (TransType = " & wWithdraw & " OR TransType = " & wContraWithdraw & ")" & _
-            " And C.CustomerId = B.CustomerID ORDER BY Transdate, val(AccNum)"
-    
-    If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
-        Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
-        CurrentRow.Style.fontWeight = "Bold"
-        With CurrentRow.cells(IIf(NewBook, 4, 1))
-            .innerText = GetResourceString(425)
-            .Align = "Left"
-        End With
-        Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
-    End If
+boolGoNext = False
+gDbTrans.SqlStmt = "Select * From DepositTypeTab where moduleid = " & wis_PDAcc
+If gDbTrans.Fetch(rstParents, adOpenDynamic) > 0 Then
+    headName = FormatField(rstParents("DepositTypeName"))
+    DepositType = FormatField(rstParents("DepositType"))
+Else
+    Set rstParents = Nothing
+    headName = GetResourceString(425)
+    DepositType = 0
 End If
 
-'Pigmy interest & fees
-If CheckAndAddTransTotal("PDIntTrans") Then
-    gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
-            " FROM PDIntTrans A,PDMaster B,QryName C " & _
-            " WHERE TransDate = #" & m_ToUSDate & "#" & _
-            " And A.AccID = B.AccID " & _
-            " And C.CustomerId = B.CustomerID ORDER BY Transdate, val(AccNum)"
-    
-    If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
-        Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
-        CurrentRow.Style.fontWeight = "Bold"
-        With CurrentRow.cells(IIf(NewBook, 4, 1))
-            .innerText = GetResourceString(425, 47)
-            .Align = "Left"
-        End With
-        Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
-    End If
-End If
+Do
+    sqlClause = ""
+    If DepositType > 0 Then sqlClause = " And B.DepositType = " & DepositType
 
-'Pigmy interest payble
-If CheckAndAddTransTotal("PDIntPayable") Then
-    gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
-            " FROM PDIntPayable A,PDMaster B,QryName C " & _
-            " WHERE TransDate = #" & m_ToUSDate & "#" & _
-            " And A.AccID = B.AccID " & _
-            " And (TransType = " & wWithdraw & " OR TransType = " & wContraWithdraw & ")" & _
-            " And C.CustomerId = B.CustomerID ORDER BY Transdate, val(AccNum)"
-    
-    If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
-        Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
-        CurrentRow.Style.fontWeight = "Bold"
-        With CurrentRow.cells(IIf(NewBook, 4, 1))
-            .innerText = GetResourceString(425) & " " & _
-                GetResourceString(450)
-            .Align = "Left"
-        End With
-        Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+    If CheckAndAddTransTotal("PDTrans", True, DepositType) Then
+        ''Put back Deplosit totals other wise Pigmy Deposit Transaction becomes double
+            m_depositTotal = Receipts
+            m_contraDepositTotal = Payments
+        gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType, Name" & _
+                " FROM PDTrans A,PDMaster B,QryName C " & _
+                " WHERE TransDate = #" & m_ToUSDate & "#" & _
+                " And A.AccID = B.AccID " & _
+                " And (TransType = " & wWithdraw & " OR TransType = " & wContraWithdraw & ")" & _
+                " And C.CustomerId = B.CustomerID" & _
+                sqlClause & " ORDER BY Transdate,val(AccNum)"
+        
+        If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
+            Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
+            CurrentRow.Style.fontWeight = "Bold"
+            With CurrentRow.cells(IIf(NewBook, 4, 1))
+                .innerText = headName 'GetResourceString(425)
+                .Align = "Left"
+            End With
+            Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+        End If
     End If
-End If
+    
+    'Pigmy interest & fees
+    If CheckAndAddTransTotal("PDIntTrans", True, DepositType) Then
+        gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
+                " FROM PDIntTrans A,PDMaster B,QryName C " & _
+                " WHERE TransDate = #" & m_ToUSDate & "#" & _
+                " And A.AccID = B.AccID " & _
+                " And C.CustomerId = B.CustomerID" & _
+                sqlClause & " ORDER BY Transdate,val(AccNum)"
+        
+        If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
+            Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
+            CurrentRow.Style.fontWeight = "Bold"
+            With CurrentRow.cells(IIf(NewBook, 4, 1))
+                .innerText = headName & " " & GetResourceString(47) 'GetResourceString(425, 47)
+                .Align = "Left"
+            End With
+            Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+        End If
+    End If
+    
+    'Pigmy interest payble
+    If CheckAndAddTransTotal("PDIntPayable", True, DepositType) Then
+        gDbTrans.SqlStmt = "SELECT AccNum,A.AccId,Amount,TransType,Name" & _
+                " FROM PDIntPayable A,PDMaster B,QryName C " & _
+                " WHERE TransDate = #" & m_ToUSDate & "#" & _
+                " And A.AccID = B.AccID " & _
+                " And (TransType = " & wWithdraw & " OR TransType = " & wContraWithdraw & ")" & _
+                " And C.CustomerId = B.CustomerID " & _
+                sqlClause & " ORDER BY Transdate,val(AccNum)"
+        
+        If gDbTrans.Fetch(rstRPDetails, adOpenDynamic) > 0 Then
+            Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, ColsInTable)
+            CurrentRow.Style.fontWeight = "Bold"
+            With CurrentRow.cells(IIf(NewBook, 4, 1))
+                .innerText = headName & " " & GetResourceString(450)
+                .Align = "Left"
+            End With
+            Call InsertTransDetails(rstRPDetails, SlNo, NewBook)
+        End If
+    End If
+    
+     boolGoNext = False
+    If Not rstParents Is Nothing Then
+        rstParents.MoveNext
+        If Not rstParents.EOF Then
+            boolGoNext = True
+            headName = FormatField(rstParents("DepositTypeName"))
+            DepositType = FormatField(rstParents("DepositTYpe"))
+        End If
+    End If
+    If Not boolGoNext Then Exit Do
+Loop
+'END PIGMY
 
 'Bkcc Details
 gDbTrans.SqlStmt = "SELECT Sum(Amount) as Total,TransType" & _
@@ -6617,8 +6746,8 @@ Public Function UpdateLedgerBook(LedgerDate As Date) As Boolean
 ' Handle Error
 On Error GoTo Hell:
 
-Dim contraWithdraw As Currency
-Dim contraDeposit As Currency
+Dim ContraWithDraw As Currency
+Dim ContraDeposit As Currency
 Dim contraWithrawId As Long
 Dim contraDepositId As Long
 Dim DepositId As Integer
@@ -6710,7 +6839,7 @@ End If
 
 'Deposit Loans
 Dim rstDeposits As Recordset
-Dim DepName As String
+Dim depName As String
 
 
 gDbTrans.SqlStmt = "SELECT " & wisDeposit_RD & " as DepositId,' " & LoadResString(424) & " ' as DepositName  From DepositName " & _
@@ -6729,7 +6858,7 @@ If Not rstDeposits Is Nothing Then
         'DepName & " " & GetResourceString(58, 483) ' Int Provision
         'GetResourceString(46) & " " & Depname  ' Matrured De[poist
         
-        DepName = FormatField(rstDeposits("DepositName"))
+        depName = FormatField(rstDeposits("DepositName"))
         DepositId = FormatField(rstDeposits("DepositId"))
         
         strDepType = IIf(DepositId = wisDeposit_PD, "PD", IIf(DepositId = wisDeposit_RD, "RD", "FD"))
@@ -6741,7 +6870,7 @@ If Not rstDeposits Is Nothing Then
             Call SetTotals  ' TO Clear the Deposit/WitDraw amount
             Call AddToTotal(rstTrans)
             Set m_rstLedgerTrans = rstTrans
-            headID = bankClass.GetHeadIDCreated(DepName)
+            headID = bankClass.GetHeadIDCreated(depName)
             If (DepositId <> wisDeposit_PD) Then
                 'For Pigmy Do not take deposits from Pigmy Trans,
                 'Take it from AgentTrans to match the Cash in Hand
@@ -6758,7 +6887,7 @@ If Not rstDeposits Is Nothing Then
             Call SetTotals  ' TO Clear the Deposit/WitDraw amount
             Call AddToTotal(rstTrans)
             Set m_rstLedgerTrans = rstTrans
-            headID = bankClass.GetHeadIDCreated(DepName & " " & GetResourceString(487))
+            headID = bankClass.GetHeadIDCreated(depName & " " & GetResourceString(487))
             Call bankClass.AddCashDeposits(headID, m_depositTotal, LedgerDate)
             Call bankClass.AddCashDeposits(headID, m_withdrawTotal, LedgerDate)
         End If
@@ -6770,7 +6899,7 @@ If Not rstDeposits Is Nothing Then
             Call SetTotals  ' TO Clear the Deposit/WitDraw amount
             Call AddToTotal(rstTrans)
             Set m_rstLedgerTrans = rstTrans
-            headID = bankClass.GetHeadIDCreated(DepName & " " & GetResourceString(450))
+            headID = bankClass.GetHeadIDCreated(depName & " " & GetResourceString(450))
             Call bankClass.AddCashDeposits(headID, m_depositTotal, LedgerDate)
             Call bankClass.AddCashDeposits(headID, m_withdrawTotal, LedgerDate)
         End If
@@ -6782,7 +6911,7 @@ If Not rstDeposits Is Nothing Then
             Call SetTotals  ' TO Clear the Deposit/WitDraw amount
             Call AddToTotal(rstTrans)
             Set m_rstLedgerTrans = rstTrans
-            headID = bankClass.GetHeadIDCreated(GetResourceString(46) & " " & DepName)
+            headID = bankClass.GetHeadIDCreated(GetResourceString(46) & " " & depName)
             Call bankClass.AddCashDeposits(headID, m_depositTotal, LedgerDate)
             Call bankClass.AddCashDeposits(headID, m_withdrawTotal, LedgerDate)
         End If
@@ -6797,7 +6926,7 @@ If Not rstDeposits Is Nothing Then
             Call SetTotals  ' TO Clear the Deposit/WitDraw amount
             Call AddToTotal(rstTrans)
             Set m_rstLedgerTrans = rstTrans
-            headID = bankClass.GetHeadIDCreated(DepName & " " & GetResourceString(58))
+            headID = bankClass.GetHeadIDCreated(depName & " " & GetResourceString(58))
             Call bankClass.AddCashDeposits(headID, m_depositTotal, LedgerDate)
             Call bankClass.AddCashDeposits(headID, m_withdrawTotal, LedgerDate)
         End If
@@ -6809,7 +6938,7 @@ If Not rstDeposits Is Nothing Then
             Call SetTotals  ' TO Clear the Deposit/WitDraw amount
             Call AddToTotal(rstTrans)
             Set m_rstLedgerTrans = rstTrans
-            headID = bankClass.GetHeadIDCreated(DepName & " " & GetResourceString(58))
+            headID = bankClass.GetHeadIDCreated(depName & " " & GetResourceString(58))
             Call bankClass.AddCashDeposits(headID, m_depositTotal, LedgerDate)
             Call bankClass.AddCashDeposits(headID, m_withdrawTotal, LedgerDate)
         End If
@@ -7210,18 +7339,30 @@ Hell:
     
 End Function
 
-Private Function CheckAndAddTransTotal(strTableName As String, Optional addTotal = True) As Boolean
-CheckAndAddTransTotal = False
-Dim rstTrans As Recordset
-gDbTrans.SqlStmt = "SELECT Sum(Amount) as Total,TransType" & _
+
+Private Function CheckAndAddTransTotal(strTableName As String, Optional addTotal = True, Optional DepositType As Integer = 0) As Boolean
+    Dim rstTrans As Recordset
+    Dim SqlStr As String
+    Dim masterTable As String
+    
+    CheckAndAddTransTotal = False
+    SqlStr = ""
+    If DepositType > 0 Then
+        masterTable = Left$(strTableName, 2) & "Master"
+        SqlStr = " And AccId in ( Select distinct(AccID) from " & _
+                masterTable & " Where DepositType = " & DepositType & " )"
+    End If
+    gDbTrans.SqlStmt = "SELECT Sum(Amount) as Total,TransType" & _
         " FROM " & strTableName & " WHERE TransDate = #" & m_ToUSDate & "#" & _
-        " group by TransType"
-If gDbTrans.Fetch(rstTrans, adOpenForwardOnly) > 0 Then
-    CheckAndAddTransTotal = True
-    If addTotal Then Call AddToTotal(rstTrans)
-End If
-Set m_rstLedgerTrans = rstTrans
+        SqlStr & " group by TransType"
+    
+    If gDbTrans.Fetch(rstTrans, adOpenForwardOnly) > 0 Then
+        CheckAndAddTransTotal = True
+        If addTotal Then Call AddToTotal(rstTrans)
+    End If
+    Set m_rstLedgerTrans = rstTrans
 End Function
+
 Private Function CheckAndAddTransTotal_FieldName(strTableName As String, FieldName As String, Optional addTotal = True) As Boolean
 
 CheckAndAddTransTotal_FieldName = False
@@ -7402,7 +7543,7 @@ Dim PrevProfit As Currency
 Dim ProfitDist As Currency
 If gDbTrans.Fetch(rstOBParents, adOpenDynamic) > 0 Then
     PrevProfit = FormatField(rstOBParents("ParentOB"))
-    If rstSum.RecordCount > 0 Then _
+    If rstSum.recordCount > 0 Then _
         If gDbTrans.FindRecord(rstSum, "ParentID=" & parProfitORLoss) Then _
                         Profit = FormatField(rstSum.Fields("SumAmount"))
 
@@ -7612,7 +7753,7 @@ Dim PrevProfit As Currency
 Dim ProfitDist As Currency
 If gDbTrans.Fetch(rstOBParents, adOpenDynamic) > 0 Then
     PrevProfit = FormatField(rstOBParents("ParentOB"))
-    If rstSum.RecordCount > 0 Then _
+    If rstSum.recordCount > 0 Then _
         If gDbTrans.FindRecord(rstSum, "ParentID=" & parProfitORLoss) Then _
                         Profit = FormatField(rstSum.Fields("SumAmount"))
 
@@ -7942,7 +8083,7 @@ gDbTrans.SqlStmt = "SELECT SUM(OPAmount) as ParentOB" & _
 
 If gDbTrans.Fetch(rstOBParents, adOpenDynamic) > 0 Then
     PrevProfit = FormatField(rstOBParents("ParentOB"))
-    If rstSum.RecordCount > 0 Then _
+    If rstSum.recordCount > 0 Then _
         If gDbTrans.FindRecord(rstSum, "ParentID=" & parProfitORLoss) Then _
                         Profit = FormatField(rstSum.Fields("SumAmount"))
 
@@ -8223,7 +8364,7 @@ Do While Not rstParents.EOF
         .Filter = adFilterNone
         .Filter = "ParentID=" & ParentID
         
-        If rstRPDetails.RecordCount > 0 Then
+        If rstRPDetails.recordCount > 0 Then
             Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, totalCols)
             
             CurrentRow.Style.fontWeight = "Bold"
@@ -8464,7 +8605,7 @@ Do While Not rstParents.EOF
         .Filter = adFilterNone
         .Filter = "ParentID=" & ParentID
         
-        If rstRPDetails.RecordCount > 0 Then
+        If rstRPDetails.recordCount > 0 Then
             Set CurrentRow = InsertRowAndCellSToTable(CurrentTable, totalCols)
             
             CurrentRow.Style.fontWeight = "Bold"
@@ -8611,7 +8752,7 @@ ShowReport1 = True
 Exit Function
 
 Hell:
-    MsgBox "ShowRPReport: " & vbCrLf & Err.Description
+    MsgBox "ShowReport1: " & vbCrLf & Err.Description
     
     Set rstRPDetails = Nothing
     Set rstParents = Nothing

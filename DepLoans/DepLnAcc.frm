@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{F166A15E-AA26-47C4-9C7F-A61A5BECEDFF}#2.0#0"; "CURRTEXT.OCX"
+Object = "{F166A15E-AA26-47C4-9C7F-A61A5BECEDFF}#2.0#0"; "CurrText.ocx"
 Begin VB.Form frmDepLoan 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "INDEX-2000   -   Deposit Loan Wizard"
@@ -272,6 +272,7 @@ Begin VB.Form frmDepLoan
             _ExtentX        =   11139
             _ExtentY        =   4154
             _Version        =   393217
+            Enabled         =   -1  'True
             TextRTF         =   $"DepLnAcc.frx":0000
          End
       End
@@ -883,6 +884,21 @@ Err_line:
     
 End Function
 
+Private Function GetPledgeDepositType() As Integer
+    Dim txtIndex As Integer
+    txtIndex = GetIndex("DepositType")
+    With Me.txtLoanIssue(txtIndex)
+        If Trim$(.Text) = "" Then
+            'MsgBox "Deposit type not specified !", vbExclamation, wis_MESSAGE_TITLE
+            MsgBox GetResourceString(570), vbExclamation, wis_MESSAGE_TITLE
+            ActivateTextBox txtLoanIssue(txtIndex)
+            'GoTo Exit_Line
+        End If
+        txtIndex = Val(ExtractToken(txtLoanIssue(txtIndex).Tag, "TextIndex"))
+        GetPledgeDepositType = cmb(txtIndex).ItemData(cmb(txtIndex).ListIndex)
+    End With
+End Function
+
 '
 Private Function LoanRepay() As Boolean
 On Error GoTo Err_line
@@ -1191,7 +1207,7 @@ Const FIELD_MARGIN = 1.5
 ' Check if there are any records in the recordset.
 rs.MoveLast
 rs.MoveFirst
-If rs.RecordCount = 0 Then
+If rs.recordCount = 0 Then
     FillMembers = True
     GoTo Exit_Line
 End If
@@ -1294,8 +1310,7 @@ Dim PledgeDesc As String
 Dim strArr() As String
 
 ' Get the loan details from the LoanMaster table.
-gDbTrans.SqlStmt = "SELECT * FROM DepositLoanMaster WHERE " _
-    & " LoanID = " & lLoanID
+gDbTrans.SqlStmt = "SELECT * FROM DepositLoanMaster WHERE LoanID = " & lLoanID
 Lret = gDbTrans.Fetch(m_rstLoanMast, adOpenStatic)
 If Lret < 1 Then GoTo Exit_Line
 m_LoanID = lLoanID
@@ -1334,7 +1349,7 @@ txtLoanIssue(txtIndex).Text = FormatField(m_rstLoanMast("CustomerId"))
 txtLoanIssue(txtIndex + 1).Text = CustClass.CustomerName(FormatField(m_rstLoanMast("CustomerId")))
 
 Set CustClass = Nothing
-txtCustNAme = txtLoanIssue(txtIndex + 1).Text
+txtCustName = txtLoanIssue(txtIndex + 1).Text
 'Loan Details
 txtIndex = GetIndex("LoanAccNo")
 txtLoanIssue(txtIndex).Text = FormatField(m_rstLoanMast("AccNum"))
@@ -1423,7 +1438,7 @@ gDbTrans.SqlStmt = "SELECT 'PRINCIPLE',TransDate,TransID, TransType,Amount,Balan
 Lret = gDbTrans.Fetch(m_rstLoanTrans, adOpenForwardOnly)
 If Lret <= 0 Then GoTo Exit_Line
 
-If m_rstLoanTrans.RecordCount = 1 Then _
+If m_rstLoanTrans.recordCount = 1 Then _
         cmdUndo.Caption = GetResourceString(14)  '' "Delete"
 
 m_rstLoanTrans.MoveLast
@@ -1449,11 +1464,11 @@ txtIntBalance = GetInterstBalance
 txtRepayAmt = 0
 
 'Now get the Pledge Deposit Information
-gDbTrans.SqlStmt = "SELECt * From PledgeDeposit" & _
+gDbTrans.SqlStmt = "SELECT * From PledgeDeposit" & _
         " WHERE LoanId = " & lLoanID
         
 If gDbTrans.Fetch(m_rstPledge, adOpenDynamic) <= 0 Then GoTo Exit_Line
-Lret = m_rstPledge.RecordCount
+Lret = m_rstPledge.recordCount
 
 ReDim m_AccArr(Lret - 1)
 ReDim m_DepTypeArr(Lret - 1)
@@ -1528,7 +1543,7 @@ On Error GoTo Err_line
 If m_rstLoanTrans Is Nothing Then Exit Sub
 
 ' If no records, exit.
-If m_rstLoanTrans.RecordCount = 0 Then Exit Sub
+If m_rstLoanTrans.recordCount = 0 Then Exit Sub
 
 'Show 10 records or till eof of the page being pointed to
 With grd
@@ -1620,9 +1635,10 @@ Dim DueDate As Date
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
 Dim DepositType As Integer
-
+Dim LoanDepositType As Integer
+Dim subDepType As Integer
 ' ------------------------------------------
-
+DepositType = GetPledgeDepositType
 DepositType = GetDepositType(GetVal("DepositType"))
 DepositType = DepositType Mod 100
 
@@ -1731,24 +1747,25 @@ Dim PledgeAccId As Long
 For count = 0 To UBound(m_AccArr)
     DepositType = m_DepTypeArr(count)
     DepositType = DepositType Mod 100
-    If DepositType = wisDeposit_RD Then
+    LoanDepositType = DepositType - (DepositType Mod 10)
+    
+    If LoanDepositType = wisDeposit_RD Then
         TableName = "RDMASTER"
-    ElseIf DepositType = wisDeposit_PD Then
+    ElseIf LoanDepositType = wisDeposit_PD Then
         TableName = "PDMASTER"
     Else
         TableName = "FDMASTER"
     End If
     SqlStr = "SELECT AccID From " & TableName & " WHERE " & _
                 " AccNum = " & AddQuotes(m_AccArr(count), True)
-    If TableName = "FDMASTER" Then _
+    If (DepositType Mod 10) > 0 Then _
                 SqlStr = SqlStr & " AND DepositType = " & DepositType
             
     gDbTrans.SqlStmt = SqlStr
-    If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then _
-                            PledgeAccId = FormatField(rst(0))
+    If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then PledgeAccId = FormatField(rst(0))
     
     gDbTrans.SqlStmt = "INSERT INTO PledgeDeposit " & _
-            "( LOanID,AccId,DepositType,PledgeNum) Values " & _
+            "( LoanID,AccId,DepositType,PledgeNum) Values " & _
             "(" & NewLoanID & "," & PledgeAccId & ", " & _
             m_DepTypeArr(count) & "," & count + 1 & ")"
     
@@ -1812,7 +1829,7 @@ RaiseEvent AccountChanged(0)
 m_PledgeDeposits = ""
 m_PledgeValue = 0
 txtLoanAmt.Caption = ""
-txtCustNAme = ""
+txtCustName = ""
 
 cmbDeposit.ListIndex = -1
 txtBalance.Caption = ""
@@ -2354,8 +2371,6 @@ For I = 0 To txtLoanIssue.count - 1
     End If
 Next
 End Function
-
-
 '
 Private Function GetIndex(strDataSrc As String) As Integer
 GetIndex = -1
@@ -2371,92 +2386,6 @@ For I = 0 To lblLoanIssue.count - 1
 Next
 
 End Function
-'
-Private Sub DisplayResults(MoveDirection As Integer)
-#If RAVI_COMMENTED Then
-'On Error Resume Next
-'Uses the record set to display results
-    If m_rstSearchResults Is Nothing Then
-        Exit Sub
-    End If
-    
-    If MoveDirection = 1 Then
-        m_rstSearchResults.MoveNext
-    ElseIf MoveDirection = -1 Then
-        m_rstSearchResults.MovePrevious
-    End If
-
-    
-    Dim customerID As Long
-    customerID = FormatField(m_rstSearchResults("SBMaster.CustomerID"))
-    If Not m_AccHolder.LoadCustomerInfo(customerID) Then
-        Exit Sub
-    End If
-    txtNewAccNo.Text = m_rstSearchResults("AccID")
-    m_AccNo = FormatField(m_rstSearchResults("AccID"))
-    txtName.Text = m_AccHolder.FullName
-    
-    cmdDetails.Enabled = True
-
-    'txtNewDate.Text = m_rstsearchresults("CreateDate")
-    txtNewDate.Text = FormatField(m_rstSearchResults("CreateDate"))
-    txtLedger.Text = FormatField(m_rstSearchResults("LedgerNo"))
-    txtFolio.Text = FormatField(m_rstSearchResults("FolioNo"))
-    
-    Dim I As Integer
-    Dim Arr() As String
-    Call GetStringArray(FormatField(m_rstSearchResults("Nominee")), Arr, ";")
-    txtNominee.Text = "": txtAge.Text = "": cmbRelation.ListIndex = -1
-    For I = 0 To UBound(Arr)
-        Select Case I
-            Case 0: txtNominee.Text = Arr(I)
-            Case 1: txtAge.Text = Arr(I)
-            Case 2: cmbRelation.ListIndex = Val(Arr(I))
-        End Select
-    Next I
-    
-    Call GetStringArray(FormatField(m_rstSearchResults("JointHolder")), Arr, ";")
-    cmbHolders.Clear
-    For I = 0 To UBound(Arr)
-        cmbHolders.AddItem Arr(I)
-    Next I
-    
-    txtIntroAccNo.Text = FormatField(m_rstSearchResults("Introduced"))
-    If Val(txtIntroAccNo.Text) = 0 Then
-        txtIntroAccNo.Text = ""
-    End If
-    
-    'Load the name now
-    Call m_AccHolder.LoadCustomerInfo(FormatField(m_rstSearchResults("SBMaster.CustomerID")))
-    txtIntroName.Text = m_AccHolder.FullName
-    
-    m_rstSearchResults.MovePrevious
-    If m_rstSearchResults.BOF Then
-        cmdPrevious.Enabled = False
-    Else
-        cmdPrevious.Enabled = True
-    End If
-    If m_rstSearchResults.BOF Then
-        m_rstSearchResults.MoveFirst
-    Else
-        m_rstSearchResults.MoveNext
-    End If
-    
-    m_rstSearchResults.MoveNext
-    If m_rstSearchResults.EOF Then
-        cmdNext.Enabled = False
-    Else
-        cmdNext.Enabled = True
-    End If
-    If m_rstSearchResults.EOF Then
-        m_rstSearchResults.MoveLast
-    Else
-        m_rstSearchResults.MovePrevious
-    End If
-    
-#End If
-End Sub
-
 '
 Private Function LoadLoanIssueProp() As Boolean
 
@@ -2663,7 +2592,7 @@ Dim cmbIndex As Integer
     I = GetIndex("DepositType")
     ' Get the combobox index for this text.
     cmbIndex = ExtractToken(lblLoanIssue(I).Tag, "TextIndex")
-    Call LoadDepositTypes(cmb(cmbIndex))
+    Call LoadFixedDepositTypes(cmb(cmbIndex))
     
 End Function
 '
@@ -2900,18 +2829,17 @@ End Function
 
 
 Private Sub cmb_KeyPress(Index As Integer, KeyAscii As Integer)
-If KeyAscii = vbKeyReturn Then SendKeys "{TAB}"
+    If KeyAscii = vbKeyReturn Then SendKeys "{TAB}"
 End Sub
 
 Private Sub cmb_LostFocus(Index As Integer)
 '
 ' Update the current text to the data text
 '
+    Dim txtIndex As String
 
-Dim txtIndex As String
-
-txtIndex = ExtractToken(cmb(Index).Tag, "TextIndex")
-If txtIndex <> "" Then txtLoanIssue(Val(txtIndex)).Text = cmb(Index).Text
+    txtIndex = ExtractToken(cmb(Index).Tag, "TextIndex")
+    If txtIndex <> "" Then txtLoanIssue(Val(txtIndex)).Text = cmb(Index).Text
 
 End Sub
 
@@ -3072,7 +3000,7 @@ Select Case UCase$(strField)
         If custReg Is Nothing Then Set custReg = New clsCustReg
         custReg.ShowDialog
         txtLoanIssue(GetIndex("MemberName")).Text = custReg.FullName
-        txtLoanIssue(GetIndex("MemberID")).Text = custReg.customerID
+        txtLoanIssue(GetIndex("MemberID")).Text = custReg.CustomerID
     
     Case "DUEDATE"
         With Calendar
@@ -3196,7 +3124,7 @@ End Sub
 
 Private Sub cmdOk_Click()
 
-Dim Cancel As Boolean
+Dim cancel As Boolean
 
 'Ask the user wen closing application
 
@@ -3241,10 +3169,10 @@ End With
 End Sub
 
 Private Sub cmdSaveLoan_Click()
-If Not Validate Then Exit Sub
-If Not LoanSave Then Exit Sub
-
-Call LoanLoad(m_LoanID)
+    If Not Validate Then Exit Sub
+    If Not LoanSave Then Exit Sub
+    
+    Call LoanLoad(m_LoanID)
 
 End Sub
 
@@ -3441,22 +3369,21 @@ Private Sub Form_Load()
       Call SetKannadaCaption
       
       'Centre the form
-          Me.Move (Screen.Width - Me.Width) \ 2, _
-                  (Screen.Height - Me.Height) \ 2
-      
+      Call CenterMe(Me)
+        
       PropInitializeForm
       
       Me.txtRepayDate.Text = gStrDate
       ReDim m_LoanAmount(0)
       
       
-      Call LoadDepositTypes(Me.cmbDeposit)
+      Call LoadFixedDepositTypes(Me.cmbDeposit)
       
       'Clear the Loan Detial
       m_LoanID = 1
       Call LoanClear
       
-      Call LoadDepositTypes(cmbRepDeposit)
+      Call LoadFixedDepositTypes(cmbRepDeposit)
       optReport(0).Value = True
       'Individual Report types for the Loans
       Screen.MousePointer = vbDefault
@@ -3468,7 +3395,7 @@ Private Sub Form_Load()
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 
 'Now Set the module level Reference to nothing before unloading
 Set m_rstLoanMast = Nothing
@@ -3501,15 +3428,15 @@ m_AccArr = AccList
 m_DepTypeArr = DepList
 'Now Get the List Of Accounts & thier Account NOs
 Dim count As Integer
-Dim MaxCount As Integer
+Dim maxCount As Integer
 Dim loopCount As Integer
 
-MaxCount = UBound(m_AccArr)
+maxCount = UBound(m_AccArr)
 m_PledgeDeposits = ""
 
-If MaxCount = 0 And m_AccArr(0) = "" Then Exit Sub
+If maxCount = 0 And m_AccArr(0) = "" Then Exit Sub
 loopCount = 1
-For count = 0 To MaxCount
+For count = 0 To maxCount
     Do
         If m_frmPldegeDeposits.lstDeposits.ListItems(loopCount).SubItems(1) = m_AccArr(count) Then
             m_PledgeDeposits = m_PledgeDeposits & gDelim & m_frmPldegeDeposits.lstDeposits.ListItems(loopCount)
@@ -3529,12 +3456,12 @@ If Val(GetVal("InterestRate")) > 0 Then Exit Sub
 Dim IntRate As Single
 Dim rst As Recordset
 
-For count = 0 To MaxCount
-    If m_DepTypeArr(count) = wisDeposit_PD Then
+For count = 0 To maxCount
+    If m_DepTypeArr(count) >= wisDeposit_PD And m_DepTypeArr(count) < wisDeposit_PD + 10 Then
         gDbTrans.SqlStmt = "Select RateOfInterest From " & _
                 " PDMaster Where Accid = " & m_AccArr(count)
     
-    ElseIf m_DepTypeArr(count) = wisDeposit_RD Then
+    ElseIf m_DepTypeArr(count) >= wisDeposit_RD And m_DepTypeArr(count) < wisDeposit_RD + 10 Then
         gDbTrans.SqlStmt = "Select RateOfInterest From " & _
                 " RDMaster Where AccID = " & (m_AccArr(count))
     
@@ -4104,9 +4031,6 @@ Private Sub txtMisc_Change()
    'txtRepayAmt = txtRegInterest + txtIntBalance + txtMisc + txtPrincAmount
 End Sub
 
-Private Sub txtPenalInterest_Change()
-   'txtTotInst.Text = FormatCurrency(Val(txtInstAmt.Text) + Val(txtRegInterest.Text) + Val(txtPenalInterest) + Val(txtMisc.Text))
-End Sub
 
 Private Sub txtPenalInterest_GotFocus()
 Me.ActiveControl.SelStart = 0

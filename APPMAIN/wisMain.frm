@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#1.0#0"; "THREED32.OCX"
 Object = "{B44203C3-6FD7-4C5A-B02A-E52525F0ECEA}#1.0#0"; "WISPrint.ocx"
 Begin VB.Form wisMain 
@@ -849,6 +849,12 @@ Dim txt As String
 ' Open the layout file
 If gLangOffSet Then
     strLayoutFile = App.Path & "\tbarkan.lyt"
+    If UCase(Mid$(gFontName, 1, 4)) = "NUDI" Then
+        If Dir(App.Path & "\TBARKAN_Nudi.lyt") <> "" Then strLayoutFile = App.Path & "\TBARKAN_Nudi.lyt"
+        'Check the Existance of file
+        
+    End If
+    
     Me.FontName = gFontName
 Else
     strLayoutFile = App.Path & "\toolbar.lyt"
@@ -888,9 +894,9 @@ End With
 
 
 End Sub
-Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+Private Sub Form_QueryUnload(cancel As Integer, UnloadMode As Integer)
 
-If UnloadMode = 0 Then Call ExitApplication(True, Cancel)
+If UnloadMode = 0 Then Call ExitApplication(True, cancel)
 
 End Sub
 Private Sub Form_Resize()

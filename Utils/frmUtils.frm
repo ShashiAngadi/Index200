@@ -22,6 +22,74 @@ Begin VB.Form frmUtils
       TabIndex        =   62
       Top             =   600
       Width           =   6400
+      Begin VB.OptionButton optPigmy 
+         Caption         =   "New Pigmy Deposit"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   3390
+         TabIndex        =   76
+         Top             =   1662
+         Width           =   2805
+      End
+      Begin VB.OptionButton optRD 
+         Caption         =   "New Recuring Deposit"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   390
+         TabIndex        =   75
+         Top             =   1725
+         Width           =   2805
+      End
+      Begin VB.OptionButton optCurrentAccount 
+         Caption         =   "New Current Account"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   3390
+         TabIndex        =   74
+         Top             =   1128
+         Width           =   2655
+      End
+      Begin VB.OptionButton optSavings 
+         Caption         =   "New Savings Account"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   390
+         TabIndex        =   73
+         Top             =   1200
+         Width           =   2415
+      End
       Begin VB.OptionButton optMember 
          Caption         =   "New Member Type"
          BeginProperty Font 
@@ -36,7 +104,7 @@ Begin VB.Form frmUtils
          Height          =   375
          Left            =   390
          TabIndex        =   72
-         Top             =   1185
+         Top             =   675
          Width           =   2805
       End
       Begin VB.OptionButton optFarmer 
@@ -70,7 +138,7 @@ Begin VB.Form frmUtils
          Height          =   285
          Left            =   3390
          TabIndex        =   70
-         Top             =   480
+         Top             =   240
          Width           =   2865
       End
       Begin VB.OptionButton optCustomer 
@@ -87,7 +155,7 @@ Begin VB.Form frmUtils
          Height          =   285
          Left            =   3390
          TabIndex        =   69
-         Top             =   1920
+         Top             =   2196
          Width           =   2865
       End
       Begin VB.OptionButton optCaste 
@@ -104,7 +172,7 @@ Begin VB.Form frmUtils
          Height          =   285
          Left            =   390
          TabIndex        =   68
-         Top             =   480
+         Top             =   240
          Width           =   2865
       End
       Begin VB.OptionButton optAccount 
@@ -121,7 +189,7 @@ Begin VB.Form frmUtils
          Height          =   240
          Left            =   390
          TabIndex        =   67
-         Top             =   1980
+         Top             =   2250
          Width           =   2865
       End
       Begin VB.OptionButton optLoanPurpose 
@@ -155,7 +223,7 @@ Begin VB.Form frmUtils
          Height          =   285
          Left            =   3390
          TabIndex        =   65
-         Top             =   1200
+         Top             =   684
          Width           =   2865
       End
       Begin VB.CommandButton cmdLoad 
@@ -180,7 +248,7 @@ Begin VB.Form frmUtils
          Height          =   495
          Left            =   480
          TabIndex        =   64
-         Top             =   3210
+         Top             =   3450
          Width           =   5565
       End
    End
@@ -1152,6 +1220,10 @@ Public Event WindowClosed()
 Private Function AddNewGroup()
 
 Dim grpType As Long
+Dim ModuleID As wisModules
+
+ModuleID = wis_None
+
 If optAccount Then grpType = grpAccount
 If optCaste Then grpType = grpCaste
 If optPlace Then grpType = grpPlace
@@ -1160,6 +1232,10 @@ If optFarmer Then grpType = grpFarmer
 If optDeposit Then grpType = grpDeposit
 If optLoanPurpose Then grpType = grpLoanPurpose
 If optMember Then grpType = grpMember
+If optSavings Then grpType = grpAllDeposit: ModuleID = wis_SBAcc
+If optCurrentAccount Then grpType = grpAllDeposit: ModuleID = wis_CAAcc
+If optPigmy Then grpType = grpAllDeposit: ModuleID = wis_PDAcc
+If optRD Then grpType = grpAllDeposit: ModuleID = wis_RDAcc
 
 'If optproduct Then grpType = grpProduct
 'If optunit Then grdpType = grpUnit
@@ -1171,7 +1247,7 @@ End If
 
 If m_AddGroup Is Nothing Then Set m_AddGroup = New clsAddGroup
 
-m_AddGroup.ShowAddGroup (grpType)
+Call m_AddGroup.ShowAddGroup(grpType, ModuleID)
 
 AddNewGroup = True
 
@@ -1546,10 +1622,12 @@ If Not DateValidate(txtDate, "/", True) Then
 End If
 
 Dim TransDate As Date
-Dim ModuleId As wisModules
+Dim ModuleID As wisModules
 Dim headID As Long
 Dim SchemeID As Long
 Dim AccountType As wis_AccountType
+Dim Deptype As Integer
+Dim subDepType As Integer
 
 TransDate = GetSysFormatDate(txtDate)
 
@@ -1560,46 +1638,56 @@ With cmb
     End If
     headID = .ItemData(.ListIndex)
 End With
-ModuleId = GetModuleIDFromHeadID(headID)
+ModuleID = GetModuleIDFromHeadID(headID)
 
-If ModuleId = wis_None Then Exit Function
+If ModuleID = wis_None Then Exit Function
 
-If ModuleId > 100 Then ModuleId = ModuleId - (ModuleId Mod 100)
+Deptype = ModuleID Mod 100
+subDepType = ModuleID Mod 10
+If ModuleID > 100 Then ModuleID = ModuleID - (ModuleID Mod 100)
 
 gDbTrans.SqlStmt = ""
 
 Dim TableName As String
-If ModuleId = wis_Members Then
+If ModuleID = wis_Members Then
     TableName = "Mem"
-ElseIf ModuleId = wis_SBAcc Then
+ElseIf ModuleID = wis_SBAcc Then
     TableName = "SB"
-ElseIf ModuleId = wis_CAAcc Then
+ElseIf ModuleID = wis_CAAcc Then
     TableName = "CA"
-ElseIf ModuleId = wis_RDAcc Then
+ElseIf ModuleID = wis_RDAcc Then
     TableName = "RD"
-ElseIf ModuleId = wis_PDAcc Then
+ElseIf ModuleID = wis_PDAcc Then
     TableName = "PD"
-ElseIf ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then
+ElseIf ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Then
     TableName = "BKCC"
-ElseIf ModuleId = wis_Loans Then
+ElseIf ModuleID = wis_Loans Then
     TableName = "Loan"
-ElseIf ModuleId = wis_DepositLoans Then
+ElseIf ModuleID = wis_DepositLoans Then
     TableName = "DepositLoan"
 End If
 
-If ModuleId = wis_Members Or ModuleId = wis_SBAcc _
-    Or ModuleId = wis_CAAcc Or ModuleId = wis_PDAcc _
-    Or ModuleId = wis_RDAcc Then
+If ModuleID = wis_Members Or ModuleID = wis_SBAcc _
+    Or ModuleID = wis_CAAcc Or ModuleID = wis_PDAcc _
+    Or ModuleID = wis_RDAcc Then
     AccountType = Liability
     gDbTrans.SqlStmt = "Select AccNum,Balance,A.AccID,TransID,TransType," & _
         "Amount,FirstName+ ' ' + MiddleNAme +' '+ LastName as CustName " & _
         "From " & TableName & "Master A," & TableName & "Trans B,NameTab C " & _
         "Where A.AccID = B.AccID And C.CustomerID = A.CustomerID And TransID = " & _
             "(Select Min(TransID) From " & TableName & "Trans C " & _
-            " Where C.AccID = B.AccID And TransDate >= #" & TransDate & "#)" & _
-        " Order By val(AccNum)"
+            " Where C.AccID = B.AccID And TransDate >= #" & TransDate & "#)"
+    
+    If subDepType > 0 Then
+        If ModuleID = wis_Members Then
+            gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And A.MemberType = " & subDepType
+        Else
+            gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And A.DepositType = " & subDepType
+        End If
+    End If
+    gDbTrans.SqlStmt = gDbTrans.SqlStmt & " Order By val(AccNum)"
 
-ElseIf ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then
+ElseIf ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Then
     AccountType = Asset
     gDbTrans.SqlStmt = "Select AccNum,Balance,A.LoanID as AccID,TransID,TransType," & _
         "Amount,FirstName+ ' ' + MiddleNAme +' '+ LastName as CustName " & _
@@ -1609,9 +1697,9 @@ ElseIf ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then
             " Where C.LoanID = B.LoanID And TransDate >= #" & TransDate & "#)" & _
         " ORder By val(AccNum)"
 
-ElseIf ModuleId = wis_Loans Then
+ElseIf ModuleID = wis_Loans Then
     
-    SchemeID = ModuleId Mod 100
+    SchemeID = ModuleID Mod 100
     AccountType = Asset
     gDbTrans.SqlStmt = "Select AccNum,Balance,A.LoanID as AccID,TransID,TransType," & _
         "Amount,FirstName+ ' ' + MiddleNAme +' '+ LastName as CustName " & _
@@ -1621,9 +1709,9 @@ ElseIf ModuleId = wis_Loans Then
             " Where C.LoanID = B.LoanID And TransDate >= #" & TransDate & "#)" & _
         " ORder By val(AccNum)"
 
-ElseIf ModuleId = wis_DepositLoans Then
+ElseIf ModuleID = wis_DepositLoans Then
     
-    SchemeID = ModuleId Mod 100
+    SchemeID = ModuleID Mod 100
     AccountType = Asset
     gDbTrans.SqlStmt = "Select AccNum,Balance,A.LoanID as AccID,TransID,TransType," & _
         "Amount,FirstName+ ' ' + MiddleNAme +' '+ LastName as CustName " & _
@@ -1655,7 +1743,7 @@ Unload frmIntPayble
 Load frmIntPayble
 With frmIntPayble
     .Caption = "Opening Balance"
-    MaxCount = rst.RecordCount + 1
+    MaxCount = rst.recordCount + 1
     Call .LoadContorls(MaxCount, 20)
     .Title(0) = GetResourceString(36, 60)
     .Title(1) = GetResourceString(35)
@@ -1728,16 +1816,16 @@ For loopCount = 1 To MaxCount - 1
     Balance = frmIntPayble.Amount(loopCount)
     transType = rst("TransType")
     
-    If ModuleId = wis_Members Or ModuleId = wis_SBAcc Or ModuleId = wis_CAAcc _
-        Or ModuleId = wis_PDAcc Or ModuleId = wis_RDAcc Then
+    If ModuleID = wis_Members Or ModuleID = wis_SBAcc Or ModuleID = wis_CAAcc _
+        Or ModuleID = wis_PDAcc Or ModuleID = wis_RDAcc Then
         gDbTrans.SqlStmt = "UpDate " & TableName & _
             " SET Balance = Balance - " & DiffAmount & _
             " Where AccID = " & rst("Accid") & _
             " ANd TransID >= " & rst("TransID") & _
             " And TransDate >= #" & TransDate & "#"
             
-    ElseIf ModuleId = wis_BKCC Or ModuleId = wis_Loans _
-        Or ModuleId = wis_BKCCLoan Or ModuleId = wis_DepositLoans Then
+    ElseIf ModuleID = wis_BKCC Or ModuleID = wis_Loans _
+        Or ModuleID = wis_BKCCLoan Or ModuleID = wis_DepositLoans Then
         
         gDbTrans.SqlStmt = "UpDate " & TableName & _
             " SET Balance = Balance - " & DiffAmount & _
@@ -1774,7 +1862,7 @@ If Not DateValidate(txtDate, "/", True) Then
 End If
 
 Dim TransDate As Date
-Dim ModuleId As wisModules
+Dim ModuleID As wisModules
 Dim headID As Long
 Dim SchemeID As Long
 Dim AccountType As wis_AccountType
@@ -1788,34 +1876,34 @@ With cmb
     End If
     headID = .ItemData(.ListIndex)
 End With
-ModuleId = GetModuleIDFromHeadID(headID)
+ModuleID = GetModuleIDFromHeadID(headID)
 
-If ModuleId = wis_None Then Exit Function
+If ModuleID = wis_None Then Exit Function
 
 gDbTrans.SqlStmt = ""
 
 Dim TableName As String
-If ModuleId = wis_Members Then
+If ModuleID = wis_Members Then
     TableName = "Mem"
-ElseIf ModuleId = wis_SBAcc Then
+ElseIf ModuleID = wis_SBAcc Then
     TableName = "SB"
-ElseIf ModuleId = wis_CAAcc Then
+ElseIf ModuleID = wis_CAAcc Then
     TableName = "CA"
-ElseIf ModuleId = wis_RDAcc Then
+ElseIf ModuleID = wis_RDAcc Then
     TableName = "RD"
-ElseIf ModuleId = wis_PDAcc Then
+ElseIf ModuleID = wis_PDAcc Then
     TableName = "PD"
-ElseIf ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then
+ElseIf ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Then
     TableName = "BKCC"
-ElseIf ModuleId = wis_Loans Then
+ElseIf ModuleID = wis_Loans Then
     TableName = "Loan"
-ElseIf ModuleId = wis_DepositLoans Then
+ElseIf ModuleID = wis_DepositLoans Then
     TableName = "DepositLoan"
 End If
 
 
-If ModuleId = wis_Members Or ModuleId = wis_SBAcc Or ModuleId = wis_CAAcc _
-        Or ModuleId = wis_PDAcc Or ModuleId = wis_RDAcc Then
+If ModuleID = wis_Members Or ModuleID = wis_SBAcc Or ModuleID = wis_CAAcc _
+        Or ModuleID = wis_PDAcc Or ModuleID = wis_RDAcc Then
     AccountType = Liability
     gDbTrans.SqlStmt = "Select AccNum, A.AccID," & _
         "FirstName+ ' ' + MiddleNAme +' '+ LastName as CustName " & _
@@ -1823,7 +1911,7 @@ If ModuleId = wis_Members Or ModuleId = wis_SBAcc Or ModuleId = wis_CAAcc _
         "Where C.CustomerID = A.CustomerID " & _
         " Order By val(AccNum)"
 
-ElseIf ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then
+ElseIf ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Then
     AccountType = Asset
     gDbTrans.SqlStmt = "Select AccNum,A.LoanID as AccID," & _
         "FirstName+ ' ' + MiddleNAme +' '+ LastName as CustName " & _
@@ -1831,9 +1919,9 @@ ElseIf ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then
         "Where C.CustomerID = A.CustomerID " & _
         " ORder By val(AccNum)"
 
-ElseIf ModuleId = wis_Loans Then
+ElseIf ModuleID = wis_Loans Then
     
-    SchemeID = ModuleId Mod 100
+    SchemeID = ModuleID Mod 100
     AccountType = Asset
     gDbTrans.SqlStmt = "Select AccNum,A.LoanID as AccID, " & _
         "FirstName+ ' ' + MiddleNAme +' '+ LastName as CustName " & _
@@ -1841,9 +1929,9 @@ ElseIf ModuleId = wis_Loans Then
         "C.CustomerID = A.CustomerID And SchemeID = " & SchemeID & " " & _
         " ORder By val(AccNum)"
 
-ElseIf ModuleId = wis_DepositLoans Then
+ElseIf ModuleID = wis_DepositLoans Then
     
-    SchemeID = ModuleId Mod 100
+    SchemeID = ModuleID Mod 100
     AccountType = Asset
     gDbTrans.SqlStmt = "Select AccNum,A.LoanID as AccID," & _
         "FirstName+ ' ' + MiddleNAme +' '+ LastName as CustName " & _
@@ -1868,7 +1956,7 @@ If gDbTrans.Fetch(rst, adOpenDynamic) < 1 Then Exit Function
 Unload frmIntPayble
 Load frmIntPayble
 With frmIntPayble
-    MaxCount = rst.RecordCount + 1
+    MaxCount = rst.recordCount + 1
     Call .LoadContorls(MaxCount, 20)
     .lblTitle.Caption = cmb.Text & " " & GetResourceString(284)
     .Title(0) = GetResourceString(36, 60)
@@ -1900,8 +1988,8 @@ While Not rst.EOF
     Amount = 0
     Balance = 0
     TransID = 0
-    If ModuleId = wis_Members Or ModuleId = wis_SBAcc Or ModuleId = wis_CAAcc _
-            Or ModuleId = wis_PDAcc Or ModuleId = wis_RDAcc Then
+    If ModuleID = wis_Members Or ModuleID = wis_SBAcc Or ModuleID = wis_CAAcc _
+            Or ModuleID = wis_PDAcc Or ModuleID = wis_RDAcc Then
         gDbTrans.SqlStmt = "Select Balance,Amount,TransType,TransID " & _
             " From " & TableName & _
             " Where AccID = " & rst("AccID") & _
@@ -1967,8 +2055,8 @@ For loopCount = 1 To MaxCount - 1
     End With
     
     If TransID Then
-        If ModuleId = wis_Members Or ModuleId = wis_SBAcc Or ModuleId = wis_CAAcc _
-                Or ModuleId = wis_PDAcc Or ModuleId = wis_RDAcc Then
+        If ModuleID = wis_Members Or ModuleID = wis_SBAcc Or ModuleID = wis_CAAcc _
+                Or ModuleID = wis_PDAcc Or ModuleID = wis_RDAcc Then
             gDbTrans.SqlStmt = "Select Balance,Amount,TransType,TransID " & _
                 " From " & TableName & _
                 " Where AccID = " & rst("AccID") & _
@@ -1997,8 +2085,8 @@ For loopCount = 1 To MaxCount - 1
             DiffAmount = Balance - frmIntPayble.Amount(loopCount)
         End If
         
-        If ModuleId = wis_Members Or ModuleId = wis_SBAcc Or ModuleId = wis_CAAcc _
-            Or ModuleId = wis_PDAcc Or ModuleId = wis_RDAcc Then
+        If ModuleID = wis_Members Or ModuleID = wis_SBAcc Or ModuleID = wis_CAAcc _
+            Or ModuleID = wis_PDAcc Or ModuleID = wis_RDAcc Then
             gDbTrans.SqlStmt = "UpDate " & TableName & _
                 " SET Balance = Balance - " & DiffAmount & _
                 " Where AccID = " & rst("Accid") & _
@@ -2015,8 +2103,8 @@ For loopCount = 1 To MaxCount - 1
     Else
         
         TransID = 100
-        If ModuleId = wis_Members Or ModuleId = wis_SBAcc Or ModuleId = wis_CAAcc _
-            Or ModuleId = wis_PDAcc Or ModuleId = wis_RDAcc Then
+        If ModuleID = wis_Members Or ModuleID = wis_SBAcc Or ModuleID = wis_CAAcc _
+            Or ModuleID = wis_PDAcc Or ModuleID = wis_RDAcc Then
             transType = wDeposit
             gDbTrans.SqlStmt = "Insert Into " & TableName & _
                 " (AccId, TransID,Amount,TransType,TransDate,Balance) " & _
@@ -2377,7 +2465,7 @@ gDbTrans.SqlStmt = "SELECT A.LoanID,TransDate,Balance,TransID,Amount" & _
 If gDbTrans.Fetch(rstReceivAble, adOpenDynamic) < 1 Then Set rstReceivAble = Nothing
 
 With frmIntPayble
-    Call .LoadContorls(rstMaster.RecordCount + 1, 20)
+    Call .LoadContorls(rstMaster.recordCount + 1, 20)
     .lblTitle = cmb.Text & " " & GetResourceString(80) & _
                 GetResourceString(376, 47)
     .BalanceColoumn = True
@@ -2458,7 +2546,7 @@ While Not rstMaster.EOF
     If gCancel Then rstMaster.MoveLast
     With frmCancel
         .lblMessage = "Calculationg interest of AccNo: " & rstMaster("AccNum")
-        UpdateStatus .PicStatus, count / rstMaster.RecordCount
+        UpdateStatus .PicStatus, count / rstMaster.recordCount
     End With
     
     
@@ -2481,7 +2569,7 @@ With frmIntPayble
         
     TotalBalance = TotalBalance + ReceivableBalance
     .ShowForm
-    If .grd.Rows < rstMaster.RecordCount Then GoTo Exit_Line
+    If .grd.Rows < rstMaster.recordCount Then GoTo Exit_Line
 End With
 
 Dim InTrans As Boolean
@@ -2561,7 +2649,7 @@ While Not rstMaster.EOF
     If gCancel Then rstMaster.MoveLast
     With frmCancel
         .lblMessage = "Calculationg interest of AccNo: " & rstMaster("AccNum")
-        UpdateStatus .PicStatus, count / rstMaster.RecordCount
+        UpdateStatus .PicStatus, count / rstMaster.recordCount
     End With
     
 NextPut:
@@ -2725,6 +2813,10 @@ optCustomer.Caption = GetResourceString(260, 205, 253)
 optLoanPurpose.Caption = GetResourceString(260, 80, 221)
 optFarmer.Caption = GetConfigValue("FarmerTypeName", GetResourceString(378)) _
                     & " " & GetResourceString(253)
+optSavings.Caption = GetResourceString(260, 421)
+optCurrentAccount.Caption = GetResourceString(260, 422)
+optPigmy.Caption = GetResourceString(260, 425)
+optRD.Caption = GetResourceString(260, 424)
         
         
 lblImagePath = GetResourceString(415, 409)
@@ -2733,7 +2825,7 @@ lblObDate = GetResourceString(284, 37)
 
 'fra(2).Visible = False
 cmdLoad.Caption = GetResourceString(3)
-cmdOK.Caption = GetResourceString(4)
+cmdOk.Caption = GetResourceString(4)
 cmdAdvance.Caption = GetResourceString(6)
 cmdApply.Caption = GetResourceString(6)
 cmdApply4.Caption = GetResourceString(6)
@@ -2747,7 +2839,7 @@ lblGuranteer = GetResourceString(389, 60)
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
     Set m_AddGroup = New clsAddGroup
     gWindowHandle = 0
     
@@ -2846,19 +2938,42 @@ Private Sub optOpBalance_Click()
     
 'Fra.Visible = True
 Dim rst As Recordset
+Dim recCount As Integer
 
 Dim headID As Long
 With cmb
     .Clear
     cmbEnglish.Clear
-    headID = GetIndexHeadID(GetResourceString(53, 36))
-    .AddItem GetResourceString(53, 36)
-    .ItemData(.newIndex) = headID
-    
-    cmbEnglish.AddItem LoadResourceStringS(53, 36)
-    cmbEnglish.ItemData(cmbEnglish.newIndex) = headID
 End With
 
+'Get the Member Types
+gDbTrans.SqlStmt = "SELECT * From MemberTypeTab"
+recCount = gDbTrans.Fetch(rst, adOpenDynamic)
+If recCount = 0 Then
+    With cmb
+        headID = GetIndexHeadID(GetResourceString(53, 36))
+        .AddItem GetResourceString(53, 36)
+        .ItemData(.newIndex) = headID
+        
+        cmbEnglish.AddItem LoadResourceStringS(53, 36)
+        cmbEnglish.ItemData(cmbEnglish.newIndex) = headID
+    End With
+Else
+    gDbTrans.SqlStmt = "Select * from Heads Where Parentid = " & parMemberShare
+    If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
+        With cmb
+            While Not rst.EOF
+                .AddItem FormatField(rst("HeadName"))
+                .ItemData(.newIndex) = rst("HeadID")
+                
+                cmbEnglish.AddItem FormatField(rst("HeadNameEnglish"))
+                cmbEnglish.ItemData(cmbEnglish.newIndex) = rst("HeadID")
+                rst.MoveNext
+            Wend
+        End With
+    End If
+
+End If
 
 gDbTrans.SqlStmt = "Select * from Heads Where Parentid = " & parMemberDeposit
 If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then

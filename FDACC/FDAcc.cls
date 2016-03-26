@@ -189,9 +189,8 @@ Dim MatDate As Date
 'Unload frmIntPayble
 Load frmIntPayble
 With frmIntPayble
-    Call .LoadContorls(rstMain.RecordCount + 1, 20)
-    .lblTitle = GetDepositTypeText(m_DepositType) & " " & _
-                GetResourceString(375, 47)
+    Call .LoadContorls(rstMain.recordCount + 1, 20)
+    .lblTitle = GetDepositTypeText(m_DepositType) & " " & GetResourceString(375, 47)
     .PutTotal = True
 '    .TotalColoumn = m_Cumulative
 '    .BalanceColoumn = m_Cumulative
@@ -213,10 +212,10 @@ End With
 With m_frmFDAcc
     .lblStatus.Caption = GetResourceString(906) & "  .........."
     .txtFailAccIDs.Visible = False
-    .prg.Min = 0: .prg.Max = rstMain.RecordCount + 2
+    .prg.Min = 0: .prg.Max = rstMain.recordCount + 2
 End With
 
-If Not frmIntPayble.LoadContorls(rstMain.RecordCount + 1, 15) Then Exit Function
+If Not frmIntPayble.LoadContorls(rstMain.recordCount + 1, 15) Then Exit Function
 
 
 count = 1
@@ -350,7 +349,7 @@ TotalInt = 0
 With m_frmFDAcc
     .txtFailAccIDs = 0
     .prg.Min = 0
-    .prg.Max = rstMain.RecordCount + 3
+    .prg.Max = rstMain.recordCount + 3
 End With
 
 rstMain.MoveFirst
@@ -735,7 +734,7 @@ Call AddInterestPayableOfFD(AsOnDate, TransDate)
 End Sub
 
 
-Private Sub m_frmFDAcc_FDClose(ByVal AccId As Long, Cancel As Integer)
+Private Sub m_frmFDAcc_FDClose(ByVal AccId As Long, cancel As Integer)
     
     'Load the for for closure (and leave the rest to the form)
     'now Load the Varaible to the Closing form
@@ -749,7 +748,7 @@ Private Sub m_frmFDAcc_FDClose(ByVal AccId As Long, Cancel As Integer)
     
 End Sub
 
-Private Sub m_frmFDAcc_FDRenew(ByVal AccId As Long, Cancel As Integer)
+Private Sub m_frmFDAcc_FDRenew(ByVal AccId As Long, cancel As Integer)
     Dim rst As Recordset
     'Check Whther This Deposit is there in the Matured FD account
     gDbTrans.SqlStmt = "Select Top 1 * from MatFDTrans where " & _
@@ -772,7 +771,7 @@ Private Sub m_frmFDAcc_FDRenew(ByVal AccId As Long, Cancel As Integer)
 End Sub
 
 
-Private Sub m_frmFDAcc_PayInterest(ByVal AccId As Long, Cancel As Integer)
+Private Sub m_frmFDAcc_PayInterest(ByVal AccId As Long, cancel As Integer)
     
     frmFDInterest.AccountId = m_AccID
     frmFDInterest.Show vbModal
@@ -782,15 +781,19 @@ End Sub
 
 Private Sub m_frmFDAcc_SelectDepositType(ByRef retDepType As Integer)
 
-If m_frmSelectFD Is Nothing Then _
-    Set m_frmSelectFD = New frmSelectFD
-        
-m_frmSelectFD.Show 1
-Unload m_frmSelectFD
-
-DepositType = m_DepositType
-retDepType = m_DepositType
-
+    Dim selectFD As New clsSelectDeposit
+    Dim multiDeposit As Boolean
+    Dim cancel As Boolean
+    Dim Deptype As Integer
+    Deptype = selectFD.SelectDeposit(wis_Deposits, grpDeposit, multiDeposit, cancel)
+    Set selectFD = Nothing
+    
+    retDepType = m_DepositType
+    If Not cancel Then
+        DepositType = Deptype
+        retDepType = Deptype
+    End If
+    
 End Sub
 
 Private Sub m_frmFDAcc_ShowReport(ReportType As wis_FDReports, ReportOrder As wis_ReportOrder, _
@@ -1306,10 +1309,20 @@ gWindowHandle = m_frmFDAcc.hwnd
 m_frmFDAcc.Show
 
 If m_AccID = 0 Then
-    If m_frmSelectFD Is Nothing Then Set m_frmSelectFD = New frmSelectFD
-    m_frmSelectFD.Show 1
-    Unload m_frmSelectFD
+    Dim selectFD As New clsSelectDeposit
+    Dim multiDeposit As Boolean
+    Dim cancel As Boolean
+    Dim DepositType As Integer
+    
+    DepositType = selectFD.SelectDeposit(wis_Deposits, grpDeposit, multiDeposit, cancel)
+    Set selectFD = Nothing
+    
+    'If m_frmSelectFD Is Nothing Then Set m_frmSelectFD = New frmSelectFD
+    'm_frmSelectFD.Show 1
+    'Unload m_frmSelectFD
+    m_DepositType = DepositType
     m_frmFDAcc.DepositType = m_DepositType
+    If cancel Then Unload m_frmFDAcc
     Exit Sub
 End If
 Dim rst As Recordset
@@ -1602,12 +1615,12 @@ BalanceMaturedFD = FormatField(rst(0))
 
 End Function
 
-Public Sub TotalDepositTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency, Optional DepositType As Integer)
+Public Sub TotalDepositTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency, Optional DepositType As Integer)
 
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
 
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
@@ -1631,20 +1644,20 @@ While rst.EOF = False
     TotalAmount = Val(FormatField(rst("TotalAmount")))
     If rst("TransType") = wDeposit Then CashDeposit = TotalAmount
     If rst("TransType") = wWithdraw Then cashWithdraw = TotalAmount
-    If rst("TransType") = wContraDeposit Then contraDeposit = TotalAmount
-    If rst("TransType") = wContraWithdraw Then contraWithdraw = TotalAmount
+    If rst("TransType") = wContraDeposit Then ContraDeposit = TotalAmount
+    If rst("TransType") = wContraWithdraw Then ContraWithDraw = TotalAmount
     
     rst.MoveNext
 Wend
 
 Set rst = Nothing
 End Sub
-Public Sub TotalDepositIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency, Optional DepositType As Integer = 0)
+Public Sub TotalDepositIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency, Optional DepositType As Integer = 0)
 
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
 
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
@@ -1668,27 +1681,26 @@ While rst.EOF = False
     TotalAmount = Val(FormatField(rst("TotalAmount")))
     If rst("TransType") = wDeposit Then CashDeposit = TotalAmount
     If rst("TransType") = wWithdraw Then cashWithdraw = TotalAmount
-    If rst("TransType") = wContraDeposit Then contraDeposit = TotalAmount
-    If rst("TransType") = wContraWithdraw Then contraWithdraw = TotalAmount
+    If rst("TransType") = wContraDeposit Then ContraDeposit = TotalAmount
+    If rst("TransType") = wContraWithdraw Then ContraWithDraw = TotalAmount
     
     rst.MoveNext
 Wend
 
 Set rst = Nothing
 End Sub
-Public Sub TotalLoanTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency, Optional DepositType As Integer)
+Public Sub TotalLoanTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency, Optional DepositType As Integer)
     Dim depLoan As New clsDepLoan
-    Call depLoan.TotalLoanTransactions(fromDate, toDate, CashDeposit, contraDeposit, cashWithdraw, contraWithdraw, DepositType)
+    Call depLoan.TotalLoanTransactions(fromDate, toDate, CashDeposit, ContraDeposit, cashWithdraw, ContraWithDraw, DepositType)
     Set depLoan = Nothing
 End Sub
-Public Sub TotalLoanIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency, Optional DepositType As Integer)
+Public Sub TotalLoanIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency, Optional DepositType As Integer)
     Dim depLoan As New clsDepLoan
-    Call depLoan.TotalLoanIntTransactions(fromDate, toDate, CashDeposit, contraDeposit, cashWithdraw, contraWithdraw, DepositType)
+    Call depLoan.TotalLoanIntTransactions(fromDate, toDate, CashDeposit, ContraDeposit, cashWithdraw, ContraWithDraw, DepositType)
     Set depLoan = Nothing
 End Sub
 
 Private Sub m_frmSelectFD_OKClick(ByVal DepositType As Integer)
     m_DepositType = DepositType Mod 100
-    
 End Sub
 

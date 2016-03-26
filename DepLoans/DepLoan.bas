@@ -16,13 +16,13 @@ End Enum
 
 ' Gets the Deposit Type .
 'Arguments DepositName
-Public Function GetDepositType(DepName As String) As Integer
+Public Function GetDepositType(depName As String) As Integer
 Dim rstDeposit As Recordset
 Dim Retval As Integer
 '
 On Error GoTo ErrLine
 Retval = 0
-Select Case DepName
+Select Case depName
     Case ""
         Retval = 0
     Case GetResourceString(424) '"Recurring Deposit"
@@ -31,10 +31,10 @@ Select Case DepName
         Retval = wisDeposit_PD ' 3
     Case Else
         gDbTrans.SqlStmt = "SELECT * From DepositName Where " & _
-            " DepositName = " & AddQuotes(DepName, True)
+            " DepositName = " & AddQuotes(depName, True)
         If gDbTrans.Fetch(rstDeposit, adOpenDynamic) > 0 Then
             While Not rstDeposit.EOF
-                If UCase(DepName) = UCase(FormatField(rstDeposit("DepositName"))) Then
+                If UCase(depName) = UCase(FormatField(rstDeposit("DepositName"))) Then
                     Retval = FormatField(rstDeposit("DepositID"))
                     'after theis we have to exit from this loop
                     'To exit from this loop we are
@@ -61,23 +61,47 @@ Public Function GetDepositTypeText(DepositType As Integer) As String
 End Function
 Public Function GetDepositTypeTextEnglish(DepositType As Integer, DepositNameEnglish) As String
 
+Dim Deptype As Integer
+Dim subDepType As Integer
+Dim rstDeposit As Recordset
+
+Deptype = IIf(DepositType > 100, DepositType Mod 100, DepositType)
+Deptype = Deptype - Deptype Mod 10
+subDepType = Deptype - Deptype Mod 10
+
 If DepositType > wis_Deposits Then DepositType = DepositType - wis_Deposits
 
 On Error GoTo ErrLine
-Select Case DepositType
+Select Case Deptype 'DepositType
     Case 0
         GetDepositTypeTextEnglish = GetResourceString(43)
         DepositNameEnglish = LoadResString(43)
     Case wisDeposit_RD
         GetDepositTypeTextEnglish = GetResourceString(424)
         DepositNameEnglish = LoadResString(424)
+        'If subDepType > 0 Then
+            gDbTrans.SqlStmt = "SELECT * From DepositTypeTab Where " & _
+                " DepositType = " & DepositType & " And ModuleID = " & wis_RDAcc
+            If gDbTrans.Fetch(rstDeposit, adOpenDynamic) > 0 Then
+                GetDepositTypeTextEnglish = FormatField(rstDeposit("DepositName"))
+                DepositNameEnglish = FormatField(rstDeposit("DepositName"))
+            End If
+        'End If
     Case wisDeposit_PD
         GetDepositTypeTextEnglish = GetResourceString(425)
         DepositNameEnglish = LoadResString(425)
-        
+        'If subDepType > 0 Then
+            gDbTrans.SqlStmt = "SELECT * From DepositTypeTab Where " & _
+                " DepositType = " & DepositType & " And ModuleID = " & wis_PDAcc
+            If gDbTrans.Fetch(rstDeposit, adOpenDynamic) > 0 Then
+                GetDepositTypeTextEnglish = FormatField(rstDeposit("DepositName"))
+                DepositNameEnglish = FormatField(rstDeposit("DepositName"))
+            End If
+        'End If
+    
     Case Else
         GetDepositTypeTextEnglish = " "
-        Dim rstDeposit As Recordset
+        
         If DepositType > wis_Deposits Then DepositType = DepositType - wis_Deposits
         gDbTrans.SqlStmt = "SELECT * From DepositName Where " & _
             " DepositID = " & DepositType
@@ -86,7 +110,8 @@ Select Case DepositType
             DepositNameEnglish = FormatField(rstDeposit("DepositName"))
         End If
 
-End Select
+    End Select
+
 Exit Function
 
 ErrLine:
@@ -100,14 +125,14 @@ On Error GoTo Err_line
 Dim IntBalance As Currency
 Dim RstLoanTrans As Recordset
 
-If LoanID = 0 Then GoTo Exit_line
+If LoanID = 0 Then GoTo Exit_Line
 
 gDbTrans.SqlStmt = "SELECT * From LoanTrans WHERE " & _
     " TransDate <= #" & AsOnDate & "# ORDER By TransID Desc"
     
-If gDbTrans.Fetch(RstLoanTrans, adOpenDynamic) < 1 Then GoTo Exit_line
+If gDbTrans.Fetch(RstLoanTrans, adOpenDynamic) < 1 Then GoTo Exit_Line
 
-If RstLoanTrans Is Nothing Then GoTo Exit_line
+If RstLoanTrans Is Nothing Then GoTo Exit_Line
 RstLoanTrans.MoveFirst
 
 Do
@@ -117,7 +142,7 @@ Do
     RstLoanTrans.MoveNext
 Loop
 
-Exit_line:
+Exit_Line:
 ComputeDepLoanInterstBalance = IntBalance
 Set RstLoanTrans = Nothing
 
@@ -127,7 +152,7 @@ Err_line:
          vbCrLf & Err.Description, vbInformation, wis_MESSAGE_TITLE
     Err.Clear
     IntBalance = 0
-    GoTo Exit_line
+    GoTo Exit_Line
 End Function
 
 
@@ -151,12 +176,12 @@ Dim IntAmount As Currency
 Dim rstLoanMast As Recordset
 Dim RstLoanTrans As Recordset
 Dim Days As Integer
-Dim Rst As ADODB.Recordset
+Dim rst As ADODB.Recordset
 
 gDbTrans.SqlStmt = "SELECT * FROM DepositLoanMaster WHERE " _
             & "loanID = " & LoanID
 Lret = gDbTrans.Fetch(rstLoanMast, adOpenStatic)
-If Lret <= 0 Then GoTo Exit_line
+If Lret <= 0 Then GoTo Exit_Line
 
 ' Save the resultset for future references.
 
@@ -173,7 +198,7 @@ ReCheck:
     Else
         gDbTrans.SqlStmt = "SELECT * From DepositLoanTrans WHERE " & _
             " LoanID = " & LoanID & " ORDER BY TransID "
-        If gDbTrans.Fetch(Rst, adOpenForwardOnly) Then LastintPaidDate = Rst("TransDate")
+        If gDbTrans.Fetch(rst, adOpenForwardOnly) Then LastintPaidDate = rst("TransDate")
     End If
 Else
     LastintPaidDate = rstLoanMast("LastIntdate")
@@ -189,7 +214,7 @@ If gDbTrans.Fetch(RstLoanTrans, adOpenStatic) < 1 Then
     Balance = RstLoanTrans("Balance")
     Duration = DateDiff("d", LastintPaidDate, AsOnDate)
     IntAmount = IntAmount + ((Duration / 365) * (IntRate / 100) * Balance)
-    GoTo Exit_line
+    GoTo Exit_Line
 End If
 IntAmount = 0
 Balance = RstLoanTrans("Balance")
@@ -212,8 +237,8 @@ Loop
     ComputeDepLoanRegularInterest = IntAmount \ 1
 
     
-Exit_line:
-    Set Rst = Nothing
+Exit_Line:
+    Set rst = Nothing
     Set rstLoanMast = Nothing
     Set RstLoanTrans = Nothing
     ComputeDepLoanRegularInterest = IntAmount \ 1
@@ -237,7 +262,7 @@ Public Function ComputeDepLoanPenalInterest(AsOnDate As Date, Optional LoanIDNo 
 
 ' Setup error handler
 Err.Clear
-On Error GoTo Exit_line
+On Error GoTo Exit_Line
 ' Variables...
 Dim LoanID As Long
 Dim LastDate As Date
@@ -255,7 +280,7 @@ Dim Days As Integer
     gDbTrans.SqlStmt = "SELECT * FROM DepositLoanMaster WHERE " _
         & "loanID = " & LoanIDNo
     Lret = gDbTrans.Fetch(rstLoanMast, adOpenStatic)
-    If Lret <= 0 Then GoTo Exit_line
+    If Lret <= 0 Then GoTo Exit_Line
 
 'Get Loan Date & LoanDueDate
 LoanDueDate = rstLoanMast("LoanDueDate")
@@ -276,11 +301,11 @@ gDbTrans.SqlStmt = "SELECT Top 1 * FROM DepositLoanTrans WHERE " _
         " And TransDate <= #" & AsOnDate & "# )"
     
 Lret = gDbTrans.Fetch(rstTrans, adOpenForwardOnly)
-If Lret <= 0 Then GoTo Exit_line
+If Lret <= 0 Then GoTo Exit_Line
 
 'Get total Loan Amount
 BalanceAmount = CCur(FormatField(rstTrans("Balance")))
-If BalanceAmount = 0 Then GoTo Exit_line
+If BalanceAmount = 0 Then GoTo Exit_Line
 LastDate = rstTrans("TransDate")
 
 PenalAmount = 0
@@ -288,7 +313,7 @@ PenalAmount = BalanceAmount * (PenaltyRate / 100) * (Days / 365)
 
 ComputeDepLoanPenalInterest = IIf(PenalAmount < 0, 0, PenalAmount \ 1)
 
-Exit_line:
+Exit_Line:
     Set rstLoanMast = Nothing
     Set rstTrans = Nothing
     If Err Then

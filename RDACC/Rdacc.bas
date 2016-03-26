@@ -19,7 +19,7 @@ End Enum
 Private Sub GetLastTransDate(ByVal AccountId As Long, _
                 Optional ByRef TransID As Long, Optional ByRef TransDate As Date)
 
-Dim Rst As Recordset
+Dim rst As Recordset
 TransID = 0
 TransDate = vbNull
 '
@@ -31,17 +31,17 @@ Dim tmpTransID As Long
 gDbTrans.SqlStmt = "Select Top 1 TransID,TransDate FROM RDTrans " & _
                     " where AccID = " & AccountId & _
                     " ORder By TransId Desc"
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) > 0 Then _
-        TransID = FormatField(Rst("TransID")): TransDate = Rst("TransDate")
+If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then _
+        TransID = FormatField(rst("TransID")): TransDate = rst("TransDate")
 
 'Get Max Trans From Interest table
 gDbTrans.SqlStmt = "Select TransID,TransDate FROM RDIntTrans " & _
                     " where AccID = " & AccountId & _
                     " ORder By TransId Desc"
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) > 0 Then
-    tmpTransID = FormatField(Rst("TransID"))
+If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
+    tmpTransID = FormatField(rst("TransID"))
     If tmpTransID > TransID Then _
-        TransID = tmpTransID: TransDate = Rst("TransDate")
+        TransID = tmpTransID: TransDate = rst("TransDate")
 End If
 
 'Get Max TransID From Payabale Trans
@@ -49,10 +49,10 @@ gDbTrans.SqlStmt = "Select TransID,TransDate FROM RDIntPayable " & _
                     " where AccID = " & AccountId & _
                     " ORder By TransId Desc"
 
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) > 0 Then
-    tmpTransID = FormatField(Rst("TransID"))
+If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
+    tmpTransID = FormatField(rst("TransID"))
     If tmpTransID > TransID Then _
-        TransID = tmpTransID: TransDate = Rst("TransDate")
+        TransID = tmpTransID: TransDate = rst("TransDate")
 End If
 
 ErrLine:
@@ -68,7 +68,6 @@ Call GetLastTransDate(AccountId, TransID)
 GetRDMaxTransID = TransID
 
 End Function
-
 
 
 'This Function Returns the Last Transction Date of The Fd
@@ -87,7 +86,7 @@ Public Function ComputeRDDepositInterestAmount(AccId As Long, _
 
 Dim transType As wisTransactionTypes
 Dim rstTrans As ADODB.Recordset
-Dim Rst As ADODB.Recordset
+Dim rst As ADODB.Recordset
 Dim MatDate As Date
 Dim IntRate As Single
 Dim IntAmount As Currency
@@ -152,8 +151,8 @@ Dim Days As Integer
                     " AND TransDate >= #" & LastTransDate & "#" & _
                     " And Transdate < #" & TransDate & "#" & _
                     " AND (TransType = " & transType & " OR TransType = " & ContraTrans & ")"
-        If gDbTrans.Fetch(Rst, adOpenForwardOnly) > 0 Then _
-                    Product = Product + Val(FormatField(Rst("TotalAmount")))
+        If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then _
+                    Product = Product + Val(FormatField(rst("TotalAmount")))
         
         LastTransDate = TransDate
         NoOfMonths = NoOfMonths + 1
@@ -171,11 +170,10 @@ Public Function ComputeRDInterest(Amount As Currency, Rate As Double) As Currenc
     ComputeRDInterest = (Amount * 1 * Rate) / (100 * 12)
 End Function
  
- 
-Public Function ComputeTotalRDLiability(AsOnDate As Date) As Currency
+Public Function ComputeTotalRDLiability(AsOnDate As Date, Optional DepositType As Integer = 0) As Currency
 
 Dim SqlStmt As String
-Dim Rst As ADODB.Recordset
+Dim rst As ADODB.Recordset
 Dim TotalBalance As Currency
     
 ComputeTotalRDLiability = 0
@@ -186,10 +184,12 @@ gDbTrans.SqlStmt = "Select SUM(Balance) From RDTrans A, RDMaster B Where " & _
    " AND B.AccID = A.AccID And TransId = (Select Max(TransID) " & _
    " From RDTrans C Where C.AccId = A.AccID " & _
    " And TransDate <= #" & AsOnDate & "#)"
-
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) < 1 Then Exit Function
-ComputeTotalRDLiability = FormatField(Rst(0))
-Set Rst = Nothing
+If DepositType > 0 Then _
+    gDbTrans.SqlStmt = gDbTrans.SqlStmt & " B.DepositType = " & DepositType
+    
+If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Function
+ComputeTotalRDLiability = FormatField(rst(0))
+Set rst = Nothing
 
 Exit Function
 
@@ -200,7 +200,7 @@ End Function
 ''Author Shashi
 'Craeted on 1/3/2000
 'This Function Will Returns the Pigmy Deposit Balnace at a give date
-Public Function GetRDBalance(AsOnDate As Date) As Currency
-    GetRDBalance = ComputeTotalRDLiability(AsOnDate)
+Public Function GetRDBalance(AsOnDate As Date, Optional DepositType As Integer) As Currency
+    GetRDBalance = ComputeTotalRDLiability(AsOnDate, DepositType)
 End Function
 

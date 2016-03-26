@@ -93,7 +93,7 @@ Dim m_AccGroup As Integer
 
 Dim m_FromAmt As Currency
 Dim m_ToAmt As Currency
-
+Private m_DepoistType As Integer
 Private WithEvents m_grdPrint As WISPrint
 Attribute m_grdPrint.VB_VarHelpID = -1
 Private WithEvents m_frmCancel As frmCancel
@@ -103,18 +103,17 @@ Private m_TotalCount As Long
 Public Event Initialising(Min As Long, Max As Long)
 Public Event Processing(strMessages As String, Ratio As Single)
 Public Event WindowClosed()
-
-
+Public Property Let DepositType(NewValue As Integer)
+    m_DepoistType = NewValue
+End Property
 
 Public Property Let AccountGroup(NewValue As Integer)
     m_AccGroup = NewValue
 End Property
 
-
 Public Property Let Caste(NewCaste As String)
     m_Caste = NewCaste
 End Property
-
 
 Public Property Let FromAmount(newAmount As Currency)
     m_FromAmt = newAmount
@@ -425,6 +424,7 @@ SqlStr = "Select AccId,AccNum, CreateDate, " & _
     " AND (ClosedDate > #" & m_ToDate & "# OR ClosedDate is NULL) " & _
     " and MaturityDate <= #" & m_ToDate & "# "
     
+If m_DepoistType > 0 Then SqlStr = SqlStr & " AND A.DepositType = " & m_DepoistType
 If m_FromAmt > 0 Then SqlStr = SqlStr & " AND Amount >= " & m_FromAmt
 If m_ToAmt > 0 Then SqlStr = SqlStr & " AND Amount <= " & m_ToAmt
 
@@ -443,7 +443,7 @@ gDbTrans.SqlStmt = SqlStr
 If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then Exit Sub
 SqlStr = ""
 
-    RaiseEvent Initialising(0, rst.RecordCount)
+    RaiseEvent Initialising(0, rst.recordCount)
     RaiseEvent Processing("Reading the data ", 0)
 
 'Init the grid
@@ -478,7 +478,7 @@ While Not rst.EOF
 nextRecord:
         DoEvents
         If gCancel = True Then rst.MoveLast
-        RaiseEvent Processing("Writing the record to the grid ", rowno / rst.RecordCount)
+        RaiseEvent Processing("Writing the record to the grid ", rowno / rst.recordCount)
         rst.MoveNext
     Wend
 'End With
@@ -513,7 +513,8 @@ SqlStr = "Select AccId,AccNUm,CreateDate,MaturityDate, Name" & _
     " ON B.CustomerID = A.CustomerID " & _
     " WHERE CreateDate <= #" & m_ToDate & "#" & _
     " And CreateDate >= #" & m_FromDate & "#"
-
+    
+If m_DepoistType > 0 Then SqlStr = SqlStr & " AND B.DepositType = " & m_DepoistType
 If m_Place <> "" Then SqlStr = SqlStr & " AND Place = " & AddQuotes(m_Place, True)
 If m_Caste <> "" Then SqlStr = SqlStr & " AND Caste = " & AddQuotes(m_Caste, True)
 If m_Gender <> wisNoGender Then SqlStr = SqlStr & " AND Gender = " & m_Gender
@@ -530,14 +531,14 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Sub
 'Initialize the Grid
  Call InitGrid
     
-    RaiseEvent Initialising(0, rst.RecordCount)
+    RaiseEvent Initialising(0, rst.recordCount)
     RaiseEvent Processing("Verifying the data to write into the grid  ", 0)
   
 Dim AccId As Long
 Dim SlNo As Integer
 Dim rowno As Long
 Dim MaxRows As Long
-MaxRows = rst.RecordCount + 2
+MaxRows = rst.recordCount + 2
     
 grd.Row = grd.FixedRows
 rowno = grd.FixedRows
@@ -602,7 +603,7 @@ SqlStr = "Select B.AccId,AccNum, MaturityDate, ClosedDate,RateOfInterest, Name,I
     " AND ClosedDate <= #" & m_ToDate & "#"
  
 
-
+If m_DepoistType > 0 Then SqlStr = SqlStr & " AND B.DepositType = " & m_DepoistType
 If m_Place <> "" Then SqlStr = SqlStr & " AND Place = " & AddQuotes(m_Place, True)
 If m_Caste <> "" Then SqlStr = SqlStr & " AND Caste = " & AddQuotes(m_Caste, True)
 If m_Gender <> wisNoGender Then SqlStr = SqlStr & " AND Gender = " & m_Gender
@@ -620,7 +621,7 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Sub
 'Initialize the Grid
 Call InitGrid
     
-    RaiseEvent Initialising(0, rst.RecordCount)
+    RaiseEvent Initialising(0, rst.recordCount)
     RaiseEvent Processing("Reading the data to write into the grid. ", 0)
 
 Dim AccId As Long
@@ -658,7 +659,7 @@ While Not rst.EOF
     Amount = 0
     DoEvents
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid . ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid . ", rst.AbsolutePosition / rst.recordCount)
     rst.MoveNext
 Wend
 
@@ -688,14 +689,15 @@ Dim SecondRst As Recordset
 Dim rst As Recordset
 Dim count As Integer
                     
-RaiseEvent Processing("Reading & Verifying the records. ", 0)
+RaiseEvent Processing("Reading && Verifying the records. ", 0)
 
 SqlStr = "Select A.AccID,AccNum, MaturityDate, CreateDate," & _
     " RateOfInterest, CLosedDate, Name " & _
     " From QryName B Inner join RDMaster A ON B.CustomerId = A.CustomerId" & _
     " Where A.AccId NOT In (Select AccId From RDMaster" & _
         " Where ClosedDate < #" & m_ToDate & "#" & ")"
-
+        
+If m_DepoistType > 0 Then SqlStr = SqlStr & " AND A.DepositType = " & m_DepoistType
 If m_Place <> "" Then SqlStr = SqlStr & " AND Place = " & AddQuotes(m_Place, True)
 If m_Caste <> "" Then SqlStr = SqlStr & " AND Caste = " & AddQuotes(m_Caste, True)
 If m_Gender <> wisNoGender Then SqlStr = SqlStr & " AND Gender = " & m_Gender
@@ -756,7 +758,7 @@ While Not rst.EOF
 nextRecord:
     DoEvents
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data to the grid . ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid . ", rst.AbsolutePosition / rst.recordCount)
     
     rst.MoveNext
 Wend
@@ -795,6 +797,7 @@ SqlStr = "Select 'PRINCIPAL',AccNum , A.AccId,TransDate, Amount," & _
     " ON B.CustomerId = C.CustomerID where " & _
     " TransDate >= #" & m_FromDate & "# AND TransDate <= #" & m_ToDate & "#"
 
+If m_DepoistType > 0 Then SqlStr = SqlStr & " AND B.DepositType = " & m_DepoistType
 If m_FromAmt > 0 Then SqlStr = SqlStr & " AND Amount >= " & m_FromAmt
 If m_ToAmt > 0 Then SqlStr = SqlStr & " AND Amount <= " & m_ToAmt
 
@@ -827,7 +830,7 @@ SqlStr = ""
 
 Call InitGrid
 
-RaiseEvent Initialising(0, rst.RecordCount)
+RaiseEvent Initialising(0, rst.recordCount)
 RaiseEvent Processing("Verifying the data to write into the grid. ", 0)
 
 Dim SubTotal(4 To 11) As Currency
@@ -898,7 +901,7 @@ While Not rst.EOF
         
         DoEvents
         If gCancel Then rst.MoveLast
-        RaiseEvent Processing("Writing the data to the grid . ", rowno / rst.RecordCount)
+        RaiseEvent Processing("Writing the data to the grid . ", rowno / rst.recordCount)
         rst.MoveNext
     End With
 Wend
@@ -951,6 +954,7 @@ SqlStr = "Select AccNum , A.AccId,TransDate, Amount, " & _
     " ON B.CustomerId = C.CustomerID  " & _
     " Where TransDate >= #" & m_FromDate & "# AND TransDate <= #" & m_ToDate & "#"
 
+If m_DepoistType > 0 Then SqlStr = SqlStr & " AND B.DepositType = " & m_DepoistType
 If m_FromAmt > 0 Then SqlStr = SqlStr & " AND Amount >= " & m_FromAmt
 If m_ToAmt > 0 Then SqlStr = SqlStr & " AND Amount <= " & m_ToAmt
 
@@ -971,7 +975,7 @@ SqlStr = ""
 
 Call InitGrid
 
-RaiseEvent Initialising(0, rst.RecordCount)
+RaiseEvent Initialising(0, rst.recordCount)
 RaiseEvent Processing("Verifying the data to write into the grid. ", 0)
 
 Dim SubTotal(5 To 6) As Currency
@@ -985,7 +989,7 @@ Dim Amount As Currency
 Dim PRINTTotal As Boolean
 Dim rowno As Long
 Dim MaxRows As Long
-MaxRows = rst.RecordCount + 2
+MaxRows = rst.recordCount + 2
 
 I = 1
 AccNum = FormatField(rst("AccNum"))
@@ -1099,6 +1103,7 @@ SqlStmt = "Select Balance,A.AccID, B.AccNum, Name " & _
 Dim sqlClause As String
 sqlClause = ""
 sqlClause = sqlClause & " And Balance > " & m_FromAmt
+If m_DepoistType > 0 Then sqlClause = sqlClause & " AND B.DepositType = " & m_DepoistType
 If m_ToAmt > 0 Then sqlClause = sqlClause & " And Balance < " & m_ToAmt
 If m_Place <> "" Then sqlClause = sqlClause & " AND Place = " & AddQuotes(m_Place, True)
 If m_Caste <> "" Then sqlClause = sqlClause & " AND Caste = " & AddQuotes(m_Caste, True)
@@ -1119,7 +1124,7 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Sub
 
 Call InitGrid
 
-RaiseEvent Initialising(0, rst.RecordCount)
+RaiseEvent Initialising(0, rst.recordCount)
 RaiseEvent Processing("Reading and Verifying the data ", 0)
 
 Dim TotalAmount As Currency
@@ -1144,7 +1149,7 @@ While Not rst.EOF
 nextRecord:
     DoEvents
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Wring data to the grid. ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Wring data to the grid. ", rst.AbsolutePosition / rst.recordCount)
     
     rst.MoveNext
 Wend
@@ -1168,7 +1173,6 @@ Private Sub cmdOk_Click()
 Unload Me
 RaiseEvent WindowClosed
 End Sub
-
 Private Sub cmdPrint_Click()
  ' Call the print class services...
 Set m_grdPrint = wisMain.grdPrint
@@ -1236,12 +1240,12 @@ End With
         Call ShowDepositBalances
     End If
     If m_ReportType = repRDDayBook Then
-        lblReportTitle.Caption = GetResourceString(424, 85) & " " & _
+        lblReportTitle.Caption = GetDepositName(wis_RDAcc, m_DepoistType) & " " & GetResourceString(85) & " " & _
             GetFromDateString(m_FromIndianDate, m_ToIndianDate)
         Call ShowDayBook
     End If
     If m_ReportType = repRDCashBook Then
-        lblReportTitle.Caption = GetResourceString(424, 63) & " " & _
+        lblReportTitle.Caption = GetDepositName(wis_RDAcc, m_DepoistType) & " " & GetResourceString(63) & " " & _
             GetFromDateString(m_FromIndianDate, m_ToIndianDate)
         Call ShowSubCashBook
     End If
@@ -1270,11 +1274,9 @@ End With
     
     If m_ReportType = repRDLedger Then
         If m_FromIndianDate = "" Or m_ToIndianDate = "" Then
-            lblReportTitle.Caption = GetResourceString(43) & " " & _
-                GetResourceString(93) '"Deposit GeneralLegder
+            lblReportTitle.Caption = GetResourceString(43, 93) '"Deposit GeneralLegder
         Else
-            lblReportTitle.Caption = GetResourceString(43) & " " & _
-                GetResourceString(93) & " " & _
+            lblReportTitle.Caption = GetResourceString(43, 93) & " " & _
                 GetFromDateString(m_FromIndianDate, m_ToIndianDate)
         End If
         Call ShowDepositGeneralLedger
@@ -1307,7 +1309,7 @@ Dim ColCount As Integer
 Dim Wid As Single
 With grd
 For ColCount = 0 To grd.Cols - 1
-    Wid = GetSetting(App.EXEName, "RDReport" & m_ReportType, "ColWidth" & ColCount, 1 / .Cols) * .Width
+    Wid = GetSetting(App.EXEName, "RDReport" & m_ReportType & m_DepoistType, "ColWidth" & ColCount, 1 / .Cols) * .Width
     If Wid >= .Width * 0.9 Then Wid = .Width / .Cols
     If Wid <= 0 Then Wid = .Width / .Cols
     
@@ -1327,10 +1329,12 @@ RaiseEvent Processing("Verifying the data ", 0)
 
 SqlStr = "Select Sum(Amount) as TotalAmount, " & _
     " TransDate,TransType From RDTrans where " & _
-    " TransDate >= #" & m_FromDate & "# AND TransDate <= #" & m_ToDate & "#" & _
-    " Group By TransDate,TransType"
+    " TransDate >= #" & m_FromDate & "# AND TransDate <= #" & m_ToDate & "#"
+If m_DepoistType > 0 Then _
+    SqlStr = SqlStr & " AND AccID in (Select Distinct AccID from RDMaster where DepositType = " & m_DepoistType & " )"
 
-gDbTrans.SqlStmt = SqlStr & " ORDER BY TransDate"
+
+gDbTrans.SqlStmt = SqlStr & " Group By TransDate,TransType ORDER BY TransDate"
 
 If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Sub
 
@@ -1347,7 +1351,7 @@ Dim I As Integer
 Dim Balance As Currency
 Dim transType As wisTransactionTypes
     
-RaiseEvent Initialising(0, rst.RecordCount)
+RaiseEvent Initialising(0, rst.recordCount)
 RaiseEvent Processing("Reading the data ", 0)
     
 TransDate = DateAdd("d", -1, m_FromDate)
@@ -1401,7 +1405,7 @@ While Not rst.EOF
     
     DoEvents
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing data to the grid. ", rst.AbsolutePosition / rst.RecordCount)
+    RaiseEvent Processing("Writing data to the grid. ", rst.AbsolutePosition / rst.recordCount)
     
     rst.MoveNext
 Wend
@@ -1483,14 +1487,15 @@ SqlStmt = "SELECT A.AccNum,A.AccID, A.CustomerID,Name as CustName " & _
         " From QryName B Inner Join RDMaster A" & _
             " ON A.CustomerID = B.CustomerID" & _
         " WHERE A.CreateDate <= #" & toDate & "#" & _
-        " AND (A.ClosedDate Is NULL OR A.Closeddate >= #" & fromDate & "#)" & _
-        " Order By val(A.ACCNUM)"
+        " AND (A.ClosedDate Is NULL OR A.Closeddate >= #" & fromDate & "#)"
+        
+If m_DepoistType > 0 Then SqlStmt = SqlStmt & " AND A.DepositType = " & m_DepoistType
 
-gDbTrans.SqlStmt = SqlStmt
+gDbTrans.SqlStmt = SqlStmt & " Order By val(A.ACCNUM)"
 If gDbTrans.Fetch(rstMain, adOpenStatic) < 1 Then Exit Sub
 
 count = DateDiff("M", fromDate, toDate) + 2
-totalCount = (count + 1) * rstMain.RecordCount
+totalCount = (count + 1) * rstMain.recordCount
 RaiseEvent Initialising(0, totalCount)
 
 Dim prmAccId As Parameter
@@ -1546,9 +1551,11 @@ Dim rstBalance As Recordset
 Do
     If DateDiff("d", fromDate, toDate) < 0 Then Exit Do
     SqlStmt = "SELECT [AccId], Max([TransID]) AS MaxTransID" & _
-            " FROM RDTrans Where TransDate <= #" & fromDate & "# " & _
-            " GROUP BY [AccID];"
-    gDbTrans.SqlStmt = SqlStmt
+            " FROM RDTrans Where TransDate <= #" & fromDate & "# "
+
+    If m_DepoistType > 0 Then _
+        SqlStmt = SqlStmt & " AND AccID in (select distinct AccID from RDMAster where DepositType = " & m_DepoistType & " )"
+    gDbTrans.SqlStmt = SqlStmt & " GROUP BY [AccID];"
     gDbTrans.CreateView ("RDMonBal")
     SqlStmt = "SELECT A.AccId,Balance From RDTrans A,RDMonBal B " & _
         " Where B.AccId = A.AccID ANd  TransID =MaxTransID"
@@ -1620,22 +1627,22 @@ End Sub
 Private Sub grd_LostFocus()
 Dim ColCount As Integer
     For ColCount = 0 To grd.Cols - 1
-        Call SaveSetting(App.EXEName, "RDReport" & m_ReportType, _
+        Call SaveSetting(App.EXEName, "RDReport" & m_ReportType & m_DepoistType, _
                 "ColWidth" & ColCount, grd.ColWidth(ColCount) / grd.Width)
     Next ColCount
 
 End Sub
 
 Private Sub m_grdPrint_MaxProcessCount(MaxCount As Long)
-m_TotalCount = MaxCount
-Set m_frmCancel = New frmCancel
-m_frmCancel.PicStatus.Visible = True
-m_frmCancel.PicStatus.ZOrder 0
+    m_TotalCount = MaxCount
+    Set m_frmCancel = New frmCancel
+    m_frmCancel.PicStatus.Visible = True
+    m_frmCancel.PicStatus.ZOrder 0
 
 End Sub
 
 Private Sub m_grdPrint_Message(strMessage As String)
-m_frmCancel.lblMessage = strMessage
+    m_frmCancel.lblMessage = strMessage
 End Sub
 
 Private Sub m_grdPrint_ProcessCount(count As Long)

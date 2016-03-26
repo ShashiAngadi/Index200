@@ -7,7 +7,7 @@ Begin VB.Form frmLoanTrans
    BackColor       =   &H80000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Loan Detials"
-   ClientHeight    =   9000
+   ClientHeight    =   9210
    ClientLeft      =   1410
    ClientTop       =   1230
    ClientWidth     =   10035
@@ -15,7 +15,7 @@ Begin VB.Form frmLoanTrans
    LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   9000
+   ScaleHeight     =   9210
    ScaleMode       =   0  'User
    ScaleWidth      =   13380
    Begin VB.CommandButton cmdOk 
@@ -23,30 +23,37 @@ Begin VB.Form frmLoanTrans
       Caption         =   "&OK"
       Height          =   400
       Left            =   8280
-      TabIndex        =   34
-      Top             =   8565
+      TabIndex        =   36
+      Top             =   8750
       Width           =   1515
    End
    Begin VB.Frame fraCust 
-      Height          =   1275
+      Height          =   1635
       Left            =   68
-      TabIndex        =   60
-      Top             =   -60
+      TabIndex        =   62
+      Top             =   -100
       Width           =   9705
+      Begin VB.ComboBox cmbMemberType 
+         Height          =   315
+         Left            =   1800
+         TabIndex        =   8
+         Top             =   720
+         Width           =   3645
+      End
       Begin VB.CommandButton cmdCustName 
          BackColor       =   &H8000000A&
          Caption         =   "..."
          Height          =   315
-         Left            =   5520
-         TabIndex        =   61
-         Top             =   720
-         Width           =   315
+         Left            =   8640
+         TabIndex        =   63
+         Top             =   1200
+         Width           =   915
       End
       Begin VB.TextBox txtCustId 
          Height          =   315
-         Left            =   7560
+         Left            =   7320
          MaxLength       =   9
-         TabIndex        =   8
+         TabIndex        =   10
          Top             =   750
          Width           =   990
       End
@@ -54,13 +61,13 @@ Begin VB.Form frmLoanTrans
          Caption         =   "..."
          Height          =   375
          Left            =   8640
-         TabIndex        =   9
+         TabIndex        =   11
          Top             =   720
          Width           =   915
       End
       Begin VB.TextBox txtLoanAccNo 
          Height          =   315
-         Left            =   7530
+         Left            =   7290
          TabIndex        =   3
          Top             =   300
          Width           =   1005
@@ -80,19 +87,28 @@ Begin VB.Form frmLoanTrans
          Top             =   300
          Width           =   3645
       End
+      Begin VB.Label lblMemberType 
+         AutoSize        =   -1  'True
+         Caption         =   "Member Type :"
+         Height          =   195
+         Left            =   120
+         TabIndex        =   7
+         Top             =   720
+         Width           =   1065
+      End
       Begin VB.Label lblCustID 
          AutoSize        =   -1  'True
          Caption         =   "Member No :"
          Height          =   300
-         Left            =   5880
-         TabIndex        =   7
+         Left            =   5640
+         TabIndex        =   9
          Top             =   780
          Width           =   915
       End
       Begin VB.Label lblLoanAccNo 
          Caption         =   "&Loan Account No"
          Height          =   300
-         Left            =   5880
+         Left            =   5640
          TabIndex        =   2
          Top             =   300
          Width           =   1305
@@ -100,18 +116,18 @@ Begin VB.Form frmLoanTrans
       Begin VB.Label txtCustName 
          BackColor       =   &H80000005&
          BorderStyle     =   1  'Fixed Single
-         Height          =   375
+         Height          =   360
          Left            =   1800
          TabIndex        =   6
-         Top             =   750
-         Width           =   3675
+         Top             =   1155
+         Width           =   6555
       End
       Begin VB.Label lblCustName 
          Caption         =   "&Name :"
          Height          =   300
          Left            =   120
          TabIndex        =   5
-         Top             =   840
+         Top             =   1200
          Width           =   1335
       End
       Begin VB.Label lblLoanScheme 
@@ -126,14 +142,14 @@ Begin VB.Form frmLoanTrans
    Begin VB.Frame fra2 
       Height          =   1155
       Left            =   68
-      TabIndex        =   49
-      Top             =   1050
+      TabIndex        =   51
+      Top             =   1410
       Width           =   9705
       Begin VB.CommandButton cmdAbn 
          Caption         =   "..."
          Height          =   315
          Left            =   9120
-         TabIndex        =   30
+         TabIndex        =   32
          Top             =   600
          Width           =   315
       End
@@ -142,7 +158,7 @@ Begin VB.Form frmLoanTrans
          BorderStyle     =   1  'Fixed Single
          Height          =   345
          Left            =   240
-         TabIndex        =   55
+         TabIndex        =   57
          Top             =   600
          Width           =   1455
       End
@@ -151,7 +167,7 @@ Begin VB.Form frmLoanTrans
          BorderStyle     =   1  'Fixed Single
          Height          =   345
          Left            =   2520
-         TabIndex        =   57
+         TabIndex        =   59
          Top             =   600
          Width           =   1635
       End
@@ -160,7 +176,7 @@ Begin VB.Form frmLoanTrans
          BorderStyle     =   1  'Fixed Single
          Height          =   345
          Left            =   7560
-         TabIndex        =   53
+         TabIndex        =   55
          Top             =   600
          Width           =   1455
       End
@@ -169,7 +185,7 @@ Begin VB.Form frmLoanTrans
          BorderStyle     =   1  'Fixed Single
          Height          =   345
          Left            =   4920
-         TabIndex        =   51
+         TabIndex        =   53
          Top             =   600
          Width           =   1545
       End
@@ -177,7 +193,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "Sanction Loan Amount :"
          Height          =   300
          Left            =   4800
-         TabIndex        =   50
+         TabIndex        =   52
          Top             =   250
          Width           =   1905
       End
@@ -185,7 +201,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "Over Due Amount :"
          Height          =   300
          Left            =   7440
-         TabIndex        =   52
+         TabIndex        =   54
          Top             =   250
          Width           =   1605
       End
@@ -193,7 +209,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "Repaid Amount :"
          Height          =   300
          Left            =   2640
-         TabIndex        =   56
+         TabIndex        =   58
          Top             =   250
          Width           =   1845
       End
@@ -201,7 +217,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "Loan Amount :"
          Height          =   300
          Left            =   240
-         TabIndex        =   54
+         TabIndex        =   56
          Top             =   250
          Width           =   1545
       End
@@ -209,13 +225,13 @@ Begin VB.Form frmLoanTrans
    Begin VB.Frame fraRepay 
       Height          =   2955
       Left            =   68
-      TabIndex        =   59
-      Top             =   2085
+      TabIndex        =   61
+      Top             =   2400
       Width           =   9705
       Begin VB.ComboBox cmbParticulars 
          Height          =   315
          Left            =   2640
-         TabIndex        =   15
+         TabIndex        =   17
          Top             =   2445
          Width           =   2325
       End
@@ -223,7 +239,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "..."
          Height          =   315
          Left            =   9120
-         TabIndex        =   16
+         TabIndex        =   18
          Top             =   1500
          Width           =   315
       End
@@ -231,7 +247,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "..."
          Height          =   315
          Left            =   4560
-         TabIndex        =   21
+         TabIndex        =   23
          Top             =   2040
          Width           =   315
       End
@@ -239,14 +255,14 @@ Begin VB.Form frmLoanTrans
          Caption         =   "..."
          Height          =   315
          Left            =   4560
-         TabIndex        =   24
+         TabIndex        =   26
          Top             =   1560
          Width           =   315
       End
       Begin VB.TextBox txtTransDate 
          Height          =   315
          Left            =   2640
-         TabIndex        =   12
+         TabIndex        =   14
          Top             =   240
          Width           =   1785
       End
@@ -254,14 +270,14 @@ Begin VB.Form frmLoanTrans
          Caption         =   "..."
          Height          =   315
          Left            =   4560
-         TabIndex        =   11
+         TabIndex        =   13
          Top             =   210
          Width           =   315
       End
       Begin WIS_Currency_Text_Box.CurrText txtTotalIntBalance 
          Height          =   345
          Left            =   7920
-         TabIndex        =   18
+         TabIndex        =   20
          Top             =   240
          Width           =   1545
          _ExtentX        =   2725
@@ -274,7 +290,7 @@ Begin VB.Form frmLoanTrans
       Begin WIS_Currency_Text_Box.CurrText txtRegInt 
          Height          =   345
          Left            =   7920
-         TabIndex        =   20
+         TabIndex        =   22
          Top             =   660
          Width           =   1545
          _ExtentX        =   2725
@@ -287,7 +303,7 @@ Begin VB.Form frmLoanTrans
       Begin WIS_Currency_Text_Box.CurrText txtPenalINT 
          Height          =   345
          Left            =   7920
-         TabIndex        =   23
+         TabIndex        =   25
          Top             =   1065
          Width           =   1545
          _ExtentX        =   2725
@@ -300,7 +316,7 @@ Begin VB.Form frmLoanTrans
       Begin WIS_Currency_Text_Box.CurrText txtMisc 
          Height          =   345
          Left            =   7920
-         TabIndex        =   26
+         TabIndex        =   28
          Top             =   1485
          Width           =   1065
          _ExtentX        =   1879
@@ -313,7 +329,7 @@ Begin VB.Form frmLoanTrans
       Begin WIS_Currency_Text_Box.CurrText txtPrincAmount 
          Height          =   345
          Left            =   7920
-         TabIndex        =   29
+         TabIndex        =   31
          Top             =   1905
          Width           =   1545
          _ExtentX        =   2725
@@ -326,7 +342,7 @@ Begin VB.Form frmLoanTrans
       Begin WIS_Currency_Text_Box.CurrText txtTotAmt 
          Height          =   345
          Left            =   7800
-         TabIndex        =   14
+         TabIndex        =   16
          Top             =   2445
          Width           =   1635
          _ExtentX        =   2884
@@ -340,7 +356,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "Particulars"
          Height          =   300
          Left            =   240
-         TabIndex        =   27
+         TabIndex        =   29
          Top             =   2445
          Width           =   2295
       End
@@ -348,7 +364,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "Interest balance"
          Height          =   300
          Left            =   5520
-         TabIndex        =   17
+         TabIndex        =   19
          Top             =   240
          Width           =   2415
       End
@@ -363,7 +379,7 @@ Begin VB.Form frmLoanTrans
          ForeColor       =   &H80000006&
          Height          =   300
          Left            =   240
-         TabIndex        =   41
+         TabIndex        =   43
          Top             =   2010
          Width           =   2295
       End
@@ -372,7 +388,7 @@ Begin VB.Form frmLoanTrans
          BorderStyle     =   1  'Fixed Single
          Height          =   315
          Left            =   2640
-         TabIndex        =   42
+         TabIndex        =   44
          Top             =   2010
          Width           =   1815
       End
@@ -381,7 +397,7 @@ Begin VB.Form frmLoanTrans
          BorderStyle     =   1  'Fixed Single
          Height          =   315
          Left            =   2640
-         TabIndex        =   36
+         TabIndex        =   38
          Top             =   675
          Width           =   2205
       End
@@ -391,7 +407,7 @@ Begin VB.Form frmLoanTrans
          BorderStyle     =   1  'Fixed Single
          Height          =   315
          Left            =   2640
-         TabIndex        =   38
+         TabIndex        =   40
          Top             =   1125
          Width           =   2205
       End
@@ -400,7 +416,7 @@ Begin VB.Form frmLoanTrans
          ForeColor       =   &H00404000&
          Height          =   300
          Left            =   5520
-         TabIndex        =   28
+         TabIndex        =   30
          Top             =   1905
          Width           =   2175
       End
@@ -408,7 +424,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "&Misc Amount"
          Height          =   300
          Left            =   5520
-         TabIndex        =   25
+         TabIndex        =   27
          Top             =   1485
          Width           =   1905
       End
@@ -416,7 +432,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "&Penal interest :"
          Height          =   300
          Left            =   5520
-         TabIndex        =   22
+         TabIndex        =   24
          Top             =   1065
          Width           =   1965
       End
@@ -424,7 +440,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "Transaction &Date"
          Height          =   300
          Left            =   240
-         TabIndex        =   10
+         TabIndex        =   12
          Top             =   240
          Width           =   2295
       End
@@ -433,7 +449,7 @@ Begin VB.Form frmLoanTrans
          ForeColor       =   &H80000006&
          Height          =   300
          Left            =   240
-         TabIndex        =   39
+         TabIndex        =   41
          Top             =   1560
          Width           =   2175
       End
@@ -441,7 +457,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "&Regular Interest"
          Height          =   300
          Left            =   5520
-         TabIndex        =   19
+         TabIndex        =   21
          Top             =   660
          Width           =   2295
       End
@@ -450,7 +466,7 @@ Begin VB.Form frmLoanTrans
          ForeColor       =   &H00000000&
          Height          =   300
          Left            =   5520
-         TabIndex        =   13
+         TabIndex        =   15
          Top             =   2445
          Width           =   1875
       End
@@ -459,7 +475,7 @@ Begin VB.Form frmLoanTrans
          ForeColor       =   &H80000006&
          Height          =   300
          Left            =   240
-         TabIndex        =   37
+         TabIndex        =   39
          Top             =   1125
          Width           =   2295
       End
@@ -467,7 +483,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "Last Transaction "
          Height          =   300
          Left            =   240
-         TabIndex        =   35
+         TabIndex        =   37
          Top             =   675
          Width           =   2385
       End
@@ -476,7 +492,7 @@ Begin VB.Form frmLoanTrans
          BorderStyle     =   1  'Fixed Single
          Height          =   315
          Left            =   2640
-         TabIndex        =   40
+         TabIndex        =   42
          Top             =   1560
          Width           =   1815
       End
@@ -484,15 +500,15 @@ Begin VB.Form frmLoanTrans
    Begin VB.Frame Frame2 
       BackColor       =   &H80000000&
       Height          =   3555
-      Left            =   68
-      TabIndex        =   58
-      Top             =   4920
+      Left            =   75
+      TabIndex        =   60
+      Top             =   5100
       Width           =   9705
       Begin VB.CommandButton cmdPhoto 
          Caption         =   "P&hoto"
          Height          =   400
          Left            =   1560
-         TabIndex        =   63
+         TabIndex        =   65
          Top             =   3050
          Width           =   1215
       End
@@ -502,7 +518,7 @@ Begin VB.Form frmLoanTrans
          Enabled         =   0   'False
          Height          =   400
          Left            =   8400
-         TabIndex        =   31
+         TabIndex        =   33
          Top             =   3050
          Width           =   1215
       End
@@ -511,7 +527,7 @@ Begin VB.Form frmLoanTrans
          Enabled         =   0   'False
          Height          =   400
          Left            =   6480
-         TabIndex        =   32
+         TabIndex        =   34
          Top             =   3050
          Width           =   1545
       End
@@ -530,7 +546,7 @@ Begin VB.Form frmLoanTrans
          Height          =   400
          Left            =   195
          MaskColor       =   &H00800080&
-         TabIndex        =   33
+         TabIndex        =   35
          Top             =   3050
          Width           =   1215
       End
@@ -539,7 +555,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "Frame14"
          Height          =   2025
          Left            =   360
-         TabIndex        =   62
+         TabIndex        =   64
          Top             =   840
          Width           =   9075
          Begin VB.CommandButton cmdAddNote 
@@ -555,27 +571,26 @@ Begin VB.Form frmLoanTrans
             Height          =   405
             Left            =   8640
             Style           =   1  'Graphical
-            TabIndex        =   64
+            TabIndex        =   66
             Top             =   0
             Width           =   405
          End
          Begin RichTextLib.RichTextBox rtfNote 
             Height          =   1965
             Left            =   0
-            TabIndex        =   65
+            TabIndex        =   67
             Top             =   0
             Width           =   8595
             _ExtentX        =   15161
             _ExtentY        =   3466
             _Version        =   393217
-            Enabled         =   -1  'True
             TextRTF         =   $"LnTrans.frx":0000
          End
       End
       Begin ComctlLib.TabStrip tabLoans 
          Height          =   2655
          Left            =   150
-         TabIndex        =   43
+         TabIndex        =   45
          Top             =   300
          Width           =   9525
          _ExtentX        =   16801
@@ -585,7 +600,6 @@ Begin VB.Form frmLoanTrans
             NumTabs         =   1
             BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   ""
-               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
@@ -596,7 +610,7 @@ Begin VB.Form frmLoanTrans
          Caption         =   "Frame13"
          Height          =   2085
          Left            =   315
-         TabIndex        =   48
+         TabIndex        =   50
          Top             =   750
          Width           =   9165
          Begin VB.CommandButton cmdNextTrans 
@@ -604,7 +618,7 @@ Begin VB.Form frmLoanTrans
             Height          =   315
             Left            =   8820
             Style           =   1  'Graphical
-            TabIndex        =   46
+            TabIndex        =   48
             Top             =   420
             Width           =   375
          End
@@ -613,7 +627,7 @@ Begin VB.Form frmLoanTrans
             Height          =   315
             Left            =   8820
             Style           =   1  'Graphical
-            TabIndex        =   45
+            TabIndex        =   47
             Top             =   15
             Width           =   375
          End
@@ -622,14 +636,14 @@ Begin VB.Form frmLoanTrans
             Left            =   8790
             Picture         =   "LnTrans.frx":0082
             Style           =   1  'Graphical
-            TabIndex        =   47
+            TabIndex        =   49
             Top             =   1470
             Width           =   375
          End
          Begin MSFlexGridLib.MSFlexGrid grd 
             Height          =   1830
             Left            =   0
-            TabIndex        =   44
+            TabIndex        =   46
             Top             =   120
             Visible         =   0   'False
             Width           =   8655
@@ -705,7 +719,7 @@ If Not DateValidate(txtTransDate, "/", True) Then
 End If
 txtTotAmt = 0
 txtTotAmt.Tag = 0
-txtPenalInt = 0
+txtPenalINT = 0
 txtRegInt = 0
 txtTotalIntBalance = 0
 txtRepaid = ""
@@ -713,7 +727,7 @@ txtPrincAmount = 0
 
 txtRegInt.BackColor = wisWhite
 txtTotalIntBalance.BackColor = wisWhite
-txtPenalInt.BackColor = wisWhite
+txtPenalINT.BackColor = wisWhite
 txtRegIntBalance.BackColor = wisWhite
 txtMisc.BackColor = wisWhite
 txtCustName.BackColor = wisWhite
@@ -722,7 +736,7 @@ txtPrincAmount.BackColor = wisWhite
 txtTotAmt.BackColor = wisWhite
 txtRegInt.Enabled = True
 txtTotalIntBalance.Enabled = True
-txtPenalInt.Enabled = True
+txtPenalINT.Enabled = True
 txtRegIntBalance.Enabled = True
 txtMisc.Enabled = True
 txtCustName.Enabled = True
@@ -880,7 +894,7 @@ LoanHeadID = GetHeadID(FormatField(rst("SchemeName")), parMemberLoan)
 fraLoanGrid.Visible = True
 fraLoanGrid.ZOrder 0
 grd.Visible = True
-txtCustId = GetMemberNumber(FormatField(m_rstLoanMast("CustomerId")))
+txtCustID = GetMemberNumber(FormatField(m_rstLoanMast("CustomerId")))
 txtLoanAccNo = FormatField(m_rstLoanMast("AccNum"))
 txtSanction = FormatField(m_rstLoanMast("LoanAmount"))
 txtLoanAmount = txtSanction
@@ -965,7 +979,7 @@ If transType = wDeposit And DateValidate(txtTransDate, "/", True) Then
 '    txtTotalIntBalance = L_clsLoan.InterestBalance(LoanID, TransDate)
     txtTotalIntBalance = Val(txtRegIntBalance) + Val(txtPenalBalance)
     txtRegInt = L_clsLoan.RegularInterest(LoanID, , TransDate)
-    txtPenalInt = L_clsLoan.PenalInterest(LoanID, , TransDate)
+    txtPenalINT = L_clsLoan.PenalInterest(LoanID, , TransDate)
     If hasEMI Then txtPrincAmount = L_clsLoan.PrincipalAmountAsOn(LoanID, TransDate)
     Call CheckForDueAmount
     txtOverDue = FormatCurrency(L_clsLoan.OverDueAmount(LoanID, , TransDate))
@@ -1046,7 +1060,7 @@ cmdPrevTrans.Enabled = False
 Dim TransID As Integer
 
 Do
-    If m_rstLoanTrans.RecordCount > 19 Then
+    If m_rstLoanTrans.recordCount > 19 Then
         cmdPrevTrans.Enabled = True
         m_rstLoanTrans.MoveLast
         TransID = m_rstLoanTrans("transID")
@@ -1073,12 +1087,12 @@ If FormatField(m_rstLoanMast("LoanClosed")) Then
     txtPrincAmount.BackColor = wisGray
     txtTotalIntBalance = 0
     txtRegInt = 0
-    txtPenalInt = 0
+    txtPenalINT = 0
     txtRegIntBalance = "0.00"
     txtPenalBalance = "0.00"
     txtTotalIntBalance.BackColor = wisGray
     txtRegInt.BackColor = wisGray
-    txtPenalInt.BackColor = wisGray
+    txtPenalINT.BackColor = wisGray
     txtRegIntBalance.BackColor = wisGray
     txtPenalBalance.BackColor = wisGray
     txtMisc.BackColor = wisGray
@@ -1088,7 +1102,7 @@ If FormatField(m_rstLoanMast("LoanClosed")) Then
     txtTotAmt.Enabled = False
     txtTotalIntBalance.Enabled = False
     txtRegInt.Enabled = False
-    txtPenalInt.Enabled = False
+    txtPenalINT.Enabled = False
     'txtIntBalance.Enabled = False
     txtMisc.Enabled = False
     txtCustName.Enabled = False
@@ -1116,8 +1130,8 @@ If FormatField(m_rstLoanMast("LoanClosed")) = 0 Then
     txtTotalIntBalance.BackColor = &H80000005
     txtRegInt.Enabled = True
     txtRegInt.BackColor = &H80000005
-    txtPenalInt.Enabled = True
-    txtPenalInt.BackColor = &H80000005
+    txtPenalINT.Enabled = True
+    txtPenalINT.BackColor = &H80000005
     txtPrincAmount.Enabled = True
     txtPrincAmount.BackColor = &H80000005
     txtMisc.Enabled = True
@@ -1139,6 +1153,7 @@ lblLoanScheme = GetResourceString(214)  'LOan Scheme
 lblLoanAccNo = GetResourceString(58, 60) 'LOan Acc NO
 lblCustID = GetResourceString(49, 60) 'Member No
 lblCustName = GetResourceString(35) 'Name
+lblMemberType.Caption = GetResourceString(101)  'Member type
 cmdPhoto.Caption = GetResourceString(415)
 
 cmdLoad.Caption = GetResourceString(3) 'Detail
@@ -1512,7 +1527,7 @@ End Sub
 
 Private Sub cmdAddNote_Click()
 
-If m_Notes.ModuleId = 0 Or m_Notes.AccId = 0 Then Exit Sub
+If m_Notes.ModuleID = 0 Or m_Notes.AccId = 0 Then Exit Sub
 
 Call m_Notes.Show
 Call m_Notes.DisplayNote(rtfNote)
@@ -1570,12 +1585,12 @@ End Sub
 
 Private Sub cmdLoad_Click()
 
-If Len(Trim(txtCustId)) = 0 Then Exit Sub
+If Len(Trim(txtCustID)) = 0 Then Exit Sub
 
-Dim custName As String
+Dim CustName As String
 Dim memberType As Integer
 
-txtCustName.Caption = GetMemberNameCustIDByMemberNum(Trim(txtCustId), m_CustomerID, memberType)
+txtCustName.Caption = GetMemberNameCustIDByMemberNum(Trim(txtCustID), m_CustomerID, memberType)
 
 If m_CustomerID < 1 Then Exit Sub
 
@@ -1591,7 +1606,7 @@ Exit Sub
 Dim SqlStr As String
 Dim rst As Recordset
 
-SqlStr = "SELECT * FROM MemMaster Where AccNum = " & AddQuotes(txtCustId, True)
+SqlStr = "SELECT * FROM MemMaster Where AccNum = " & AddQuotes(txtCustID, True)
 gDbTrans.SqlStmt = SqlStr
 If gDbTrans.Fetch(rst, adOpenDynamic) < 1 Then
     m_CustomerID = 0
@@ -1618,7 +1633,7 @@ If gDbTrans.Fetch(rst, adOpenDynamic) < 1 Then
     m_CustomerID = 0
     m_frmLookUp.Show vbModal
     If m_CustomerID = 0 Then Exit Sub
-    txtCustId = GetMemberNumber(m_CustomerID)
+    txtCustID = GetMemberNumber(m_CustomerID)
     GoTo RetryLine
     Exit Sub
 End If
@@ -1675,7 +1690,7 @@ End If
 
 Dim custId As Long
 Dim LoanID As Long
-If rst.RecordCount > 1 Then
+If rst.recordCount > 1 Then
     Dim multiLoan As Boolean
     multiLoan = False
     While rst.EOF = False
@@ -1697,7 +1712,7 @@ End If
 
 
 Set rst = Nothing
-txtCustId = GetMemberNumber(custId)
+txtCustID = GetMemberNumber(custId)
 m_CustomerID = custId
 m_ClsCust.LoadCustomerInfo (m_CustomerID)
 txtCustName = m_ClsCust.CustomerName(m_CustomerID)
@@ -1829,7 +1844,7 @@ End Sub
 Private Sub cmdRepay_Click()
 
 If Val(txtTotAmt.Tag) Then
-    If txtTotAmt.Value <> (txtTotalIntBalance + txtRegInt + txtPenalInt + txtMisc + txtPrincAmount) Then
+    If txtTotAmt.Value <> (txtTotalIntBalance + txtRegInt + txtPenalINT + txtMisc + txtPrincAmount) Then
         MsgBox GetResourceString(499), vbInformation, wis_MESSAGE_TITLE
         ActivateTextBox txtTotAmt
         Exit Sub
@@ -1916,7 +1931,7 @@ Dim RetMsg As VbMsgBoxResult
 Amount = Val(txtTotAmt)
 Balance = Val(txtBalance)
 IntAmount = txtRegInt
-PenalIntAmount = Val(txtPenalInt)
+PenalIntAmount = Val(txtPenalINT)
 PrevIntBalance = Val(txtRegIntBalance) + Val(txtPenalBalance)
 IntBalance = txtTotalIntBalance
 PenalBalance = Val(txtPenalBalance)
@@ -2407,6 +2422,8 @@ tabLoans.Tabs.Clear
 cmbLoanScheme.Clear
 Call LoadLoanSchemes(cmbLoanScheme)
 
+Call LoadMemberTypes(cmbMemberType)
+
 Dim InstType As wisInstallmentTypes
 
 Set m_ClsCust = New clsCustReg
@@ -2422,7 +2439,7 @@ Call LoadParticularsFromFile(cmbParticulars, App.Path & "\Loan.ini")
 End Sub
 
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 Call ClearControls
 Set m_ClsCust = Nothing
 gWindowHandle = 0
@@ -3017,8 +3034,8 @@ On Error Resume Next
 End Sub
 
 
-Private Sub txtCustId_Change()
-If m_CustomerID = Val(txtCustId) Then Exit Sub
+Private Sub txtCustID_Change()
+If m_CustomerID = Val(txtCustID) Then Exit Sub
 Call ClearControls
 txtCustName = ""
 fraLoanGrid.Visible = False
@@ -3050,7 +3067,7 @@ Call txtRegInt_Change
 End Sub
 
 Private Sub txtPenalInt_GotFocus()
-With txtPenalInt
+With txtPenalINT
     .SelStart = 0
     .SelLength = Len(.Text)
 End With
@@ -3074,9 +3091,9 @@ Dim Amount As Currency
 txtRegIntBalance.Tag = Val(txtRegInt)
 Amount = txtTotAmt
 If Val(txtTotAmt.Tag) Then
-    txtPrincAmount = txtTotAmt - (txtTotalIntBalance + txtRegInt + txtPenalInt + txtMisc)
+    txtPrincAmount = txtTotAmt - (txtTotalIntBalance + txtRegInt + txtPenalINT + txtMisc)
 Else
-    Amount = txtTotalIntBalance + txtRegInt + txtPenalInt + txtMisc + txtPrincAmount
+    Amount = txtTotalIntBalance + txtRegInt + txtPenalINT + txtMisc + txtPrincAmount
     If Amount < 0 Then Amount = 0
     txtTotAmt = Amount
 End If
@@ -3107,7 +3124,7 @@ End Sub
 
 Private Sub txtTotAmt_Change()
 If Me.ActiveControl.name <> txtTotAmt.name Then Exit Sub
-txtPrincAmount = txtTotAmt - txtRegInt - txtPenalInt - txtMisc
+txtPrincAmount = txtTotAmt - txtRegInt - txtPenalINT - txtMisc
 txtTotAmt.Tag = 1
 End Sub
 

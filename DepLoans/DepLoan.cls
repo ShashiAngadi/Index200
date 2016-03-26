@@ -139,18 +139,24 @@ Dim AccHeadName As String
 Dim IntHeadName As String
 
 Set ClsBank = New clsBankAcc
+Dim depName As String
+Dim depNameEnglish As String
 
-If DepositType = wisDeposit_PD Then
+If DepositType >= wisDeposit_PD And DepositType < wisDeposit_PD + 10 Then
     'Loand Head
-    AccHeadName = GetResourceString(425, 58)
+    depName = GetDepositName(wis_PDAcc, DepositType Mod 10, depNameEnglish)
+    AccHeadName = depName & " " & GetResourceString(58)
+    'AccHeadName = GetResourceString(425, 58)
     'Deposit Head
     IntHeadName = AccHeadName & " " & GetResourceString(483)
-ElseIf DepositType = wisDeposit_RD Then
+ElseIf DepositType >= wisDeposit_RD And DepositType < wisDeposit_RD + 10 Then
     'Loand Head
-    AccHeadName = GetResourceString(424, 58)
+    depName = GetDepositName(wis_RDAcc, DepositType Mod 10, depNameEnglish)
+    AccHeadName = depName & " " & GetResourceString(58)
+    'AccHeadName = GetResourceString(424, 58)
     'Deposit Head
     IntHeadName = AccHeadName & " " & GetResourceString(483)
-ElseIf DepositType >= wisDeposit_FD Then
+ElseIf DepositType >= wisDeposit_FD And DepositType < wisDeposit_FD + 10 Then
     gDbTrans.SqlStmt = "Select DepositName From DepositNAme " & _
             " WHERE DepositID = " & DepositType
     Call gDbTrans.Fetch(rst, adOpenDynamic)
@@ -342,8 +348,7 @@ Dim RstLoanTrans As Recordset
 Dim Days As Integer
 Dim rst As ADODB.Recordset
 
-gDbTrans.SqlStmt = "SELECT * FROM DepositLoanMaster WHERE " _
-    & "loanID = " & LoanID
+gDbTrans.SqlStmt = "SELECT * FROM DepositLoanMaster WHERE LoanID = " & LoanID
 Lret = gDbTrans.Fetch(rstLoanMast, adOpenStatic)
 If Lret <= 0 Then GoTo Exit_Line
 ' Save the resultset for future references.
@@ -406,8 +411,6 @@ Err_line:
         Err.Clear
      End If
 End Function
-
-
 
 ' This Function returns the next Loan Balance of
 'the customer whose first account details already fetched
@@ -475,12 +478,14 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Function
 If Not rst Is Nothing Then LoanTransAmount = Val(FormatField(rst(0)))
 
 End Function
-Public Sub TotalLoanTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency, Optional DepositType As Integer)
+Public Sub TotalLoanTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency, Optional DepositType As Integer)
 
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
+Dim subDepType As Integer
+
 
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
@@ -504,20 +509,20 @@ While rst.EOF = False
     TotalAmount = Val(FormatField(rst("TotalAmount")))
     If rst("TransType") = wDeposit Then CashDeposit = TotalAmount
     If rst("TransType") = wWithdraw Then cashWithdraw = TotalAmount
-    If rst("TransType") = wContraDeposit Then contraDeposit = TotalAmount
-    If rst("TransType") = wContraWithdraw Then contraWithdraw = TotalAmount
+    If rst("TransType") = wContraDeposit Then ContraDeposit = TotalAmount
+    If rst("TransType") = wContraWithdraw Then ContraWithDraw = TotalAmount
     
     rst.MoveNext
 Wend
 
 Set rst = Nothing
 End Sub
-Public Sub TotalLoanIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency, Optional DepositType As Integer = 0)
+Public Sub TotalLoanIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency, Optional DepositType As Integer = 0)
 
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
 
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
@@ -541,8 +546,8 @@ While rst.EOF = False
     TotalAmount = Val(FormatField(rst("TotalAmount")))
     If rst("TransType") = wDeposit Then CashDeposit = TotalAmount
     If rst("TransType") = wWithdraw Then cashWithdraw = TotalAmount
-    If rst("TransType") = wContraDeposit Then contraDeposit = TotalAmount
-    If rst("TransType") = wContraWithdraw Then contraWithdraw = TotalAmount
+    If rst("TransType") = wContraDeposit Then ContraDeposit = TotalAmount
+    If rst("TransType") = wContraWithdraw Then ContraWithDraw = TotalAmount
     
     rst.MoveNext
 Wend
@@ -831,11 +836,14 @@ Dim LoanHeadID As Long
 
 If Not CashTransaction Then
     Dim AccHeadName As String
+    Dim depName As String
     'Loand Head
-    If DepositType = wisDeposit_PD Then
-        AccHeadName = GetResourceString(425, 58)
-    ElseIf DepositType = wisDeposit_RD Then
-        AccHeadName = GetResourceString(424, 58)
+    If DepositType >= wisDeposit_PD And DepositType < wisDeposit_PD + 10 Then
+        depName = GetDepositName(wis_PDAcc, DepositType Mod 10)
+        AccHeadName = depName & " " & GetResourceString(58) ' GetResourceString(425, 58)
+    ElseIf DepositType >= wisDeposit_RD And DepositType < wisDeposit_RD + 10 Then
+        depName = GetDepositName(wis_RDAcc, DepositType Mod 10)
+        AccHeadName = depName & " " & GetResourceString(58) ' AccHeadName = GetResourceString(424, 58)
     ElseIf DepositType >= wisDeposit_FD Then
         gDbTrans.SqlStmt = "Select DepositName From DepositNAme " & _
                 " WHERE DepositID = " & DepositType
@@ -1073,5 +1081,4 @@ With frmCancel
     
 End With
 End Sub
-
 

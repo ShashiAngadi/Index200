@@ -242,7 +242,7 @@ Private Sub LoadGridSelectedDataToCombo()
 'Declare the variables
 Dim RelationID As Long
 Dim GodownID As Byte
-Dim HeadID As Long
+Dim headID As Long
 Dim GroupID As Long
 Dim UnitID As Long
 Dim VoucherType As Wis_VoucherTypes
@@ -579,7 +579,7 @@ End Property
 
 
 
-Public Property Let HeadName(ByVal vData As String)
+Public Property Let headName(ByVal vData As String)
     On Error GoTo HeadNameLetErr
 
 
@@ -596,13 +596,13 @@ HeadNameLetErr:
 End Property
 
 
-Public Property Get HeadName() As String
+Public Property Get headName() As String
     On Error GoTo HeadNameGetErr
 
 
 'used when retrieving value of a property, on the right side of an assignment.
 'Syntax: Debug.Print X.HeadName
-    HeadName = m_HeadName
+    headName = m_HeadName
     Exit Property
 
 
@@ -614,7 +614,7 @@ End Property
 
 
 
-Public Property Let HeadID(ByVal vData As Long)
+Public Property Let headID(ByVal vData As Long)
     On Error GoTo HeadIDLetErr
 
 
@@ -631,14 +631,14 @@ HeadIDLetErr:
 End Property
 
 
-Public Property Get HeadID() As Long
+Public Property Get headID() As Long
     
     On Error GoTo HeadIDGetErr
 
 
 'used when retrieving value of a property, on the right side of an assignment.
 'Syntax: Debug.Print X.HeadID
-    HeadID = m_HeadID
+    headID = m_HeadID
     Exit Property
 
 
@@ -684,12 +684,7 @@ GodownIDGetErr:
     Call RaiseError(MyUnhandledError, "clsTransferNew:GodownID Property Get")
 End Property
 
-
-
-
-
 Private Sub Class_Initialize()
-
    
     #If DebugMode Then
         'get the next available class ID, and print out
@@ -982,9 +977,9 @@ End Sub
 
 Private Function LoadBranchRelationID(ByVal TheCombo As ComboBox, ByVal ToGodownID As Byte) As Long
 'Declare the variables
-Dim Rst As ADODB.Recordset
+Dim rst As ADODB.Recordset
 Dim ProductID As Long
-Dim HeadID As Long
+Dim headID As Long
 Dim GroupID As Integer
 Dim UnitID As Long
 
@@ -996,11 +991,11 @@ Dim fldRelationID As ADODB.Field
 gDbTrans.SqlStmt = "SELECT GroupID,ProductID FROM RelationMaster " & _
                 " WHERE RelationID= " & m_RelationID
 
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) < 0 Then Exit Function
+If gDbTrans.Fetch(rst, adOpenForwardOnly) < 0 Then Exit Function
 
-ProductID = FormatField(Rst.Fields("ProductID"))
+ProductID = FormatField(rst.Fields("ProductID"))
 'HeadID = FormatField(Rst.Fields("HeadID"))
-GroupID = FormatField(Rst.Fields("GroupID"))
+GroupID = FormatField(rst.Fields("GroupID"))
 
 gDbTrans.SqlStmt = " SELECT ProductName,UnitName,RelationID FROM RelationMaster A," & _
                 " Products B,ProductGroup C ,Units D " & _
@@ -1017,19 +1012,19 @@ gDbTrans.SqlStmt = " SELECT ProductName,UnitName,RelationID FROM RelationMaster 
 
 TheCombo.Clear
 
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) < 0 Then Exit Function
+If gDbTrans.Fetch(rst, adOpenForwardOnly) < 0 Then Exit Function
 
-Set fldProductName = Rst.Fields("ProductName")
-Set fldUnitName = Rst.Fields("UnitName")
-Set fldRelationID = Rst.Fields("RelationID")
+Set fldProductName = rst.Fields("ProductName")
+Set fldUnitName = rst.Fields("UnitName")
+Set fldRelationID = rst.Fields("RelationID")
  
  
-Do While Not Rst.EOF
+Do While Not rst.EOF
     TheCombo.AddItem fldProductName.Value & "  " & fldUnitName.Value
     TheCombo.ItemData(TheCombo.newIndex) = fldRelationID.Value
     
     'Move the record set
-    Rst.MoveNext
+    rst.MoveNext
 Loop
 
 

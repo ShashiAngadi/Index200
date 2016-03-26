@@ -570,24 +570,47 @@ ElseIf ModuleId = wis_CAAcc Then 'Current Account
 
 'Deposit Accounts like Fd
 ElseIf ModuleId >= wis_Deposits And ModuleId < wis_Deposits + 100 Then
-    SqlStr = "Select AccNum, " & _
-        ", Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
-        "From FDMaster A,NameTab B Where A.CustomerID = B.CustomerID " & _
-            " ANd AccID Not IN (Select Distinct AccID From FDTrans C)"
-    If ModuleId > wis_Deposits Then _
-        SqlStr = SqlStr & " ANd A.DepositType = " & ModuleId - wis_Deposits
+    Dim subDepType As Integer
+    subDepType = ModuleId Mod 100 'wis_Deposits
+    
+    'If subDepType >= wisDeposit_RD And subDepType < wisDeposit_RD + 10 Then
+        SqlStr = "Select AccNum, " & _
+            ", Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
+            "From RDMaster A,NameTab B Where A.CustomerID = B.CustomerID " & _
+                " ANd AccID Not IN (Select Distinct AccID From FDTrans C)"
+        If subDepType > wisDeposit_RD Then _
+            SqlStr = SqlStr & " ANd A.DepositType = " & subDepType - 10
+    
+    'ElseIf subDepType >= wisDeposit_PD And subDepType < wisDeposit_PD + 10 Then
+        SqlStr = "Select AccNum, " & _
+            ", Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
+            "From PDMaster A,NameTab B Where A.CustomerID = B.CustomerID " & _
+                " ANd AccID Not IN (Select Distinct AccID From FDTrans C)"
+        If subDepType > wisDeposit_PD Then _
+            SqlStr = SqlStr & " ANd A.DepositType = " & subDepType - wis_Deposits
+   'Else
+   
+   
+        SqlStr = "Select AccNum, " & _
+            ", Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
+            "From FDMaster A,NameTab B Where A.CustomerID = B.CustomerID " & _
+                " ANd AccID Not IN (Select Distinct AccID From FDTrans C)"
+        If ModuleId > wis_Deposits Then _
+            SqlStr = SqlStr & " ANd A.DepositType = " & ModuleId - wis_Deposits
+    'End If
+    
 
-
-ElseIf ModuleId = wis_PDAcc Then   'Pigmy Accounts
+ElseIf ModuleId >= wis_PDAcc And ModuleId < wis_PDAcc + 10 Then
+    'Pigmy Accounts
     SqlStr = "Select AccNum, AccId as ID From PDMaster A"
 
-ElseIf ModuleId = wis_RDAcc Then  'Recurring Accounts
+ElseIf ModuleId >= wis_RDAcc And ModuleId < wis_RDAcc + 10 Then  'Recurring Accounts
     SqlStr = "Select AccNum, " & _
         " Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
         "From RDMaster A,NameTab B Where A.CustomerID = B.CustomerID " & _
             " ANd AccID Not IN (Select Distinct AccID From RDTrans )"
 
-ElseIf ModuleId = wis_SBAcc Then
+ElseIf ModuleId >= wis_SBAcc And ModuleId < wis_SBAcc + 10 Then
     SqlStr = "Select AccNum, " & _
         "Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
         "From SBMaster A,NameTab B Where A.CustomerID = B.CustomerID " & _
@@ -1030,20 +1053,20 @@ ElseIf ModuleId = wis_Loans Then
         sqlClause = " AND A.SchemeID = " & ModuleId - wis_Loans
 
 'Pigmy Accounts
-ElseIf ModuleId = wis_PDAcc Then
+ElseIf ModuleId >= wis_PDAcc And ModuleId < wis_PDAcc + 100 Then
     SqlStr = "Select AccNum, AccId as ID," & _
             " Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
             " From PDMaster A, NameTab B WHERE B.CustomerID = A.CustomerID " & _
             " And Accid = " & AccId
 
 'Recurring Accounts
-ElseIf ModuleId = wis_RDAcc Then
+ElseIf ModuleId >= wis_RDAcc And ModuleId < wis_RDAcc + 100 Then
     SqlStr = "Select AccNum, AccId as ID ," & _
             " Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
             " From RDMaster A, NameTab B WHERE B.CustomerID = A.CustomerID " & _
             " And Accid = " & AccId
 
-ElseIf ModuleId = wis_SBAcc Then
+ElseIf ModuleId >= wis_SBAcc And ModuleId < wis_SBAcc + 100 Then
     SqlStr = "Select AccNum, AccId as ID ," & _
             " Title +' '+FirstName+' '+MiddleName+' '+LastName as CustName" & _
             " From SBMaster A, NameTab B WHERE B.CustomerID = A.CustomerID " & _

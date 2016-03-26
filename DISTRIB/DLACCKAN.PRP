@@ -1,0 +1,28 @@
+[SBSetup]
+MinimumBalance=500
+
+[Particulars]
+Key0=Apple
+Key1=By Cheque
+Key2=iiii
+Key3=By dsf
+Key4=By Interest
+Key5=shfdhgsfdghfdsgfdsgs
+ 
+[Property Sheet]
+Prop1=Prompt=²ñÀúÁñÇğÇğ ÆğÇğ ;PropType=Heading;SubItems=2
+Prop2=Prompt=²ñÀú Íğ®²úå;PropType=Editable;Description=²ñÀúÁñÇğÂğ ²ñÀú Íğ®²úå®õğôÂğôá Íğ÷„ÍğôÀğŞÁú.;DescTitle=²ñÀúÁñÇğ;DataSource=AccID;DisplayType=Browse
+Prop3=Prompt=²ñÀúÁñÇğÂğ ÎúÍğÇğô;LockEdit=True;PropType=Editable;Description=²ñÀúÁñÇğÂğ ÎúÍğÇğÂğôá Íğ÷„ÍğÀğŞÁú.;DescTitle=²ñÀúÁñÇğÂğ ÎúÍğÇğô;DisplayType=Browse;DataSource=AccName
+Prop4=Prompt=ÂñÆğô ‹Áúó“Àğ;PropType=Heading;SubItems=3
+Prop5=Prompt=ÎúÍğÇğô;PropType=Editable;Description=ÂñÆğô ‹Áúó“ÀğÂğ ÎúÍğÇğÂğôá Íğ÷„ÍğôÀğŞÁú.;DescTitle=ÂñÆğô ‹ÁúóËğÂğ;DataSource=NomineeName;
+Prop6=Prompt=Æğ®õğôÍğôì;PropType=Editable;Description=ÂñÆğô ‹Áúó“ÀğÂğ Æğ®õğôÍğìÂğôá Íğ÷„ÍğôÀğŞÁú.;DescTitle=Æğ®õğôÍğôì;DataSource=NomineeAge
+Prop7=Prompt=Íğ®Ä®Áşğ;PropType=Editable;LockEdit=True;Description=²ñÀúÁñÇğÂú÷®Š³ú ÂñÆğô‹Áúó“ÀğÂğ Íğ®Ä®ÁğÆğÂğôá Íğ÷„ÍğôÀğŞÁú;DescTitle=Íğ®Ä®Áşğ;DataSource=NomineeRelation;DisplayType=List;ListData=Àğ®Áú,Àñô,ÍğÎú÷óÁğÇğ,ÍğÎú÷óÁğ,Ãğ‰,Ãğ‰á,£ÀğÇú
+Prop8=Prompt=Ãğ¶ğôÍğôÆğÆğÇğô;PropType=Heading;SubItems=2;
+Prop9=Prompt=²ñÀú Íğ®²úå;PropType=Editable;Description=Ãğ¶ğôÍğôÆğÆğÇğ ²ñÀú Íğ®²úå®õğôÂğôá Íğ÷„ÍğôÀğŞÁú.;DescTitle=Ãğ¶ğôÍğôÆğÆğÇğ ²ñÀú Íğ®²úû.;DataSource=IntroducerID;DisplayType=Browse
+Prop10=Prompt=ÎúÍğÇğô;PropType=Editable;DescTitle=Ãğ¶ğôÍğôÆğÆğÇğ ÎúÍğÇğô;Description=Ãğ¶ğôÍğôÆğÆğÇğ ÎúÍğÇğÂğôá Íğ÷„ÍğôÀğŞÁú.;Datasource=IntroducerName;LockEdit=True
+Prop11=Prompt=Éú½ğ×Çğ ÆğÇğ;PropType=Heading;SubItems=3
+Prop12=Prompt=Éú½ğ×Çğ Íğ®²úå;PropType=Editable;DescTitle=Éú½ğ×Çğ Íğ®²úå;Description=Éú½ğ×Çğ Íğ®²úå®õğôÂğôá Íğ÷„ÍğôÀğŞÁú.;DataSource=LedgerNo
+Prop13=Prompt=Ãşúø‘®õú÷ Íğ®²úå;PropType=Editable;DescTitle=Ãşúø‘®õú÷ Íğ®²úå;Description=²ñÀú®õğô Ãşúø‘®õú÷ Íğ®±å®õğôÂğôá Íğ÷„ÍğôÀğŞÁú.;DataSource=FolioNo
+Prop14=Prompt=²ñÀú ÀúÇú®õğôôÆğ ŠÂñ®°ğ;PropType=Editable;DescTitle=²ñÀú ÀúÇú®õğôôÆğ ŠÂñ®°ğ;Description=²ñÀú ÀúÇú®õğôôÆğ ŠÂñ®°ğÆğÂğôá Íğ÷„ÍğôÀğŞÁú.;DataSource=CreateDate
+Prop15=Prompt=Æğõñå„‡®õğõñÁñ³ğ Íğ÷„Íğô;PropType=Editable;DescTitle=Æğõñå¶ğô‡ Íğ÷¶ğÂú ;Description=ÇÏúóÆğ¾ò Æğõñå¶ğôÇğ ¢Áñ³ğ ²ñÀúÁñÇğ‹³ú ‰’ÍğÈô Íğ÷¶ğÂú.;DisplayType=Boolean
+/`Indicates that this account holder has to be intimated, when the deposit matures

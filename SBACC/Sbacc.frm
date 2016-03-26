@@ -1,23 +1,33 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{F166A15E-AA26-47C4-9C7F-A61A5BECEDFF}#2.0#0"; "CURRTEXT.OCX"
+Object = "{F166A15E-AA26-47C4-9C7F-A61A5BECEDFF}#2.0#0"; "CurrText.ocx"
 Begin VB.Form frmSBAcc 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "INDEX-2000   -   SB Account Wizard"
-   ClientHeight    =   7680
+   ClientHeight    =   7935
    ClientLeft      =   1065
    ClientTop       =   720
    ClientWidth     =   8265
    Icon            =   "Sbacc.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7680
+   ScaleHeight     =   7935
    ScaleWidth      =   8265
    ShowInTaskbar   =   0   'False
+   Begin VB.CommandButton cmdDepositType 
+      Appearance      =   0  'Flat
+      Caption         =   ".."
+      Height          =   315
+      Left            =   4560
+      TabIndex        =   109
+      Top             =   7320
+      Width           =   375
+   End
    Begin VB.CommandButton cmdOK 
       Cancel          =   -1  'True
       Caption         =   "&OK"
@@ -33,8 +43,410 @@ Begin VB.Form frmSBAcc
       Height          =   450
       Left            =   6900
       TabIndex        =   35
-      Top             =   7170
+      Top             =   7290
       Width           =   1215
+   End
+   Begin VB.Frame fraTransact 
+      Height          =   6500
+      Left            =   360
+      TabIndex        =   70
+      Top             =   570
+      Width           =   7635
+      Begin VB.TextBox txtVoucherNo 
+         Height          =   330
+         Left            =   5310
+         TabIndex        =   30
+         Top             =   2220
+         Width           =   2115
+      End
+      Begin VB.CommandButton cmdDate 
+         Caption         =   "..."
+         Height          =   300
+         Left            =   2970
+         TabIndex        =   16
+         Top             =   1230
+         Width           =   315
+      End
+      Begin VB.ComboBox cmbParticulars 
+         Height          =   315
+         Left            =   1320
+         TabIndex        =   21
+         Top             =   2220
+         Width           =   2145
+      End
+      Begin VB.CommandButton cmdLoad 
+         Caption         =   "&Load"
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   400
+         Left            =   2910
+         TabIndex        =   10
+         Top             =   210
+         Width           =   1215
+      End
+      Begin VB.CommandButton cmdUndo 
+         Caption         =   "&Undo last"
+         Enabled         =   0   'False
+         Height          =   450
+         Left            =   4920
+         TabIndex        =   32
+         Top             =   5970
+         Width           =   1215
+      End
+      Begin VB.TextBox txtDate 
+         BackColor       =   &H00FFFFFF&
+         Height          =   330
+         Left            =   1320
+         TabIndex        =   17
+         Top             =   1230
+         Width           =   1545
+      End
+      Begin VB.CommandButton cmdAccept 
+         Caption         =   "Accept"
+         Default         =   -1  'True
+         Enabled         =   0   'False
+         Height          =   450
+         Left            =   6210
+         TabIndex        =   31
+         Top             =   5970
+         Width           =   1215
+      End
+      Begin VB.ComboBox cmbTrans 
+         Height          =   315
+         Left            =   1320
+         Style           =   2  'Dropdown List
+         TabIndex        =   19
+         Top             =   1770
+         Width           =   2115
+      End
+      Begin VB.TextBox txtAccNo 
+         Height          =   315
+         Left            =   1320
+         MaxLength       =   9
+         TabIndex        =   9
+         Top             =   210
+         Width           =   1515
+      End
+      Begin VB.ComboBox cmbCheque 
+         Height          =   315
+         Left            =   5310
+         TabIndex        =   26
+         Top             =   1740
+         Width           =   1725
+      End
+      Begin VB.CommandButton cmdCheque 
+         Caption         =   "..."
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Left            =   7080
+         TabIndex        =   28
+         Top             =   1770
+         Width           =   315
+      End
+      Begin VB.TextBox txtCheque 
+         Height          =   315
+         Left            =   5310
+         TabIndex        =   27
+         Top             =   1740
+         Visible         =   0   'False
+         Width           =   2115
+      End
+      Begin VB.ComboBox cmbAccNames 
+         Height          =   315
+         Left            =   1320
+         Style           =   2  'Dropdown List
+         TabIndex        =   59
+         Top             =   660
+         Width           =   6075
+      End
+      Begin WIS_Currency_Text_Box.CurrText txtAmount 
+         Height          =   345
+         Left            =   5310
+         TabIndex        =   23
+         Top             =   1230
+         Width           =   2055
+         _ExtentX        =   3625
+         _ExtentY        =   609
+         CurrencySymbol  =   ""
+         TeenString      =   "eleven,twelwe,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,ninteen"
+         NumberString    =   "zero,one,two,three,four,five,six,seven,eight,nine"
+         FontSize        =   8.25
+      End
+      Begin VB.Frame fraPassBook 
+         BorderStyle     =   0  'None
+         Caption         =   "Frame13"
+         Height          =   2445
+         Left            =   240
+         TabIndex        =   71
+         Top             =   3450
+         Width           =   7065
+         Begin VB.CommandButton cmdPrint 
+            Height          =   375
+            Left            =   6600
+            Style           =   1  'Graphical
+            TabIndex        =   105
+            Top             =   1800
+            Width           =   435
+         End
+         Begin MSFlexGridLib.MSFlexGrid grd 
+            Height          =   2325
+            Left            =   120
+            TabIndex        =   72
+            Top             =   30
+            Width           =   6495
+            _ExtentX        =   11456
+            _ExtentY        =   4101
+            _Version        =   393216
+            Rows            =   5
+            AllowUserResizing=   1
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+         End
+         Begin VB.CommandButton cmdPrevTrans 
+            Height          =   405
+            Left            =   6630
+            Style           =   1  'Graphical
+            TabIndex        =   36
+            Top             =   75
+            Width           =   435
+         End
+         Begin VB.CommandButton cmdNextTrans 
+            Height          =   405
+            Left            =   6630
+            Style           =   1  'Graphical
+            TabIndex        =   37
+            Top             =   510
+            Width           =   435
+         End
+      End
+      Begin ComctlLib.TabStrip TabStrip2 
+         Height          =   2925
+         Left            =   150
+         TabIndex        =   33
+         Top             =   3000
+         Width           =   7275
+         _ExtentX        =   12832
+         _ExtentY        =   5159
+         _Version        =   327682
+         BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
+            NumTabs         =   2
+            BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+               Caption         =   "Instructions"
+               Key             =   ""
+               Object.Tag             =   ""
+               ImageVarType    =   2
+            EndProperty
+            BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+               Caption         =   "Pass book"
+               Key             =   ""
+               Object.Tag             =   ""
+               ImageVarType    =   2
+            EndProperty
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.Frame fraInstructions 
+         BorderStyle     =   0  'None
+         Caption         =   "Frame14"
+         Height          =   2325
+         Left            =   270
+         TabIndex        =   73
+         Top             =   3510
+         Width           =   7035
+         Begin VB.CommandButton cmdAddNote 
+            Enabled         =   0   'False
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   405
+            Left            =   6570
+            Style           =   1  'Graphical
+            TabIndex        =   34
+            Top             =   90
+            Width           =   405
+         End
+         Begin RichTextLib.RichTextBox rtfNote 
+            Height          =   2235
+            Left            =   60
+            TabIndex        =   74
+            Top             =   30
+            Width           =   6435
+            _ExtentX        =   11351
+            _ExtentY        =   3942
+            _Version        =   393217
+            Enabled         =   -1  'True
+            TextRTF         =   $"Sbacc.frx":000C
+         End
+      End
+      Begin VB.Line Line4 
+         X1              =   7530
+         X2              =   120
+         Y1              =   1080
+         Y2              =   1080
+      End
+      Begin VB.Line Line3 
+         X1              =   7500
+         X2              =   150
+         Y1              =   2790
+         Y2              =   2790
+      End
+      Begin VB.Label lblVoucher 
+         Caption         =   "Voucher No: "
+         Height          =   300
+         Left            =   3930
+         TabIndex        =   29
+         Top             =   2280
+         Width           =   1365
+      End
+      Begin VB.Label lblDate 
+         Caption         =   "Date : "
+         Height          =   300
+         Left            =   180
+         TabIndex        =   15
+         Top             =   1260
+         Width           =   735
+      End
+      Begin VB.Label lblParticular 
+         Caption         =   "Particulars : "
+         Height          =   300
+         Left            =   180
+         TabIndex        =   20
+         Top             =   2220
+         Width           =   945
+      End
+      Begin VB.Label lblAmount 
+         Caption         =   "Amount (Rs) : "
+         Height          =   300
+         Left            =   3930
+         TabIndex        =   22
+         Top             =   1260
+         Width           =   1425
+      End
+      Begin VB.Label lblTrans 
+         Caption         =   "Transaction : "
+         Height          =   300
+         Left            =   180
+         TabIndex        =   18
+         Top             =   1800
+         Width           =   1035
+      End
+      Begin VB.Label lblName 
+         Caption         =   "Name(s) : "
+         Height          =   300
+         Left            =   180
+         TabIndex        =   14
+         Top             =   720
+         Width           =   795
+      End
+      Begin VB.Label lblAccNo 
+         Caption         =   "Account No. : "
+         Height          =   300
+         Left            =   150
+         TabIndex        =   8
+         Top             =   240
+         Width           =   1125
+      End
+      Begin VB.Label lblBalance 
+         Alignment       =   1  'Right Justify
+         Caption         =   "Balance : Rs. 00.00"
+         Height          =   300
+         Left            =   4830
+         TabIndex        =   13
+         Top             =   300
+         Width           =   2055
+      End
+      Begin VB.Label lblInstrNo 
+         Caption         =   "Instument no:"
+         Height          =   300
+         Left            =   3930
+         TabIndex        =   25
+         Top             =   1770
+         Width           =   1425
+      End
+   End
+   Begin ComctlLib.TabStrip TabStrip 
+      Height          =   7000
+      Left            =   180
+      TabIndex        =   0
+      Top             =   120
+      Width           =   7965
+      _ExtentX        =   14049
+      _ExtentY        =   12356
+      _Version        =   327682
+      BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
+         NumTabs         =   4
+         BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Transactions"
+            Key             =   "Transactions"
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "New / Modify Account"
+            Key             =   "AddModify"
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Reports"
+            Key             =   "Reports"
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Properties"
+            Key             =   "Properties"
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+      EndProperty
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
    End
    Begin VB.Frame fraProps 
       Height          =   6500
@@ -775,407 +1187,24 @@ Begin VB.Form frmSBAcc
          Width           =   1215
       End
    End
-   Begin VB.Frame fraTransact 
-      Height          =   6500
-      Left            =   360
-      TabIndex        =   70
-      Top             =   570
-      Width           =   7635
-      Begin VB.TextBox txtVoucherNo 
-         Height          =   330
-         Left            =   5310
-         TabIndex        =   30
-         Top             =   2220
-         Width           =   2115
-      End
-      Begin VB.CommandButton cmdDate 
-         Caption         =   "..."
-         Height          =   300
-         Left            =   2970
-         TabIndex        =   16
-         Top             =   1230
-         Width           =   315
-      End
-      Begin VB.ComboBox cmbParticulars 
-         Height          =   315
-         Left            =   1320
-         TabIndex        =   21
-         Top             =   2220
-         Width           =   2145
-      End
-      Begin VB.CommandButton cmdLoad 
-         Caption         =   "&Load"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   400
-         Left            =   2910
-         TabIndex        =   10
-         Top             =   210
-         Width           =   1215
-      End
-      Begin VB.CommandButton cmdUndo 
-         Caption         =   "&Undo last"
-         Enabled         =   0   'False
-         Height          =   450
-         Left            =   4920
-         TabIndex        =   32
-         Top             =   5970
-         Width           =   1215
-      End
-      Begin VB.TextBox txtDate 
-         BackColor       =   &H00FFFFFF&
-         Height          =   330
-         Left            =   1320
-         TabIndex        =   17
-         Top             =   1230
-         Width           =   1545
-      End
-      Begin VB.CommandButton cmdAccept 
-         Caption         =   "Accept"
-         Default         =   -1  'True
-         Enabled         =   0   'False
-         Height          =   450
-         Left            =   6210
-         TabIndex        =   31
-         Top             =   5970
-         Width           =   1215
-      End
-      Begin VB.ComboBox cmbTrans 
-         Height          =   315
-         Left            =   1320
-         Style           =   2  'Dropdown List
-         TabIndex        =   19
-         Top             =   1770
-         Width           =   2115
-      End
-      Begin VB.TextBox txtAccNo 
-         Height          =   315
-         Left            =   1320
-         MaxLength       =   9
-         TabIndex        =   9
-         Top             =   210
-         Width           =   1515
-      End
-      Begin VB.ComboBox cmbCheque 
-         Height          =   315
-         Left            =   5310
-         TabIndex        =   26
-         Top             =   1740
-         Width           =   1725
-      End
-      Begin VB.CommandButton cmdCheque 
-         Caption         =   "..."
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "Arial"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   315
-         Left            =   7080
-         TabIndex        =   28
-         Top             =   1770
-         Width           =   315
-      End
-      Begin VB.TextBox txtCheque 
-         Height          =   315
-         Left            =   5310
-         TabIndex        =   27
-         Top             =   1740
-         Visible         =   0   'False
-         Width           =   2115
-      End
-      Begin VB.ComboBox cmbAccNames 
-         Height          =   315
-         Left            =   1320
-         Style           =   2  'Dropdown List
-         TabIndex        =   59
-         Top             =   660
-         Width           =   6075
-      End
-      Begin WIS_Currency_Text_Box.CurrText txtAmount 
-         Height          =   345
-         Left            =   5310
-         TabIndex        =   23
-         Top             =   1230
-         Width           =   2055
-         _ExtentX        =   3625
-         _ExtentY        =   609
-         CurrencySymbol  =   ""
-         TeenString      =   "eleven,twelwe,thirteen,fourteen,fifteen,sixteen,seventeen,eighteen,ninteen"
-         NumberString    =   "zero,one,two,three,four,five,six,seven,eight,nine"
-         FontSize        =   8.25
-      End
-      Begin VB.Frame fraPassBook 
-         BorderStyle     =   0  'None
-         Caption         =   "Frame13"
-         Height          =   2445
-         Left            =   240
-         TabIndex        =   71
-         Top             =   3450
-         Width           =   7065
-         Begin VB.CommandButton cmdPrint 
-            Height          =   375
-            Left            =   6600
-            Style           =   1  'Graphical
-            TabIndex        =   105
-            Top             =   1800
-            Width           =   435
-         End
-         Begin MSFlexGridLib.MSFlexGrid grd 
-            Height          =   2325
-            Left            =   120
-            TabIndex        =   72
-            Top             =   30
-            Width           =   6495
-            _ExtentX        =   11456
-            _ExtentY        =   4101
-            _Version        =   393216
-            Rows            =   5
-            AllowUserResizing=   1
-            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-               Name            =   "MS Sans Serif"
-               Size            =   9.75
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-         End
-         Begin VB.CommandButton cmdPrevTrans 
-            Height          =   405
-            Left            =   6630
-            Style           =   1  'Graphical
-            TabIndex        =   36
-            Top             =   75
-            Width           =   435
-         End
-         Begin VB.CommandButton cmdNextTrans 
-            Height          =   405
-            Left            =   6630
-            Style           =   1  'Graphical
-            TabIndex        =   37
-            Top             =   510
-            Width           =   435
-         End
-      End
-      Begin ComctlLib.TabStrip TabStrip2 
-         Height          =   2925
-         Left            =   150
-         TabIndex        =   33
-         Top             =   3000
-         Width           =   7275
-         _ExtentX        =   12832
-         _ExtentY        =   5159
-         _Version        =   327682
-         BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-            NumTabs         =   2
-            BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-               Caption         =   "Instructions"
-               Key             =   ""
-               Object.Tag             =   ""
-               ImageVarType    =   2
-            EndProperty
-            BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-               Caption         =   "Pass book"
-               Key             =   ""
-               Object.Tag             =   ""
-               ImageVarType    =   2
-            EndProperty
-         EndProperty
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin VB.Frame fraInstructions 
-         BorderStyle     =   0  'None
-         Caption         =   "Frame14"
-         Height          =   2325
-         Left            =   270
-         TabIndex        =   73
-         Top             =   3510
-         Width           =   7035
-         Begin VB.CommandButton cmdAddNote 
-            Enabled         =   0   'False
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   405
-            Left            =   6570
-            Style           =   1  'Graphical
-            TabIndex        =   34
-            Top             =   90
-            Width           =   405
-         End
-         Begin RichTextLib.RichTextBox rtfNote 
-            Height          =   2235
-            Left            =   60
-            TabIndex        =   74
-            Top             =   30
-            Width           =   6435
-            _ExtentX        =   11351
-            _ExtentY        =   3942
-            _Version        =   393217
-            Enabled         =   -1  'True
-            TextRTF         =   $"Sbacc.frx":000C
-         End
-      End
-      Begin VB.Line Line4 
-         X1              =   7530
-         X2              =   120
-         Y1              =   1080
-         Y2              =   1080
-      End
-      Begin VB.Line Line3 
-         X1              =   7500
-         X2              =   150
-         Y1              =   2790
-         Y2              =   2790
-      End
-      Begin VB.Label lblVoucher 
-         Caption         =   "Voucher No: "
-         Height          =   300
-         Left            =   3930
-         TabIndex        =   29
-         Top             =   2280
-         Width           =   1365
-      End
-      Begin VB.Label lblDate 
-         Caption         =   "Date : "
-         Height          =   300
-         Left            =   180
-         TabIndex        =   15
-         Top             =   1260
-         Width           =   735
-      End
-      Begin VB.Label lblParticular 
-         Caption         =   "Particulars : "
-         Height          =   300
-         Left            =   180
-         TabIndex        =   20
-         Top             =   2220
-         Width           =   945
-      End
-      Begin VB.Label lblAmount 
-         Caption         =   "Amount (Rs) : "
-         Height          =   300
-         Left            =   3930
-         TabIndex        =   22
-         Top             =   1260
-         Width           =   1425
-      End
-      Begin VB.Label lblTrans 
-         Caption         =   "Transaction : "
-         Height          =   300
-         Left            =   180
-         TabIndex        =   18
-         Top             =   1800
-         Width           =   1035
-      End
-      Begin VB.Label lblName 
-         Caption         =   "Name(s) : "
-         Height          =   300
-         Left            =   180
-         TabIndex        =   14
-         Top             =   720
-         Width           =   795
-      End
-      Begin VB.Label lblAccNo 
-         Caption         =   "Account No. : "
-         Height          =   300
-         Left            =   150
-         TabIndex        =   8
-         Top             =   240
-         Width           =   1125
-      End
-      Begin VB.Label lblBalance 
-         Alignment       =   1  'Right Justify
-         Caption         =   "Balance : Rs. 00.00"
-         Height          =   300
-         Left            =   4830
-         TabIndex        =   13
-         Top             =   300
-         Width           =   2055
-      End
-      Begin VB.Label lblInstrNo 
-         Caption         =   "Instument no:"
-         Height          =   300
-         Left            =   3930
-         TabIndex        =   25
-         Top             =   1770
-         Width           =   1425
-      End
-   End
-   Begin ComctlLib.TabStrip TabStrip 
-      Height          =   7000
-      Left            =   180
-      TabIndex        =   0
-      Top             =   120
-      Width           =   7965
-      _ExtentX        =   14049
-      _ExtentY        =   12356
-      _Version        =   327682
-      BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-         NumTabs         =   4
-         BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Transactions"
-            Key             =   "Transactions"
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "New / Modify Account"
-            Key             =   "AddModify"
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Reports"
-            Key             =   "Reports"
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Properties"
-            Key             =   "Properties"
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-      EndProperty
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+   Begin VB.Label lblDepositTypeName 
+      Alignment       =   2  'Center
+      AutoSize        =   -1  'True
+      Caption         =   "Member Type"
+      BeginProperty Font 
          Name            =   "MS Sans Serif"
-         Size            =   8.25
+         Size            =   12
          Charset         =   0
-         Weight          =   400
+         Weight          =   700
          Underline       =   0   'False
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+      Height          =   300
+      Left            =   2760
+      TabIndex        =   108
+      Top             =   7320
+      Width           =   1635
    End
 End
 Attribute VB_Name = "frmSBAcc"
@@ -1184,7 +1213,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-
+Private m_FormLoaded As Boolean
 Private m_SBHeadId As Long
 Private m_AccID As Long
 Private m_AccClosed As Boolean
@@ -1192,6 +1221,11 @@ Private m_CustReg As clsCustReg
 'Private m_TransID As Long
 Private m_rstTrans As Recordset
 Private m_NoOfPages As Integer
+Private m_DepositType As Integer
+Private m_mulipleDeposit As Boolean
+Private m_DepositTypeName As String
+Private m_DepositTypeNameEnglish As String
+        
 
 Private m_JointCustID(3) As Long
 Private M_UserPermission As wis_Permissions
@@ -1217,11 +1251,13 @@ Public Event ShowReport(ReportType As wis_SBReports, _
         fromDate As String, toDate As String, _
         RepOption As clsRepOption)
         
-Public Event AccountTransaction(transType As wisTransactionTypes, Cancel As Integer)
+Public Event AccountTransaction(transType As wisTransactionTypes, cancel As Integer)
 Public Event AccountChanged(AccId As Long)
 Public Event DateChanged(IndianDate As String)
 Public Event UpdateStatus(strMsg As String)
 Public Event WindowClosed()
+Public Event SelectDeposit(ByRef DepositType As Integer, ByRef cancel As Boolean)
+
 
 
 Private Function AccountDepositInterests(IndianFromDate As String, _
@@ -1258,11 +1294,11 @@ TransDate = GetSysFormatDate(IndianTransDate)
     Dim l_Setup As New clsSetup
     Dim Rate As Double
     Dim MaxTrans As Integer
-    'Call l_Setup.WriteSetupValue("SBAcc", "RateOfInterest", txtPropInterest.Text)
-    Call SaveInterest(wis_SBAcc, "SBAcc", Val(txtPropInterest.Text))
+    'Call l_Setup.WriteSetupValue("SBAcc" & m_DepositType, "RateOfInterest", txtPropInterest.Text)
+    Call SaveInterest(wis_SBAcc, "SBAcc" & m_DepositType, Val(txtPropInterest.Text))
     'Rate = Val(l_Setup.ReadSetupValue("SBAcc", "RateOfInterest", 0))
     
-    Rate = GetInterestRate(wis_SBAcc, "SBAcc")
+    Rate = GetInterestRate(wis_SBAcc + m_DepositType, "SBAcc")
     If Rate = 0 Then Rate = txtPropInterest
     If Rate < 1 Or Rate >= 100 Then
         'MsgBox "Invalid interest rate specified", vbInformation, wis_MESSAGE_TITLE
@@ -1271,7 +1307,7 @@ TransDate = GetSysFormatDate(IndianTransDate)
         Exit Function
     End If
     
-    MaxTrans = Val(l_Setup.ReadSetupValue("SBAcc", "MaxTransactions", ""))
+    MaxTrans = Val(l_Setup.ReadSetupValue("SBAcc" & m_DepositType, "MaxTransactions", ""))
     Set l_Setup = Nothing
 
 'Loop through all the months till To_Date starting with From_Date
@@ -1287,7 +1323,7 @@ TransDate = GetSysFormatDate(IndianTransDate)
     Mn = Month(This_date)
     Yr = Year(This_date)
     'Call ComputeSBProducts_New(AccIDs(), Mn, Yr, Products(), MaxTrans, IIf(chkMinBalInt.Value = vbChecked, True, False))
-    Call ComputeSBProducts_Daily(AccIDs(), Interest(), This_date, GetSysFormatDate(IndianToDate), Rate, IIf(chkMinBalInt.Value = vbChecked, True, False))
+    Call ComputeSBProducts_Daily(AccIDs(), Interest(), This_date, GetSysFormatDate(IndianToDate), Rate, IIf(chkMinBalInt.Value = vbChecked, True, False), m_DepositType)
     'Update the status
     prg.Value = 0 'prg.Value + 1
     
@@ -1331,12 +1367,18 @@ TransDate = GetSysFormatDate(IndianTransDate)
     Dim TotalIntAmount As Currency
     Dim TotalBalance As Currency
     
-    gDbTrans.SqlStmt = "Select max(TransID)as MaxTransID," & _
+    'gDbTrans.SqlStmt = "Select max(TransID)as MaxTransID," & _
         " max(TransDate) as MAxTransDate,AccID from SBTrans Group BY AccID"
     
     gDbTrans.SqlStmt = "Select A.AccId,A.TransID,A.TransDate From SbTrans A " & _
         "inner Join ((Select max(TransID)as MaxTransID, AccID from SBTrans Group BY AccID)as B)" & _
-        " On A.AccID=B.AccId and A.TransID=B.MaxTransID order by A.AccID"
+        " On A.AccID=B.AccId and A.TransID=B.MaxTransID "
+    If m_DepositType > 0 Then
+        gDbTrans.SqlStmt = gDbTrans.SqlStmt & " Where A.AccID in " & _
+            "(Select distinct AccID from SBMAster where DepositType = " & m_DepositType & " )"
+    End If
+    gDbTrans.SqlStmt = gDbTrans.SqlStmt & " Order by A.AccID"
+    
     gDbTrans.CreateView ("qrySbMaxDateID")
     
     'Dim sqlStr As String
@@ -1347,6 +1389,7 @@ TransDate = GetSysFormatDate(IndianTransDate)
     gDbTrans.SqlStmt = SqlStr
     gDbTrans.CreateView ("qrySbAccBalance")
     
+     If RoundInterest Then Interest(0) = Interest(0) \ 1
     gDbTrans.SqlStmt = SqlStr
     If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
         For I = 0 To UBound(AccIDs) - 1
@@ -1380,13 +1423,19 @@ gDbTrans.SqlStmt = "Select AccNum,TransID,Balance, A.AccID,Title + ' ' " & _
         " From SbMAster A, qrySbAccBalance B, Nametab C " & _
         " WHERE A.AccID = B.AccID " & _
         " AND C.CustomerID = A.CustomerID " & _
-        " AND (ClosedDate is NULL OR ClosedDate > #" & TransDate & "#)" & _
-        " ORDER By A.AccID"
+        " AND (ClosedDate is NULL OR ClosedDate > #" & TransDate & "#)"
+If m_DepositType > 0 Then
+    gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And A.DepositType = " & m_DepositType
+End If
+gDbTrans.SqlStmt = gDbTrans.SqlStmt & " ORDER By A.AccID"
+
 Call gDbTrans.Fetch(rstMain, adOpenStatic)
 
+Dim rowNo As Integer
 Load frmInterest
 With frmInterest
-    Call .LoadContorls(rstMain.RecordCount + 1, 20)
+    rowNo = 0
+    Call .LoadContorls(rstMain.recordCount + 1, 20)
     .lblTitle = GetResourceString(421, 47)
     .Title(0) = GetResourceString(36, 60)
     .Title(1) = GetResourceString(35)
@@ -1398,27 +1447,27 @@ With frmInterest
     .BalanceColoumn = False
     .TotalColoumn = True
     
-    I = 1
+    I = 0
     count = 0
-    
+    rowNo = 1
     While Not rstMain.EOF
-        .AccNum(I) = FormatField(rstMain("AccNum"))
-        .CustName(I) = FormatField(rstMain("custName"))
-        .Balance(I) = FormatCurrency(rstMain("Balance"))
-        .Total(I) = FormatCurrency(rstMain("Balance") + Interest(I))
-        .KeyData(I) = rstMain("TransID")
+        .AccNum(rowNo) = FormatField(rstMain("AccNum"))
+        .CustName(rowNo) = FormatField(rstMain("custName"))
+        .Balance(rowNo) = FormatCurrency(rstMain("Balance"))
+        .Total(rowNo) = FormatCurrency(rstMain("Balance") + Interest(I))
+        .KeyData(rowNo) = rstMain("TransID")
         Do
             If AccIDs(count) = rstMain("AccID") Then Exit Do
             count = count + 1
         Loop
-        .Amount(I) = FormatCurrency(Interest(count))
+        .Amount(rowNo) = FormatCurrency(Interest(count))
         
         TotalIntAmount = TotalIntAmount + Interest(I)
         TotalBalance = TotalBalance + rstMain("Balance")
         
         DoEvents
         If gCancel Then Exit Function
-        
+        rowNo = rowNo + 1
         rstMain.MoveNext: I = I + 1
     Wend
     
@@ -1465,14 +1514,16 @@ Dim IntAmount As Currency
 TotalBalance = 0
 TotalIntAmount = 0
 
-I = 1
+I = 0
 count = 0
 rstMain.MoveFirst
-
+rowNo = 0
 While Not rstMain.EOF
+    
     With frmInterest
-        IntAmount = .Amount(I)
-        TransID = .KeyData(I) + 2
+        rowNo = rowNo + 1
+        IntAmount = .Amount(rowNo)
+        TransID = .KeyData(rowNo) + 2
     End With
     
     Do
@@ -1530,11 +1581,13 @@ Wend
 Me.Refresh
 
 Dim IntHeadID As Long
-Dim AccHead As String
+Dim AccHeadName As String
+Dim AccHeadNameEnglish As String
 Dim bankClass As clsBankAcc
 Set bankClass = New clsBankAcc
-AccHead = GetResourceString(421, 487)
-IntHeadID = bankClass.GetHeadIDCreated(AccHead, LoadResourceStringS(421, 487), parMemDepIntPaid, 0, wis_SBAcc)
+AccHeadName = m_DepositTypeName & " " & GetResourceString(487)
+AccHeadNameEnglish = m_DepositTypeNameEnglish & " " & LoadResourceStringS(487)
+IntHeadID = bankClass.GetHeadIDCreated(AccHeadName, AccHeadNameEnglish, parMemDepIntPaid, 0, wis_SBAcc + m_DepositType)
 
 Call bankClass.UpdateContraTrans(IntHeadID, m_SBHeadId, TotalIntAmount, TransDate)
 
@@ -1564,6 +1617,12 @@ USdate = GetSysFormatDate(IndianTransDate)
 'First Check interet is deposited to any account or
 SqlStr = "SELECT AccID,TransID,Amount From SBPLTRANS WHERE " & _
             " TransDate = #" & USdate & "# ORDER BY ACCID"
+If m_DepositType > 0 Then
+    SqlStr = "SELECT A.AccID,A.TransID,A.Amount From SBPLTRANS A, SBMAster B WHERE " & _
+            " A.AccId= B.AccID and B.DepositType = " & m_DepositType & _
+            " And TransDate = #" & USdate & "# ORDER BY A.ACCID"
+End If
+            
 gDbTrans.SqlStmt = SqlStr
 ret = gDbTrans.Fetch(rstInt, adOpenStatic)
 If ret < 1 Then
@@ -1645,10 +1704,12 @@ Wend
     
 'If TransType = wContraDeposit Or TransType = wContraWithdraw Then
     Dim IntHeadID As Long
-    Dim AccHead As String
+    Dim AccHeadName As String
+    Dim AccHeadNameEnglish As String
     Dim bankClass As New clsBankAcc
-    AccHead = GetResourceString(421, 487)
-    IntHeadID = bankClass.GetHeadIDCreated(AccHead, LoadResourceStringS(421, 487), parMemDepIntPaid, 0, wis_SBAcc)
+    AccHeadName = m_DepositTypeName & " " & GetResourceString(487)
+    AccHeadNameEnglish = m_DepositTypeNameEnglish & " " & LoadResourceStringS(487)
+    IntHeadID = bankClass.GetHeadIDCreated(AccHeadName, AccHeadNameEnglish, parMemDepIntPaid, 0, wis_SBAcc + m_DepositType)
     
     Call bankClass.UndoContraTrans(IntHeadID, m_SBHeadId, IntAmount, GetSysFormatDate(IndianTransDate))
 'End If
@@ -1730,6 +1791,7 @@ Dim JointNo As Integer
         gDbTrans.SqlStmt = "Select AccID from SBMaster where " & _
                 " AccNum = " & AddQuotes(strAccNum, True)
         
+        If m_DepositType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And DepositType = " & m_DepositType
         'if Account is updating then
         If m_accUpdatemode = wis_UPDATE Then _
             gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And AccID <> " & m_AccID
@@ -1803,10 +1865,8 @@ txtIndex = GetIndex("NomineeRelation")
 With txtData(txtIndex)
     'check whether nominee name specified or not
     If Trim$(.Text) = "" And NomineeSpecified Then
-        'MsgBox "Specify nominee relationship.", _
-                vbInformation, wis_MESSAGE_TITLE
-        MsgBox GetResourceString(559), _
-                vbInformation, wis_MESSAGE_TITLE
+        'MsgBox "Specify nominee relationship.", vbInformation , wis_MESSAGE_TITLE
+        MsgBox GetResourceString(559), vbInformation, wis_MESSAGE_TITLE
         ActivateTextBox txtData(txtIndex)
         GoTo Exit_Line
     End If
@@ -1913,10 +1973,13 @@ If m_accUpdatemode = wis_INSERT Then
 '    AccId = GetNewAccountNumber
     SqlStr = "Insert into SBMaster (AccID,AccNum, CustomerID, CreateDate, " _
             & " JointHolder, NomineeName,NomineeAge,NomineeRelation, " _
-            & " IntroducerId, LedgerNo, FolioNo,AccGroupID,UserId) " _
-            & "values (" & AccId & "," & _
+            & " IntroducerId, LedgerNo, FolioNo,AccGroupID,UserId  "
+    SqlStr = SqlStr & IIf(m_DepositType > 0, " ,DepositTYpe ) ", ")")  'ADD CLosing Bracket
+    
+    'Add Values for parameters Below
+    SqlStr = SqlStr & " Values (" & AccId & "," & _
             AddQuotes(strAccNum, True) & "," & _
-            m_CustReg.customerID & "," & _
+            m_CustReg.CustomerID & "," & _
             "#" & GetSysFormatDate(GetVal("CreateDate")) & "#," & _
             AddQuotes(Left(GetVal("JointHolder"), 250), True) & ", " & _
             AddQuotes(Left(GetVal("Nomineename"), 25), True) & ", " & _
@@ -1926,7 +1989,8 @@ If m_accUpdatemode = wis_INSERT Then
             AddQuotes(GetVal("LedgerNo"), True) & ", " & _
             AddQuotes(GetVal("FolioNo"), True) & ", " & _
             GetAccGroupID & _
-            "," & gUserID & ")"
+            "," & gUserID & ""
+    SqlStr = SqlStr & IIf(m_DepositType > 0, ", " & m_DepositType & ")", ")")   'ADD CLosing Bracket
     ' Insert/update the data.
     
     gDbTrans.SqlStmt = SqlStr
@@ -1965,8 +2029,9 @@ ElseIf m_accUpdatemode = wis_UPDATE Then
         " FolioNo = " & AddQuotes(GetVal("FolioNo"), True) & ", " & _
         " CreateDate = #" & GetSysFormatDate(GetVal("CreateDate")) & "#," & _
         " AccGroupID = " & GetAccGroupID & ", " & _
-        " InOperative = " & InOperative & _
-        " Where AccID = " & m_AccID
+        " InOperative = " & InOperative
+    If m_DepositType > 0 Then SqlStr = SqlStr & ", DepositType = " & m_DepositType
+    SqlStr = SqlStr & " Where AccID = " & m_AccID
     
     ' Insert/update the data.
     gDbTrans.SqlStmt = SqlStr
@@ -2170,8 +2235,7 @@ End If
 
 If transType = wContraDeposit Or transType = wContraWithdraw Then
     Dim IntHeadID As Long
-    IntHeadID = GetIndexHeadID(GetResourceString(421) & " " & _
-            GetResourceString(487))
+    IntHeadID = GetIndexHeadID(m_DepositTypeName & " " & GetResourceString(487))
     If transType = wContraDeposit Then
         If Not ClsBank.UndoContraTrans(IntHeadID, m_SBHeadId, Amount, TransDate) Then GoTo ExitLine
     ElseIf transType = wContraWithdraw Then
@@ -2307,6 +2371,89 @@ AccNo = m_AccID
 AccountDelete = True
 End Function
 
+Private Sub LoadDepositType(Deptype As Integer)
+    
+    Dim rstDepType As Recordset
+    Dim txtIndex  As Integer
+    Dim cmbIndex As Integer
+
+    gDbTrans.SqlStmt = "Select * From DepositTypeTab where ModuleID = " & wis_SBAcc & _
+        " AND DepositType = " & Deptype
+    
+    If gDbTrans.Fetch(rstDepType, adOpenDynamic) > 0 Then
+        'Load the Membertype details
+        m_DepositTypeName = FormatField(rstDepType("DepositTypeName"))
+        m_DepositTypeNameEnglish = FormatField(rstDepType("DepositTypeNameEnglish"))
+        lblDepositTypeName.Caption = m_DepositTypeName
+        lblDepositTypeName.Tag = m_DepositTypeNameEnglish
+        
+        'Position the Lable
+        lblDepositTypeName.Left = (Me.Width - lblDepositTypeName.Width) / 2 - 100
+        cmdDepositType.Left = lblDepositTypeName.Left + lblDepositTypeName.Width + 50
+        m_SBHeadId = 0
+        'CLEAR all the controls
+        ResetUserInterface
+
+        'txtIndex = GetIndex("AccNum")
+        'txtData(txtIndex).Text = GetNewAccountNumber
+        
+        'DepType
+        'txtIndex = GetIndex("DepositType")
+        'txtData(txtIndex).Text = m_DepositTypeName
+        'cmbIndex = ExtractToken(txtPrompt(txtIndex).Tag, "TextIndex")
+        'Call SetComboIndex(cmb(cmbIndex), , m_depositType)
+        'cmb(cmbIndex).Locked = True
+        'Call SetComboIndex(cmbRepMemType, , m_depositType)
+        'cmbRepMemType.Locked = True
+    Else
+        m_DepositTypeName = GetResourceString(421)
+        m_DepositTypeNameEnglish = LoadResourceStringS(421)
+    End If
+    
+End Sub
+
+Private Sub LoadSetupValues()
+'Load the Setup values
+    Dim SetUp As New clsSetup
+    Dim defValue As String
+    defValue = SetUp.ReadSetupValue("SBAcc", "MinBalanceWithChequeBook", "0.00")
+    txtPropCheque.Text = SetUp.ReadSetupValue("SBAcc" & m_DepositType, "MinBalanceWithChequeBook", defValue)
+    defValue = SetUp.ReadSetupValue("SBAcc", "MinBalanceWithoutChequeBook", "0.00")
+    txtPropNoCheque.Text = SetUp.ReadSetupValue("SBAcc" & m_DepositType, "MinBalanceWithoutChequeBook", defValue)
+    defValue = SetUp.ReadSetupValue("SBAcc", "InsufficientBalance", "0.00")
+    txtPropBalance.Text = SetUp.ReadSetupValue("SBAcc" & m_DepositType, "InsufficientBalance", defValue)
+    defValue = SetUp.ReadSetupValue("SBAcc", "Cancellation", "0.00")
+    txtPropCancel.Text = SetUp.ReadSetupValue("SBAcc" & m_DepositType, "Cancellation", defValue)
+    defValue = SetUp.ReadSetupValue("SBAcc", "DuplicatePassBook", "0.00")
+    txtPropPassBook.Text = SetUp.ReadSetupValue("SBAcc" & m_DepositType, "DuplicatePassBook", defValue)
+    defValue = SetUp.ReadSetupValue("SBAcc", "RateOfInterest", "0.00")
+    txtPropInterest.Text = SetUp.ReadSetupValue("SBAcc" & m_DepositType, "RateOfInterest", defValue)
+    defValue = SetUp.ReadSetupValue("SBAcc", "InterestFrom", "")
+    txtInterestFrom.Text = SetUp.ReadSetupValue("SBAcc" & m_DepositType, "InterestFrom", defValue)
+    defValue = SetUp.ReadSetupValue("SBAcc", "MaxTransactions", "")
+    txtPropMaxTrans.Text = SetUp.ReadSetupValue("SBAcc" & m_DepositType, "MaxTransactions", defValue)
+    defValue = SetUp.ReadSetupValue("SBAcc", "NoInterestOnMinBalance", "False")
+    chkMinBalInt.Value = IIf(CBool(SetUp.ReadSetupValue("SBAcc" & m_DepositType, "NoInterestOnMinBalance", defValue)), vbChecked, vbUnchecked)
+End Sub
+
+Public Property Let MultipleDeposit(NewValue As Boolean)
+    m_mulipleDeposit = NewValue
+    lblDepositTypeName.Visible = NewValue
+    cmdDepositType.Visible = NewValue
+End Property
+Public Property Get IsFormLoaded() As Boolean
+    IsFormLoaded = m_FormLoaded
+End Property
+Public Property Let DepositType(NewValue As Integer)
+    m_DepositType = NewValue
+    If m_FormLoaded Then
+        lblDepositTypeName.Visible = NewValue
+        cmdDepositType.Visible = NewValue
+        LoadDepositType (NewValue)
+        Call LoadSetupValues
+    End If
+    
+End Property
 
 Private Function GetAccGroupID() As Byte
 
@@ -2347,6 +2494,7 @@ Dim NewAccNo As Long
 Dim rst As ADODB.Recordset
     
     gDbTrans.SqlStmt = "SELECT MAX(val(AccNum)) FROM SBMaster"
+    If m_DepositType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt + " Where DepositType = " & m_DepositType
     If gDbTrans.Fetch(rst, adOpenForwardOnly) = 0 Then
         NewAccNo = 1
     Else
@@ -2355,7 +2503,6 @@ Dim rst As ADODB.Recordset
     GetNewAccountNumber = NewAccNo
 End Function
 Private Function AccountTransaction() As Boolean
-
 
 Dim AccountCloseFlag As Boolean
 Dim ClosedON As String
@@ -2518,10 +2665,10 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
     End If
 End If
 
-Dim Cancel As Integer
-RaiseEvent AccountTransaction(Trans, Cancel)
+Dim cancel As Integer
+RaiseEvent AccountTransaction(Trans, cancel)
 
-If Cancel Then Exit Function
+If cancel Then Exit Function
 
 AccountTransaction = True
 
@@ -2839,12 +2986,12 @@ Private Sub ResetUserInterface()
 'Get the Sb Head ID in  Heads AccTrans Table
 Dim ClsBank As clsBankAcc
 
-If m_SBHeadId = 0 Then
+If m_SBHeadId = 0 And m_DepositType > -1 Then
     Set ClsBank = New clsBankAcc
     
     gDbTrans.BeginTrans
-    m_SBHeadId = ClsBank.GetHeadIDCreated(GetResourceString(421), _
-            LoadResString(421), parMemberDeposit, 0, wis_SBAcc)
+    m_SBHeadId = ClsBank.GetHeadIDCreated(m_DepositTypeName, _
+            m_DepositTypeNameEnglish, parMemberDeposit, 0, wis_SBAcc + m_DepositType)
     gDbTrans.CommitTrans
     
     Set ClsBank = Nothing
@@ -2859,7 +3006,7 @@ End If
     End If
 
 'If m_Accid = 0 Then Exit Sub
-If m_AccID = 0 And m_CustReg.customerID = 0 Then Exit Sub
+If m_AccID = 0 And m_CustReg.CustomerID = 0 Then Exit Sub
     'Disable the UI if you are unable to load the specified account number
     lblBalance.Caption = ""
     
@@ -3007,7 +3154,7 @@ Const RecorsdToShow = 10
 ' If no recordset, exit.
 If m_rstTrans Is Nothing Then Exit Sub
 ' If no records, exit.
-If m_rstTrans.RecordCount = 0 Then Exit Sub
+If m_rstTrans.recordCount = 0 Then Exit Sub
 Dim transType As wisTransactionTypes
 Dim TransID  As Long
 
@@ -3043,7 +3190,7 @@ End With
 cmdNextTrans.Enabled = Not m_rstTrans.EOF
 cmdUndo.Enabled = gCurrUser.IsAdmin
 
-If m_rstTrans.RecordCount < 10 Then
+If m_rstTrans.recordCount < 10 Then
     cmdPrevTrans.Enabled = False
     cmdNextTrans.Enabled = False
 End If
@@ -3082,7 +3229,7 @@ If transType = wContraDeposit Or transType = wContraWithdraw Then
         MsgBox "This Transaction can not be updated"
         GoTo ExitLine
     End If
-    AccHeadID = GetIndexHeadID(GetResourceString(421, 487))
+    AccHeadID = GetIndexHeadID(m_DepositTypeName & " " & GetResourceString(487))
     
 'if transtype=wContraDeposit t
 End If
@@ -3313,7 +3460,7 @@ Select Case UCase$(strField)
         Screen.MousePointer = vbDefault
         Dim AccNum As String
         AccNum = GetIndex("AccID")
-        If m_CustReg.customerID = 0 Then Exit Sub
+        If m_CustReg.CustomerID = 0 Then Exit Sub
         
         Dim NameStr  As String
         Dim Lret As Long
@@ -3330,7 +3477,7 @@ Select Case UCase$(strField)
         gDbTrans.SqlStmt = "SELECT CustomerID, Title + FirstName + " _
             & "Space(1) + Middlename + space(1) + LastName as Name, " _
             & " HomeAddress, OfficeAddress FROM NameTab " _
-            & " WHERE CustomerID <> " & m_CustReg.customerID _
+            & " WHERE CustomerID <> " & m_CustReg.CustomerID _
             & " And ( FirstName like '" & NameStr & "%' " _
             & " Or MiddleName like '" & NameStr & "%' " _
             & " Or LastName like '" & NameStr & "%' )" _
@@ -3441,8 +3588,7 @@ Dim rst As ADODB.Recordset
 Dim FailIDs() As Long
 ReDim FailIDs(0)
     
-    If Not AccountDepositInterests(txtInterestFrom.Text, _
-                txtInterestTo.Text, gStrDate, FailIDs) Then
+    If Not AccountDepositInterests(txtInterestFrom.Text, txtInterestTo.Text, gStrDate, FailIDs) Then
         'MsgBox "Unable to add interests!", vbExclamation, gAppName & " - Error"
         MsgBox GetResourceString(535), vbExclamation, gAppName & " - Error"
         Exit Sub
@@ -3475,7 +3621,7 @@ txtFailAccIDs = TmpStr
     'DateStr = FormatDate(DateStr)
     txtInterestFrom.Text = DateStr
     txtInterestTo.Text = ""
-    Call l_Setup.WriteSetupValue("SBAcc", "NextInterestOn", txtInterestFrom.Text)
+    Call l_Setup.WriteSetupValue("SBAcc" & m_DepositType, "NextInterestOn", txtInterestFrom.Text)
     
     'Reset the progress
     prg.Value = 0
@@ -3549,16 +3695,16 @@ End If
 
 Dim SetUp As New clsSetup
 
-Call SetUp.WriteSetupValue("SBAcc", "MinBalanceWithChequeBook", txtPropCheque.Text)
-Call SetUp.WriteSetupValue("SBAcc", "MinBalanceWithoutChequeBook", txtPropNoCheque.Text)
-Call SetUp.WriteSetupValue("SBAcc", "InsufficientBalance", txtPropBalance.Text)
-Call SetUp.WriteSetupValue("SBAcc", "Cancellation", txtPropCancel.Text)
-Call SetUp.WriteSetupValue("SBAcc", "DuplicatePassBook", txtPropPassBook.Text)
-Call SetUp.WriteSetupValue("SBAcc", "MaxTransactions", txtPropMaxTrans.Text)
-Call SetUp.WriteSetupValue("SBAcc", "RateOfInterest", txtPropInterest.Text)
-Call SetUp.WriteSetupValue("SBAcc", "InterestFrom", txtInterestFrom.Text)
-'Call Setup.WriteSetupValue("SBAcc", "NextInterestOn", txtPropNextInterestOn.Text)
-Call SetUp.WriteSetupValue("SBAcc", "NoInterestOnMinBalance", chkMinBalInt.Value)
+Call SetUp.WriteSetupValue("SBAcc" & m_DepositType, "MinBalanceWithChequeBook", txtPropCheque.Text)
+Call SetUp.WriteSetupValue("SBAcc" & m_DepositType, "MinBalanceWithoutChequeBook", txtPropNoCheque.Text)
+Call SetUp.WriteSetupValue("SBAcc" & m_DepositType, "InsufficientBalance", txtPropBalance.Text)
+Call SetUp.WriteSetupValue("SBAcc" & m_DepositType, "Cancellation", txtPropCancel.Text)
+Call SetUp.WriteSetupValue("SBAcc" & m_DepositType, "DuplicatePassBook", txtPropPassBook.Text)
+Call SetUp.WriteSetupValue("SBAcc" & m_DepositType, "MaxTransactions", txtPropMaxTrans.Text)
+Call SetUp.WriteSetupValue("SBAcc" & m_DepositType, "RateOfInterest", txtPropInterest.Text)
+Call SetUp.WriteSetupValue("SBAcc" & m_DepositType, "InterestFrom", txtInterestFrom.Text)
+'Call Setup.WriteSetupValue("SBAcc" & m_DepositType, "NextInterestOn", txtPropNextInterestOn.Text)
+Call SetUp.WriteSetupValue("SBAcc" & m_DepositType, "NoInterestOnMinBalance", chkMinBalInt.Value)
 cmdApply.Enabled = False
 End Sub
 
@@ -3651,8 +3797,15 @@ End If
 Call AccountDelete
     
 Call ResetUserInterface
-    
 
+End Sub
+
+Private Sub cmdDepositType_Click()
+    Dim cancel As Boolean
+    Dim DepositType As Integer
+    RaiseEvent SelectDeposit(DepositType, cancel)
+    If Not cancel And DepositType <> m_DepositType Then txtAccNo = ""
+    
 End Sub
 
 Private Sub cmdLoad_Click()
@@ -3660,6 +3813,7 @@ Dim rst As ADODB.Recordset
 
 'get the account id from SBMaster
 gDbTrans.SqlStmt = "SELECT ACCID From SBMaster WHere AccNum = " & AddQuotes(txtAccNo.Text, True)
+If m_DepositType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And DepositTYpe = " & m_DepositType
 If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then
     'MsgBox "Account number does not exists !", vbExclamation, gAppName & " - Error"
     MsgBox GetResourceString(525), vbExclamation, gAppName & " - Error"
@@ -3699,7 +3853,7 @@ End Sub
 
 
 Private Sub cmdOk_Click()
-Dim Cancel As Boolean
+Dim cancel As Boolean
 Set m_Notes = Nothing
 
 'If MsgBox(GetResourceString(750), vbYesNo + vbQuestion, gAppName & " - Error") = vbNo Then
@@ -3711,8 +3865,8 @@ End Sub
 
 Private Sub cmdPhoto_Click()
     If Not m_CustReg Is Nothing Then
-        frmPhoto.setAccNo (m_CustReg.customerID)
-        If (m_CustReg.customerID > 0) Then _
+        frmPhoto.setAccNo (m_CustReg.CustomerID)
+        If (m_CustReg.CustomerID > 0) Then _
             frmPhoto.Show vbModal
     End If
 End Sub
@@ -3774,24 +3928,7 @@ Private Sub cmdReset_Click()
 
 Call ResetUserInterface
 
-'' Clear the account holder details.
-'Dim i As Integer
-'Dim strField As String
-'For i = 0 To txtData.Count - 1
-'    txtData(i).Text = ""
-'    ' If its Createdate field, then put today's left.
-'    strField = ExtractToken(txtPrompt(i).Tag, "DataSource")
-'    If StrComp(strField, "CreateDate", vbTextCompare) = 0 Then
-'        txtData(i).Text = GetAppFormatDate(gstrdate)
-'    End If
-'Next
-'lblOperation.Caption = "Operation Mode : <INSERT>"
-'m_accUpdatemode = wis_INSERT
-'m_CustReg.NewCustomer
-'Dim txtindex As Integer
-'txtindex = GetIndex("AccID")
-'txtData(txtindex).Text = GetNewAccountNumber
-'cmdTerminate.Enabled = False
+
 End Sub
 Private Sub cmdSave_Click()
 Dim rst As ADODB.Recordset
@@ -3811,8 +3948,8 @@ End If
     Dim AccNo As Long
     AccNum = GetVal("AccID")
     'now get the account id of this account
-    gDbTrans.SqlStmt = "SELECT ACCID From SBMAster WHERE " & _
-            " AccNum = " & AddQuotes(AccNum, True)
+    gDbTrans.SqlStmt = "SELECT ACCID From SBMAster WHERE AccNum = " & AddQuotes(AccNum, True)
+    If m_DepositType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And DepositTYpe = " & m_DepositType
     Call gDbTrans.Fetch(rst, adOpenForwardOnly)
     AccNo = FormatField(rst("AccID"))
     If Not AccountLoad(AccNo) Then
@@ -3861,8 +3998,11 @@ gDbTrans.CreateView ("qrySBWrongInt")
 gDbTrans.SqlStmt = "Select A.AccID, ClosedDate,A.AccNum,C.Amount,C.TransID,C.TransDate,C.Balance from (SBMAster A " & _
     " Inner Join qrySBWrongInt B on A.AccID = B.AccID) " & _
     " Inner Join (SBTrans C  inner join SBPLTrans D on C.AccId =D.AccID and C.TransID =D.TransID ) on A.AccID = C.AccID " & _
-    " Where A.ClosedDate <  B.MaxTransDate and c.TransID=B.MAxTransID " & _
-    " order BY A.AccID"
+    " Where A.ClosedDate <  B.MaxTransDate and c.TransID=B.MAxTransID "
+If m_DepositType > 0 Then _
+    gDbTrans.SqlStmt = gDbTrans.SqlStmt & " A.DepositType = " & m_DepositType
+    
+gDbTrans.SqlStmt = gDbTrans.SqlStmt & " order BY A.AccID"
 If gDbTrans.Fetch(rstTrans, adOpenDynamic) < 1 Then Exit Sub
 
 TransDate = rstTrans("TransDate")
@@ -3887,15 +4027,17 @@ Wend
 
 '''''''''''''''
 Dim IntHeadID As Long
-Dim AccHead As String
+Dim AccHeadName As String
+Dim AccHeadNameEnglish As String
 Dim bankClass As clsBankAcc
 Set bankClass = New clsBankAcc
-AccHead = GetResourceString(421, 487)
-IntHeadID = bankClass.GetHeadIDCreated(AccHead, LoadResourceStringS(421, 487), parMemDepIntPaid, 0, wis_SBAcc)
+AccHeadName = m_DepositTypeName & " " & GetResourceString(487)
+AccHeadNameEnglish = m_DepositTypeNameEnglish & " " & LoadResourceStringS(487)
+IntHeadID = bankClass.GetHeadIDCreated(AccHeadName, AccHeadNameEnglish, parMemDepIntPaid, 0, wis_SBAcc + m_DepositType)
 
 If Not bankClass.UndoContraTrans(IntHeadID, m_SBHeadId, TotalIntAmount, TransDate) Then
-        gDbTrans.RollBack
-        MsgBox "Error Occured in Undo contra"
+    gDbTrans.RollBack
+    MsgBox "Error Occured in Undo contra"
 End If
 
 
@@ -3953,6 +4095,7 @@ Dim I As Integer
 For I = 0 To UBound(FailIDs) - 1
 'Get the Account number From The account Id
     gDbTrans.SqlStmt = "SELECT AccNum From SBMaster Where AccID = " & FailIDs(I)
+    If m_DepositType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And DepositTYpe = " & m_DepositType
     If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then TmpStr = TmpStr & ", " & FormatField(rst("AccNum"))
 Next I
 
@@ -4018,6 +4161,12 @@ End Sub
 
 Private Sub Command1_Click()
 
+End Sub
+
+Private Sub Form_Initialize()
+    m_DepositTypeName = GetResourceString(421)
+    m_DepositTypeNameEnglish = LoadResourceStringS(421)
+    m_DepositType = -1
 End Sub
 
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -4112,7 +4261,7 @@ End If
     If gDbTrans.Fetch(rstJoint, adOpenForwardOnly) > 0 Then
         If m_frmSBJoint Is Nothing Then Set m_frmSBJoint = New frmJoint
         m_frmSBJoint.ModuleID = wis_SBAcc
-        m_frmSBJoint.JointCustId(0) = m_CustReg.customerID
+        m_frmSBJoint.JointCustId(0) = m_CustReg.CustomerID
     End If
 
 'Get the cheque details
@@ -4335,6 +4484,11 @@ With Me
     Next
 End With
     
+'Check is the DepositTYpe loaded or Not
+If Len(lblDepositTypeName.Caption) = 0 And FormatField(rstMaster("DepositTYpe")) > 0 Then
+    LoadDepositType (FormatField(rstMaster("DepositTYpe")))
+End If
+    
 AccountLoad = True
 
 Set rstJoint = Nothing
@@ -4358,7 +4512,7 @@ If gDbTrans.Fetch(m_rstTrans, adOpenDynamic) > 0 Then
     m_rstTrans.MoveFirst
     If TransID Mod 10 = 0 Then TransID = TransID - 10
     m_rstTrans.Find "TransiD > " & TransID - TransID Mod 10
-    If m_rstTrans.RecordCount <= 10 Then m_rstTrans.MoveFirst
+    If m_rstTrans.recordCount <= 10 Then m_rstTrans.MoveFirst
     PassBookPageShow
 End If
 
@@ -4371,6 +4525,8 @@ End If
 'cmdPhoto.Enabled = True
 cmdPhoto.Enabled = Len(gImagePath)
 
+
+
 RaiseEvent AccountChanged(m_AccID)
 Exit Function
 
@@ -4381,6 +4537,8 @@ End Function
 
 
 Private Sub Form_Load()
+
+m_FormLoaded = True
 Screen.MousePointer = vbHourglass
 'Caption = GetResourceString(1)
 
@@ -4422,17 +4580,7 @@ fraInstructions.ZOrder (0)
 TabStrip.Tabs(3).Tag = 1
 Call LoadPropSheet
 
-'Load the Setup values
-Dim SetUp As New clsSetup
-txtPropCheque.Text = SetUp.ReadSetupValue("SBAcc", "MinBalanceWithChequeBook", "0.00")
-txtPropNoCheque.Text = SetUp.ReadSetupValue("SBAcc", "MinBalanceWithoutChequeBook", "0.00")
-txtPropBalance.Text = SetUp.ReadSetupValue("SBAcc", "InsufficientBalance", "0.00")
-txtPropCancel.Text = SetUp.ReadSetupValue("SBAcc", "Cancellation", "0.00")
-txtPropPassBook.Text = SetUp.ReadSetupValue("SBAcc", "DuplicatePassBook", "0.00")
-txtPropInterest.Text = SetUp.ReadSetupValue("SBAcc", "RateOfInterest", "0.00")
-txtInterestFrom.Text = SetUp.ReadSetupValue("SBAcc", "InterestFrom", "")
-txtPropMaxTrans.Text = SetUp.ReadSetupValue("SBAcc", "MaxTransactions", "")
-chkMinBalInt.Value = IIf(CBool(SetUp.ReadSetupValue("SBAcc", "NoInterestOnMinBalance", "False")), vbChecked, vbUnchecked)
+Call LoadSetupValues
 cmdApply.Enabled = False
 
 
@@ -4446,6 +4594,7 @@ txtData(Val(GetIndex("AccGroup"))).Text = cmb(cmbIndex).Text
 
 Set m_CustReg = New clsCustReg
 
+lblDepositTypeName.Caption = ""
 'Reset the User Interface
 Call ResetUserInterface
 
@@ -4483,10 +4632,14 @@ If gDbTrans.Fetch(rstTrans, adOpenDynamic) < 1 Then cmdTemp.Visible = False
 
 
 End Sub
+Private Sub Form_Resize()
+    lblDepositTypeName.Left = (Me.Width - lblDepositTypeName.Width) / 2 - 100
+    cmdDepositType.Left = lblDepositTypeName.Left + lblDepositTypeName.Width = 50
+End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 
-
+m_FormLoaded = False
 ' Cheque form.
 If Not m_frmCheque Is Nothing Then
     Unload m_frmCheque
@@ -4524,6 +4677,8 @@ cmbTrans.Tag = TransID
 Call LoadPreviousTransaction(TransID)
 
 End Sub
+
+
 
 Private Sub m_frmPrintTrans_DateClick(StartIndiandate As String, EndIndianDate As String)
 

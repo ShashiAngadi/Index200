@@ -487,7 +487,7 @@ End With
 End Sub
 
 
-Public Sub InitialiseValue(ByVal TransDate As Date, ByVal VoucherNo As String, ByVal AccHeadID As Long, ByVal AccNum As String, ByVal Amount As Currency, Cancel As Integer, Optional AmountType As wis_AmountType = wisPrincipal)
+Public Sub InitialiseValue(ByVal TransDate As Date, ByVal VoucherNo As String, ByVal AccHeadID As Long, ByVal AccNum As String, ByVal Amount As Currency, cancel As Integer, Optional AmountType As wis_AmountType = wisPrincipal)
 'Public Sub InitialiseValue(ByVal TransDate As Date, ByVal VoucherNo As String, ByVal Module As wisModules, ByVal AccNum As String, ByVal Amount As Currency, Cancel As Integer, Optional AmountType As Wis_AmountType = wisPrincipal)
 Dim StrAcctype As String
 
@@ -501,7 +501,7 @@ If AccHeadID = 0 Then GoTo Exit_Line
 
 'If transferring amount already loaded
 'then exit the sub
-Cancel = True
+cancel = True
 
 If fraTo.Enabled Then GoTo Exit_Line
 m_InitLoad = True
@@ -557,7 +557,7 @@ txtFromAmount.Enabled = False
 cmdFrom.Enabled = False
 
 
-Cancel = False
+cancel = False
 
 Exit_Line:
 
@@ -571,28 +571,34 @@ Dim BalanceAmount As Currency
 Dim AccId As Long
 Dim rst As ADODB.Recordset
 Dim AccType As wisModules
-
+Dim DepositType As Integer
 'Check for the Selected AccountType if Account type is Sb then
 'get the SB balance and if it is CA then Get the CA Balance-siddu
 Dim LstInd As Long
 
-AccType = cmbFrom.ItemData(cmbFrom.ListIndex)
-
+'AccType = GetModuleIDFromHeadID(AccHeadID)
+AccType = GetModuleIDFromHeadID(cmbFrom.ItemData(cmbFrom.ListIndex))
+DepositType = AccType Mod 100
+If AccType > 100 Then AccType = AccType - AccType Mod 100
 With cmbFrom
    LstInd = .ListIndex
-   If .ListIndex = 0 Then AccType = wis_SBAcc
-   If .ListIndex = 1 Then AccType = wis_CAAcc
+   'If .ListIndex = 0 Then AccType = wis_SBAcc
+   'If .ListIndex = 1 Then AccType = wis_CAAcc
 End With
 
 
 
+'DepositType = GetDepositTypeIDFromHeadID(cmbFrom.ItemData(cmbFrom.ListIndex))
+             
 'Check for the Account tyeps
 'AccType = Accnum
 'If it is Current Account then get the Balance
 If AccType = wis_CAAcc Then
     gDbTrans.SqlStmt = "SELECT AccID FROM CAMaster " & _
-        "WHERE AccNum = " & AddQuotes(Trim$(txtFromAccNo.Text), True)
-    
+        " WHERE AccNum = " & AddQuotes(Trim$(txtFromAccNo.Text), True)
+    If DepositType > 0 Then _
+        gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And DepositType = " & DepositType
+        
     If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then
         'MsgBox "Account number does not exists !", vbExclamation, gAppName & " - Error"
         MsgBox GetResourceString(525), vbExclamation, gAppName & " - Error"
@@ -620,6 +626,9 @@ If AccType = wis_SBAcc Then
     'AccId=
     gDbTrans.SqlStmt = "Select * from SBMaster" & _
                 " where AccNum = " & AddQuotes(txtFromAccNo, True)
+    If DepositType > 0 Then _
+        gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And DepositType = " & DepositType
+    
     If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then
         MsgBox GetResourceString(525), vbExclamation, gAppName & " - Error"
         txtFromAmount.Text = ""
@@ -649,6 +658,7 @@ Dim rstDeposit As Recordset
 Dim rstLoan As Recordset
 Dim rstTemp As Recordset
 Dim recCount As Integer
+Dim loopCount As Integer
 
 gDbTrans.SqlStmt = "Select * FROM DepositName"
 If gDbTrans.Fetch(rstDeposit, adOpenStatic) < 1 Then Set rstDeposit = Nothing
@@ -675,23 +685,33 @@ With cmbFrom
     
     .Clear
     'ModuleId = wis_SBAcc
-    AccName = GetResourceString(421) '"SB Account
-    AccHeadID = GetIndexHeadID(AccName)
-    If AccHeadID Then
-        .AddItem AccName
-        .ItemData(.newIndex) = AccHeadID 'ModuleId
-    End If
-    
+    Dim strDeposits() As String
+    'AccName = GetResourceString(421) '"SB Account
+    strDeposits = GetDepositTypesList(wis_SBAcc)
+    recCount = UBound(strDeposits)
+    For loopCount = 0 To recCount - 1
+        'AccHeadID = GetIndexHeadID(AccName)
+        AccHeadID = GetIndexHeadID(strDeposits(loopCount))
+        If AccHeadID Then
+            .AddItem strDeposits(loopCount)
+            .ItemData(.newIndex) = AccHeadID 'ModuleId
+        End If
+    Next loopCount
     'ModuleId = wis_CAAcc
-    AccName = GetResourceString(422) '"CA AccOUnt
-    AccHeadID = GetIndexHeadID(AccName)
-    If AccHeadID Then
-        .AddItem AccName
-        .ItemData(.newIndex) = AccHeadID 'ModuleId
-    End If
+    'AccName = GetResourceString(422) '"CA AccOUnt
+    strDeposits = GetDepositTypesList(wis_CAAcc)
+    recCount = UBound(strDeposits)
+    For loopCount = 0 To recCount - 1
+        'AccHeadID = GetIndexHeadID(AccName)
+        AccHeadID = GetIndexHeadID(strDeposits(loopCount))
+        If AccHeadID Then
+            .AddItem strDeposits(loopCount)
+            .ItemData(.newIndex) = AccHeadID 'ModuleId
+        End If
+    Next loopCount
     
     'ModuleId = wis_SuspAcc
-    AccName = GetResourceString(365) '"CA AccOUnt
+    AccName = GetResourceString(365) '"
     AccHeadID = GetIndexHeadID(AccName)
     If AccHeadID Then
         .AddItem AccName
@@ -755,33 +775,53 @@ With cmbTo
         Wend
     End If
     
-    AccName = GetResourceString(421) '"SB Account
-    AccHeadID = GetIndexHeadID(AccName)
-    If AccHeadID Then
-        .AddItem AccName
-        .ItemData(.newIndex) = AccHeadID
-    End If
+    'AccName = GetResourceString(421) '"SB Account
+    strDeposits = GetDepositTypesList(wis_SBAcc)
+    recCount = UBound(strDeposits)
+    For loopCount = 0 To recCount - 1
+        'AccHeadID = GetIndexHeadID(AccName)
+        AccHeadID = GetIndexHeadID(strDeposits(loopCount))
+        If AccHeadID Then
+            .AddItem strDeposits(loopCount)
+            .ItemData(.newIndex) = AccHeadID 'ModuleId
+        End If
+    Next loopCount
     
-    AccName = GetResourceString(422) '"CA AccOUnt
-    AccHeadID = GetIndexHeadID(AccName)
-    If AccHeadID Then
-        .AddItem AccName
-        .ItemData(.newIndex) = AccHeadID
-    End If
+    'AccName = GetResourceString(422) '"CA AccOUnt
+    strDeposits = GetDepositTypesList(wis_CAAcc)
+    recCount = UBound(strDeposits)
+    For loopCount = 0 To recCount - 1
+        'AccHeadID = GetIndexHeadID(AccName)
+        AccHeadID = GetIndexHeadID(strDeposits(loopCount))
+        If AccHeadID Then
+            .AddItem strDeposits(loopCount)
+            .ItemData(.newIndex) = AccHeadID 'ModuleId
+        End If
+    Next loopCount
     
     AccName = GetResourceString(424)  '"RD Account
-    AccHeadID = GetIndexHeadID(AccName)
-    If AccHeadID Then
-        .AddItem AccName
-        .ItemData(.newIndex) = AccHeadID
-    End If
-
+    strDeposits = GetDepositTypesList(wis_RDAcc)
+    recCount = UBound(strDeposits)
+    For loopCount = 0 To recCount - 1
+        'AccHeadID = GetIndexHeadID(AccName)
+        AccHeadID = GetIndexHeadID(strDeposits(loopCount))
+        If AccHeadID Then
+            .AddItem strDeposits(loopCount)
+            .ItemData(.newIndex) = AccHeadID 'ModuleId
+        End If
+    Next loopCount
+    
     AccName = GetResourceString(425) '"Pigmy Account
-    AccHeadID = GetIndexHeadID(AccName)
-    If AccHeadID Then
-        .AddItem AccName
-        .ItemData(.newIndex) = AccHeadID
-    End If
+    strDeposits = GetDepositTypesList(wis_PDAcc)
+    recCount = UBound(strDeposits)
+    For loopCount = 0 To recCount - 1
+        'AccHeadID = GetIndexHeadID(AccName)
+        AccHeadID = GetIndexHeadID(strDeposits(loopCount))
+        If AccHeadID Then
+            .AddItem strDeposits(loopCount)
+            .ItemData(.newIndex) = AccHeadID 'ModuleId
+        End If
+    Next loopCount
 
     'Now Load All othe Deposits
     'ModuleId = wis_Deposits
@@ -891,7 +931,7 @@ Dim Amount As Currency
 Dim IntAmount As Currency
 Dim PenalAmount As Currency
 Dim BalanceAmount As Currency
-Dim ModuleId As wisModules
+Dim ModuleID As wisModules
 Dim AccHeadID As Long
 Dim InTrans As Boolean
 Dim TransDate As Date
@@ -914,15 +954,15 @@ AccHeadID = m_AccHeadId(0)
 
 'Get the ModuleID
 Dim rstTemp As ADODB.Recordset
-ModuleId = GetModuleIDFromHeadID(AccHeadID)
-If ModuleId > 100 Then ModuleId = ModuleId - ModuleId Mod 100
+ModuleID = GetModuleIDFromHeadID(AccHeadID)
+If ModuleID > 100 Then ModuleID = ModuleID - ModuleID Mod 100
 
 If Not m_InitLoad Then
     gDbTrans.BeginTrans
     InTrans = True
-    If ModuleId = wis_SBAcc Or ModuleId = wis_CAAcc Then
-        If ModuleId = wis_CAAcc Then Set ClsObject = New ClsCAAcc
-        If ModuleId = wis_SBAcc Then Set ClsObject = New clsSBAcc
+    If ModuleID = wis_SBAcc Or ModuleID = wis_CAAcc Then
+        If ModuleID = wis_CAAcc Then Set ClsObject = New ClsCAAcc
+        If ModuleID = wis_SBAcc Then Set ClsObject = New clsSBAcc
         If ClsObject.WithdrawAmount(m_Id(0), Amount, "Tfr to ", _
                 TransDate, VoucherNo) = 0 Then GoTo Exit_Line
                 
@@ -938,20 +978,20 @@ For count = 1 To MaxCount
     IntAmount = 0: PenalAmount = 0
     Amount = m_Amount(count)
     
-    ModuleId = GetModuleIDFromHeadID(m_AccHeadId(count))
+    ModuleID = GetModuleIDFromHeadID(m_AccHeadId(count))
     
-    If ModuleId > 100 Then ModuleId = ModuleId - (ModuleId Mod 100)
+    If ModuleID > 100 Then ModuleID = ModuleID - (ModuleID Mod 100)
     
-    If ModuleId = wis_CAAcc Or ModuleId = wis_SBAcc Or _
-        ModuleId = wis_PDAcc Or _
-        ModuleId = wis_Deposits Or ModuleId = wis_RDAcc Then
+    If ModuleID = wis_CAAcc Or ModuleID = wis_SBAcc Or _
+        ModuleID = wis_PDAcc Or _
+        ModuleID = wis_Deposits Or ModuleID = wis_RDAcc Then
         
-        If ModuleId = wis_BKCC Or ModuleId = wis_BKCCLoan Then Set ClsObject = New clsBkcc
-        If ModuleId = wis_SBAcc Then Set ClsObject = New clsSBAcc
-        If ModuleId = wis_Deposits Then Set ClsObject = New clsFDAcc
-        If ModuleId = wis_PDAcc Then Set ClsObject = New clsPDAcc
-        If ModuleId = wis_CAAcc Then Set ClsObject = New ClsCAAcc
-        If ModuleId = wis_RDAcc Then Set ClsObject = New clsRDAcc
+        If ModuleID = wis_BKCC Or ModuleID = wis_BKCCLoan Then Set ClsObject = New clsBkcc
+        If ModuleID = wis_SBAcc Then Set ClsObject = New clsSBAcc
+        If ModuleID = wis_Deposits Then Set ClsObject = New clsFDAcc
+        If ModuleID = wis_PDAcc Then Set ClsObject = New clsPDAcc
+        If ModuleID = wis_CAAcc Then Set ClsObject = New ClsCAAcc
+        If ModuleID = wis_RDAcc Then Set ClsObject = New clsRDAcc
         
         BalanceAmount = BalanceAmount - Amount
         If ClsObject.DepositAmount(m_Id(count), Amount, _
@@ -959,8 +999,8 @@ For count = 1 To MaxCount
         Set ClsObject = Nothing
     End If
     
-    If ModuleId = wis_DepositLoans Or ModuleId = wis_BKCCLoan Or _
-                    ModuleId = wis_Loans Or ModuleId = wis_Members Then
+    If ModuleID = wis_DepositLoans Or ModuleID = wis_BKCCLoan Or _
+                    ModuleID = wis_Loans Or ModuleID = wis_Members Then
         'Now search whether he is Paying any Interest Amount
         'on this loan account
         Amount = 0
@@ -983,23 +1023,23 @@ For count = 1 To MaxCount
             I = I + 1
         Loop
 
-        If ModuleId = wis_DepositLoans Then
+        If ModuleID = wis_DepositLoans Then
             Set ClsObject = New clsDepLoan
             If ClsObject.DepositAmount(m_Id(count), Amount, _
                 IntAmount, "Tfr From ", TransDate, VoucherNo) = 0 Then GoTo Exit_Line
             
             BalanceAmount = BalanceAmount - Amount - IntAmount
         
-        ElseIf ModuleId = wis_Loans Or ModuleId = wis_BKCCLoan Then
+        ElseIf ModuleID = wis_Loans Or ModuleID = wis_BKCCLoan Then
             
-            If ModuleId = wis_Loans Then Set ClsObject = New clsLoan
-            If ModuleId = wis_BKCCLoan Then Set ClsObject = New clsBkcc
+            If ModuleID = wis_Loans Then Set ClsObject = New clsLoan
+            If ModuleID = wis_BKCCLoan Then Set ClsObject = New clsBkcc
             If ClsObject.DepositAmount(CLng(m_Id(count)), Amount, _
                 IntAmount, PenalAmount, "Tfr From ", TransDate, VoucherNo) = 0 Then GoTo Exit_Line
             
             BalanceAmount = BalanceAmount - Amount - IntAmount - PenalAmount
         
-        ElseIf ModuleId = wis_Members Then
+        ElseIf ModuleID = wis_Members Then
             Set ClsObject = New clsMMAcc
             If ClsObject.DepositAmount(CLng(m_Id(count)), Amount, _
                     IntAmount, "Tfr From ", TransDate, VoucherNo) = 0 Then GoTo Exit_Line
@@ -1208,7 +1248,7 @@ On Error GoTo Exit_Line
 cmdFrom.Enabled = False
 cmdTo.Enabled = False
 
-Dim ModuleId As wisModules
+Dim ModuleID As wisModules
 Dim RstCust As Recordset
 
 Dim SqlStr As String
@@ -1239,19 +1279,19 @@ With gDbTrans
     End If
 End With
 
-ModuleId = cmbTo.ItemData(cmbTo.ListIndex)
+ModuleID = cmbTo.ItemData(cmbTo.ListIndex)
 If m_frmLookUp Is Nothing Then Set m_frmLookUp = New frmLookUp
 
 Me.MousePointer = vbHourglass
 Set RstCust = Nothing
-If ModuleId = wis_SuspAcc Then
+If ModuleID = wis_SuspAcc Then
     'Load the Detils from the FromAccount
-    ModuleId = cmbFrom.ItemData(cmbFrom.ListIndex)
+    ModuleID = cmbFrom.ItemData(cmbFrom.ListIndex)
     txtToAccNo = txtFromAccNo
    ' Set RstCust = GetAccRecordSet(Moduleid, txtFromAccNo)
     
 Else
-    Set RstCust = GetAccRecordSet(ModuleId)
+    Set RstCust = GetAccRecordSet(ModuleID)
     If RstCust Is Nothing Then GoTo Exit_Line
     
     Call FillView(m_frmLookUp.lvwReport, RstCust, True)
@@ -1351,7 +1391,7 @@ Call SetFontToControlsSkipGrd(Me)
     
 ' TransCtion Frame
 fraFrom.Caption = GetResourceString(107)
-lblTransDate.Caption = GetResourceString(37)
+lbltransDate.Caption = GetResourceString(37)
 lblVoucher.Caption = GetResourceString(41)
 lblFromAccType.Caption = GetResourceString(36, 35)
 lblFromAccNo.Caption = GetResourceString(36, 60)
@@ -1370,14 +1410,12 @@ cmdUndo.Caption = GetResourceString(14)
 
 cmdSave.Caption = GetResourceString(7)
 cmdClose.Caption = GetResourceString(11)
-cmdClear.Caption = GetResourceString(8)    '
+CmdClear.Caption = GetResourceString(8)    '
 
 
 End Sub
 
-
-
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
     RaiseEvent WindowClosed
 End Sub
 
@@ -1385,7 +1423,6 @@ End Sub
 Private Sub m_frmLookUp_SelectClick(strSelection As String)
 m_retVar = strSelection
 End Sub
-
 
 '
 Private Sub m_frmLookUp_SubItems(strSubItem() As String)
@@ -1395,22 +1432,6 @@ Err.Clear
 On Error GoTo 0
 End Sub
 
-
-Private Sub SSRibbon1_Click(Value As Integer)
-
-End Sub
-
-Private Sub SSRibbon1_DragDrop(Source As Control, X As Single, Y As Single)
-
-End Sub
-
-
-Private Sub SSRibbon1_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
-
-End Sub
-
-
-'
 Private Sub txtFromAccNo_Change()
 'Chnge when accountNumber Changes
 cmdFrom.Enabled = IIf(Trim$(txtFromAccNo.Text) <> "", True, False)
@@ -1418,8 +1439,6 @@ txtFromAmount.Text = ""
 End Sub
 
 
-
-'
 Private Sub txtFromAccNo_LostFocus()
 
 'Check for the Account Number

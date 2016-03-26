@@ -1450,7 +1450,7 @@ If rs.EOF And rs.BOF Then Exit Function
 ' Check if there are any records in the recordset.
 rs.MoveLast
 rs.MoveFirst
-If rs.RecordCount = 0 Then
+If rs.recordCount = 0 Then
     FillView = True
     GoTo Exit_Line
 End If
@@ -2325,13 +2325,13 @@ End Function
 Public Sub InitPassBook(rstTrans As Recordset, recordsPerPage As Integer, prevButton As CommandButton)
     If rstTrans Is Nothing Then Exit Sub
     Dim nextRec As Integer
-    If rstTrans.RecordCount <= recordsPerPage Then rstTrans.MoveFirst: prevButton.Enabled = False
-    If rstTrans.RecordCount > recordsPerPage Then
+    If rstTrans.recordCount <= recordsPerPage Then rstTrans.MoveFirst: prevButton.Enabled = False
+    If rstTrans.recordCount > recordsPerPage Then
         prevButton.Enabled = True
-        If rstTrans.RecordCount Mod recordsPerPage = 0 Then
-            nextRec = rstTrans.RecordCount - recordsPerPage
+        If rstTrans.recordCount Mod recordsPerPage = 0 Then
+            nextRec = rstTrans.recordCount - recordsPerPage
         Else
-            nextRec = rstTrans.RecordCount - (rstTrans.RecordCount Mod recordsPerPage)
+            nextRec = rstTrans.recordCount - (rstTrans.recordCount Mod recordsPerPage)
         End If
         rstTrans.MoveFirst
         rstTrans.Move nextRec
@@ -2345,7 +2345,7 @@ Public Sub PassBookPrevButtonClicked(rstTrans As Recordset, recordsPerPage As In
     Dim negMovePos As Integer
     currPos = rstTrans.AbsolutePosition
     
-    If currPos = rstTrans.RecordCount Or rstTrans.EOF Then
+    If currPos = rstTrans.recordCount Or rstTrans.EOF Then
         Call InitPassBook(rstTrans, recordsPerPage, prevButton)
         negMovePos = recordsPerPage
     Else
@@ -2362,7 +2362,7 @@ Public Sub GetPassBookPrevButton(rstTrans As Recordset, recordsPerPage As Intege
     Dim nextRecord As Integer
     Dim currRecord As Integer
     
-    totalRecords = rstTrans.RecordCount
+    totalRecords = rstTrans.recordCount
     currRecord = rstTrans.AbsolutePosition
     
     currRecord = totalRecords - recordsPerPage * 2
@@ -2379,7 +2379,7 @@ Public Sub GetPassBookNextButton(rstTrans As Recordset, recordsPerPage As Intege
     Dim nextRecord As Integer
     Dim currRecord As Integer
     
-    totalRecords = rstTrans.RecordCount
+    totalRecords = rstTrans.recordCount
     currRecord = rstTrans.AbsolutePosition
     
     cmdPrev.Enabled = True

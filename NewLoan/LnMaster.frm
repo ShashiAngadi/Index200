@@ -431,7 +431,7 @@ Begin VB.Form frmLoanMaster
          Left            =   1920
          TabIndex        =   2
          Top             =   240
-         Width           =   4125
+         Width           =   2805
       End
       Begin VB.ListBox lstHidden 
          Appearance      =   0  'Flat
@@ -828,10 +828,10 @@ End If
       ActivateTextBox txtIntRate
       Exit Function
    End If
-   If Not CurrencyValidate(txtPenalInt, True) Then
+   If Not CurrencyValidate(txtPenalINT, True) Then
       'MsgBox "Please enter the Penal interest rate", vbInformation, wis_MESSAGE_TITLE
       MsgBox GetResourceString(505), vbInformation, wis_MESSAGE_TITLE
-      ActivateTextBox txtPenalInt
+      ActivateTextBox txtPenalINT
       Exit Function
    End If
    If Not DateValidate(txtIssueDate, "/", True) Then
@@ -899,7 +899,7 @@ Dim count As Integer
     txtLoanAccNo = ""
     txtLoanAmount.Text = ""
     txtIntRate = ""
-    txtPenalInt = ""
+    txtPenalINT = ""
     txtIssueDate = ""
     txtDueDate = ""
     
@@ -1001,7 +1001,7 @@ If m_rstCustLoans.EOF Then cmdPrev.Enabled = False
 'If m_rstCustLoans.BOF Then cmdNext.Enabled = False
 
 If m_rstCustLoans.AbsolutePosition > 1 And _
-            m_rstCustLoans.RecordCount > 1 Then cmdPrev.Enabled = True
+            m_rstCustLoans.recordCount > 1 Then cmdPrev.Enabled = True
 'cmdNext.Enabled = False
 'If m_rstCustLoans.AbsolutePosition = m_rstCustLoans.RecordCount Then cmdNext.Enabled = False
 
@@ -1021,7 +1021,7 @@ txtLoanAmount = FormatField(m_rstCustLoans("LoanAmount"))
 'Get The Ist TransaCtion Amount
 
 txtIntRate = FormatField(m_rstCustLoans("IntRate"))
-txtPenalInt = FormatField(m_rstCustLoans("PenalIntRate"))
+txtPenalINT = FormatField(m_rstCustLoans("PenalIntRate"))
 txtIssueDate = FormatField(m_rstCustLoans("IssueDate"))
 txtDueDate = FormatField(m_rstCustLoans("LoanDueDate"))
 
@@ -1047,11 +1047,11 @@ cmbPurpose.Text = FormatField(m_rstCustLoans("LoanPurpose"))
 
 Dim Guaranteer As Long
 Dim GMemNum As String
-Dim memberTYpe As Integer
+Dim memberType As Integer
 For iCount = 0 To 3
     txtGName(iCount).Tag = 0
     Guaranteer = FormatField(m_rstCustLoans("Guarantor" & CStr(iCount + 1)))
-    txtGName(iCount).Text = GetMemberNameNumberByCustID(Guaranteer, GMemNum, memberTYpe)
+    txtGName(iCount).Text = GetMemberNameNumberByCustID(Guaranteer, GMemNum, memberType)
     If Len(txtGName(iCount).Text) > 0 Then txtGName(iCount).Tag = Guaranteer: txtGMem(iCount).Text = GMemNum
 Next
 
@@ -1106,7 +1106,7 @@ gDbTrans.SqlStmt = SqlStr
 If gDbTrans.Fetch(RstInst, adOpenDynamic) < 1 Then Exit Sub
    'Set RstInst = gDbTrans.Rst.Clone
 
-InstNo = RstInst.RecordCount
+InstNo = RstInst.recordCount
 txtNoOfINst = InstNo
 
 Set m_FrmInst = New frmLoanInst
@@ -1154,10 +1154,10 @@ Call SetComboIndex(cmbLoanScheme, , SchemeID)
 'txtCustId = GetMemberNumber(rst("CustomerID"))
 Dim memNum As String
 
-Dim memberTYpe As Integer
-txtCustName.Caption = GetMemberNameNumberByCustID(rst("CustomerID"), memNum, memberTYpe)
+Dim memberType As Integer
+txtCustName.Caption = GetMemberNameNumberByCustID(rst("CustomerID"), memNum, memberType)
 txtCustID.Text = memNum
-If cmbMemberType.ListCount > 1 Then Call SetComboIndex(cmbMemberType, , memberTYpe)
+If cmbMemberType.ListCount > 1 Then Call SetComboIndex(cmbMemberType, , memberType)
 
 m_CustomerID = rst("CustomerId")
 m_LoanID = rst("LoanID")
@@ -1213,7 +1213,7 @@ End If
 'Get The Ist Instllment
 
 txtIntRate = FormatField(m_rstLoanScheme("IntRate"))
-txtPenalInt = FormatField(m_rstLoanScheme("PenalIntRate"))
+txtPenalINT = FormatField(m_rstLoanScheme("PenalIntRate"))
 txtIssueDate = Format(Now, "dd/mm/yyyy")
 On Error Resume Next
 Days = FormatField(m_rstLoanScheme("MonthDuration"))
@@ -1435,7 +1435,7 @@ If m_dbOperation = Insert Then
          Val(Trim$(txtLoanAmount)) & "," & _
          InstType & "," & InstAmount & "," & Val(txtNoOfINst) & "," & EMI & "," & _
          "#" & DueDate & "#," & _
-         CSng(Val(Trim$(txtIntRate))) & "," & CSng(Val(Trim$(txtPenalInt))) & "," & _
+         CSng(Val(Trim$(txtIntRate))) & "," & CSng(Val(Trim$(txtPenalINT))) & "," & _
          Val(txtGName(0).Tag) & ", " & Val(txtGName(1).Tag) & ", " & _
          Val(txtGName(2).Tag) & ", " & Val(txtGName(3).Tag) & ", " & _
          AddQuotes(OtherDet, True) & ", " & _
@@ -1447,7 +1447,7 @@ If m_dbOperation = Insert Then
     gDbTrans.BeginTrans
     'iF hE HAS CREATED nEW CUSTOMER
     'FirST save the customer
-    m_CustDet.ModuleId = wis_Loans
+    m_CustDet.ModuleID = wis_Loans
     If Not m_CustDet.SaveCustomer Then
         gDbTrans.RollBack
         Exit Function
@@ -1494,7 +1494,7 @@ ElseIf m_dbOperation = Update Then
          " EMI = " & EMI & ", " & _
          " LoanDueDate = #" & DueDate & "#," & _
          " IntRate = " & CSng(Val(Trim$(txtIntRate))) & ", " & _
-         " PenalIntRate = " & CSng(Val(Trim$(txtPenalInt))) & ", " & _
+         " PenalIntRate = " & CSng(Val(Trim$(txtPenalINT))) & ", " & _
          " AccGroupID = " & cmbAccGroup.ItemData(cmbAccGroup.ListIndex) & ", " & _
          " Guarantor1 = " & Val(txtGName(0).Tag) & ", " & " Guarantor2 = " & Val(txtGName(1).Tag) & ", " & _
          " Guarantor3 = " & Val(txtGName(2).Tag) & ", " & " Guarantor4 = " & Val(txtGName(3).Tag) & ", " & _
@@ -1755,7 +1755,7 @@ gDbTrans.SqlStmt = SqlStr
 
 If gDbTrans.Fetch(m_rstCustLoans, adOpenStatic) < 1 Then Exit Sub
 
-count = m_rstCustLoans.RecordCount
+count = m_rstCustLoans.recordCount
 
 If count > 1 Then cmdPrev.Enabled = True
 cmdNext.Enabled = count
@@ -1858,7 +1858,7 @@ End If
 
 Dim SqlStr As String
 Dim rst As Recordset
-Dim memberTYpe As Integer
+Dim memberType As Integer
 
 ' This will get the Member name
 SqlStr = "SELECT * FROM MemMaster Where AccNum = " & AddQuotes(txtCustID, True)
@@ -1866,8 +1866,8 @@ SqlStr = "SELECT * FROM MemMaster Where AccNum = " & AddQuotes(txtCustID, True)
 If m_CustomerID > 0 Then
     SqlStr = "SELECT * FROM MemMaster Where CustomerID = " & m_CustomerID
 Else
-    If cmbMemberType.ListCount > 1 And cmbMemberType.ListIndex >= 0 Then memberTYpe = cmbMemberType.ItemData(cmbMemberType.ListIndex)
-    txtCustName.Caption = GetMemberNameCustIDByMemberNum(Trim(txtCustID), m_CustomerID, memberTYpe)
+    If cmbMemberType.ListCount > 1 And cmbMemberType.ListIndex >= 0 Then memberType = cmbMemberType.ItemData(cmbMemberType.ListIndex)
+    txtCustName.Caption = GetMemberNameCustIDByMemberNum(Trim(txtCustID), m_CustomerID, memberType)
     If m_CustomerID = 0 Then Exit Sub
     SqlStr = "SELECT * FROM MemMaster Where CustomerID = " & m_CustomerID
 End If
@@ -1879,12 +1879,12 @@ If gDbTrans.Fetch(rst, adOpenDynamic) < 1 Then
 Else
     txtCustID = FormatField(rst("AccNum"))
     m_CustomerID = FormatField(rst("customerid"))
-    memberTYpe = FormatField(rst("MemberType"))
+    memberType = FormatField(rst("MemberType"))
 End If
 
 If m_CustomerID = 0 Then Exit Sub
 
-If cmbMemberType.ListCount > 1 Then Call SetComboIndex(cmbMemberType, , memberTYpe)
+If cmbMemberType.ListCount > 1 Then Call SetComboIndex(cmbMemberType, , memberType)
 
 m_CustDet.LoadCustomerInfo (m_CustomerID)
 
@@ -2072,7 +2072,7 @@ For ItemCount = 0 To cmbLoanScheme.ListCount - 1
 Next ItemCount
 
 txtIntRate = FormatField(LoanRst("IntRate"))
-txtPenalInt = FormatField(LoanRst("PenalIntRate"))
+txtPenalINT = FormatField(LoanRst("PenalIntRate"))
 txtIssueDate = FormatField(LoanRst("IssueDate"))
 txtDueDate = FormatField(LoanRst("LoanDueDate"))
 'Set the appropriate Option button
@@ -2503,7 +2503,7 @@ Set m_CustDet = Nothing
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 gWindowHandle = 0
 RaiseEvent WindowClosed
 
@@ -2664,9 +2664,9 @@ End Sub
 
 
 Private Sub txtPenalInt_LostFocus()
-If Val(txtPenalInt.Text) = 0 And Len(txtPenalInt.Text) > 0 Then
+If Val(txtPenalINT.Text) = 0 And Len(txtPenalINT.Text) > 0 Then
  MsgBox "Invalid amount specified", vbOKOnly
-  txtPenalInt.SetFocus
+  txtPenalINT.SetFocus
   End If
    End Sub
 
