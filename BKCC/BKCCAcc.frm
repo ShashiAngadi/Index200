@@ -348,11 +348,13 @@ Begin VB.Form frmBKCCAcc
             NumTabs         =   2
             BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Instructions"
+               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
             BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Pass book"
+               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
@@ -3779,17 +3781,32 @@ Dim custId As Long
 Dim SbACCID As Long
 Dim rst As Recordset
 
+'Memeber type
+Dim memberType As Integer
+txtIndex = GetIndex("MemberType")
+'Now get the index of the combo box which represents the farmer type
+CtrlIndex = ExtractToken(lblLoanIssue(txtIndex).Tag, "TextIndex")
+memberType = cmb(CtrlIndex).ItemData(cmb(CtrlIndex).ListIndex)
 
 ' Check for member details.
 txtIndex = GetIndex("MemberID")
 With txtLoanIssue(txtIndex)
     gDbTrans.SqlStmt = "SELECT * FROM MemMaster " & _
                 " WHERE AccNum = " & AddQuotes(.Text, True)
+    
+    If memberType > 0 Then _
+            gDbTrans.SqlStmt = gDbTrans.SqlStmt + " AND MemberType = " & memberType
+            
     Call gDbTrans.Fetch(rst, adOpenDynamic)
     MemID = FormatField(rst("AccId"))
     custId = FormatField(rst("CustomerID"))
 End With
 
+' Get a new loanid.
+gDbTrans.SqlStmt = "SELECT MAX(LoanID) FROM BKCCMaster"
+Lret = gDbTrans.Fetch(rst, adOpenDynamic)
+If Lret <= 0 Then GoTo Exit_Line
+NewLoanID = Val(FormatField(rst(0))) + 1
 
 'Memeber type
 'Now Get the Farmer Type
@@ -3798,12 +3815,6 @@ txtIndex = GetIndex("FarmerType")
 'Now get the index of the combo box which represents the farmer type
 CtrlIndex = ExtractToken(lblLoanIssue(txtIndex).Tag, "TextIndex")
 FarmerType = cmb(CtrlIndex).ItemData(cmb(CtrlIndex).ListIndex)
-
-' Get a new loanid.
-gDbTrans.SqlStmt = "SELECT MAX(LoanID) FROM BKCCMaster"
-Lret = gDbTrans.Fetch(rst, adOpenDynamic)
-If Lret <= 0 Then GoTo Exit_Line
-NewLoanID = Val(FormatField(rst(0))) + 1
 
 ' Begin the transaction.
 gDbTrans.BeginTrans
@@ -4156,32 +4167,31 @@ Dim MemID As Long
 Dim custId As Long
 Dim lGuarantorID As Long
 Dim rst As Recordset
+Dim CtrlIndex As Integer
 ' ------------------------------------------
 
 ' Check for member details.
+'Memeber type
+Dim memberType As Integer
+txtIndex = GetIndex("MemberType")
+'Now get the index of the combo box which represents the farmer type
+CtrlIndex = ExtractToken(lblLoanIssue(txtIndex).Tag, "TextIndex")
+memberType = cmb(CtrlIndex).ItemData(cmb(CtrlIndex).ListIndex)
+
 txtIndex = GetIndex("MemberID")
 With txtLoanIssue(txtIndex)
 
     ' Check if the specified memberid is valid.
     gDbTrans.SqlStmt = "SELECT * FROM MemMaster " & _
             " WHERE AccNum = " & AddQuotes(.Text, True)
+ If memberType > 0 Then _
+            gDbTrans.SqlStmt = gDbTrans.SqlStmt + " AND MemberType = " & memberType
+            
     Call gDbTrans.Fetch(rst, adOpenDynamic)
     MemID = FormatField(rst("AccId"))
     custId = FormatField(rst("CustomerID"))
 End With
 
-
-'Memeber type
-'Now Get the Farmer Type
-Dim FarmerType As Integer
-Dim CtrlIndex As Integer
-txtIndex = GetIndex("FarmerType")
-
-'Now get the index of the combo box which represents the farmer type
-CtrlIndex = ExtractToken(lblLoanIssue(txtIndex).Tag, "TextIndex")
-With cmb(CtrlIndex)
-    FarmerType = .ItemData(.ListIndex)
-End With
 
 txtIndex = GetIndex("InterestBalance")
 With txtLoanIssue(txtIndex)
@@ -4210,7 +4220,9 @@ If IntBalance <> Val(txtLoanIssue(txtIndex)) Then
     End If
 End If
 
-'Dim FarmerType As Integer
+'Memeber type
+'Now Get the Farmer Type
+Dim FarmerType As Integer
 txtIndex = GetIndex("FarmerType")
 'Now get the index of the combo box which represents the farmer type
 CtrlIndex = ExtractToken(lblLoanIssue(txtIndex).Tag, "TextIndex")

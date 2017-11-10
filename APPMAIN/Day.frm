@@ -839,15 +839,16 @@ End With
 Set RDClass = Nothing
 
 PigmyDEPOSIT:
+'Create the MaxPDTransView
+gDbTrans.SqlStmt = "Select Max(TransID) as MaxTransID ,AccID From PDTrans group by AccID"
+gDbTrans.CreateView ("qryPDMAxTrans")
 
-gDbTrans.SqlStmt = "Select A.AccId,AccNum,Balance as DepositAmount," & _
-        " Title+' '+FirstName+' '+MiddleName+' '+LastName as Name " & _
-        " From PDMaster A,PDTrans B,NameTab C" & _
+gDbTrans.SqlStmt = "Select A.AccId,AccNum,Balance as DepositAmount, Name " & _
+        " From PDMaster A,PDTrans B,qryName C, qryPDMaxTrans D" & _
         " Where ClosedDate is NULL " & _
         " And MaturityDate <= #" & gStrDate & "#" & _
         " And B.AccID = A.AccId " & _
-        " And TransID = (Select Max(TransID) From PDTrans D " & _
-            " WHERE D.AccID = A.AccId)" & _
+        " And B.TransID = D.MaxTransID AND D.AccID = A.AccId " & _
         " And C.CustomerID = A.CustomerId" & _
         " Order By MaturityDate,val(AccNum)"
 

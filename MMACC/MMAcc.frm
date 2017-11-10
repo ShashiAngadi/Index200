@@ -1268,10 +1268,11 @@ Dim strAccNum As String
     'Check for the existance of the MemberNum
     gDbTrans.SqlStmt = "Select * FROM MemMaster " & _
         " Where AccNum = " & AddQuotes(strAccNum)
-    If m_MemberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And MemberType = " & m_MemberType
-    
     If m_accUpdatemode = Update Then _
         gDbTrans.SqlStmt = gDbTrans.SqlStmt & " AND AccID <> " & m_AccID
+        
+    If m_MemberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And MemberType = " & m_MemberType
+        
     If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
         '"This Account number already exists"
         MsgBox GetResourceString(545), vbInformation, wis_MESSAGE_TITLE
@@ -1306,7 +1307,6 @@ Dim strAccNum As String
         End If
         'Now Check for the of existance of the asccount Number
         gDbTrans.SqlStmt = "Select * from MemMaster Where AccNum = " & AddQuotes(strAccNum)
-        If m_MemberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And MemberType = " & m_MemberType
     Else
         'PrevTransDate = Rst("CreateDate")
         gDbTrans.SqlStmt = "Select * from MemIntTrans Where " & _
@@ -1319,6 +1319,9 @@ Dim strAccNum As String
                         " AccNum = " & AddQuotes(strAccNum, True) & _
                         " And Accid <> " & m_AccID
     End If
+    'Check is there more than one membertype
+    If m_MemberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And MemberType = " & m_MemberType
+    
     If gDbTrans.Fetch(rst, adOpenDynamic) >= 1 Then
         'MsgBox "Account number " & .Text & "already exists." & vbCrLf & vbCrLf & _
             "Please specify another account number !", vbExclamation, gAppName & " - Error"
@@ -1711,6 +1714,7 @@ End If
 Dim bankClass As clsBankAcc
 Dim SetUp As New clsSetup
 FaceValue = Val(SetUp.ReadSetupValue("MMAcc", "ShareValue", "10.00"))
+FaceValue = Val(SetUp.ReadSetupValue("MMAcc" & m_MemberType, "ShareValue", CStr(FaceValue)))
 Set SetUp = Nothing
 
 Set bankClass = New clsBankAcc

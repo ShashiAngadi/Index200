@@ -61,7 +61,18 @@ Private m_eMail As String
 Private m_UIType As Byte
 Private m_CustType As Byte
 Private m_FarmerType As Byte
-
+Private m_KyCIDType1 As Byte
+Private m_KyCIDType2 As Byte
+Private m_KycIdText1 As String
+Private m_KycIdText2 As String
+Private m_KycBankName1 As String
+Private m_KycBankName2 As String
+Private m_KycBankNum1 As String
+Private m_KycBankNum2 As String
+Private m_KycIfsc1 As String
+Private m_KycIfsc2 As String
+Private m_KycPhone As String
+Private m_kycCustName As String
 'Private m_dbFile As String
 Private m_Modified As Boolean
 Private m_CustomerLoaded As Boolean
@@ -76,10 +87,10 @@ Private m_InitStatus As Integer
 Public Property Get ObjectName()
     ObjectName = "CustClass"
 End Property
-Public Function CustomerNameNew(customerID As Long, ByRef CustomerNameEnglish As String)
+Public Function CustomerNameNew(CustomerID As Long, ByRef CustomerNameEnglish As String)
     Dim rst As ADODB.Recordset
-    gDbTrans.SQLStmt = "Select Title + ' ' + FirstName + ' ' + MiddleName + ' ' + LastName as Name,FullName " & _
-            " From NameTab Where CustomerId = " & customerID
+    gDbTrans.SqlStmt = "Select Title + ' ' + FirstName + ' ' + MiddleName + ' ' + LastName as Name,FullName " & _
+            " From NameTab Where CustomerId = " & CustomerID
     If gDbTrans.Fetch(rst, adOpenForwardOnly) <> 1 Then
         CustomerNameNew = " "
         CustomerNameEnglish = ""
@@ -89,10 +100,10 @@ Public Function CustomerNameNew(customerID As Long, ByRef CustomerNameEnglish As
         If Len(CustomerNameEnglish) < 1 And gLangOffSet = 0 Then CustomerNameEnglish = CustomerNameNew
     End If
 End Function
-Public Function CustomerName(customerID As Long)
+Public Function CustomerName(CustomerID As Long)
     Dim rst As ADODB.Recordset
-    gDbTrans.SQLStmt = "Select Title + ' ' + FirstName + ' ' + MiddleName + ' ' + LastName as Name,FullName " & _
-            " From NameTab Where CustomerId = " & customerID
+    gDbTrans.SqlStmt = "Select Title + ' ' + FirstName + ' ' + MiddleName + ' ' + LastName as Name,FullName " & _
+            " From NameTab Where CustomerId = " & CustomerID
     If gDbTrans.Fetch(rst, adOpenForwardOnly) <> 1 Then
         CustomerName = " "
     Else
@@ -119,16 +130,16 @@ Dim custId As Long
 Dim count As Integer
 Dim transHasBegun  As Boolean
 
-    gDbTrans.SQLStmt = "SELECT * FROM FreeCustId Where Selected = False " & _
+    gDbTrans.SqlStmt = "SELECT * FROM FreeCustId Where Selected = False " & _
         " And FreeID > 0 And  FreeID not in (Select distinct customerID from NameTab) Order By FreeID"
     If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then
         'INsert 10 new CutomerID
-        gDbTrans.SQLStmt = "SELECT Max(CustomerID) From NameTab"
+        gDbTrans.SqlStmt = "SELECT Max(CustomerID) From NameTab"
         Call gDbTrans.Fetch(rst, adOpenForwardOnly)
         custId = FormatField(rst(0))
         transHasBegun = gDbTrans.BeginTrans
         For count = 1 To 10
-            gDbTrans.SQLStmt = "INSERT INTo FreeCustID ( FreeID, Selected) " & _
+            gDbTrans.SqlStmt = "INSERT INTo FreeCustID ( FreeID, Selected) " & _
                 " VALUES (" & custId + count & ", False )"
             
             If Not gDbTrans.SQLExecute Then
@@ -137,13 +148,13 @@ Dim transHasBegun  As Boolean
             End If
         Next
         If transHasBegun Then gDbTrans.CommitTrans: transHasBegun = False
-        gDbTrans.SQLStmt = "SELECT * FROM FreeCustId Where " & _
+        gDbTrans.SqlStmt = "SELECT * FROM FreeCustId Where " & _
                         " Selected =False Order By FreeID "
         If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Function
     End If
     
     custId = Val(FormatField(rst("FreeID")))
-    gDbTrans.SQLStmt = "UPDATE FreeCustID set Selected = True " & _
+    gDbTrans.SqlStmt = "UPDATE FreeCustID set Selected = True " & _
         " WHERE FreeID = " & custId
     transHasBegun = gDbTrans.BeginTrans
     Call gDbTrans.SQLExecute
@@ -155,7 +166,7 @@ Dim transHasBegun  As Boolean
 TestEnd:
 
 ' Get the new Customer ID from the Database.
-    gDbTrans.SQLStmt = "SELECT MAX(CustomerID) FROM NameTab"
+    gDbTrans.SqlStmt = "SELECT MAX(CustomerID) FROM NameTab"
     custId = 1
     Dim Lret As Long
     Lret = gDbTrans.Fetch(rst, adOpenForwardOnly)
@@ -168,10 +179,10 @@ TestEnd:
     GoTo ExitLine
 'Changed By shashi on 18/3/2002
     
-    gDbTrans.SQLStmt = "SELECT count(*) as CustCount FROM NameTab"
+    gDbTrans.SqlStmt = "SELECT count(*) as CustCount FROM NameTab"
     Lret = gDbTrans.Fetch(rst, adOpenForwardOnly)
     If FormatField(rst(0)) = custId - 1 Then GoTo ExitLine
-    gDbTrans.SQLStmt = "SELECT CustomerID FROM NameTab Order By CustomerId Asc"
+    gDbTrans.SqlStmt = "SELECT CustomerID FROM NameTab Order By CustomerId Asc"
     Lret = gDbTrans.Fetch(rst, adOpenForwardOnly)
     custId = 1
     Do
@@ -186,7 +197,7 @@ ExitLine:
 GetNewCutomerId = custId
     
 transHasBegun = gDbTrans.BeginTrans
-gDbTrans.SQLStmt = "UPDATE Install set ValueData = '" & Val(custId + 1) & "'" & _
+gDbTrans.SqlStmt = "UPDATE Install set ValueData = '" & Val(custId + 1) & "'" & _
     " WHERE KEYDATA = 'NewCustomerID'"
 If gDbTrans.SQLExecute Then
     If transHasBegun Then gDbTrans.CommitTrans
@@ -238,6 +249,18 @@ m_eMail = ""
 m_CustomerLoaded = False
 m_UIType = 0
 m_CustType = 0
+'Clear KYC
+    m_kycCustName = ""
+    m_KyCIDType1 = 0
+    m_KycIdText1 = 0
+    m_KycBankName1 = ""
+    m_KycBankNum1 = ""
+    m_KycIfsc1 = ""
+    m_KyCIDType2 = 0
+    m_KycIdText2 = ""
+    m_KycBankName2 = ""
+    m_KycBankNum2 = ""
+    m_KycIfsc2 = ""
 
 'Delete the Photos of any unsaved
 Call DeleteUnregisteredImageFiles
@@ -268,12 +291,12 @@ Public Property Get FormValue() As frmCustReg
 End Property
 
 ' Gets the customer details for a specified Account number.
-Public Function LoadCustomerInfo(customerID As Long) As Boolean
+Public Function LoadCustomerInfo(CustomerID As Long) As Boolean
 On Error GoTo Err_line
 
 Dim StrSql As String, rst As ADODB.Recordset
 Dim Lret As Long
-gDbTrans.SQLStmt = "SELECT * FROM NameTab WHERE CustomerID = " & customerID
+gDbTrans.SqlStmt = "SELECT * FROM NameTab WHERE CustomerID = " & CustomerID
 Lret = gDbTrans.Fetch(rst, adOpenForwardOnly)
 
 If RegDialog Is Nothing Then Set RegDialog = New frmCustReg
@@ -328,7 +351,7 @@ If Lret > 0 Then
         
         m_CustType = FormatField(rst("CustType"))
         'Now Get the Informattion Of the UI Type
-        gDbTrans.SQLStmt = "SELECT UITYPE From CustomerType " & _
+        gDbTrans.SqlStmt = "SELECT UITYPE From CustomerType " & _
             " WHERE CustType = " & m_CustType
         If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then _
                 m_UIType = FormatField(rst("UITYPE"))
@@ -343,6 +366,10 @@ If Lret > 0 Then
     End With
 
     m_CustomerLoaded = True  ' Set the Existing Flag
+    
+    'Load the KYC details
+    LoadCustomerKYC (m_CustomerID)
+    
     LoadToForm      ' Load the details to the Interface dialog.
     
     LoadCustomerInfo = True
@@ -350,7 +377,7 @@ Else
     RegDialog.NewCustomer = True
     'MsgBox "No details available for Customer ID: " _
         & CustomerID, vbExclamation, wis_MESSAGE_TITLE
-    MsgBox GetResourceString(662) & customerID, vbExclamation, wis_MESSAGE_TITLE
+    MsgBox GetResourceString(662) & CustomerID, vbExclamation, wis_MESSAGE_TITLE
 
 End If
 
@@ -364,7 +391,55 @@ Err_line:
                 & "for account number " & CustomerID & vbCrLf _
                 & Err.Description, vbCritical
         
-        MsgBox GetResourceString(651) & customerID & vbCrLf _
+        MsgBox GetResourceString(651) & CustomerID & vbCrLf _
+                & Err.Description, vbCritical
+    End If
+'Resume
+End Function
+
+
+
+' Gets the customer details for a specified Account number.
+Public Function LoadCustomerKYC(CustomerID As Long) As Boolean
+On Error GoTo Err_line
+
+Dim StrSql As String, rstKYC As ADODB.Recordset
+Dim Lret As Long
+gDbTrans.SqlStmt = "SELECT * FROM KYCTab WHERE CustomerID = " & CustomerID
+Lret = gDbTrans.Fetch(rstKYC, adOpenForwardOnly)
+
+If Lret > 0 Then
+    ' Update the variables.
+    m_InsertCustomer = False
+    
+        'Load KYC detials
+        m_kycCustName = FormatField(rstKYC("CustomerName"))
+        m_KyCIDType1 = FormatField(rstKYC("IDType1"))
+        m_KycIdText1 = FormatField(rstKYC("IDText1"))
+        m_KycBankName1 = FormatField(rstKYC("ExtBankName1"))
+        m_KycBankNum1 = FormatField(rstKYC("ExtAccNum1"))
+        m_KycIfsc1 = FormatField(rstKYC("ExtIFSC1"))
+        m_KyCIDType2 = FormatField(rstKYC("IDType2"))
+        m_KycIdText2 = FormatField(rstKYC("IDText2"))
+        m_KycBankName2 = FormatField(rstKYC("ExtBankName2"))
+        m_KycBankNum2 = FormatField(rstKYC("ExtAccNum2"))
+        m_KycIfsc2 = FormatField(rstKYC("ExtIFSC2"))
+    
+    LoadCustomerKYC = True
+    
+End If
+
+Exit Function
+
+Err_line:
+    If Err.Number = 383 Then    'Combo text read only.
+        Resume Next
+    ElseIf Err Then
+        'MsgBox "Error while getting the customer details " _
+                & "for account number " & CustomerID & vbCrLf _
+                & Err.Description, vbCritical
+        
+        MsgBox GetResourceString(651) & CustomerID & vbCrLf _
                 & Err.Description, vbCritical
     End If
 'Resume
@@ -376,7 +451,7 @@ On Error Resume Next
 Dim count As Byte
     ' Update the variables.
     With RegDialog
-        '.cmdLookup.Caption = IIf(m_CustomerLoaded, "&Clear", "&Lookup")
+        
         If m_Title = "" Then
             .cmbTitle.ListIndex = -1
         Else
@@ -511,6 +586,20 @@ Dim count As Byte
             .cmbCustType.Enabled = True
         End If
         
+        
+        .cmbKycId1.ListIndex = m_KyCIDType1
+        .cmbKycID2.ListIndex = m_KyCIDType2
+        .txtKycAccNum1.Text = m_KycBankNum1
+        .txtKycAccNum2.Text = m_KycBankNum2
+        .txtKycBankName2.Text = m_KycBankName2
+        .txtKycBankName1.Text = m_KycBankName1
+        .txtKycId1.Text = m_KycIdText1
+        .txtKycId2.Text = m_KycIdText2
+        .txtKYCIfsc1.Text = m_KycIfsc1
+        .txtKycIfsc2.Text = m_KycIfsc2
+        .txtKYCPhone.Text = m_KycPhone
+        .txtKYCCustname = m_kycCustName
+        
     End With
     
 End Sub
@@ -524,7 +613,7 @@ If m_CustomerID Then
     'If the old customer has saved then
     'the detail of that id has been deleted
     'In such case the below code will not affect
-    gDbTrans.SQLStmt = "UPDate FreeCustID Set Selected = False " & _
+    gDbTrans.SqlStmt = "UPDate FreeCustID Set Selected = False " & _
             " WHERE FreeId = " & m_CustomerID
     Dim transHasBegun As Boolean
     transHasBegun = gDbTrans.BeginTrans
@@ -552,15 +641,74 @@ Err_line:
 'Resume
 End Sub
 
+Public Function SaveCustomerKYC() As Boolean
+    
+        
+  If m_CustomerID = 0 Then Exit Function
+    Dim SqlStmt As String
+    Dim KycId As Long
+    Dim rstKYC As Recordset
+    Dim transHasBegun As Boolean
+    
+    gDbTrans.SqlStmt = "Select * from KycTab where Customerid = " & m_CustomerID
+    If gDbTrans.Fetch(rstKYC, adOpenDynamic) > 0 Then KycId = FormatField(rstKYC("KycID"))
+    
+    
+    If KycId = 0 Then
+        gDbTrans.SqlStmt = "Select max(kycId) as MaxKycID from KycTab "
+        If gDbTrans.Fetch(rstKYC, adOpenDynamic) > 0 Then KycId = FormatField(rstKYC("MaxKycID"))
+        KycId = KycId + 1
+        gDbTrans.SqlStmt = "Insert Into KycTab (KYCId, CustomerID, CustomerName, CustPhone, " & _
+            "IdType1, IdText1, ExtBankName1, ExtAccNum1, ExtIfsc1, " & _
+            "IdType2, IdText2, ExtBankName2, ExtAccNum2, ExtIfsc2 ) " & _
+            " Values (" & KycId & "," & m_CustomerID & "," & AddQuotes(RegDialog.txtKYCCustname.Text) & "," & AddQuotes(RegDialog.txtKYCPhone.Text) & _
+            " ," & RegDialog.cmbKycId1.ListIndex & "," & AddQuotes(RegDialog.txtKycId1.Text) & "," & _
+            AddQuotes(RegDialog.txtKycBankName1.Text) & "," & AddQuotes(RegDialog.txtKycAccNum1.Text) & "," & AddQuotes(RegDialog.txtKYCIfsc1.Text) & "," & _
+            RegDialog.cmbKycID2.ListIndex & "," & AddQuotes(RegDialog.txtKycId2.Text) & "," & _
+            AddQuotes(RegDialog.txtKycBankName2.Text) & "," & AddQuotes(RegDialog.txtKycAccNum2.Text) & "," & AddQuotes(RegDialog.txtKycIfsc2.Text) & ")"
+    Else
+        gDbTrans.SqlStmt = "UPdate KycTab Set " & _
+            " CustomerName = " & AddQuotes(RegDialog.txtKYCCustname.Text) & "," & _
+            " CustPhone  = " & AddQuotes(RegDialog.txtKYCPhone.Text) & ", " & _
+            " IdType1 =" & RegDialog.cmbKycId1.ListIndex & "," & _
+            " IdText1 = " & AddQuotes(RegDialog.txtKycId1.Text) & "," & _
+            " ExtBankName1 = " & AddQuotes(RegDialog.txtKycBankName1.Text) & "," & _
+            " ExtAccNum1 = " & AddQuotes(RegDialog.txtKycAccNum1.Text) & "," & _
+            " ExtIfsc1 = " & AddQuotes(RegDialog.txtKYCIfsc1.Text) & "," & _
+            " IdType2 =" & RegDialog.cmbKycID2.ListIndex & "," & _
+            " IdText2 = " & AddQuotes(RegDialog.txtKycId2.Text) & "," & _
+            " ExtBankName2 = " & AddQuotes(RegDialog.txtKycBankName2.Text) & "," & _
+            " ExtAccNum2 = " & AddQuotes(RegDialog.txtKycAccNum2.Text) & "," & _
+            " ExtIfsc2 = " & AddQuotes(RegDialog.txtKycIfsc2.Text)
+    End If
+
+
+    transHasBegun = gDbTrans.IsTransBegun
+    If Not transHasBegun Then gDbTrans.BeginTrans
+    
+    If Not gDbTrans.SQLExecute Then
+        MsgBox "Unable to save the KYC details", vbOKOnly, wis_MESSAGE_TITLE
+        If Not transHasBegun Then gDbTrans.RollBack
+    Else
+        If Not transHasBegun Then gDbTrans.CommitTrans
+    End If
+    
+SaveCustomerKYC = True
+
+
+        
+  
+End Function
+
 'Displays the Customer Registration dialog.
 Public Sub ShowDialog()
-If RegDialog Is Nothing Then Set RegDialog = New frmCustReg
-If m_CustomerLoaded Then
-    RegDialog.cmdLookUp.Caption = GetResourceString(8)    ' Clear
-Else
-    RegDialog.cmdLookUp.Caption = GetResourceString(17)    ' Lookup
-End If
-RegDialog.Show vbModal
+    If RegDialog Is Nothing Then Set RegDialog = New frmCustReg
+    If m_CustomerLoaded Then
+        RegDialog.cmdLookUp.Caption = GetResourceString(8)
+    Else
+        RegDialog.cmdLookUp.Caption = GetResourceString(17)
+    End If
+    RegDialog.Show vbModal
 End Sub
 
 Public Property Get ObjectHandle() As Long
@@ -713,9 +861,9 @@ With gDbTrans
     'If Not CustomerLoaded Then
     If m_InsertCustomer Then
         ' Get the SQL statement for data insertion.
-        .SQLStmt = GetSQL(wis_INSERT)
+        .SqlStmt = GetSQL(wis_INSERT)
     Else
-        .SQLStmt = GetSQL(wis_UPDATE)
+        .SqlStmt = GetSQL(wis_UPDATE)
     End If
 
 'Temporary block of code, to be redefined later
@@ -726,20 +874,19 @@ With gDbTrans
     
     If Not .SQLExecute Then
         If transHasBegun Then gDbTrans.RollBack
-        'MsgBox "Error adding the Customer details.", _
-                vbCritical, wis_MESSAGE_TITLE
-        MsgBox "Error adding the Customer details.", _
-                vbCritical, wis_MESSAGE_TITLE
+        'MsgBox "Error adding the Customer details.", vbCritical , wis_MESSAGE_TITLE
+        MsgBox "Error adding the Customer details.", vbCritical, wis_MESSAGE_TITLE
         GoTo SaveCustomer_err
     End If
-
+    
+    
 'Temporary block of code, to be redefined later
     If m_InsertCustomer Then
         'Now Save the Photo & Sign
         Call SaveUnregisteredImageFiles(m_CustomerID)
         
         m_InsertCustomer = False
-        gDbTrans.SQLStmt = "DELETE * From FreeCustID WHERE FreeId = " & m_CustomerID
+        gDbTrans.SqlStmt = "DELETE * From FreeCustID WHERE FreeId = " & m_CustomerID
         If Not .SQLExecute Then
             If transHasBegun Then gDbTrans.RollBack
             'MsgBox "Error adding the Customer details.", _
@@ -751,6 +898,10 @@ With gDbTrans
     End If
     If transHasBegun Then gDbTrans.CommitTrans: transHasBegun = False
     inTransaction = False
+    
+    'Insert the KYC details
+    Call SaveCustomerKYC
+
 
 End With
 
@@ -792,9 +943,9 @@ Private Sub Class_Terminate()
 'Set dbObj = Nothing
 Dim transHasBegun  As Boolean
 
-If customerID > 0 And CustomerLoaded Then
+If CustomerID > 0 And CustomerLoaded Then
     transHasBegun = gDbTrans.BeginTrans
-    gDbTrans.SQLStmt = "UPDATE FreeCustID set Selected = False " & _
+    gDbTrans.SqlStmt = "UPDATE FreeCustID set Selected = False " & _
         " WHERE FreeId = " & m_CustomerID
     If gDbTrans.SQLExecute Then
         If transHasBegun Then gDbTrans.CommitTrans
@@ -812,8 +963,8 @@ If Not LookUpDialog Is Nothing Then
     Set LookUpDialog = Nothing
 End If
 End Sub
-Public Property Get customerID() As Long
-    customerID = m_CustomerID
+Public Property Get CustomerID() As Long
+    CustomerID = m_CustomerID
 End Property
 Public Property Get Modified() As Boolean
     Modified = m_Modified
@@ -869,16 +1020,16 @@ Dim rst As ADODB.Recordset
 
 ' Query the database to get all the customer names...
 With gDbTrans
-    .SQLStmt = "SELECT CustomerId, " & _
+    .SqlStmt = "SELECT CustomerId, " & _
         " Title + ' ' + FirstName + ' ' + MIddleName + ' ' + LastName AS Name, " & _
         " Profession FROM NameTab "
     If Trim(strSearch) <> "" Then
-        .SQLStmt = .SQLStmt & " Where (FirstName like '" & strSearch & "%' " & _
+        .SqlStmt = .SqlStmt & " Where (FirstName like '" & strSearch & "%' " & _
             " Or MiddleName like '" & strSearch & "%' " & _
             " Or LastName like '" & strSearch & "%')"
-        .SQLStmt = .SQLStmt & " Order by IsciName"
+        .SqlStmt = .SqlStmt & " Order by IsciName"
     Else
-        .SQLStmt = .SQLStmt & " Order by CustomerId"
+        .SqlStmt = .SqlStmt & " Order by CustomerId"
     End If
     Lret = .Fetch(rst, adOpenStatic)
     If Lret <= 0 Then

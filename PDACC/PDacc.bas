@@ -23,7 +23,7 @@ End Enum
 Private Sub GetLastTransDate(ByVal AccountId As Long, _
                 Optional ByRef TransID As Long, Optional ByRef TransDate As Date)
 
-Dim Rst As Recordset
+Dim rst As Recordset
 TransID = 0
 TransDate = vbNull
 '
@@ -35,17 +35,17 @@ Dim tmpTransID As Long
 gDbTrans.SqlStmt = "Select Top 1 TransID,TransDate FROM PDTrans " & _
                     " where AccID = " & AccountId & _
                     " ORder By TransId Desc"
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) > 0 Then _
-        TransID = FormatField(Rst("TransID")): TransDate = Rst("TransDate")
+If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then _
+        TransID = FormatField(rst("TransID")): TransDate = rst("TransDate")
 
 'Get Max Trans From Interest table
 gDbTrans.SqlStmt = "Select TransID,TransDate FROM PDIntTrans " & _
                     " where AccID = " & AccountId & _
                     " ORder By TransId Desc"
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) > 0 Then
-    tmpTransID = FormatField(Rst("TransID"))
+If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
+    tmpTransID = FormatField(rst("TransID"))
     If tmpTransID > TransID Then _
-        TransID = tmpTransID: TransDate = Rst("TransDate")
+        TransID = tmpTransID: TransDate = rst("TransDate")
 End If
 
 'Get Max TransID From Payabale Trans
@@ -53,10 +53,10 @@ gDbTrans.SqlStmt = "Select TransID,TransDate FROM PDIntPayable " & _
                     " where AccID = " & AccountId & _
                     " ORder By TransId Desc"
 
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) > 0 Then
-    tmpTransID = FormatField(Rst("TransID"))
+If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
+    tmpTransID = FormatField(rst("TransID"))
     If tmpTransID > TransID Then _
-        TransID = tmpTransID: TransDate = Rst("TransDate")
+        TransID = tmpTransID: TransDate = rst("TransDate")
 End If
 
 ErrLine:
@@ -88,7 +88,7 @@ Public Function PDInterest(AccId As Long) As Currency
 Dim FirstDate As String
 Dim LastDate As Date
 Dim NextDate As Date
-Dim Rst As Recordset
+Dim rst As Recordset
 Dim TotalAmount As Currency
 Dim Product As Currency
 
@@ -97,17 +97,17 @@ Product = 0
 
 Dim ROI As Single
 gDbTrans.SqlStmt = "SELECT * FROM PDMaster WHERE AccID = " & AccId
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) < 1 Then Exit Function
-ROI = FormatField(Rst.Fields("RateOFInterest"))
+If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Function
+ROI = FormatField(rst.Fields("RateOFInterest"))
 
 gDbTrans.SqlStmt = "SELECT TransDate FROM PDTrans WHERE AccID = " & AccId
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) < 1 Then Exit Function
-FirstDate = Rst.Fields(0)
+If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Function
+FirstDate = rst.Fields(0)
 
 gDbTrans.SqlStmt = "SELECT TOP 1 TransDate FROM PDTrans WHERE AccID = " & AccId & _
     " ORDER BY TransDate  DESC"
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) < 1 Then Exit Function
-LastDate = Rst.Fields(0)
+If gDbTrans.Fetch(rst, adOpenForwardOnly) < 1 Then Exit Function
+LastDate = rst.Fields(0)
 NextDate = DateAdd("m", 1, FirstDate)
 
 Do
@@ -116,9 +116,9 @@ Do
         " where AccID = " & AccId & _
         " AND Transdate >= #" & FirstDate & "# And TransDate < #" & NextDate & "# " & _
         " AND (TransType = " & wDeposit & " or TransType = " & wContraDeposit & ")"
-    If gDbTrans.Fetch(Rst, adOpenForwardOnly) <= 0 Then GoTo NextMonth
-    TotalAmount = TotalAmount + FormatField(Rst(0))
-    If FormatField(Rst(0)) > 0 Then Product = Product + TotalAmount
+    If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then GoTo NextMonth
+    TotalAmount = TotalAmount + FormatField(rst(0))
+    If FormatField(rst(0)) > 0 Then Product = Product + TotalAmount
     
 NextMonth:
     FirstDate = NextDate
@@ -134,13 +134,13 @@ End Function
 '
 Public Function GetAgentName(AgentID As Long) As String
 
-Dim Rst As Recordset
+Dim rst As Recordset
     GetAgentName = ""
     gDbTrans.SqlStmt = "Select CustomerId From UserTab Where UserId = " & AgentID
     Dim CustClass As New clsCustReg
     GetAgentName = " "
-    If gDbTrans.Fetch(Rst, adOpenForwardOnly) > 0 Then
-        GetAgentName = CustClass.CustomerName(Val(FormatField(Rst(0))))
+    If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
+        GetAgentName = CustClass.CustomerName(Val(FormatField(rst(0))))
     End If
     Set CustClass = Nothing
 End Function
@@ -298,7 +298,7 @@ End Function
 Public Function ComputeTotalPDLiability(AsonIndianDate As String) As Currency
 Dim AsOnDate As Date
 AsOnDate = GetSysFormatDate(AsonIndianDate)
-Dim Rst As Recordset
+Dim rst As Recordset
 Dim SqlStr As String
 
 SqlStr = "SELECT AccID, Max(TransID) As MaxTransID " & _
@@ -311,7 +311,7 @@ gDbTrans.CreateView ("QryTemp")
 
 gDbTrans.SqlStmt = "SELECT SUM(Balance) FROM PDTrans A, qryTEMP B " & _
     " WHERE A.AccID=B.AccID And A.TransID = B.MaxTransID "
-If gDbTrans.Fetch(Rst, adOpenDynamic) > 0 Then ComputeTotalPDLiability = FormatField(Rst(0))
+If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then ComputeTotalPDLiability = FormatField(rst(0))
 DoEvents
 
 End Function
@@ -329,8 +329,9 @@ Public Function ComputePDInterestAmount(AccId As Long, _
 
 Dim transType As wisTransactionTypes
 Dim rstTrans As ADODB.Recordset
-Dim Rst As ADODB.Recordset
+Dim rst As ADODB.Recordset
 Dim MatDate As Date
+Dim DepDate As Date
 Dim IntRate As Single
 Dim IntAmount As Currency
 
@@ -338,13 +339,14 @@ Dim LastTransDate As Date
 Dim TransDate As Date
     
 gDbTrans.SqlStmt = "Select * from PDMaster where AccID = " & AccId
-If gDbTrans.Fetch(Rst, adOpenForwardOnly) <= 0 Then
+If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then
     'MsgBox "No deposits listed !", vbExclamation, gAppName & " - Error"
     MsgBox GetResourceString(570), vbExclamation, gAppName & " - Error"
     Exit Function
 End If
-IntRate = FormatField(Rst("RateOfinterest"))
-MatDate = Rst("MaturityDate")
+IntRate = FormatField(rst("RateOfinterest"))
+MatDate = rst("MaturityDate")
+DepDate = rst("CreateDate")
 
 gDbTrans.SqlStmt = "Select * from PDTrans where AccID = " & AccId
 If gDbTrans.Fetch(rstTrans, adOpenStatic) <= 0 Then
@@ -359,7 +361,7 @@ End If
     IntRate = SetUp.ReadSetupValue("PDAcc", "Interest on PDDeposit", "7")
 'Set SetUp = Nothing
 If IntRate <= 0 Then _
-    IntRate = GetDepositInterestRate(wis_PDAcc, Rst("CreateDate"), AsOnDate)
+    IntRate = GetDepositInterestRate(wis_PDAcc, rst("CreateDate"), AsOnDate)
 
 If ConsiderPremature Then _
     If DateDiff("d", AsOnDate, MatDate) < 0 Then IntRate = IntRate - 2
@@ -369,11 +371,11 @@ If ConsiderPremature Then _
 Dim Days As Integer
 
     'Calculate the number of days
-    Days = DateDiff("D", AsOnDate, MatDate)
+    Days = DateDiff("D", AsOnDate, DepDate)
     If Days > 0 Then  'Account being closed prematurely
         'If deposit is not a year old then do not pay some interest
         If Days < 365 Then GoTo ExitLine
-   End If
+    End If
    
    'Now Calulate the total product
    Dim Product As Currency
@@ -398,8 +400,8 @@ Dim Days As Integer
                     " And Transdate < #" & TransDate & "#" & _
                     " AND (TransType = " & transType & " OR TransType = " & ContraTrans & ")"
         
-        If gDbTrans.Fetch(Rst, adOpenForwardOnly) > 0 Then _
-                    Product = Product + Val(FormatField(Rst("TotalAmount")))
+        If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then _
+                    Product = Product + Val(FormatField(rst("TotalAmount")))
         LastTransDate = TransDate
         NoOfMonths = NoOfMonths + 1
         IntAmount = IntAmount + ((Product * CDbl(IntRate / 100)) / 12)

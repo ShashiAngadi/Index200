@@ -48,7 +48,6 @@ Set rst = Nothing
 
 End Property
 
-
 Public Function InterestAmount(ByVal AccountId As Long, ByVal AsOnDate As Date)
 
 InterestAmount = ComputePDInterestAmount(AccountId, AsOnDate)
@@ -162,7 +161,7 @@ AccId = FormatField(m_rstCustBalance("AccId"))
 retAccNo = FormatField(m_rstCustBalance("AccNum"))
 CustomerBalance = FormatField(m_rstCustBalance("Balance"))
 
-If CustomerBalance = 0 And m_rstCustBalance.RecordCount > 1 And m_rstCustBalance.EOF = False Then
+If CustomerBalance = 0 And m_rstCustBalance.recordCount > 1 And m_rstCustBalance.EOF = False Then
     m_rstCustBalance.MoveNext
     GoTo NextAccount
 End If
@@ -788,23 +787,23 @@ Balance = 0
 Balance = ComputeTotalPDLiability(AsonIndianDate)
 
 End Function
-Public Sub TotalLoanTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Public Sub TotalLoanTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency)
     Dim depLoan As New clsDepLoan
-    Call depLoan.TotalLoanTransactions(fromDate, toDate, CashDeposit, contraDeposit, cashWithdraw, contraWithdraw, wis_PDAcc)
+    Call depLoan.TotalLoanTransactions(fromDate, toDate, CashDeposit, ContraDeposit, cashWithdraw, ContraWithDraw, wis_PDAcc)
     Set depLoan = Nothing
 End Sub
-Public Sub TotalLoanIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Public Sub TotalLoanIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency)
     Dim depLoan As New clsDepLoan
-    Call depLoan.TotalLoanIntTransactions(fromDate, toDate, CashDeposit, contraDeposit, cashWithdraw, contraWithdraw, wis_PDAcc)
+    Call depLoan.TotalLoanIntTransactions(fromDate, toDate, CashDeposit, ContraDeposit, cashWithdraw, ContraWithDraw, wis_PDAcc)
     Set depLoan = Nothing
 End Sub
-Public Sub TotalDepositTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Public Sub TotalDepositTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency)
 
 
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
 
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
@@ -821,8 +820,8 @@ While rst.EOF = False
     TotalAmount = Val(FormatField(rst("TotalAmount")))
     If rst("TransType") = wDeposit Then CashDeposit = TotalAmount
     If rst("TransType") = wWithdraw Then cashWithdraw = TotalAmount
-    If rst("TransType") = wContraDeposit Then contraDeposit = TotalAmount
-    If rst("TransType") = wContraWithdraw Then contraWithdraw = TotalAmount
+    If rst("TransType") = wContraDeposit Then ContraDeposit = TotalAmount
+    If rst("TransType") = wContraWithdraw Then ContraWithDraw = TotalAmount
     
     rst.MoveNext
 Wend
@@ -830,12 +829,12 @@ Wend
 Set rst = Nothing
 End Sub
 
-Public Sub TotalDepositIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Public Sub TotalDepositIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency)
 
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
 
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
@@ -852,8 +851,8 @@ While rst.EOF = False
     TotalAmount = Val(FormatField(rst("TotalAmount")))
     If rst("TransType") = wDeposit Then CashDeposit = TotalAmount
     If rst("TransType") = wWithdraw Then cashWithdraw = TotalAmount
-    If rst("TransType") = wContraDeposit Then contraDeposit = TotalAmount
-    If rst("TransType") = wContraWithdraw Then contraWithdraw = TotalAmount
+    If rst("TransType") = wContraDeposit Then ContraDeposit = TotalAmount
+    If rst("TransType") = wContraWithdraw Then ContraWithDraw = TotalAmount
     
     rst.MoveNext
 Wend

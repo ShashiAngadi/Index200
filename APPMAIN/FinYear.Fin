@@ -1,5 +1,5 @@
 [Language]
-Language=Kannada
+Language=kannada
 LanguageTool=NUDI
 1LanguageTool=SAMHITA
 1FontName=SUCHI-KAN-0850
@@ -10,5 +10,5 @@ NewReport=true
 FarmerType=true
 FarmerTypeName=Customer
 [FinYear]
-Year1=FromYear#01/04/2014,ToYear#31/03/2015,DBPath#WISDB1415
-Year2=FromYear#01/04/2015,ToYear#31/03/2016,DBPath#WISDB1516
+Year1=FromYear#01/04/2015,ToYear#31/03/2016,DBPath#WISDB1516
+Year2=FromYear#01/04/2016,ToYear#31/03/2017,DBPath#WISDB1617

@@ -673,6 +673,8 @@ Private m_InstBalance() As Currency
 Private m_rstLoanScheme As Recordset
 Private m_rstCustLoans As Recordset
 
+Private m_IsUpdateMemberID As Boolean
+
 Public Event CustomerSelected(custId As Long)
 Public Event LoanCreated(ByVal LoanID As Long)
 Public Event LoanModified(ByVal LoanID As Long)
@@ -1169,7 +1171,7 @@ m_rstCustLoans.MoveFirst
 m_rstCustLoans.Find "LoanID = " & LoanID
 
 Call LoadCustomerLoan
-
+m_IsUpdateMemberID = False
 End Sub
 
 Private Sub LoadLoanSchemeDetail()
@@ -1885,6 +1887,7 @@ End If
 If m_CustomerID = 0 Then Exit Sub
 
 If cmbMemberType.ListCount > 1 Then Call SetComboIndex(cmbMemberType, , memberType)
+cmbMemberType.ListIndex = memberType - 1
 
 m_CustDet.LoadCustomerInfo (m_CustomerID)
 
@@ -2342,6 +2345,7 @@ Private Sub cmdPrev_Click()
 End Sub
 Private Sub Form_Load()
 
+'m_IsUpdateMemberID = gCurrUser.IsSuperAdmin
 'Me.Caption = Me.Caption & " - " & gBankName
 Call CenterMe(Me)
 Call SetKannadaCaption

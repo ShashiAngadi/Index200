@@ -19,6 +19,681 @@ Begin VB.Form frmCustReg
    WhatsThisHelp   =   -1  'True
    Begin VB.PictureBox pic 
       Height          =   5900
+      Index           =   4
+      Left            =   195
+      ScaleHeight     =   5835
+      ScaleWidth      =   5640
+      TabIndex        =   96
+      TabStop         =   0   'False
+      Top             =   500
+      Width           =   5700
+      Begin VB.TextBox txtKycAccNum2 
+         Height          =   345
+         Left            =   3840
+         MaxLength       =   20
+         TabIndex        =   109
+         Top             =   5310
+         Width           =   1665
+      End
+      Begin VB.TextBox txtKycIfsc2 
+         Height          =   345
+         Left            =   2160
+         MaxLength       =   20
+         TabIndex        =   108
+         Top             =   5310
+         Width           =   1425
+      End
+      Begin VB.TextBox txtKycBankName2 
+         Height          =   345
+         Left            =   2160
+         MaxLength       =   20
+         TabIndex        =   107
+         Top             =   4800
+         Width           =   3345
+      End
+      Begin VB.TextBox txtKycAccNum1 
+         Height          =   345
+         Left            =   3840
+         MaxLength       =   20
+         TabIndex        =   106
+         Top             =   4320
+         Width           =   1665
+      End
+      Begin VB.TextBox txtKycId2 
+         Height          =   345
+         Left            =   2160
+         TabIndex        =   105
+         Top             =   3255
+         Width           =   3345
+      End
+      Begin VB.ComboBox cmbKycID2 
+         Height          =   315
+         Left            =   2160
+         TabIndex        =   104
+         Text            =   "Combo1"
+         Top             =   2760
+         Width           =   3375
+      End
+      Begin VB.TextBox txtKYCIfsc1 
+         Height          =   345
+         Left            =   2160
+         MaxLength       =   20
+         TabIndex        =   103
+         Top             =   4322
+         Width           =   1425
+      End
+      Begin VB.TextBox txtKycBankName1 
+         Height          =   345
+         Left            =   2160
+         MaxLength       =   20
+         TabIndex        =   102
+         Top             =   3816
+         Width           =   3345
+      End
+      Begin VB.TextBox txtKYCPhone 
+         Height          =   345
+         Left            =   2160
+         TabIndex        =   101
+         Top             =   1286
+         Width           =   3345
+      End
+      Begin VB.TextBox txtKycId1 
+         Height          =   345
+         Left            =   2160
+         TabIndex        =   100
+         Top             =   2298
+         Width           =   3345
+      End
+      Begin VB.Frame Frame1 
+         Height          =   45
+         Left            =   60
+         TabIndex        =   99
+         Top             =   630
+         Width           =   5415
+      End
+      Begin VB.TextBox txtKYCCustname 
+         Height          =   345
+         Left            =   2160
+         Locked          =   -1  'True
+         TabIndex        =   98
+         Top             =   780
+         Width           =   3345
+      End
+      Begin VB.ComboBox cmbKycId1 
+         Height          =   315
+         Left            =   2160
+         TabIndex        =   97
+         Text            =   "Combo1"
+         Top             =   1800
+         Width           =   3375
+      End
+      Begin VB.Label lblKycAccNum2 
+         Caption         =   "IFSC and Account #"
+         Height          =   315
+         Left            =   90
+         TabIndex        =   120
+         Top             =   5370
+         Width           =   1860
+      End
+      Begin VB.Label lblKycBank2 
+         Caption         =   "Ext Bank Name"
+         Height          =   315
+         Left            =   90
+         TabIndex        =   119
+         Top             =   4860
+         Width           =   1740
+      End
+      Begin VB.Label lblKycID2 
+         Caption         =   "Identification Number"
+         Height          =   315
+         Left            =   90
+         TabIndex        =   118
+         Top             =   3315
+         WhatsThisHelpID =   10
+         Width           =   1740
+      End
+      Begin VB.Label lblKycIdType2 
+         Caption         =   "Identification Type"
+         Height          =   315
+         Left            =   90
+         TabIndex        =   117
+         Top             =   2805
+         WhatsThisHelpID =   10
+         Width           =   1740
+      End
+      Begin VB.Label lblKycAccNum1 
+         Caption         =   "IFSC and Account #"
+         Height          =   315
+         Left            =   90
+         TabIndex        =   116
+         Top             =   4380
+         Width           =   1980
+      End
+      Begin VB.Label lblKycBank1 
+         Caption         =   "Ext Bank Name"
+         Height          =   315
+         Left            =   90
+         TabIndex        =   115
+         Top             =   3870
+         Width           =   1980
+      End
+      Begin VB.Label lblKycPhoneType1 
+         Caption         =   "Secondary Phone"
+         Height          =   315
+         Left            =   90
+         TabIndex        =   114
+         Top             =   1350
+         WhatsThisHelpID =   10
+         Width           =   1860
+      End
+      Begin VB.Label lblID1 
+         Caption         =   "Identification Number"
+         Height          =   315
+         Left            =   90
+         TabIndex        =   113
+         Top             =   2355
+         WhatsThisHelpID =   10
+         Width           =   1740
+      End
+      Begin VB.Label lblKycIdType1 
+         Caption         =   "Identification Type"
+         Height          =   315
+         Left            =   90
+         TabIndex        =   112
+         Top             =   1845
+         WhatsThisHelpID =   10
+         Width           =   1740
+      End
+      Begin VB.Label lblKycTitle 
+         AutoSize        =   -1  'True
+         Caption         =   "Enter the KYC Details  for <customer>"
+         Height          =   195
+         Left            =   870
+         TabIndex        =   111
+         Top             =   300
+         Width           =   2670
+      End
+      Begin VB.Image Image5 
+         Height          =   465
+         Left            =   210
+         Picture         =   "custReg.frx":0000
+         Stretch         =   -1  'True
+         Top             =   180
+         Width           =   525
+      End
+      Begin VB.Label lblKycPhone 
+         Caption         =   "Customer Name :"
+         Height          =   315
+         Left            =   90
+         TabIndex        =   110
+         Top             =   840
+         WhatsThisHelpID =   10
+         Width           =   1860
+      End
+   End
+   Begin VB.PictureBox pic 
+      Height          =   6015
+      Index           =   5
+      Left            =   120
+      ScaleHeight     =   5955
+      ScaleWidth      =   5595
+      TabIndex        =   121
+      Top             =   480
+      Width           =   5655
+      Begin VB.Frame fraPhoto 
+         Height          =   5085
+         Left            =   0
+         TabIndex        =   122
+         Top             =   480
+         Width           =   5685
+         Begin VB.CommandButton cmdImgDel 
+            Caption         =   "-"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   13.5
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   465
+            Left            =   1275
+            TabIndex        =   130
+            Top             =   3600
+            Width           =   420
+         End
+         Begin VB.CommandButton cmdImgPrev 
+            Caption         =   "<"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   13.5
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   495
+            Left            =   120
+            TabIndex        =   129
+            Top             =   3600
+            Width           =   375
+         End
+         Begin VB.CommandButton cmdImgAdd 
+            Caption         =   "+"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   12
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   465
+            Left            =   720
+            TabIndex        =   128
+            Top             =   3600
+            Width           =   420
+         End
+         Begin VB.CommandButton cmdImgNext 
+            Caption         =   ">"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   13.5
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   495
+            Left            =   2040
+            TabIndex        =   127
+            Top             =   3600
+            Width           =   375
+         End
+         Begin VB.CommandButton cmdSgnDel 
+            Caption         =   "-"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   13.5
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   465
+            Left            =   4230
+            TabIndex        =   126
+            Top             =   3600
+            Width           =   420
+         End
+         Begin VB.CommandButton cmdSgnNext 
+            Caption         =   ">"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   13.5
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   495
+            Left            =   4920
+            TabIndex        =   125
+            Top             =   3600
+            Width           =   375
+         End
+         Begin VB.CommandButton cmdSgnAdd 
+            Caption         =   "+"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   12
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   465
+            Left            =   3690
+            TabIndex        =   124
+            Top             =   3600
+            Width           =   420
+         End
+         Begin VB.CommandButton cmdSgnPrev 
+            Caption         =   "<"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   13.5
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   495
+            Left            =   3000
+            TabIndex        =   123
+            Top             =   3600
+            Width           =   375
+         End
+         Begin MSComDlg.CommonDialog CommonDialog1 
+            Left            =   2040
+            Top             =   240
+            _ExtentX        =   847
+            _ExtentY        =   847
+            _Version        =   393216
+         End
+         Begin VB.Image picphoto 
+            Height          =   2800
+            Left            =   120
+            Stretch         =   -1  'True
+            Top             =   600
+            Width           =   2400
+         End
+         Begin VB.Image picSign 
+            Height          =   2805
+            Left            =   3000
+            Stretch         =   -1  'True
+            Top             =   600
+            Width           =   2400
+         End
+         Begin VB.Line Line3 
+            BorderColor     =   &H00404040&
+            BorderWidth     =   2
+            X1              =   2750
+            X2              =   2750
+            Y1              =   120
+            Y2              =   4020
+         End
+         Begin VB.Label lblImgDate 
+            Caption         =   "Date: 2/4/2013"
+            Height          =   315
+            Left            =   255
+            TabIndex        =   134
+            Top             =   4185
+            Width           =   1440
+         End
+         Begin VB.Label lblImgCount 
+            Alignment       =   2  'Center
+            Caption         =   "Photo: 0/0"
+            Height          =   315
+            Left            =   480
+            TabIndex        =   133
+            Top             =   4440
+            Width           =   1290
+         End
+         Begin VB.Label lblSgnDate 
+            Caption         =   "Date: 13/06/2013"
+            Height          =   345
+            Left            =   2850
+            TabIndex        =   132
+            Top             =   4170
+            Width           =   1560
+         End
+         Begin VB.Label lblSgnCount 
+            Alignment       =   2  'Center
+            Caption         =   "Signature: 0/0"
+            Height          =   345
+            Left            =   2880
+            TabIndex        =   131
+            Top             =   4440
+            Width           =   1410
+         End
+      End
+   End
+   Begin VB.CommandButton cmdHelp 
+      Caption         =   "&Help"
+      Height          =   400
+      Left            =   150
+      TabIndex        =   61
+      Top             =   6780
+      Width           =   1215
+   End
+   Begin VB.CommandButton cmdLookup 
+      Caption         =   "&Lookup..."
+      Height          =   400
+      Left            =   1710
+      TabIndex        =   0
+      Top             =   6780
+      Width           =   1215
+   End
+   Begin VB.CommandButton cmdOK 
+      Caption         =   "&OK"
+      Height          =   400
+      Left            =   3270
+      TabIndex        =   49
+      Tag             =   "40"
+      Top             =   6780
+      Width           =   1215
+   End
+   Begin VB.CommandButton cmdCancel 
+      Cancel          =   -1  'True
+      Caption         =   "&Cancel"
+      Height          =   400
+      Left            =   4830
+      TabIndex        =   60
+      Top             =   6780
+      Width           =   1215
+   End
+   Begin VB.PictureBox pic 
+      Height          =   5900
+      Index           =   2
+      Left            =   195
+      ScaleHeight     =   5835
+      ScaleWidth      =   5640
+      TabIndex        =   27
+      TabStop         =   0   'False
+      Top             =   600
+      Width           =   5700
+      Begin VB.TextBox txtHomeTaluka 
+         Height          =   345
+         Left            =   1995
+         MaxLength       =   20
+         TabIndex        =   36
+         Top             =   2319
+         Width           =   3100
+      End
+      Begin VB.TextBox txtEnglishName 
+         Height          =   345
+         Left            =   1995
+         TabIndex        =   92
+         Top             =   5280
+         Width           =   3100
+      End
+      Begin VB.CommandButton cmdPlace 
+         Caption         =   "..."
+         Height          =   300
+         Left            =   4740
+         TabIndex        =   33
+         Top             =   1800
+         Width           =   315
+      End
+      Begin VB.TextBox txtEMail 
+         Height          =   345
+         Left            =   1995
+         MaxLength       =   30
+         TabIndex        =   47
+         Top             =   4784
+         Width           =   3100
+      End
+      Begin VB.TextBox txtHomePhone 
+         Height          =   345
+         Left            =   1995
+         MaxLength       =   30
+         TabIndex        =   45
+         Top             =   4291
+         Width           =   3100
+      End
+      Begin VB.TextBox txtHomeCity 
+         Height          =   345
+         Left            =   1995
+         MaxLength       =   20
+         TabIndex        =   40
+         Top             =   1800
+         Width           =   2505
+      End
+      Begin VB.TextBox txtHomePin 
+         Height          =   345
+         Left            =   1995
+         MaxLength       =   20
+         TabIndex        =   43
+         Top             =   3798
+         Width           =   3100
+      End
+      Begin VB.TextBox txtHomeStreet 
+         Height          =   345
+         Left            =   1995
+         TabIndex        =   31
+         Top             =   1363
+         Width           =   3100
+      End
+      Begin VB.TextBox txtHomeNo 
+         Height          =   345
+         Left            =   1995
+         TabIndex        =   29
+         Top             =   870
+         Width           =   3100
+      End
+      Begin VB.Frame Frame4 
+         Height          =   45
+         Left            =   120
+         TabIndex        =   63
+         Top             =   630
+         Width           =   4995
+      End
+      Begin VB.TextBox txtHomeDistrict 
+         Height          =   345
+         Left            =   1995
+         MaxLength       =   20
+         TabIndex        =   38
+         Top             =   2812
+         Width           =   3100
+      End
+      Begin VB.TextBox txtHomeState 
+         Height          =   345
+         Left            =   1995
+         MaxLength       =   20
+         TabIndex        =   41
+         Top             =   3305
+         Width           =   3100
+      End
+      Begin VB.ComboBox cmbHomeCity 
+         Height          =   315
+         Left            =   1995
+         Style           =   2  'Dropdown List
+         TabIndex        =   34
+         Top             =   1856
+         Visible         =   0   'False
+         Width           =   2535
+      End
+      Begin VB.Label lblTaluka 
+         Caption         =   "Taluka : "
+         Height          =   315
+         Left            =   210
+         TabIndex        =   35
+         Top             =   2400
+         Width           =   1335
+      End
+      Begin VB.Label lblEnglishName 
+         AutoSize        =   -1  'True
+         Caption         =   "Name in English"
+         Height          =   315
+         Left            =   210
+         TabIndex        =   93
+         Top             =   5355
+         Width           =   1260
+      End
+      Begin VB.Label lblHomeEmail 
+         Caption         =   "eMail :"
+         Height          =   315
+         Left            =   210
+         TabIndex        =   46
+         Top             =   4860
+         Width           =   1395
+      End
+      Begin VB.Label lblHomePhone 
+         Caption         =   "Phone :"
+         Height          =   315
+         Left            =   210
+         TabIndex        =   44
+         Top             =   4365
+         Width           =   1215
+      End
+      Begin VB.Label lblDistrict 
+         Caption         =   "District : "
+         Height          =   315
+         Left            =   210
+         TabIndex        =   37
+         Top             =   2895
+         Width           =   1335
+      End
+      Begin VB.Label lblState 
+         Caption         =   "State : "
+         Height          =   315
+         Left            =   210
+         TabIndex        =   39
+         Top             =   3390
+         Width           =   1065
+      End
+      Begin VB.Label lblCity 
+         Caption         =   "City / Village :"
+         Height          =   315
+         Left            =   210
+         TabIndex        =   32
+         Top             =   1905
+         Width           =   1365
+      End
+      Begin VB.Label lblPINCode 
+         Caption         =   "PIN Code :"
+         Height          =   315
+         Left            =   210
+         TabIndex        =   42
+         Top             =   3870
+         Width           =   1275
+      End
+      Begin VB.Label lblStreetAddr 
+         Caption         =   "Street address :"
+         Height          =   315
+         Left            =   210
+         TabIndex        =   30
+         Top             =   1425
+         Width           =   1305
+      End
+      Begin VB.Label lblHouseNo 
+         Caption         =   "House Number :"
+         Height          =   315
+         Left            =   210
+         TabIndex        =   28
+         Top             =   930
+         WhatsThisHelpID =   10
+         Width           =   1305
+      End
+      Begin VB.Image Image2 
+         Height          =   465
+         Left            =   210
+         Picture         =   "custReg.frx":2A42
+         Stretch         =   -1  'True
+         Top             =   180
+         Width           =   525
+      End
+      Begin VB.Label lblHomeTitle 
+         AutoSize        =   -1  'True
+         Caption         =   "Enter home related information of the client here."
+         Height          =   195
+         Left            =   1110
+         TabIndex        =   62
+         Top             =   300
+         Width           =   3900
+      End
+   End
+   Begin VB.PictureBox pic 
+      Height          =   5900
       Index           =   1
       Left            =   195
       ScaleHeight     =   5835
@@ -98,9 +773,9 @@ Begin VB.Form frmCustReg
          End
          Begin VB.ComboBox cmbTitle 
             Height          =   315
-            ItemData        =   "custReg.frx":0000
+            ItemData        =   "custReg.frx":333B
             Left            =   1995
-            List            =   "custReg.frx":0016
+            List            =   "custReg.frx":3351
             Style           =   2  'Dropdown List
             TabIndex        =   2
             Top             =   780
@@ -129,9 +804,9 @@ Begin VB.Form frmCustReg
          End
          Begin VB.ComboBox cmbGender 
             Height          =   315
-            ItemData        =   "custReg.frx":0042
+            ItemData        =   "custReg.frx":337D
             Left            =   1995
-            List            =   "custReg.frx":004F
+            List            =   "custReg.frx":338A
             Style           =   2  'Dropdown List
             TabIndex        =   14
             Top             =   3105
@@ -139,9 +814,9 @@ Begin VB.Form frmCustReg
          End
          Begin VB.ComboBox cmbMaritalStatus 
             Height          =   315
-            ItemData        =   "custReg.frx":006E
+            ItemData        =   "custReg.frx":33A9
             Left            =   1995
-            List            =   "custReg.frx":0070
+            List            =   "custReg.frx":33AB
             Style           =   2  'Dropdown List
             TabIndex        =   16
             Top             =   3990
@@ -267,7 +942,7 @@ Begin VB.Form frmCustReg
          Begin VB.Image Image1 
             Height          =   405
             Left            =   360
-            Picture         =   "custReg.frx":0072
+            Picture         =   "custReg.frx":33AD
             Stretch         =   -1  'True
             Top             =   210
             Width           =   435
@@ -293,7 +968,7 @@ Begin VB.Form frmCustReg
          Height          =   5900
          Index           =   1
          Left            =   30
-         TabIndex        =   94
+         TabIndex        =   91
          Top             =   0
          Width           =   5700
          Begin VB.ComboBox cmbCustType 
@@ -321,9 +996,9 @@ Begin VB.Form frmCustReg
          End
          Begin VB.ComboBox cmbInstTitle 
             Height          =   315
-            ItemData        =   "custReg.frx":0214
+            ItemData        =   "custReg.frx":354F
             Left            =   2100
-            List            =   "custReg.frx":022A
+            List            =   "custReg.frx":3565
             Style           =   2  'Dropdown List
             TabIndex        =   74
             Top             =   930
@@ -396,7 +1071,7 @@ Begin VB.Form frmCustReg
          Begin VB.Image Image4 
             Height          =   405
             Left            =   180
-            Picture         =   "custReg.frx":0256
+            Picture         =   "custReg.frx":3591
             Stretch         =   -1  'True
             Top             =   240
             Width           =   435
@@ -412,246 +1087,6 @@ Begin VB.Form frmCustReg
          End
       End
    End
-   Begin VB.CommandButton cmdHelp 
-      Caption         =   "&Help"
-      Height          =   400
-      Left            =   150
-      TabIndex        =   61
-      Top             =   6780
-      Width           =   1215
-   End
-   Begin VB.CommandButton cmdLookup 
-      Caption         =   "&Lookup..."
-      Height          =   400
-      Left            =   1710
-      TabIndex        =   0
-      Top             =   6780
-      Width           =   1215
-   End
-   Begin VB.CommandButton cmdOK 
-      Caption         =   "&OK"
-      Height          =   400
-      Left            =   3270
-      TabIndex        =   49
-      Tag             =   "40"
-      Top             =   6780
-      Width           =   1215
-   End
-   Begin VB.CommandButton cmdCancel 
-      Cancel          =   -1  'True
-      Caption         =   "&Cancel"
-      Height          =   400
-      Left            =   4830
-      TabIndex        =   60
-      Top             =   6780
-      Width           =   1215
-   End
-   Begin VB.Frame fraPhoto 
-      Height          =   5085
-      Left            =   240
-      TabIndex        =   91
-      Top             =   600
-      Width           =   5200
-      Begin VB.CommandButton cmdSgnPrev 
-         Caption         =   "<"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   13.5
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   495
-         Left            =   2760
-         TabIndex        =   102
-         Top             =   3600
-         Width           =   375
-      End
-      Begin VB.CommandButton cmdSgnAdd 
-         Caption         =   "+"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   12
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   465
-         Left            =   3450
-         TabIndex        =   101
-         Top             =   3600
-         Width           =   420
-      End
-      Begin VB.CommandButton cmdSgnNext 
-         Caption         =   ">"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   13.5
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   495
-         Left            =   4680
-         TabIndex        =   100
-         Top             =   3600
-         Width           =   375
-      End
-      Begin VB.CommandButton cmdSgnDel 
-         Caption         =   "-"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   13.5
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   465
-         Left            =   3990
-         TabIndex        =   99
-         Top             =   3600
-         Width           =   420
-      End
-      Begin VB.CommandButton cmdImgNext 
-         Caption         =   ">"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   13.5
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   495
-         Left            =   2040
-         TabIndex        =   96
-         Top             =   3600
-         Width           =   375
-      End
-      Begin VB.CommandButton cmdImgAdd 
-         Caption         =   "+"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   12
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   465
-         Left            =   720
-         TabIndex        =   95
-         Top             =   3600
-         Width           =   420
-      End
-      Begin VB.CommandButton cmdImgPrev 
-         Caption         =   "<"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   13.5
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   495
-         Left            =   120
-         TabIndex        =   93
-         Top             =   3600
-         Width           =   375
-      End
-      Begin VB.CommandButton cmdImgDel 
-         Caption         =   "-"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   13.5
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   465
-         Left            =   1275
-         TabIndex        =   92
-         Top             =   3600
-         Width           =   420
-      End
-      Begin MSComDlg.CommonDialog CommonDialog1 
-         Left            =   2040
-         Top             =   240
-         _ExtentX        =   847
-         _ExtentY        =   847
-         _Version        =   393216
-      End
-      Begin VB.Label lblSgnCount 
-         Alignment       =   2  'Center
-         Caption         =   "Signature: 0/0"
-         Height          =   345
-         Left            =   2880
-         TabIndex        =   104
-         Top             =   4440
-         Width           =   1410
-      End
-      Begin VB.Label lblSgnDate 
-         Caption         =   "Date: 13/06/2013"
-         Height          =   345
-         Left            =   2850
-         TabIndex        =   103
-         Top             =   4170
-         Width           =   1560
-      End
-      Begin VB.Label lblImgCount 
-         Alignment       =   2  'Center
-         Caption         =   "Photo: 0/0"
-         Height          =   315
-         Left            =   255
-         TabIndex        =   98
-         Top             =   4545
-         Width           =   1290
-      End
-      Begin VB.Label lblImgDate 
-         Caption         =   "Date: 2/4/2013"
-         Height          =   315
-         Left            =   255
-         TabIndex        =   97
-         Top             =   4185
-         Width           =   1440
-      End
-      Begin VB.Line Line3 
-         BorderColor     =   &H00404040&
-         BorderWidth     =   2
-         X1              =   2580
-         X2              =   2580
-         Y1              =   120
-         Y2              =   4020
-      End
-      Begin VB.Image picSign 
-         Height          =   2800
-         Left            =   2640
-         Stretch         =   -1  'True
-         Top             =   600
-         Width           =   2400
-      End
-      Begin VB.Image picphoto 
-         Height          =   2800
-         Left            =   120
-         Stretch         =   -1  'True
-         Top             =   600
-         Width           =   2400
-      End
-   End
    Begin ComctlLib.TabStrip TabStrip1 
       Height          =   6585
       Left            =   120
@@ -662,24 +1097,35 @@ Begin VB.Form frmCustReg
       _ExtentY        =   11615
       _Version        =   327682
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-         NumTabs         =   4
+         NumTabs         =   5
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Personal"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Home"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Office"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "KYC Docs"
+            Key             =   "KYC"
+            Object.Tag             =   ""
+            Object.ToolTipText     =   "KYC documents"
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Photo"
+            Key             =   "photo"
             Object.Tag             =   ""
             Object.ToolTipText     =   "Photo and signature of Customer"
             ImageVarType    =   2
@@ -688,219 +1134,8 @@ Begin VB.Form frmCustReg
    End
    Begin VB.PictureBox pic 
       Height          =   5900
-      Index           =   2
-      Left            =   180
-      ScaleHeight     =   5835
-      ScaleWidth      =   5640
-      TabIndex        =   27
-      TabStop         =   0   'False
-      Top             =   570
-      Width           =   5700
-      Begin VB.TextBox txtHomeTaluka 
-         Height          =   345
-         Left            =   1995
-         MaxLength       =   20
-         TabIndex        =   36
-         Top             =   2319
-         Width           =   3100
-      End
-      Begin VB.TextBox txtEnglishName 
-         Height          =   345
-         Left            =   1995
-         TabIndex        =   105
-         Top             =   5280
-         Width           =   3100
-      End
-      Begin VB.CommandButton cmdPlace 
-         Caption         =   "..."
-         Height          =   300
-         Left            =   4740
-         TabIndex        =   33
-         Top             =   1800
-         Width           =   315
-      End
-      Begin VB.TextBox txtEMail 
-         Height          =   345
-         Left            =   1995
-         MaxLength       =   30
-         TabIndex        =   47
-         Top             =   4784
-         Width           =   3100
-      End
-      Begin VB.TextBox txtHomePhone 
-         Height          =   345
-         Left            =   1995
-         MaxLength       =   30
-         TabIndex        =   45
-         Top             =   4291
-         Width           =   3100
-      End
-      Begin VB.TextBox txtHomeCity 
-         Height          =   345
-         Left            =   1995
-         MaxLength       =   20
-         TabIndex        =   40
-         Top             =   1800
-         Width           =   2505
-      End
-      Begin VB.TextBox txtHomePin 
-         Height          =   345
-         Left            =   1995
-         MaxLength       =   20
-         TabIndex        =   43
-         Top             =   3798
-         Width           =   3100
-      End
-      Begin VB.TextBox txtHomeStreet 
-         Height          =   345
-         Left            =   1995
-         TabIndex        =   31
-         Top             =   1363
-         Width           =   3100
-      End
-      Begin VB.TextBox txtHomeNo 
-         Height          =   345
-         Left            =   1995
-         TabIndex        =   29
-         Top             =   870
-         Width           =   3100
-      End
-      Begin VB.Frame Frame4 
-         Height          =   45
-         Left            =   120
-         TabIndex        =   63
-         Top             =   630
-         Width           =   4995
-      End
-      Begin VB.TextBox txtHomeDistrict 
-         Height          =   345
-         Left            =   1995
-         MaxLength       =   20
-         TabIndex        =   38
-         Top             =   2812
-         Width           =   3100
-      End
-      Begin VB.TextBox txtHomeState 
-         Height          =   345
-         Left            =   1995
-         MaxLength       =   20
-         TabIndex        =   41
-         Top             =   3305
-         Width           =   3100
-      End
-      Begin VB.ComboBox cmbHomeCity 
-         Height          =   315
-         Left            =   1995
-         Style           =   2  'Dropdown List
-         TabIndex        =   34
-         Top             =   1856
-         Visible         =   0   'False
-         Width           =   2535
-      End
-      Begin VB.Label lblTaluka 
-         Caption         =   "Taluka : "
-         Height          =   315
-         Left            =   210
-         TabIndex        =   35
-         Top             =   2400
-         Width           =   1335
-      End
-      Begin VB.Label lblEnglishName 
-         AutoSize        =   -1  'True
-         Caption         =   "Name in English"
-         Height          =   315
-         Left            =   210
-         TabIndex        =   106
-         Top             =   5355
-         Width           =   1260
-      End
-      Begin VB.Label lblHomeEmail 
-         Caption         =   "eMail :"
-         Height          =   315
-         Left            =   210
-         TabIndex        =   46
-         Top             =   4860
-         Width           =   1395
-      End
-      Begin VB.Label lblHomePhone 
-         Caption         =   "Phone :"
-         Height          =   315
-         Left            =   210
-         TabIndex        =   44
-         Top             =   4365
-         Width           =   1215
-      End
-      Begin VB.Label lblDistrict 
-         Caption         =   "District : "
-         Height          =   315
-         Left            =   210
-         TabIndex        =   37
-         Top             =   2895
-         Width           =   1335
-      End
-      Begin VB.Label lblState 
-         Caption         =   "State : "
-         Height          =   315
-         Left            =   210
-         TabIndex        =   39
-         Top             =   3390
-         Width           =   1065
-      End
-      Begin VB.Label lblCity 
-         Caption         =   "City / Village :"
-         Height          =   315
-         Left            =   210
-         TabIndex        =   32
-         Top             =   1905
-         Width           =   1365
-      End
-      Begin VB.Label lblPINCode 
-         Caption         =   "PIN Code :"
-         Height          =   315
-         Left            =   210
-         TabIndex        =   42
-         Top             =   3870
-         Width           =   1275
-      End
-      Begin VB.Label lblStreetAddr 
-         Caption         =   "Street address :"
-         Height          =   315
-         Left            =   210
-         TabIndex        =   30
-         Top             =   1425
-         Width           =   1305
-      End
-      Begin VB.Label lblHouseNo 
-         Caption         =   "House Number :"
-         Height          =   315
-         Left            =   210
-         TabIndex        =   28
-         Top             =   930
-         WhatsThisHelpID =   10
-         Width           =   1305
-      End
-      Begin VB.Image Image2 
-         Height          =   465
-         Left            =   210
-         Picture         =   "custReg.frx":0698
-         Stretch         =   -1  'True
-         Top             =   180
-         Width           =   525
-      End
-      Begin VB.Label lblHomeTitle 
-         AutoSize        =   -1  'True
-         Caption         =   "Enter home related information of the client here."
-         Height          =   195
-         Left            =   1110
-         TabIndex        =   62
-         Top             =   300
-         Width           =   3900
-      End
-   End
-   Begin VB.PictureBox pic 
-      Height          =   5900
       Index           =   3
-      Left            =   210
+      Left            =   195
       ScaleHeight     =   5835
       ScaleWidth      =   5640
       TabIndex        =   80
@@ -911,7 +1146,7 @@ Begin VB.Form frmCustReg
          Height          =   345
          Left            =   1920
          MaxLength       =   20
-         TabIndex        =   107
+         TabIndex        =   94
          Top             =   3310
          Width           =   3465
       End
@@ -994,7 +1229,7 @@ Begin VB.Form frmCustReg
          Caption         =   "Taluka : "
          Height          =   315
          Left            =   210
-         TabIndex        =   108
+         TabIndex        =   95
          Top             =   3370
          Width           =   1500
       End
@@ -1077,7 +1312,7 @@ Begin VB.Form frmCustReg
       Begin VB.Image Image3 
          Height          =   465
          Left            =   210
-         Picture         =   "custReg.frx":0F91
+         Picture         =   "custReg.frx":39D3
          Stretch         =   -1  'True
          Top             =   180
          Width           =   525
@@ -1108,7 +1343,7 @@ Public Event WindowClosed()
 
 'Status variable to track if an action is complete.
 Public Status As Integer
-'Private WithEvents m_frmPlace As frmPlaceCaste  'Discuss it with Shashi(Vinay)
+
 Private m_StrName As String
 Private m_Cancel As Boolean
 Private m_Remove As Boolean
@@ -1126,11 +1361,12 @@ Dim fCurImgSignature As String
 Dim fCurSignatureNum As Integer
 Dim fCurSignatureDate As String
 
-' Form level variables
+'Form level variables
 Private signatures() As String
 Private photos() As String
-Private m_photo As String
-Private m_Sign As String
+Private m_PhotTabIndex As Byte
+Private m_kycDocTabIndex As Byte
+
 ''photo/Sing end
 
 Public Property Let NewCustomer(NewValue As Boolean)
@@ -1321,7 +1557,7 @@ End Sub
 
 
 Private Sub cmbGender_GotFocus()
-cmdLookup.Default = False
+cmdLookUp.Default = False
 End Sub
 
 
@@ -1332,7 +1568,7 @@ End Sub
 Private Sub cmbHomeCity_Click()
 With cmbHomeCity
     txtHomeCity.Text = .List(.ListIndex)
-    If .ListIndex >= 0 Then cmdOK.Default = True
+    If .ListIndex >= 0 Then cmdOk.Default = True
 End With
 End Sub
 
@@ -1344,7 +1580,7 @@ cmbHomeCity.Visible = False
 End Sub
 
 Private Sub cmbMaritalStatus_GotFocus()
-    cmdLookup.Default = False
+    cmdLookUp.Default = False
 End Sub
 
 
@@ -1394,7 +1630,7 @@ Exit Sub
 End Sub
 
 Private Sub cmdCaste_GotFocus()
-cmdLookup.Default = False
+cmdLookUp.Default = False
 End Sub
 
 
@@ -1408,11 +1644,11 @@ Private Sub cmdFarmerType_Click()
 End Sub
 
 Private Sub cmdLookup_Click()
-If InStr(1, cmdLookup.Caption, GetResourceString(8), vbTextCompare) <> 0 Then     ' Clear
+If InStr(1, cmdLookUp.Caption, GetResourceString(8), vbTextCompare) <> 0 Then     ' Clear
     RaiseEvent ClearClick
-    cmdLookup.Caption = GetResourceString(17)     ' Set as lookup
+    cmdLookUp.Caption = GetResourceString(17)     ' Set as lookup
 
-ElseIf InStr(1, cmdLookup.Caption, GetResourceString(17), vbTextCompare) <> 0 Then    ' Lookup
+ElseIf InStr(1, cmdLookUp.Caption, GetResourceString(17), vbTextCompare) <> 0 Then    ' Lookup
     Screen.MousePointer = vbHourglass
     Dim strSearch As String
     strSearch = Trim$(txtFirstName.Text)
@@ -1423,7 +1659,7 @@ ElseIf InStr(1, cmdLookup.Caption, GetResourceString(17), vbTextCompare) <> 0 Th
     Screen.MousePointer = vbDefault
     
 End If
-cmdLookup.Enabled = True
+cmdLookUp.Enabled = True
 
 End Sub
 
@@ -1531,12 +1767,17 @@ Private Sub Form_Load()
 Call SetKannadaCaption
 Dim I As Integer
 ' Remove the border for frames.
-For I = pic.LBound To pic.UBound
+pic(1).BorderStyle = 0
+pic(1).Visible = False
+For I = pic.LBound + 1 To pic.UBound
     pic(I).BorderStyle = 0
     pic(I).Visible = False
+    pic(I).Left = pic(1).Left
+    pic(I).Top = pic(1).Top
 Next
 fraCust(0).ZOrder 0
 fraCust(0).Tag = 1
+fraCust(1).Tag = 0
 
 'Marital Status Combo
     With cmbMaritalStatus
@@ -1603,29 +1844,22 @@ txtOffState = SetUp.ReadSetupValue("Customer", "State", "")
 Set SetUp = Nothing
 
 'Load Customer Type
-    
+Call LoadCustomerTypes(cmbCustType)
+'Load The Id type for KYC
+Call LoadIDTypes(cmbKycId1)
+Call LoadIDTypes(cmbKycID2)
 
-    Dim rst As Recordset
-    
-    gDbTrans.SqlStmt = "SELECT * From CustomerType "
-    Call gDbTrans.Fetch(rst, adOpenDynamic)
-    While Not rst.EOF
-        With cmbCustType
-            .AddItem FormatField(rst("custTypeName"))
-            .ItemData(.newIndex) = FormatField(rst("custType"))
-        End With
-        rst.MoveNext
-    Wend
-    cmbCustType.ListIndex = 0
-    cmbCustType.Tag = 0
-    Set rst = Nothing
-    
+
 Me.TabStrip1.Tabs(1).Selected = True
    Me.Move (Screen.Width - Me.Width) \ 2, (Screen.Height - Me.Height) \ 2
    'set icon for the form caption
    Me.Icon = LoadResPicture(161, vbResIcon)
    
-If Len(gImagePath) Then PhotoInitialize Else TabStrip1.Tabs.Remove (4)
+If Len(gImagePath) Then
+    PhotoInitialize
+Else
+    TabStrip1.Tabs.Remove (TabStrip1.Tabs.count)
+End If
 ''Show or Not to Show the FarmerType combo
 Dim Show As Boolean
 Show = CBool(GetConfigValue("FarmerType", "True"))
@@ -1754,14 +1988,14 @@ txtOffPin.Text = IIf(vNewValue = "", SetUp.ReadSetupValue("Customer", "PinCode",
 Set SetUp = Nothing
 End Property
 
-Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+Private Sub Form_QueryUnload(cancel As Integer, UnloadMode As Integer)
 If UnloadMode = vbFormControlMenu Then
-    Cancel = True
+    cancel = True
     Me.Hide
 End If
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 '   ""(Me.hwnd, False)
 RaiseEvent WindowClosed
 End Sub
@@ -1786,7 +2020,7 @@ End If
 
 End Sub
 
-Private Sub m_AddGroup_ItemDeleting(strDelItem As String, Cancel As Integer)
+Private Sub m_AddGroup_ItemDeleting(strDelItem As String, cancel As Integer)
 
 Dim cmb As ComboBox
 Dim rst As Recordset
@@ -1820,12 +2054,9 @@ m_Cancel = False
 End Sub
 
 
-Private Sub m_frmPlace_CancelClick(Cancel As Boolean)
+Private Sub m_frmPlace_CancelClick(cancel As Boolean)
 m_Cancel = True
 End Sub
-
-
-
 
 Private Sub m_frmPlace_RemoveClick(StrName As String)
 m_StrName = StrName
@@ -1872,8 +2103,10 @@ If curTab = m_PrevTab Then Exit Sub
 ' Hide the previous frame.
 If m_PrevTab <> 0 Then pic(m_PrevTab).Visible = False
 pic(curTab).Visible = True
-fraPhoto.Visible = IIf(curTab = 4, True, False)
-'fraPhoto.ZOrder = IIf(curTab = 4, 0, 1)
+pic(curTab).ZOrder (0)
+Debug.Print pic(curTab).Parent.name
+'fraPhoto.Visible = IIf(curTab = 5, True, False)
+fraPhoto.Visible = True
 #If COMMENTED Then
     If curTab = 1 Then
         cmbTitle.SetFocus
@@ -1930,7 +2163,6 @@ End Sub
 
 Private Sub SetKannadaCaption()
 
-
 Call SetFontToControls(Me)
  
  'Common to the Form
@@ -1938,10 +2170,11 @@ Call SetFontToControls(Me)
     Me.TabStrip1.Tabs(1).Caption = GetResourceString(116)
     TabStrip1.Tabs(2).Caption = GetResourceString(117) '
     TabStrip1.Tabs(3).Caption = GetResourceString(118)
-    TabStrip1.Tabs(4).Caption = GetResourceString(415)
+    TabStrip1.Tabs(4).Caption = "KYC DOCs"
+    TabStrip1.Tabs(5).Caption = GetResourceString(415)
     cmdHelp.Caption = GetResourceString(16) '
-    Me.cmdLookup.Caption = GetResourceString(17)
-    cmdOK.Caption = GetResourceString(1)
+    Me.cmdLookUp.Caption = GetResourceString(17)
+    cmdOk.Caption = GetResourceString(1)
     cmdCancel.Caption = GetResourceString(2)
     
 'Tabstrip of Office
@@ -1962,7 +2195,7 @@ Call SetFontToControls(Me)
     lblCity = GetResourceString(131)
     lblDistrict = GetResourceString(132)
     Me.lblState = GetResourceString(133)
-    lblPINCode = GetResourceString(134)
+    lblPinCode = GetResourceString(134)
     lblHomePhone = GetResourceString(135)
     lblHomeEmail = GetResourceString(136)
   'TabStrip of  Personnel
@@ -1978,11 +2211,11 @@ Call SetFontToControls(Me)
     lblProfession = GetResourceString(127)
     lblFarmerType = GetConfigValue("FarmerTypeName", GetResourceString(378)) & " " & GetResourceString(253)
     lblCaste = GetResourceString(111)
-    m_photo = GetResourceString(415)
-    m_Sign = GetResourceString(416)
+'Tab strip of KYC
+    lblKycTitle.Caption = "Pleae Enter KYC Details"
+    
 '''2nd frame
-    'cmdNewCust.Caption = GetResourceString(260) & " " & _
-         GetResourceString(205,253)
+    'cmdNewCust.Caption = GetResourceString(260,205,253)
     lblCustType.Caption = GetResourceString(205, 253)
     optUI(0).Caption = GetResourceString(254) & " UI"
     optUI(1).Caption = GetResourceString(254) & " UI"

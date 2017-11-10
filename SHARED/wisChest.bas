@@ -1544,6 +1544,108 @@ fillview_error:
 End Function
 
 ' Fills the listview control with the record set data.
+Public Function FillView_dup(view As ListView, rs As ADODB.Recordset, Optional AutoWidth As Boolean) As Boolean
+On Error GoTo fillview_error
+Const FIELD_MARGIN = 1.5
+If rs.EOF And rs.BOF Then Exit Function
+' Check if there are any records in the recordset.
+rs.MoveLast
+rs.MoveFirst
+If rs.recordCount = 0 Then
+    FillView = True
+    GoTo Exit_Line
+End If
+
+Dim I As Integer
+Dim itmX As ListItem
+
+With view
+    ' Hide the view control before processing.
+    .Visible = False
+    .ListItems.Clear
+    .ColumnHeaders.Clear
+
+    ' Add column headers.
+    Dim X As Integer
+    X = 4
+    If rs.Fields.count <= 4 Then X = rs.Fields.count - 1
+    
+    For I = 0 To X  'display only selected fields instead of all the fields
+        .ColumnHeaders.Add , rs.Fields(I).name, rs.Fields(I).name, _
+                     view.Parent.TextWidth(rs.Fields(I).name) * FIELD_MARGIN
+        ' Set the alignment characterstic for the column.
+        If I > 0 Then
+            If rs.Fields(I).Type = adNumeric Or _
+                    rs.Fields(I).Type = adInteger Or _
+                    rs.Fields(I).Type = adInteger Or _
+                    rs.Fields(I).Type = adDouble Or _
+                    rs.Fields(I).Type = adCurrency Then
+                .ColumnHeaders(I + 1).Alignment = lvwColumnRight
+            End If
+        End If
+        ' If the autowidth property is set,
+        ' check if the width of the column is to be adjusted.
+    Next
+
+    ' Begin a loop for processing rows.
+    Dim KeyField As String
+    Do While Not rs.EOF
+         KeyField = FormatField(rs.Fields(0))
+         DoEvents
+         ' Add the details.
+        Set itmX = .ListItems.Add(, "KEY" & KeyField, KeyField)
+        'Set itmX = .ListItems.Add(, , FormatField(rs.Fields(0)))
+        
+        ' If the 'Autowidth' property is enabled,
+        ' then check if the width needs to be expanded.
+        If AutoWidth Then
+            If .ColumnHeaders(1).Width \ FIELD_MARGIN < _
+                        .Parent.TextWidth(FormatField(rs.Fields(0))) Then
+                .ColumnHeaders(1).Width = _
+                    .Parent.TextWidth(FormatField(rs.Fields(0))) * FIELD_MARGIN
+            End If
+        End If
+        ' Add sub-items.
+       ' For I = 1 To rs.fields.Count - 1
+           X = 4
+    If rs.Fields.count <= 4 Then X = rs.Fields.count - 1
+
+       For I = 1 To X 'display only necessary fields to user
+            itmX.SubItems(I) = FormatField(rs.Fields(I))
+            ' If the 'Autowidth' property is enabled,
+            ' then check if the width needs to be expanded.
+            If AutoWidth Then
+                If .ColumnHeaders(I + 1).Width \ FIELD_MARGIN < _
+                        .Parent.TextWidth(FormatField(rs.Fields(I))) Then
+                    .ColumnHeaders(I + 1).Width = _
+                        .Parent.TextWidth(FormatField(rs.Fields(I))) * FIELD_MARGIN
+                End If
+            End If
+        Next
+
+        rs.MoveNext
+    Loop
+End With
+FillView_dup = True
+
+Exit_Line:
+view.Visible = True
+view.view = lvwReport
+view.Tag = ""
+
+Exit Function
+
+fillview_error:
+    If Err Then
+        MsgBox "FillView: The following error occurred." _
+            & vbCrLf & Err.Description, vbCritical
+        'Resume
+    End If
+    GoTo Exit_Line
+End Function
+
+
+' Fills the listview control with the record set data.
 Public Function FillViewNew(view As ListView, rs As ADODB.Recordset, KeyField As String, Optional AutoWidth As Boolean) As Boolean
 'Declare the variables
 Dim strKey As String
@@ -2345,7 +2447,7 @@ Public Sub PassBookPrevButtonClicked(rstTrans As Recordset, recordsPerPage As In
     Dim negMovePos As Integer
     currPos = rstTrans.AbsolutePosition
     
-    If currPos = rstTrans.recordCount Or rstTrans.EOF Then
+    If rstTrans.EOF Or currPos < recordsPerPage * 2 Then
         Call InitPassBook(rstTrans, recordsPerPage, prevButton)
         negMovePos = recordsPerPage
     Else

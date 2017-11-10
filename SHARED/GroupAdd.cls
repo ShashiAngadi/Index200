@@ -704,20 +704,21 @@ Private Function AddDepositAccountType() As Boolean
     Dim strPrevName As String
     Dim Cumulative As Byte
     Dim strMsg As String
-    Dim resStringID As Integer
+    Dim resStringId As Integer
     Dim Deptype As Integer
     Dim depTableName As String
     Dim depTransTableName As String
     Dim recordCount As Integer
     
-    Call GetTableNameForModule(M_ModuleID, depTableName, depTransTableName, , , resStringID)
+    Call GetTableNameForModule(M_ModuleID, depTableName, depTransTableName, , , resStringId)
 
-    gDbTrans.BeginTrans
     
 If m_Status = recNothing Then 'recInitialize
     gDbTrans.SqlStmt = "Select * From DepositTypeTab where ModuleID = " & M_ModuleID
     recordCount = gDbTrans.Fetch(rst, adOpenDynamic)
     If recordCount = 0 Then
+        gDbTrans.BeginTrans
+    
         'There are no Deposit Types Before, Please check is there any Deposits are there
         gDbTrans.SqlStmt = "Select CustomerID From " & depTableName
         recordCount = gDbTrans.Fetch(rst, adOpenDynamic)
@@ -754,7 +755,7 @@ If m_Status = recNothing Then 'recInitialize
             '
             Deptype = Deptype + 1
             ''Update the AccType in bankHeadID's
-            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + 1  where AccType = " & M_ModuleID
+            gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + " & Deptype & " where AccType = " & M_ModuleID
             Call gDbTrans.SQLExecute
             'Create the Deposit Type
             gDbTrans.SqlStmt = "Update " & depTableName & " Set DepositType =  " & Deptype
@@ -763,45 +764,45 @@ If m_Status = recNothing Then 'recInitialize
             gDbTrans.SqlStmt = "Insert into DepositTypeTab " & _
                 " (DepositType, ModuleID, DepositTypeName,DepositTypeNameEnglish)" & _
                 " Values ( " & Deptype & "," & M_ModuleID & "," & _
-                AddQuotes(GetResourceString(102, resStringID)) & "," & _
-                AddQuotes(LoadResourceStringS(102, resStringID)) & ")"
+                AddQuotes(GetResourceString(102, resStringId)) & "," & _
+                AddQuotes(LoadResourceStringS(102, resStringId)) & ")"
             Call gDbTrans.SQLExecute
             
             'Update the Head Name also
-            m_PrevName = GetResourceString(resStringID)
-            m_GroupName = GetResourceString(102, resStringID)
+            m_PrevName = GetResourceString(resStringId)
+            m_GroupName = GetResourceString(102, resStringId)
             m_PrevNameEnglish = ""
-            m_GroupNameEnglish = LoadResourceStringS(102, resStringID)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringId)
             Call UpdateLedgerHeads(True)
             
             'Deposit Interest Paid
-            m_PrevName = GetResourceString(resStringID, 487)
-            m_GroupName = GetResourceString(102, resStringID, 487)
-            m_GroupNameEnglish = LoadResourceStringS(102, resStringID, 487)
+            m_PrevName = GetResourceString(resStringId, 487)
+            m_GroupName = GetResourceString(102, resStringId, 487)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringId, 487)
             Call UpdateLedgerHeads(True)
             
              'Payable Interest
-            m_PrevName = GetResourceString(resStringID, 375, 47)
-            m_GroupName = GetResourceString(102, resStringID, 375, 47)
-            m_GroupNameEnglish = LoadResourceStringS(102, resStringID, 375, 47)
+            m_PrevName = GetResourceString(resStringId, 375, 47)
+            m_GroupName = GetResourceString(102, resStringId, 375, 47)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringId, 375, 47)
             Call UpdateLedgerHeads(True)
             
             'Interest Provision
-            m_PrevName = GetResourceString(resStringID, 450)
-            m_GroupName = GetResourceString(102, resStringID, 450)
-            m_GroupNameEnglish = LoadResourceStringS(102, resStringID, 450)
+            m_PrevName = GetResourceString(resStringId, 450)
+            m_GroupName = GetResourceString(102, resStringId, 450)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringId, 450)
             Call UpdateLedgerHeads(True)
             
             'Deposit Loan
-            m_PrevName = GetResourceString(resStringID, 58)
-            m_GroupName = GetResourceString(102, resStringID, 58)
-            m_GroupNameEnglish = LoadResourceStringS(102, resStringID, 58)
+            m_PrevName = GetResourceString(resStringId, 58)
+            m_GroupName = GetResourceString(102, resStringId, 58)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringId, 58)
             Call UpdateLedgerHeads(True)
             
             'Deposit Loan Interest
-            m_PrevName = GetResourceString(resStringID, 58, 483)
-            m_GroupName = GetResourceString(102, resStringID, 58, 483)
-            m_GroupNameEnglish = LoadResourceStringS(102, resStringID, 58, 483)
+            m_PrevName = GetResourceString(resStringId, 58, 483)
+            m_GroupName = GetResourceString(102, resStringId, 58, 483)
+            m_GroupNameEnglish = LoadResourceStringS(102, resStringId, 58, 483)
             Call UpdateLedgerHeads(True)
 
             gDbTrans.CommitTrans
@@ -1176,20 +1177,18 @@ Select Case m_GroupType
     Case grpAllDeposit
         
         If Not AddDepositAccountType Then Exit Function
-        Dim resStringID As Integer
-        Call GetTableNameForModule(M_ModuleID, , , , , resStringID)
+        Dim resStringId As Integer
+        Call GetTableNameForModule(M_ModuleID, , , , , resStringId)
         
         With m_frmGroup
             .Caption = "Add/Remove member deposit Types"
-            .lblItem.Caption = GetResourceString(resStringID, 253)
-            .lblItemEnglish.Caption = GetResourceString(resStringID, 253, 468)
-            .lblList.Caption = GetResourceString(resStringID, 253) & GetResourceString(92)
+            .lblItem.Caption = GetResourceString(resStringId, 253)
+            .lblItemEnglish.Caption = GetResourceString(resStringId, 253, 468)
+            .lblList.Caption = GetResourceString(resStringId, 253) & GetResourceString(92)
             .chkCumulative.Visible = False
         End With
         
         'Dim rstMemType As ADODB.Recordset
-        
-        
         m_TableName = "DepositTypeTab"
         m_Fields(0) = "DepositType"
         m_Fields(1) = "DepositTypeName"

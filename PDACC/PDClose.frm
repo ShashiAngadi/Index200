@@ -960,7 +960,8 @@ End If
   '''now get the depositIntreat
 Dim IntAmount As Currency
 Days = DateDiff("d", MatDate, AsOnDate)
-IntAmount = ComputePDInterestAmount(m_AccID, DepDate, Days < 1)
+'IntAmount = ComputePDInterestAmount(m_AccID, DepDate, Days < 1)  'Dated 15 May 2016
+IntAmount = ComputePDInterestAmount(m_AccID, AsOnDate, Days < 1)
 IntAmount = IntAmount \ 1
 txtDepInterest = IntAmount
 'Get the Total

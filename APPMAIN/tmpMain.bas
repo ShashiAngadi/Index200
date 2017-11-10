@@ -185,7 +185,7 @@ ElseIf ModuleID = wis_Deposits Then
 'Loan Accounts
 ElseIf ModuleID = wis_Loans Then
     SqlStr = "Select AccNum, LoanId as ID,A.CustomerID From LoanMaster A"
-    If Deptype > wis_Loans Then _
+    If Deptype > 0 Then _
         sqlClause = " AND A.SchemeID = " & Deptype
 
 'Pigmy Accounts
@@ -852,6 +852,36 @@ If gDbTrans.Fetch(rst, adOpenDynamic) Then
     End With
 End If
 End Sub
+Public Sub LoadCutomerTypes(cmbObject As ComboBox)
+Dim rst As Recordset
+cmbObject.AddItem ""
+gDbTrans.SqlStmt = "SELECT * From CustomerType"
+If gDbTrans.Fetch(rst, adOpenDynamic) Then
+    With cmbObject
+        While Not rst.EOF
+            .AddItem FormatField(rst("custTypeName"))
+            .ItemData(.newIndex) = FormatField(rst("custType"))
+           rst.MoveNext
+        Wend
+    End With
+End If
+End Sub
+
+Public Sub LoadIDTypes(cmbObject As ComboBox)
+    With cmbObject
+        .Clear
+        .AddItem "--Select One--"
+        .AddItem "Aadhar Card"
+        .AddItem "Voter Id"
+        .AddItem "Ration Card"
+        .AddItem "Passport Number"
+        .AddItem "Driving License"
+        .AddItem "PAN Number"
+        .AddItem "Other"
+    End With
+
+End Sub
+
 
 Public Sub LoadCastes(cmbObject As ComboBox)
 Dim rst As Recordset
@@ -1279,6 +1309,9 @@ If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
 'TEMPORARY CODE REMOVE IN 2016
 'UPdate the New ModuleIds Of SB and Member
 'Saving Bank
+gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + 20 where AccType > 2000 and AccType < 2020 "
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+
 gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 2000 where AccType = 2"
 If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
 gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 2000 where ModuleID = 2"
@@ -1287,6 +1320,9 @@ gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 2000 where ModuleID = 2"
 If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
 
 'Current Account
+gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + 30 where AccType > 3000 and AccType < 3030 "
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+
 gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 3000 where AccType = 3"
 If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
 gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 3000 where ModuleID = 3"
@@ -1295,6 +1331,9 @@ gDbTrans.SqlStmt = "Update NoteTab Set ModuleID = 3000 where ModuleID = 3"
 If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
 
 'Recurring Deposit
+gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = AccType + 40 where AccType > 4000 and AccType < 4040 "
+If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
+
 gDbTrans.SqlStmt = "Update BankHeadIDs Set AccType = 4000 where AccType = 4"
 If Not gDbTrans.SQLExecute Then gDbTrans.RollBack
 gDbTrans.SqlStmt = "Update InterestTab Set ModuleID = 4000 where ModuleID = 4"

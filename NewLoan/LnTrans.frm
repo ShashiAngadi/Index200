@@ -600,6 +600,7 @@ Begin VB.Form frmLoanTrans
             NumTabs         =   1
             BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   ""
+               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
@@ -1595,7 +1596,8 @@ txtCustName.Caption = GetMemberNameCustIDByMemberNum(Trim(txtCustID), m_Customer
 If m_CustomerID < 1 Then Exit Sub
 
 m_ClsCust.LoadCustomerInfo (m_CustomerID)
-txtCustName = m_ClsCust.CustomerName(m_CustomerID)
+txtCustNAme = m_ClsCust.CustomerName(m_CustomerID)
+Call SetComboIndex(cmbMemberType, ,memberType)
 Call LoadCustomerLoans
 
 Exit Sub
@@ -1712,7 +1714,8 @@ End If
 
 
 Set rst = Nothing
-txtCustID = GetMemberNumber(custId)
+Dim memberType As Integer
+txtCustID = GetMemberNumberAndType(custId, memberType)
 m_CustomerID = custId
 m_ClsCust.LoadCustomerInfo (m_CustomerID)
 txtCustName = m_ClsCust.CustomerName(m_CustomerID)

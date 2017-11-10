@@ -312,7 +312,6 @@ Begin VB.Form frmSBAcc
             _ExtentX        =   11351
             _ExtentY        =   3942
             _Version        =   393217
-            Enabled         =   -1  'True
             TextRTF         =   $"Sbacc.frx":000C
          End
       End
@@ -1431,10 +1430,10 @@ gDbTrans.SqlStmt = gDbTrans.SqlStmt & " ORDER By A.AccID"
 
 Call gDbTrans.Fetch(rstMain, adOpenStatic)
 
-Dim rowNo As Integer
+Dim rowno As Integer
 Load frmInterest
 With frmInterest
-    rowNo = 0
+    rowno = 0
     Call .LoadContorls(rstMain.recordCount + 1, 20)
     .lblTitle = GetResourceString(421, 47)
     .Title(0) = GetResourceString(36, 60)
@@ -1449,32 +1448,32 @@ With frmInterest
     
     I = 0
     count = 0
-    rowNo = 1
+    rowno = 1
     While Not rstMain.EOF
-        .AccNum(rowNo) = FormatField(rstMain("AccNum"))
-        .CustName(rowNo) = FormatField(rstMain("custName"))
-        .Balance(rowNo) = FormatCurrency(rstMain("Balance"))
-        .Total(rowNo) = FormatCurrency(rstMain("Balance") + Interest(I))
-        .KeyData(rowNo) = rstMain("TransID")
+        .AccNum(rowno) = FormatField(rstMain("AccNum"))
+        .CustName(rowno) = FormatField(rstMain("custName"))
+        .Balance(rowno) = FormatCurrency(rstMain("Balance"))
+        .Total(rowno) = FormatCurrency(rstMain("Balance") + Interest(I))
+        .KeyData(rowno) = rstMain("TransID")
         Do
             If AccIDs(count) = rstMain("AccID") Then Exit Do
             count = count + 1
         Loop
-        .Amount(rowNo) = FormatCurrency(Interest(count))
+        .Amount(rowno) = FormatCurrency(Interest(count))
         
         TotalIntAmount = TotalIntAmount + Interest(I)
         TotalBalance = TotalBalance + rstMain("Balance")
         
         DoEvents
         If gCancel Then Exit Function
-        rowNo = rowNo + 1
+        rowno = rowno + 1
         rstMain.MoveNext: I = I + 1
     Wend
     
-    .CustName(I) = GetResourceString(286)
-    .Balance(I) = TotalBalance
-    .Amount(I) = TotalIntAmount
-    .Total(I) = TotalBalance + TotalIntAmount
+    .CustName(rowno) = GetResourceString(286)
+    .Balance(rowno) = TotalBalance
+    .Amount(rowno) = TotalIntAmount
+    .Total(rowno) = TotalBalance + TotalIntAmount
     
     
 'Now show the Form
@@ -1517,13 +1516,13 @@ TotalIntAmount = 0
 I = 0
 count = 0
 rstMain.MoveFirst
-rowNo = 0
+rowno = 0
 While Not rstMain.EOF
     
     With frmInterest
-        rowNo = rowNo + 1
-        IntAmount = .Amount(rowNo)
-        TransID = .KeyData(rowNo) + 2
+        rowno = rowno + 1
+        IntAmount = .Amount(rowno)
+        TransID = .KeyData(rowno) + 2
     End With
     
     Do
@@ -1973,8 +1972,8 @@ If m_accUpdatemode = wis_INSERT Then
 '    AccId = GetNewAccountNumber
     SqlStr = "Insert into SBMaster (AccID,AccNum, CustomerID, CreateDate, " _
             & " JointHolder, NomineeName,NomineeAge,NomineeRelation, " _
-            & " IntroducerId, LedgerNo, FolioNo,AccGroupID,UserId  "
-    SqlStr = SqlStr & IIf(m_DepositType > 0, " ,DepositTYpe ) ", ")")  'ADD CLosing Bracket
+            & " IntroducerId, LedgerNo, FolioNo,AccGroupID,UserId ,DepositType )  "
+    'SqlStr = SqlStr & IIf(m_DepositType > 0, " ,DepositType ) ", ")")  'ADD CLosing Bracket
     
     'Add Values for parameters Below
     SqlStr = SqlStr & " Values (" & AccId & "," & _
@@ -1989,8 +1988,8 @@ If m_accUpdatemode = wis_INSERT Then
             AddQuotes(GetVal("LedgerNo"), True) & ", " & _
             AddQuotes(GetVal("FolioNo"), True) & ", " & _
             GetAccGroupID & _
-            "," & gUserID & ""
-    SqlStr = SqlStr & IIf(m_DepositType > 0, ", " & m_DepositType & ")", ")")   'ADD CLosing Bracket
+            "," & gUserID & ", " & m_DepositType & ")"
+    'SqlStr = SqlStr & IIf(m_DepositType > 0, ", " & m_DepositType & ")", ")")   'ADD CLosing Bracket
     ' Insert/update the data.
     
     gDbTrans.SqlStmt = SqlStr
@@ -3195,8 +3194,6 @@ If m_rstTrans.recordCount < 10 Then
     cmdNextTrans.Enabled = False
 End If
 End Sub
-
-
 
 Private Function UpdateTransaction() As Boolean
 Dim TransID As Integer

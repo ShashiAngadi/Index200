@@ -43,8 +43,6 @@ ErrLine:
         
 End Function
 
-
-
 Private Function InsertIntoIndexIds(ByVal headID As Long, _
                 ByVal headName As String, AccType As wisModules) As Boolean
 

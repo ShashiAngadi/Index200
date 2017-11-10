@@ -192,6 +192,10 @@ End Property
 Public Property Get IsAdmin() As Boolean
     IsAdmin = m_UserPermissions And perBankAdmin
 End Property
+
+Public Property Get IsSuperAdmin() As Boolean
+    IsSuperAdmin = m_UserPermissions And perOnlyWaves
+End Property
 Public Property Get CanDoTransaction() As Boolean
     Dim retValue As Boolean
     retValue = m_UserPermissions And perBankAdmin

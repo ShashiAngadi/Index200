@@ -606,6 +606,8 @@ End If
 
 On Error GoTo ErrLine
 Fetch = 0
+Dim nowDate As Date
+nowDate = TimeValue(Now)
 
 Set rstFetch = New ADODB.Recordset
 
@@ -618,14 +620,16 @@ rstFetch.Open m_SQLStmt, m_DataBaseObject, TheCursorType, adLockReadOnly, adCmdT
 
 Select Case TheCursorType
    Case adOpenStatic
-      Fetch = rstFetch.RecordCount
+      Fetch = rstFetch.recordCount
    Case Else
       'Fetch = IIf(rstFetch.RecordCount < 0, 1, rstFetch.RecordCount)
-      Fetch = IIf(rstFetch.BOF And rstFetch.EOF, 0, IIf(rstFetch.RecordCount > 0, rstFetch.RecordCount, 1))
+      Fetch = IIf(rstFetch.BOF And rstFetch.EOF, 0, IIf(rstFetch.recordCount > 0, rstFetch.recordCount, 1))
 End Select
 
 ' Disconnect the Recordset
 Set rstFetch.ActiveConnection = Nothing
+
+Debug.Print "TIME Taken " & DateDiff("s", nowDate, TimeValue(Now))
 
 'Set the sqlstmt to nullm_SQLStmt = ""
 
@@ -668,7 +672,7 @@ rstFetch.Open CommandObject, , TheCursorType, adLockOptimistic, adCmdStoredProc
 
 Select Case TheCursorType
    Case adOpenStatic
-      ParameterFetch = rstFetch.RecordCount
+      ParameterFetch = rstFetch.recordCount
    Case Else
       ParameterFetch = 1
       If rstFetch.BOF And rstFetch.EOF Then ParameterFetch = -1

@@ -1894,9 +1894,10 @@ With Me.rtfAgent
 End With
 Call m_AgentNotes.DisplayNote(rtfAgent)
 
+cmdAgentNextTrans.Enabled = False
 Call InitPassBook(m_rstAgent, 10, cmdAgentPrevTrans)
 Call AgentBookShow
-cmdAgentNextTrans.Enabled = True
+
 AgentLoad = True
 End Function
 
@@ -1992,6 +1993,7 @@ Dim rst As Recordset
             'MsgBox "Account number " & .Text & "already exists." & vbCrLf & vbCrLf & "Please specify another account number !", vbExclamation, gAppName & " - Error"
             MsgBox GetResourceString(545) & vbCrLf & GetResourceString(641), vbExclamation, gAppName & " - Error"
             ActivateTextBox txtData(txtIndex)
+            GoTo Exit_Line
         End If
         AccNum = GetVal("AccID")
     End With
@@ -2231,7 +2233,7 @@ End If
         gDbTrans.SqlStmt = "Insert into PDMaster (AccID,AgentId, AccNum, CustomerID, " _
                 & "CreateDate, MaturityDate, PigmyType, JointHolder, Nominee, " & _
                 " LastPrintID,Introduced,NomineeID, " & _
-                " LedgerNo,FolioNo, PigmyAmount, RateOfInterest,AccGroupID,UserID)" & _
+                " LedgerNo,FolioNo, PigmyAmount, RateOfInterest,AccGroupID,UserID,DepositType)" & _
                 "values (" & AccId & "," & _
                 GetAgentID("AgentName") & ", " & _
                 AddQuotes(AccNum, True) & ", " & _
@@ -2246,7 +2248,7 @@ End If
                 AddQuotes(GetVal("FolioNo"), True) & ", " & _
                 CCur(GetVal("PigmyAmount")) & ", " & _
                 GetVal("RateOfInterest") & ", " & _
-                GetAccGroupID & "," & gUserID & " )"
+                GetAccGroupID & "," & gUserID & ",0 )"
     ElseIf m_accUpdatemode = wis_UPDATE Then
         ' The user has selected updation.
         ' Build the SQL update statement.
@@ -3508,7 +3510,8 @@ Dim AgentID As Long
             .Col = IIf(FormatField(m_rstAgent("TransType")) < 0, 2, 3)
             .Text = FormatField(m_rstAgent("Amount"))
             .Col = 4: .Text = FormatField(m_rstAgent("Balance"))
-            If I < 10 Then m_rstAgent.MoveNext Else Exit Do
+             m_rstAgent.MoveNext
+            If I > 10 Then Exit Do
             If m_rstAgent.EOF Then Exit Do
         Loop
         .Visible = True
@@ -5701,6 +5704,7 @@ Call LoadPropSheet
     
 
 'Load Agent Name
+lblBalance.Caption = ""
 Call LoadAgentNames(cmbAgents)
 Dim cmbIndex As Byte
 cmbIndex = GetIndex("AccGroup")

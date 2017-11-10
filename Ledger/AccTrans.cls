@@ -1333,7 +1333,7 @@ Do While Not rstTrans.EOF
          rstLedger.Filter = "TransID=" & TransID & " AND Debit > " & 0
      End If
                    
-     RowsToEnter = rstLedger.RecordCount
+     RowsToEnter = rstLedger.recordCount
      
      ' This will update the bulk rows
      m_GrdFunctions.fMoreRows (RowsToEnter + 2)
@@ -3318,7 +3318,7 @@ Do While Not rstTrans.EOF
      Else
          rstLedger.Filter = "TransID = " & TransID '& " AND Debit > " & 0
      End If
-     RowsToEnter = rstLedger.RecordCount
+     RowsToEnter = rstLedger.recordCount
      ' This will update the bulk rows
      m_GrdFunctions.fMoreRows (RowsToEnter + 2)
      If RowsToEnter > 1 Then
@@ -3667,7 +3667,7 @@ If StockValue > 0 Then
 '    InTrans = gDbTrans.BeginTrans
     gDbTrans.SqlStmt = "select opId From CloseStock " & _
                 " WHere TransDate = #" & TransDate & "#" & _
-                " ANd HeadID = " & headID
+                " ANd HeadID = " & StockId
     If gDbTrans.Fetch(rstTemp, adOpenDynamic) Then
         gDbTrans.SqlStmt = "Update CloseStock " & _
                 " Set StockValue = " & StockValue & _
@@ -3676,7 +3676,7 @@ If StockValue > 0 Then
     Else
         gDbTrans.SqlStmt = "Insert Into CloseStock " & _
             " (TransDate,HeadID,StockValue)  VALUES " & _
-            " ( #" & TransDate & "#," & headID & "," & StockValue & ")"
+            " ( #" & TransDate & "#," & StockId & "," & StockValue & ")"
     End If
     If Not gDbTrans.SQLExecute Then gDbTrans.RollBacknRaiseError
 '    If InTrans Then gDbTrans.CommitTrans: Exit Function

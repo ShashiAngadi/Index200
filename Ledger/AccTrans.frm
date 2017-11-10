@@ -1466,12 +1466,12 @@ Private Sub FixHeads()
     End If
 
 End Sub
-Private Sub HeadTransDetails(headID As Long, AsOnDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Private Sub HeadTransDetails(headID As Long, AsOnDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency)
     
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
 
 Dim Deposit As Currency
 Dim WithDraw As Currency
@@ -1490,8 +1490,8 @@ Dim rstTrans As Recordset
             If PrevTransID <> rstTrans("TransID") Then
                 If PrevTransID > 0 Then
                     If isCOntra Then
-                        contraDeposit = contraDeposit + Deposit
-                        contraWithdraw = contraWithdraw + WithDraw
+                        ContraDeposit = ContraDeposit + Deposit
+                        ContraWithDraw = ContraWithDraw + WithDraw
                     Else
                         CashDeposit = CashDeposit + Deposit
                         cashWithdraw = cashWithdraw + WithDraw
@@ -1597,7 +1597,7 @@ Private Sub LedgerTransHeads()
     End If
 
 End Sub
-Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+Private Sub Form_QueryUnload(cancel As Integer, UnloadMode As Integer)
 
 Set m_AccTransClass = Nothing
 Set m_LedgerClass = Nothing
@@ -1611,7 +1611,7 @@ Set m_GrdFunctions.fGrd = grdLedger(0)
 End Sub
 
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 
 Set frmAccTrans = Nothing
 

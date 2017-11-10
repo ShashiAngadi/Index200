@@ -117,7 +117,7 @@ Public Property Let Gender(NewValue As wis_Gender)
 End Property
 
 
-Public Property Let memberTYpe(newMem As wis_MemberType)
+Public Property Let memberType(newMem As wis_MemberType)
     m_MemberType = newMem
 End Property
 
@@ -411,7 +411,7 @@ Private Sub SetKannadaCaption()
 Call SetFontToControls(Me)
 
 'chkDetails.Caption = GetResourceString(295)
-cmdOk.Caption = GetResourceString(11)
+cmdOK.Caption = GetResourceString(11)
 cmdPrint.Caption = GetResourceString(23)
 ErrLine:
 
@@ -1252,6 +1252,8 @@ If gDbTrans.Fetch(rst, adOpenForwardOnly) <= 0 Then Exit Sub
 
 Dim OpeningBalance As Currency
 Dim TransDate As Date
+
+
 'Initialize the grid
     Dim SubTotal As Currency, GrandTotal As Currency
     Dim WithDraw As Currency, Deposit As Currency, Interest As Currency, Charges As Currency
@@ -1262,7 +1264,7 @@ Dim TransDate As Date
    RaiseEvent Processing("Aligning the data ", 0)
    
    'Get liability on a day before m_fromdate
-    OpeningBalance = ComputeTotalMMLiability(DateAdd("d", -1, m_ToDate))
+    OpeningBalance = ComputeTotalMMLiability(DateAdd("d", -1, m_FromDate))
     
     Dim count As Integer
     Dim SlNo As Integer
@@ -1798,8 +1800,7 @@ Me.Icon = LoadResPicture(161, vbResIcon)
 Call SetKannadaCaption
 
 lblReportTitle.FONTSIZE = 14
-lblReportTitle.Caption = GetResourceString(49) & " " & _
-    GetResourceString(283) & GetResourceString(92)
+lblReportTitle.Caption = GetResourceString(49, 283) & GetResourceString(92)
 
 'Init the grid
 With grd
@@ -1821,28 +1822,22 @@ Screen.MousePointer = vbHourglass
         lblReportTitle.Caption = GetResourceString(61)
         Call ShowLiability
     ElseIf m_ReportType = repMemSubCashBook Then
-        lblReportTitle.Caption = GetResourceString(390) & " " & _
-            GetResourceString(85) & " " & GetFromDateString(m_FromIndianDate, m_ToIndianDate)
+        lblReportTitle.Caption = GetResourceString(390, 85) & " " & GetFromDateString(m_FromIndianDate, m_ToIndianDate)
         Call ShowSubCashBook
     ElseIf m_ReportType = repMemDayBook Then
-        lblReportTitle.Caption = GetResourceString(62) & " " & _
-            GetFromDateString(m_FromIndianDate, m_ToIndianDate)
+        lblReportTitle.Caption = GetResourceString(62) & " " & GetFromDateString(m_FromIndianDate, m_ToIndianDate)
         Call ShowDayBook
     ElseIf m_ReportType = repMemLedger Then
-        lblReportTitle.Caption = GetResourceString(93) & " " & _
-            GetFromDateString(m_FromIndianDate, m_ToIndianDate)
+        lblReportTitle.Caption = GetResourceString(93) & " " & GetFromDateString(m_FromIndianDate, m_ToIndianDate)
         Call ShowMemLedger
     ElseIf m_ReportType = repMemOpen Then
-        lblReportTitle.Caption = GetResourceString(94) & " " & _
-            GetFromDateString(m_FromIndianDate, m_ToIndianDate)
+        lblReportTitle.Caption = GetResourceString(94) & " " & GetFromDateString(m_FromIndianDate, m_ToIndianDate)
         Call ShowMembersAdmitted
     ElseIf m_ReportType = repMemClose Then
-        lblReportTitle.Caption = GetResourceString(95) & " " & _
-            GetFromDateString(m_FromIndianDate, m_ToIndianDate)
+        lblReportTitle.Caption = GetResourceString(95) & " " & GetFromDateString(m_FromIndianDate, m_ToIndianDate)
         Call ShowMembersCancelled
     ElseIf m_ReportType = repFeeCol Then
-        lblReportTitle.Caption = GetResourceString(96) & " " & _
-            GetFromDateString(m_FromIndianDate, m_ToIndianDate)
+        lblReportTitle.Caption = GetResourceString(96) & " " & GetFromDateString(m_FromIndianDate, m_ToIndianDate)
         Call ShowMemberAndShareFee
     ElseIf m_ReportType = repMonthlyBalance Then
         Call ShowMonthlyBalances
@@ -1873,8 +1868,8 @@ grd.Width = Me.Width - 150
 fra.Top = Me.ScaleHeight - fra.Height
 fra.Left = Me.Width - fra.Width
 grd.Height = Me.ScaleHeight - fra.Height - lblReportTitle.Height
-cmdOk.Left = fra.Width - cmdOk.Width - (cmdOk.Width / 4)
-cmdPrint.Left = cmdOk.Left - cmdPrint.Width - (cmdPrint.Width / 4)
+cmdOK.Left = fra.Width - cmdOK.Width - (cmdOK.Width / 4)
+cmdPrint.Left = cmdOK.Left - cmdPrint.Width - (cmdPrint.Width / 4)
 cmdWeb.Top = cmdPrint.Top
 cmdWeb.Left = cmdPrint.Left - cmdPrint.Width - (cmdPrint.Width / 4)
 

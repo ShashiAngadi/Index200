@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.Form frmLookUp 
    Caption         =   "INDEX-2000   -   Report wizard"
    ClientHeight    =   5805
@@ -11,28 +11,11 @@ Begin VB.Form frmLookUp
    Picture         =   "LookUp.frx":0000
    ScaleHeight     =   5805
    ScaleWidth      =   6585
-   Begin ComctlLib.ListView lvwReport 
-      Height          =   5175
-      Left            =   360
-      TabIndex        =   3
-      Top             =   120
-      Width           =   6135
-      _ExtentX        =   10821
-      _ExtentY        =   9128
-      LabelWrap       =   -1  'True
-      HideSelection   =   -1  'True
-      _Version        =   327682
-      ForeColor       =   -2147483640
-      BackColor       =   -2147483643
-      BorderStyle     =   1
-      Appearance      =   1
-      NumItems        =   0
-   End
    Begin VB.CommandButton cmdSave 
       Caption         =   "&Save"
       Height          =   400
       Left            =   2850
-      TabIndex        =   2
+      TabIndex        =   3
       Top             =   5295
       Width           =   1200
    End
@@ -40,7 +23,7 @@ Begin VB.Form frmLookUp
       Caption         =   "&Print"
       Height          =   400
       Left            =   4095
-      TabIndex        =   1
+      TabIndex        =   2
       Top             =   5295
       Width           =   1200
    End
@@ -49,9 +32,36 @@ Begin VB.Form frmLookUp
       Default         =   -1  'True
       Height          =   400
       Left            =   5340
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   5295
       Width           =   1200
+   End
+   Begin ComctlLib.ListView lvwReport 
+      Height          =   5250
+      Left            =   15
+      TabIndex        =   0
+      Top             =   -15
+      Width           =   6555
+      _ExtentX        =   11562
+      _ExtentY        =   9260
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   -1  'True
+      _Version        =   327682
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Courier"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      NumItems        =   0
    End
 End
 Attribute VB_Name = "frmLookUp"
@@ -106,13 +116,13 @@ ReDim m_SubItems(0)
 Screen.MousePointer = vbDefault
 End Sub
 
-Private Sub Form_QueryUnload(cancel As Integer, UnloadMode As Integer)
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
 'On Error Resume Next
 'RaiseEvent SelectClick(lvwReport.SelectedItem.Text)
 'Me.Hide
 
 If UnloadMode = vbFormControlMenu Then
-    cancel = True
+    Cancel = True
     'Me.Status = wis_CANCEL
     Me.Hide
 End If
@@ -179,7 +189,7 @@ Public Property Let AutoWidth(ByVal vNewValue As Boolean)
     m_AutoWidth = vNewValue
 End Property
 
-Private Sub Form_Unload(cancel As Integer)
+Private Sub Form_Unload(Cancel As Integer)
 '""(Me.hwnd, False)
 End Sub
 

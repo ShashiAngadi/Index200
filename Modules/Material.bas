@@ -7,7 +7,7 @@ Option Explicit
 ' Inputs :
 '           HeadID as Long
 ' OutPut : HeadName as string
-Public Function GetHeadName(ByVal headID As Long) As String
+Public Function GetHeadName(ByVal HeadID As Long) As String
 
 'Trap an error
 On Error GoTo ErrLine
@@ -19,11 +19,11 @@ Dim rstHeads As ADODB.Recordset
 GetHeadName = ""
 
 'Validate the inputs
-If headID = 0 Then Exit Function
+If HeadID = 0 Then Exit Function
 
 'Check the given Heads in the database
 gDbTrans.SqlStmt = " SELECT HeadName FROM BankHeadIds " & _
-                   " WHERE Headid = " & headID
+                   " WHERE Headid = " & HeadID
                 
 'if exists then exit function
 If gDbTrans.Fetch(rstHeads, adOpenForwardOnly) > 0 Then _
@@ -99,7 +99,7 @@ GetHeadID = 0
 
 'Validate the inputs
 If headName = "" Then Exit Function
-
+headName = Trim(headName)
 'Check the given Heads in the database
 gDbTrans.SqlStmt = " SELECT HeadID FROM Heads " & _
             " WHERE HeadName = " & AddQuotes(headName, True) & _
@@ -129,13 +129,13 @@ End Function
 
 
 '
-Public Function IsBankHead(headID As Long) As Boolean
+Public Function IsBankHead(HeadID As Long) As Boolean
 
 Dim rstTemp As Recordset
 
 gDbTrans.SqlStmt = "SELECT * FRom ParentHeads " & _
         " WHERE ParentID = (SELECT ParentID " & _
-            " From Heads Where HeadID = " & headID & " )"
+            " From Heads Where HeadID = " & HeadID & " )"
 
 If gDbTrans.Fetch(rstTemp, adOpenDynamic) < 1 Then Exit Function
 
@@ -146,13 +146,13 @@ End Function
 
 'This Function Checks whetehr the given head id is created by user
 'or created by system(i.e. head is predifined
-Public Function IsUserCreatedHead(headID As Long) As Boolean
+Public Function IsUserCreatedHead(HeadID As Long) As Boolean
 
 Dim rstTemp As Recordset
 
 gDbTrans.SqlStmt = "SELECT * FRom ParentHeads " & _
             " WHERE ParentID = (SELECT ParentID " & _
-                " From Heads Where HeadID = " & headID & " )"
+                " From Heads Where HeadID = " & HeadID & " )"
 
 If gDbTrans.Fetch(rstTemp, adOpenDynamic) < 1 Then Exit Function
 If FormatField(rstTemp("UserCreated")) Mod 2 = 0 Then IsUserCreatedHead = True
@@ -1015,7 +1015,7 @@ End Function
 '
 ' Pradeep
 '
-Public Function GetParentID(headID As Long) As Long
+Public Function GetParentID(HeadID As Long) As Long
 ' Handle Error
 On Error GoTo NoParentID:
 
@@ -1026,10 +1026,10 @@ Dim rstParentID As ADODB.Recordset
 GetParentID = 0
 
 ' Check the Input Received if Zero then Exit
-If headID = 0 Then Exit Function
+If HeadID = 0 Then Exit Function
 
 ' set the sqlstmt
-gDbTrans.SqlStmt = "SELECT ParentID FROM Heads WHERE HeadID=" & headID
+gDbTrans.SqlStmt = "SELECT ParentID FROM Heads WHERE HeadID=" & HeadID
                    
 ' Now fetch the record
 If gDbTrans.Fetch(rstParentID, adOpenForwardOnly) < 1 Then Exit Function

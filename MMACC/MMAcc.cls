@@ -180,10 +180,35 @@ Public Property Get ObjectName()
 End Property
 
 
-Public Function Balance(AsOnDate As Date, Optional MemberType As Integer) As Currency
-Balance = 0
-If IsMissing(MemberType) Then MemberType = 0
-Balance = ComputeTotalMMLiability(AsOnDate, MemberType)
+
+Public Function Balance(AsOnDate As Date, Optional memberType As Integer) As Currency
+    Balance = 0
+    If IsMissing(memberType) Then memberType = 0
+    Balance = ComputeTotalMMLiability(AsOnDate, memberType)
+End Function
+Public Function LedgerOpBalance(AsOnDate As Date, Optional memberType As Integer) As Currency
+    Dim headID As Long
+    Dim AccTransClass As clsAccTrans
+    Dim memTypeName As String
+    Dim rst As Recordset
+    
+    LedgerOpBalance = 0
+    memTypeName = ""
+    If IsMissing(memberType) Then memberType = 0
+        
+    If memberType > 0 Then
+        gDbTrans.SqlStmt = "SeLECT * from MemberTypeTab where membertype = " & memberType
+        Call gDbTrans.Fetch(rst, adOpenDynamic)
+        memTypeName = FormatField(rst("MemberTypeName"))
+        Set rst = Nothing
+    End If
+    
+    headID = GetHeadID(memTypeName & " " & GetResourceString(53, 36), parMemberShare)
+    
+    Set AccTransClass = New clsAccTrans
+    LedgerOpBalance = AccTransClass.GetOpBalance(headID, AsOnDate)
+    Set AccTransClass = Nothing
+    
 End Function
 
 Public Property Let CustomerID(NewValue As Long)
@@ -703,7 +728,7 @@ Next I
 'Obtain the Face Value from current settings
     Dim SetUp As New clsSetup
     FaceValue = Val(SetUp.ReadSetupValue("MMAcc", "ShareValue", "10.00"))
-
+    FaceValue = Val(SetUp.ReadSetupValue("MMAcc" & m_MemberType, "ShareValue", CStr(FaceValue)))
 Dim UserID As Integer
 UserID = gCurrUser.UserID
 
