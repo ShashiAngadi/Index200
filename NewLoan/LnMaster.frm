@@ -824,16 +824,16 @@ End If
         Exit Function
     End If
     
-   If Not CurrencyValidate(txtIntRate, False) Then
+   If Not CurrencyValidate(txtIntrate, False) Then
       'MsgBox "Please enter the rate of interest", vbInformation, wis_MESSAGE_TITLE
       MsgBox GetResourceString(505), vbInformation, wis_MESSAGE_TITLE
-      ActivateTextBox txtIntRate
+      ActivateTextBox txtIntrate
       Exit Function
    End If
-   If Not CurrencyValidate(txtPenalINT, True) Then
+   If Not CurrencyValidate(txtPenalInt, True) Then
       'MsgBox "Please enter the Penal interest rate", vbInformation, wis_MESSAGE_TITLE
       MsgBox GetResourceString(505), vbInformation, wis_MESSAGE_TITLE
-      ActivateTextBox txtPenalINT
+      ActivateTextBox txtPenalInt
       Exit Function
    End If
    If Not DateValidate(txtIssueDate, "/", True) Then
@@ -900,8 +900,8 @@ Dim count As Integer
 '    If Not m_CustDet Is Nothing And m_CustomerID = 0 Then m_CustDet.NewCustomer
     txtLoanAccNo = ""
     txtLoanAmount.Text = ""
-    txtIntRate = ""
-    txtPenalINT = ""
+    txtIntrate = ""
+    txtPenalInt = ""
     txtIssueDate = ""
     txtDueDate = ""
     
@@ -1022,8 +1022,8 @@ txtLoanAccNo = FormatField(m_rstCustLoans("AccNum"))
 txtLoanAmount = FormatField(m_rstCustLoans("LoanAmount"))
 'Get The Ist TransaCtion Amount
 
-txtIntRate = FormatField(m_rstCustLoans("IntRate"))
-txtPenalINT = FormatField(m_rstCustLoans("PenalIntRate"))
+txtIntrate = FormatField(m_rstCustLoans("IntRate"))
+txtPenalInt = FormatField(m_rstCustLoans("PenalIntRate"))
 txtIssueDate = FormatField(m_rstCustLoans("IssueDate"))
 txtDueDate = FormatField(m_rstCustLoans("LoanDueDate"))
 
@@ -1214,8 +1214,8 @@ End If
 
 'Get The Ist Instllment
 
-txtIntRate = FormatField(m_rstLoanScheme("IntRate"))
-txtPenalINT = FormatField(m_rstLoanScheme("PenalIntRate"))
+txtIntrate = FormatField(m_rstLoanScheme("IntRate"))
+txtPenalInt = FormatField(m_rstLoanScheme("PenalIntRate"))
 txtIssueDate = Format(Now, "dd/mm/yyyy")
 On Error Resume Next
 Days = FormatField(m_rstLoanScheme("MonthDuration"))
@@ -1437,7 +1437,7 @@ If m_dbOperation = Insert Then
          Val(Trim$(txtLoanAmount)) & "," & _
          InstType & "," & InstAmount & "," & Val(txtNoOfINst) & "," & EMI & "," & _
          "#" & DueDate & "#," & _
-         CSng(Val(Trim$(txtIntRate))) & "," & CSng(Val(Trim$(txtPenalINT))) & "," & _
+         CSng(Val(Trim$(txtIntrate))) & "," & CSng(Val(Trim$(txtPenalInt))) & "," & _
          Val(txtGName(0).Tag) & ", " & Val(txtGName(1).Tag) & ", " & _
          Val(txtGName(2).Tag) & ", " & Val(txtGName(3).Tag) & ", " & _
          AddQuotes(OtherDet, True) & ", " & _
@@ -1495,8 +1495,8 @@ ElseIf m_dbOperation = Update Then
          " NoOfInstall = " & Val(txtNoOfINst) & ", " & _
          " EMI = " & EMI & ", " & _
          " LoanDueDate = #" & DueDate & "#," & _
-         " IntRate = " & CSng(Val(Trim$(txtIntRate))) & ", " & _
-         " PenalIntRate = " & CSng(Val(Trim$(txtPenalINT))) & ", " & _
+         " IntRate = " & CSng(Val(Trim$(txtIntrate))) & ", " & _
+         " PenalIntRate = " & CSng(Val(Trim$(txtPenalInt))) & ", " & _
          " AccGroupID = " & cmbAccGroup.ItemData(cmbAccGroup.ListIndex) & ", " & _
          " Guarantor1 = " & Val(txtGName(0).Tag) & ", " & " Guarantor2 = " & Val(txtGName(1).Tag) & ", " & _
          " Guarantor3 = " & Val(txtGName(2).Tag) & ", " & " Guarantor4 = " & Val(txtGName(3).Tag) & ", " & _
@@ -2074,8 +2074,8 @@ For ItemCount = 0 To cmbLoanScheme.ListCount - 1
     End If
 Next ItemCount
 
-txtIntRate = FormatField(LoanRst("IntRate"))
-txtPenalINT = FormatField(LoanRst("PenalIntRate"))
+txtIntrate = FormatField(LoanRst("IntRate"))
+txtPenalInt = FormatField(LoanRst("PenalIntRate"))
 txtIssueDate = FormatField(LoanRst("IssueDate"))
 txtDueDate = FormatField(LoanRst("LoanDueDate"))
 'Set the appropriate Option button
@@ -2264,10 +2264,10 @@ End Sub
 Private Sub cmdInst_Click()
 
 If cmbInstType.ListIndex < 0 Or Val(txtNoOfINst) < 1 Then Exit Sub
-If Val(txtIntRate) = 0 Then
+If Val(txtIntrate) = 0 Then
     If MsgBox(GetResourceString(505) & vbCrLf & _
         GetResourceString(541), vbQuestion + vbYesNo, wis_MESSAGE_TITLE) = vbNo Then
-        ActivateTextBox txtIntRate
+        ActivateTextBox txtIntrate
         Exit Sub
     End If
 End If
@@ -2281,7 +2281,7 @@ If m_FrmInst Is Nothing Then Set m_FrmInst = New frmLoanInst
 m_FrmInst.Operation = InstInsert
 'Load the Form
 m_FrmInst.LoanID = m_LoanID
-m_FrmInst.InterestRate = Val(txtIntRate)
+m_FrmInst.InterestRate = Val(txtIntrate)
 Load m_FrmInst
    
 'Load The Details
@@ -2638,9 +2638,9 @@ End Sub
 
 
 Private Sub txtIntrate_LostFocus()
-If Val(txtIntRate.Text) = 0 And Len(txtIntRate.Text) > 0 Then
+If Val(txtIntrate.Text) = 0 And Len(txtIntrate.Text) > 0 Then
  MsgBox "Invalid amount specified...", vbOKOnly
-  txtIntRate.SetFocus
+  txtIntrate.SetFocus
  End If
  End Sub
 
@@ -2668,9 +2668,9 @@ End Sub
 
 
 Private Sub txtPenalInt_LostFocus()
-If Val(txtPenalINT.Text) = 0 And Len(txtPenalINT.Text) > 0 Then
+If Val(txtPenalInt.Text) = 0 And Len(txtPenalInt.Text) > 0 Then
  MsgBox "Invalid amount specified", vbOKOnly
-  txtPenalINT.SetFocus
+  txtPenalInt.SetFocus
   End If
    End Sub
 

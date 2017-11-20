@@ -31,14 +31,14 @@ Attribute m_frmMMShare.VB_VarHelpID = -1
 Private WithEvents m_frmMMReport As frmMMReport
 Attribute m_frmMMReport.VB_VarHelpID = -1
 Private m_Share() As String
-Public Function GetMemberNameCustIDByMemberNum(memNum As String, ByRef CustomerID As Long, Optional MemberType As Integer) As String
+Public Function GetMemberNameCustIDByMemberNum(memNum As String, ByRef CustomerID As Long, Optional memberType As Integer) As String
     GetMemberNameCustIDByMemberNum = ""
     CustomerID = 0
     If Len(Trim$(memNum)) < 1 Then Exit Function
     Dim rstName As Recordset
     gDbTrans.SqlStmt = "Select MemberNum + ' - ' +  MemberTypeName as MemberNum,Name, CustomerID From QryMemName A " & _
         " Left Join MemberTypeTab B On A.MemberType = B.MemberType  Where MemberNum = " & AddQuotes(Trim(memNum))
-    If MemberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And MemberType = " & MemberType
+    If memberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And MemberType = " & memberType
                 
     Dim recCount As Integer
     
@@ -220,13 +220,12 @@ If gDbTrans.Fetch(rst, adOpenDynamic) Then m_AccID = rst("AccID")
 
 Set rst = Nothing
 
-
 End Property
 
 Public Function CustomerNextBalance(retAccNum As String) As Currency
-    Dim MemberType As String
+    Dim memberType As String
     
-    CustomerNextBalance = CustomerNextBalanceNew(retAccNum, MemberType)
+    CustomerNextBalance = CustomerNextBalanceNew(retAccNum, memberType)
     
 End Function
 Public Function CustomerNextBalanceNew(ByRef retAccNum As String, ByRef MemberTypeName) As Currency
@@ -255,12 +254,12 @@ Dim rst As ADODB.Recordset
 Dim UserID As Integer
 Dim AccHeadID As Long
 
-Dim MemberType As Integer
+Dim memberType As Integer
 Dim MemberTypeName As String
 Dim MemberTypeNameEnglish As String
 
 'Get the MemberTYpe for the AccID
-MemberType = GetMemberTypeByAccID(AccId, MemberTypeName, MemberTypeNameEnglish)
+memberType = GetMemberTypeByAccID(AccId, MemberTypeName, MemberTypeNameEnglish)
 'Get the Transaction Type
 Dim transType As wisTransactionTypes
 transType = IIf(CashTransaction, wDeposit, wContraDeposit)
@@ -277,7 +276,7 @@ transType = IIf(CashTransaction, wDeposit, wContraDeposit)
     Dim ShareValue As Currency
     
     ShareValue = Val(SetupClass.ReadSetupValue("MMAcc", "ShareValue", "10"))
-    ShareValue = Val(SetupClass.ReadSetupValue("MMAcc" & MemberType, "ShareValue", CStr(ShareValue)))
+    ShareValue = Val(SetupClass.ReadSetupValue("MMAcc" & memberType, "ShareValue", CStr(ShareValue)))
     
     'Temporay message if he has not having any share value
     If ShareValue = 0 Then
@@ -361,7 +360,7 @@ End If
 'Obtain the Face Value from current settings
     Dim SetUp As New clsSetup
     FaceValue = Val(SetUp.ReadSetupValue("MMAcc", "ShareValue", "10.00"))
-    FaceValue = Val(SetUp.ReadSetupValue("MMAcc" & MemberType, "ShareValue", CStr(FaceValue)))
+    FaceValue = Val(SetUp.ReadSetupValue("MMAcc" & memberType, "ShareValue", CStr(FaceValue)))
 
 
 UserID = gCurrUser.UserID
@@ -464,9 +463,9 @@ End If
 
 End Function
 
-Public Function MemberName(AccNum As String, Optional MemberType As Integer) As String
+Public Function MemberName(AccNum As String, Optional memberType As Integer) As String
 
-If IsMissing(MemberType) Then MemberType = 0
+If IsMissing(memberType) Then memberType = 0
 
 Dim Lret As Long
 gDbTrans.SqlStmt = "Select Title + Space(1) + FirstName + " & _
@@ -474,7 +473,7 @@ gDbTrans.SqlStmt = "Select Title + Space(1) + FirstName + " & _
         " from NameTab, MemMaster where MemMaster.AccNum  = " & AddQuotes(AccNum, True) & _
         " And  NameTab.CustomerID =  MemMaster.CustomerId"
 
-If MemberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And memberType = " & MemberType
+If memberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & " And memberType = " & memberType
 
 Dim rst As ADODB.Recordset
 Lret = gDbTrans.Fetch(rst, adOpenStatic)
@@ -606,12 +605,12 @@ Dim FaceValue As Currency
 Dim ShareAmount As Currency
 Dim rst As ADODB.Recordset
 
-Dim MemberType As Integer
+Dim memberType As Integer
 Dim MemberTypeName As String
 Dim MemberTypeNameEnglish As String
 
 'Get the MemberTYpe for the AccID
-MemberType = GetMemberTypeByAccID(AccId, MemberTypeName, MemberTypeNameEnglish)
+memberType = GetMemberTypeByAccID(AccId, MemberTypeName, MemberTypeNameEnglish)
 
 'Get the Transaction Type
 Dim transType As wisTransactionTypes
@@ -863,7 +862,7 @@ ShareFee = Val(FormatField(rst("Deposit")))
 
 End Function
 
-Public Function MembershipFee(fromDate As Date, toDate As Date, Optional MemberType As Integer) As Currency
+Public Function MembershipFee(fromDate As Date, toDate As Date, Optional memberType As Integer) As Currency
 MembershipFee = 0
 
 Dim TransID As Long
@@ -876,8 +875,8 @@ gDbTrans.SqlStmt = "Select sum(Amount) as deposit from MemIntTrans " & _
     " WHERE TransId = " & TransID & " And TransDate >= #" & fromDate & "#" & _
     " And TransDate <= #" & toDate & "# "
     
-If MemberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & _
-    " And AccId in (Select Distinct AccId from MemMaster where memberType = " & MemberType & ")"
+If memberType > 0 Then gDbTrans.SqlStmt = gDbTrans.SqlStmt & _
+    " And AccId in (Select Distinct AccId from MemMaster where memberType = " & memberType & ")"
     
 Dim rst As ADODB.Recordset
 Lret = gDbTrans.Fetch(rst, adOpenDynamic)
@@ -946,7 +945,7 @@ If gCurrUser Is Nothing Then Set gCurrUser = New clsUsers: Exit Sub
             If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then m_MemberType = rst("MemberType")
             
             With m_FrmMemAcc
-                .MemberType = m_MemberType
+                .memberType = m_MemberType
                 .AccountLoad (m_AccID)
                 .cmdLoad.Enabled = False
                 .txtAccNo.Locked = True
@@ -976,7 +975,7 @@ If gCurrUser Is Nothing Then Set gCurrUser = New clsUsers: Exit Sub
             
             'Set m_frmSelectMemType = Nothing
             
-            m_FrmMemAcc.MemberType = m_MemberType
+            m_FrmMemAcc.memberType = m_MemberType
         End If
 
         m_FrmMemAcc.SingleMemberModule = recCount < 2
@@ -1001,7 +1000,7 @@ Private Function SelectMemberType() As Integer
     Set selectMem = Nothing
     
     If memType > -1 Then
-        m_FrmMemAcc.MemberType = memType
+        m_FrmMemAcc.memberType = memType
         m_FrmMemAcc.SingleMemberModule = Not multiDeposit
         If m_MemberType <> memType Then m_FrmMemAcc.txtAccNo = ""
     End If
@@ -1185,7 +1184,7 @@ End Sub
 
 
 Private Sub m_FrmMemAcc_ShowReport(ReportType As wis_MemReports, _
-                ReportOrder As wis_ReportOrder, MemberType As wis_MemberType, _
+                ReportOrder As wis_ReportOrder, memberType As wis_MemberType, _
                 fromDate As String, toDate As String, _
                 RepOption As clsRepOption)
 gCancel = 0
@@ -1202,7 +1201,7 @@ With m_frmMMReport
     
     .ReportOrder = ReportOrder
     .ReportType = ReportType
-    .MemberType = MemberType
+    .memberType = memberType
     .Place = RepOption.Place
     .Caste = RepOption.Caste
     .Gender = RepOption.Gender

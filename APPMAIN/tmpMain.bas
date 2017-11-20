@@ -491,8 +491,6 @@ End If
 
 End Function
 
-
-
 Public Function GetMemberNumber(ByVal CustomerID As Long) As String
 
 GetMemberNumber = ""
@@ -503,6 +501,20 @@ gDbTrans.SqlStmt = "SELECT AccNum From MemMaster " & _
 If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then _
         GetMemberNumber = FormatField(rst("AccNum"))
 
+Set rst = Nothing
+
+End Function
+
+Public Function GetMemberNumberAndType(ByVal CustomerID As Long, ByRef memberType) As String
+
+GetMemberNumberAndType = ""
+Dim rst As Recordset
+gDbTrans.SqlStmt = "SELECT AccNum,MemberType From MemMaster WHERE customerID = " & CustomerID
+
+If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
+    GetMemberNumberAndType = FormatField(rst("AccNum"))
+    memberType = FormatField(rst("MemberType"))
+End If
 Set rst = Nothing
 
 End Function
@@ -866,6 +878,9 @@ If gDbTrans.Fetch(rst, adOpenDynamic) Then
     End With
 End If
 End Sub
+Public Sub LoadKYCIDTypes(cmbObject As ComboBox)
+	Call LoadIDTypes(cmbObject)
+End sub
 
 Public Sub LoadIDTypes(cmbObject As ComboBox)
     With cmbObject

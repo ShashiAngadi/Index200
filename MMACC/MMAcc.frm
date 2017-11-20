@@ -1160,9 +1160,9 @@ Attribute m_frmMMShare.VB_VarHelpID = -1
 Private m_frmdividend As frmIntPayble
 Public Event AccountChanged(ByVal AccId As Long)
 Public Event WindowClosed()
-Public Event SelectMemberType(memeberType As Integer, Cancel As Boolean)
+Public Event SelectMemberType(memeberType As Integer, cancel As Boolean)
 Public Event ShowReport(ReportType As wis_MemReports, ReportOrder As wis_ReportOrder, _
-        memberType As wis_MemberType, fromDate As String, toDate As String, RepOptionClass As clsRepOption)
+        MemberType As wis_MemberType, fromDate As String, toDate As String, RepOptionClass As clsRepOption)
        
 Private Sub LoadSetupValues()
 'Load the Setup values
@@ -1190,7 +1190,7 @@ End Sub
 Public Property Let MultiMemberTypes(NewValue As Boolean)
     m_multiMembers = NewValue
 End Property
-Public Property Let memberType(NewValue As Integer)
+Public Property Let MemberType(NewValue As Integer)
     
 If NewValue = 0 Or m_MemberType = NewValue Then Exit Property
     
@@ -1231,8 +1231,8 @@ Dim cmbIndex As Integer
     
 End Property
 
-Public Property Get memberType() As Integer
-    memberType = m_MemberType
+Public Property Get MemberType() As Integer
+    MemberType = m_MemberType
 End Property
 Public Property Let SingleMemberModule(NewValue As Boolean)
     m_MemberLocked = NewValue
@@ -1343,7 +1343,7 @@ Dim strAccNum As String
     End With
     
     'Check if Member type is specified
-    Dim memberType As Byte
+    Dim MemberType As Byte
     If m_MemberType = 0 Then
         txtIndex = GetIndex("MemberType")
         With txtData(txtIndex)
@@ -1354,10 +1354,10 @@ Dim strAccNum As String
                 GoTo Exit_Line
             End If
             txtIndex = Val(ExtractToken(txtPrompt(txtIndex).Tag, "TextIndex"))
-            memberType = cmb(txtIndex).ItemData(cmb(txtIndex).ListIndex)
+            MemberType = cmb(txtIndex).ItemData(cmb(txtIndex).ListIndex)
         End With
     Else
-        memberType = m_MemberType
+        MemberType = m_MemberType
     End If
     
     'Check For Mebership Fee 'Code By Shashi on 18/2/2000
@@ -1459,7 +1459,7 @@ Dim strAccNum As String
 
 
 'Start Transactions to Data base
-    m_CustReg.ModuleId = wis_Members
+    m_CustReg.ModuleID = wis_Members
     
     gDbTrans.BeginTrans
     If Not m_CustReg.SaveCustomer Then
@@ -1501,7 +1501,7 @@ Dim strAccNum As String
                 Val(GetVal("IntroducerID")) & "," & _
                 AddQuotes(GetVal("LedgerNo"), True) & ", " & _
                 AddQuotes(GetVal("FolioNo"), True) & ", " & _
-                memberType & "," & _
+                MemberType & "," & _
                 GetAccGroupID & "," & gUserID & " )"
         'Build Sql To Insert values into MemTrans
         transType = wDeposit
@@ -1533,7 +1533,7 @@ Dim strAccNum As String
                 " IntroducerID = " & Val(GetVal("IntroducerID")) & "," & _
                 " LedgerNo = " & AddQuotes(GetVal("LedgerNo"), True) & "," & _
                 " FolioNo = " & AddQuotes(GetVal("FolioNo"), True) & ", " & _
-                " MemberType = " & memberType & ", " & _
+                " MemberType = " & MemberType & ", " & _
                 " CreateDate = #" & TransDate & "#," & _
                 " AccGroupId = " & GetAccGroupID & _
                 " where AccID = " & m_AccID
@@ -2437,7 +2437,7 @@ m_accUpdatemode = Insert
 'First the TAB 1
     'Disable the UI if you are unable to load the specified account number
     lblBalance.Caption = ""
-    With txtCustName
+    With txtCustNAme
         .BackColor = wisGray: .Enabled = False: .Caption = ""
     End With
     With txtDate
@@ -2758,7 +2758,7 @@ strField = ExtractToken(txtPrompt(Val(txtIndex)).Tag, "DataSource")
             End If
     
         Case "ACCNAME"
-            m_CustReg.ModuleId = wis_Members
+            m_CustReg.ModuleID = wis_Members
             m_CustReg.ShowDialog
             txtData(txtIndex).Text = m_CustReg.FullName
     
@@ -2837,7 +2837,7 @@ If Not AccountTransaction() Then Exit Sub
 End Sub
 
 Private Sub cmdAddNote_Click()
-If m_Notes.ModuleId = 0 Then
+If m_Notes.ModuleID = 0 Then
     Exit Sub
 End If
 
@@ -3420,7 +3420,7 @@ End If
 End Sub
 
 Private Sub cmdOk_Click()
-Dim Cancel As Boolean
+Dim cancel As Boolean
 'ask for the user
 
 Unload Me
@@ -3747,7 +3747,7 @@ Dim txtIndex As Byte
         MsgBox GetResourceString(555), vbCritical, gAppName & " - Error"
         GoTo DisableUserInterface
     End If
-    m_CustReg.ModuleId = wis_Members
+    m_CustReg.ModuleID = wis_Members
 'Get the transaction details of this account holder
     
     gDbTrans.SqlStmt = " Select Count(*) as ShareCount, A.AccId,A.TransID,TransDate,FaceValue,Balance, 'Sales' as Trans " & _
@@ -3821,7 +3821,7 @@ With Me
         
     End With
     
-    With .txtCustName
+    With .txtCustNAme
         .Enabled = True: .BackColor = vbWhite
         .Caption = m_CustReg.FullName
     End With
@@ -4105,13 +4105,13 @@ End If
 
 End Sub
 
-Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+Private Sub Form_QueryUnload(cancel As Integer, UnloadMode As Integer)
 'gWindowHandle = 0
 
 End Sub
 
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 
 ' Notes object.
 Set m_Notes = Nothing
@@ -4125,11 +4125,11 @@ End Sub
 
 Private Sub lblMemberTypeName_DblClick()
     Dim memType As Integer
-    Dim Cancel As Boolean
-    RaiseEvent SelectMemberType(memType, Cancel)
+    Dim cancel As Boolean
+    RaiseEvent SelectMemberType(memType, cancel)
 End Sub
 
-Private Sub m_frmMMShare_ShareIssued(ShareNos() As String, Cancel As Boolean)
+Private Sub m_frmMMShare_ShareIssued(ShareNos() As String, cancel As Boolean)
 Dim I As Long
 Dim MaxI As Integer
 Dim rst As Recordset
@@ -4144,7 +4144,7 @@ For I = 0 To MaxI
         MsgBox GetResourceString(589) & _
             "The Shares are already given to Member No. : " & _
             FormatField(rst("AccID")), vbExclamation, gAppName & " - Error"
-        Cancel = True
+        cancel = True
         Exit Sub
     End If
 Next I

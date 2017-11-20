@@ -261,7 +261,7 @@ m_CustType = 0
     m_KycBankName2 = ""
     m_KycBankNum2 = ""
     m_KycIfsc2 = ""
-
+    m_KycPhone = ""
 'Delete the Photos of any unsaved
 Call DeleteUnregisteredImageFiles
 
@@ -424,7 +424,7 @@ If Lret > 0 Then
         m_KycBankName2 = FormatField(rstKYC("ExtBankName2"))
         m_KycBankNum2 = FormatField(rstKYC("ExtAccNum2"))
         m_KycIfsc2 = FormatField(rstKYC("ExtIFSC2"))
-    
+        m_KycPhone = FormatField(rstKYC("CustPhone"))
     LoadCustomerKYC = True
     
 End If
@@ -679,7 +679,9 @@ Public Function SaveCustomerKYC() As Boolean
             " IdText2 = " & AddQuotes(RegDialog.txtKycId2.Text) & "," & _
             " ExtBankName2 = " & AddQuotes(RegDialog.txtKycBankName2.Text) & "," & _
             " ExtAccNum2 = " & AddQuotes(RegDialog.txtKycAccNum2.Text) & "," & _
-            " ExtIfsc2 = " & AddQuotes(RegDialog.txtKycIfsc2.Text)
+            " ExtIfsc2 = " & AddQuotes(RegDialog.txtKycIfsc2.Text) & _
+            " Where KYCID = " & KycId & " And CustomerID = " & m_CustomerID
+        
     End If
 
 

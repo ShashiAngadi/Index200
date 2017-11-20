@@ -741,15 +741,15 @@ If SbACCID Then
     'Now Pay the Amount SHHead
     
     Dim SbHeadID As Long
-    Dim sbTYpe As Integer
+    Dim SBType As Integer
     Dim headName As String
-    sbTYpe = 0
+    SBType = 0
     If cmbSB.Visible Then
-        sbTYpe = cmbSB.ItemData(cmbSB.ListIndex)
-        headName = GetDepositName(wis_SBAcc, sbTYpe, engHeadName)
-        SbHeadID = bankClass.GetHeadIDCreated(headName, engHeadName, parMemberDeposit, 0, wis_SBAcc + sbTYpe)
+        SBType = cmbSB.ItemData(cmbSB.ListIndex)
+        headName = GetDepositName(wis_SBAcc, SBType, engHeadName)
+        SbHeadID = bankClass.GetHeadIDCreated(headName, engHeadName, parMemberDeposit, 0, wis_SBAcc + SBType)
     Else
-        SbHeadID = bankClass.GetHeadIDCreated(GetResourceString(421), LoadResString(421), parMemberDeposit, 0, wis_SBAcc + sbTYpe)
+        SbHeadID = bankClass.GetHeadIDCreated(GetResourceString(421), LoadResString(421), parMemberDeposit, 0, wis_SBAcc + SBType)
     End If
     
     If Not bankClass.UpdateContraTrans(LoanHeadID, SbHeadID, Amount, TransDate) Then GoTo Err_line

@@ -10,6 +10,7 @@ Begin VB.Form frmCustReg
    ClientWidth     =   6255
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   7290
@@ -186,7 +187,7 @@ Begin VB.Form frmCustReg
          WhatsThisHelpID =   10
          Width           =   1860
       End
-      Begin VB.Label lblID1 
+      Begin VB.Label lblKycID1 
          Caption         =   "Identification Number"
          Height          =   315
          Left            =   90
@@ -1100,13 +1101,11 @@ Begin VB.Form frmCustReg
          NumTabs         =   5
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Personal"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Home"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -1846,8 +1845,8 @@ Set SetUp = Nothing
 'Load Customer Type
 Call LoadCustomerTypes(cmbCustType)
 'Load The Id type for KYC
-Call LoadIDTypes(cmbKycId1)
-Call LoadIDTypes(cmbKycID2)
+Call LoadKYCIDTypes(cmbKycId1)
+Call LoadKYCIDTypes(cmbKycID2)
 
 
 Me.TabStrip1.Tabs(1).Selected = True
@@ -2213,6 +2212,16 @@ Call SetFontToControls(Me)
     lblCaste = GetResourceString(111)
 'Tab strip of KYC
     lblKycTitle.Caption = "Pleae Enter KYC Details"
+    lblKycPhone.Caption = GetResourceString(205, 35)
+    lblKycPhoneType1.Caption = GetResourceString(239, 60)
+    lblKycIdType1.Caption = GetResourceString(447, 253)
+    lblKycIdType2.Caption = GetResourceString(447, 253)
+    lblKycID1.Caption = GetResourceString(447, 60)
+    lblKycID2.Caption = GetResourceString(447, 60)
+    lblKycBank1.Caption = GetResourceString(446, 35)
+    lblKycBank2.Caption = GetResourceString(237, 418, 35)
+    lblKycAccNum1.Caption = GetResourceString(446, 60, 482)
+    lblKycAccNum2.Caption = GetResourceString(237, 418, 60, 482)
     
 '''2nd frame
     'cmdNewCust.Caption = GetResourceString(260,205,253)

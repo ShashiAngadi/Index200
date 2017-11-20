@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "Msflxgrd.ocx"
 Begin VB.Form frmBkccReport 
    Caption         =   "BKCC Loan Reports .."
    ClientHeight    =   6015
@@ -129,7 +129,7 @@ LastIssueDate = CDate("31/3/" & Year(TransDate) + IIf(Month(TransDate) < 4, 0, 1
        gDbTrans.SqlStmt = "Select Amount,Balance,TransType,TransDate from BKCCTrans where LoanId = " & LoanID & _
            " And Deposit = False And TransDate > #" & DateAdd("yyyy", -1, LastIssueDate) & "#  And TransDate <= #" & LastIssueDate & "#" & _
            " order by TransDate, TransID"
-       If gDbTrans.Fetch(rstPay, adOpenDynamic) < 1 Or rstPay.RecordCount < 1 Then Exit Function
+       If gDbTrans.Fetch(rstPay, adOpenDynamic) < 1 Or rstPay.recordCount < 1 Then Exit Function
        transType = FormatField(rstPay("TransType"))
        
        ''Check All the Transactions till begin of year
@@ -185,7 +185,7 @@ Private Sub GetLoanDetailsForCliamBill(ByVal LoanID As Long, ByVal TransDate As 
         " order by TransDate"
     
     If gDbTrans.Fetch(rstPay, adOpenDynamic) < 1 Then Exit Sub
-    If rstPay.RecordCount < 1 Then Exit Sub
+    If rstPay.recordCount < 1 Then Exit Sub
     'Do while
     lastTransType = FormatField(rstPay("TransType"))
     Do
@@ -265,7 +265,7 @@ Private Sub GetRepayDetailsForCliamBill(ByVal LoanID As Long, ByVal TransDate As
         " order by TransDate,TransID"
     
     
-    If gDbTrans.Fetch(rstPay, adOpenDynamic) < 1 Or rstPay.RecordCount < 1 Then
+    If gDbTrans.Fetch(rstPay, adOpenDynamic) < 1 Or rstPay.recordCount < 1 Then
         'If he has not paid any amount, then consider whole amount till the End of Year
         payDate(0) = "1/1/2000"
         repayAmount(0) = loanIssueAmount
@@ -344,7 +344,7 @@ Private Sub GetRepayDetailsForPrevCliamBill(ByVal LoanID As Long, ByVal TransDat
         " order by TransDate,TransID"
     
     
-    If gDbTrans.Fetch(rstPay, adOpenDynamic) < 1 Or rstPay.RecordCount < 1 Then
+    If gDbTrans.Fetch(rstPay, adOpenDynamic) < 1 Or rstPay.recordCount < 1 Then
         'If he has not paid any amount, then consider whole amount till the End of Year
         payDate(0) = "1/1/2000"
         repayAmount(0) = loanIssueAmount
@@ -448,7 +448,7 @@ Dim rowno As Integer, colno As Integer
 
 count = DateDiff("m", fromDate, toDate)
 count = count + 2
-MaxCount = rstMain.RecordCount * count
+MaxCount = rstMain.recordCount * count
 
 RaiseEvent Initialise(0, MaxCount)
 
@@ -590,7 +590,7 @@ Dim rowno As Integer, colno As Integer
 
 count = DateDiff("m", fromDate, m_ToDate)
 count = count + 2
-MaxCount = rstMain.RecordCount * count
+MaxCount = rstMain.recordCount * count
 
 Call InitGrid
 Dim TotAmount() As Currency
@@ -648,7 +648,7 @@ fromDate = FinUSFromDate
 'Last Day Of the Todate
 toDate = GetSysLastDate(m_ToDate)
 
-grd.Rows = rstMain.RecordCount + grd.FixedRows + 2
+grd.Rows = rstMain.recordCount + grd.FixedRows + 2
 
 While DateDiff("d", fromDate, toDate) > 0
   With grd
@@ -761,7 +761,7 @@ Wend
 
 
 With grd
-    .Rows = rstMain.RecordCount + .FixedRows + 2
+    .Rows = rstMain.recordCount + .FixedRows + 2
     .Row = .Rows - 1
     .Col = 2: .Text = GetResourceString(286)
     .CellFontBold = True: .CellAlignment = 4
@@ -830,7 +830,7 @@ Dim MaxCount As Long
 
 count = DateDiff("m", fromDate, m_ToDate)
 count = count + 2
-MaxCount = rstMain.RecordCount * count
+MaxCount = rstMain.recordCount * count
 
 Call InitGrid
 Dim TotAmount() As Currency
@@ -876,7 +876,7 @@ fromDate = FinUSFromDate
 'Last Day Of the Todate
 toDate = GetSysLastDate(m_ToDate)
 
-grd.Rows = rstMain.RecordCount + grd.FixedRows + 2
+grd.Rows = rstMain.recordCount + grd.FixedRows + 2
 
 While DateDiff("d", fromDate, toDate) > 0
   With grd
@@ -976,7 +976,7 @@ Wend
 
 
 With grd
-    .Rows = rstMain.RecordCount + .FixedRows + 2
+    .Rows = rstMain.recordCount + .FixedRows + 2
     .Row = .Rows - 1
     .Col = 2: .Text = GetResourceString(286)
     .CellFontBold = True: .CellAlignment = 4
@@ -1411,7 +1411,7 @@ Select Case m_ReportType
         With grd
             .Clear
             .Rows = 5
-            .Cols = 17
+            .Cols = 23
             .FixedCols = 2
             .FixedRows = 3
             .Row = 0
@@ -1490,7 +1490,13 @@ Select Case m_ReportType
             .Col = 16: .Text = "Nabard  " & rebateRate & "% " & GetResourceString(47, 437, 91) 'Interest Rebate
             
             '.Col = 16: .Text = GetResourceString(261) 'Remark
-            
+            .Col = 17: .Text = GetResourceString(464, 60) '"AAdar Number
+            .Col = 18: .Text = GetResourceString(239, 60) 'mObile Number
+            .Col = 19: .Text = GetResourceString(446, 36, 60) '"DCC Bank AccOunt
+            .Col = 20: .Text = GetResourceString(446, 482) 'DCC Bank IFSC
+            .Col = 21: .Text = GetResourceString(237, 418, 36)  '"Other Bank AccOunt
+            .Col = 22: .Text = GetResourceString(237, 418, 482) 'OTHR Bank IFSC
+                        
             .Row = 2
             For ColCount = 0 To .Cols - 1
                 .Col = ColCount
@@ -1503,7 +1509,7 @@ Select Case m_ReportType
         With grd
             .Clear
             .Rows = 5
-            .Cols = 14
+            .Cols = 20
             .FixedCols = 2
             .FixedRows = 3
             .Row = 0
@@ -1563,6 +1569,15 @@ Select Case m_ReportType
             .Col = 12: .Text = GetResourceString(91) 'Interest Subsidy
             
             .Col = 13: .Text = GetResourceString(261) 'Remark
+            
+            '''KYC Columns
+            .Col = 13: .Text = GetResourceString(464, 60) '"Adhaar Number
+            .Col = 14: .Text = GetResourceString(239, 60) 'mObile Number
+            .Col = 15: .Text = GetResourceString(446, 36, 60) '"DCC Bank AccOunt
+            .Col = 16: .Text = GetResourceString(446, 482) 'DCC Bank IFSC
+            .Col = 17: .Text = GetResourceString(237, 418, 36) & GetResourceString(92) '"Other Bank AccOunt
+            .Col = 18: .Text = GetResourceString(237, 418, 482) 'OTHR Bank IFSC
+            
             
             .Row = 2
             For ColCount = 0 To .Cols - 1
@@ -1660,7 +1675,7 @@ rptRS.MoveFirst
 
 'Initialize the grid.
 'Call InitGrid
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Alignig the data to be written into the grid.", 0)
 
 Call InitGrid
@@ -1722,7 +1737,7 @@ nextRecord:
     DoEvents
     If gCancel Then rptRS.MoveLast
     Me.Refresh
-    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / rptRS.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / rptRS.recordCount)
     rptRS.MoveNext
 Loop
 
@@ -2025,7 +2040,7 @@ If m_Gender Then SqlStr = SqlStr & " And Gender = " & m_Gender
     
 gDbTrans.SqlStmt = SqlStr
 If gDbTrans.Fetch(rstLoan, adOpenDynamic) < 1 Then gCancel = True: Exit Function
-RaiseEvent Initialise(0, rstLoan.RecordCount * 2)
+RaiseEvent Initialise(0, rstLoan.recordCount * 2)
 
 'Now fix the headers for the shedule
 Call Shed1RowCOl
@@ -2174,7 +2189,7 @@ While Not rstLoan.EOF
     End If
     DoEvents
     If gCancel Then rstLoan.MoveLast
-    RaiseEvent Processing("Writing the record", (rstLoan.AbsolutePosition / rstLoan.RecordCount))
+    RaiseEvent Processing("Writing the record", (rstLoan.AbsolutePosition / rstLoan.recordCount))
     rstLoan.MoveNext
 Wend
 
@@ -2543,13 +2558,13 @@ Call SetGrid
 
 Call InitMonthRegGrid
 
-RaiseEvent Initialise(0, rstMaster.RecordCount)
+RaiseEvent Initialise(0, rstMaster.recordCount)
 
 grd.Row = grd.FixedRows
 lblReportTitle = "Meeting register As on " & m_ToIndianDate
 
 Dim rowno As Integer, colno As Integer
-RaiseEvent Initialise(0, rstMaster.RecordCount)
+RaiseEvent Initialise(0, rstMaster.recordCount)
 
 rowno = grd.Row
 Do
@@ -2717,7 +2732,7 @@ Do
 
   End With
     DoEvents
-    RaiseEvent Processing("Writing the record", rstMaster.AbsolutePosition / rstMaster.RecordCount)
+    RaiseEvent Processing("Writing the record", rstMaster.AbsolutePosition / rstMaster.recordCount)
     If gCancel Then rstMaster.MoveLast
     rstMaster.MoveNext
 Loop
@@ -2949,7 +2964,7 @@ rptRS.MoveLast
 rptRS.MoveFirst
 
 ' Initialize the grid.
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Alignig the data tobe written into the grid.", 0)
 
 Call InitGrid
@@ -3055,7 +3070,7 @@ nextRecord:
     DoEvents
     If gCancel Then rptRS.MoveLast
     Me.Refresh
-    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / rptRS.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / rptRS.recordCount)
     
     LoanID = rptRS("LoanID")
     rptRS.MoveNext
@@ -3174,7 +3189,7 @@ rptRS.MoveFirst
 
 ' Initialize the grid.
 'Call InitGrid
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Alignig the data tobe written into the grid.", 0)
 
 Call InitGrid
@@ -3262,7 +3277,7 @@ nextRecord:
     DoEvents
     If gCancel Then rptRS.MoveLast
     Me.Refresh
-    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / rptRS.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / rptRS.recordCount)
     rptRS.MoveNext
 Loop
 rptRS.MoveLast
@@ -3382,7 +3397,7 @@ rptRS.MoveFirst
 
 ' Initialize the grid.
 'Call InitGrid
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Alignig the data tobe written into the grid.", 0)
 
 Call InitGrid
@@ -3461,7 +3476,7 @@ nextRecord:
     DoEvents
     If gCancel Then rptRS.MoveLast
     Me.Refresh
-    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / rptRS.RecordCount)
+    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / rptRS.recordCount)
     rptRS.MoveNext
 Loop
 rptRS.MoveLast
@@ -3581,12 +3596,12 @@ rptRS.MoveFirst
 
 ' Initialize the grid.
 'Call InitGrid
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Alignig the data tobe written into the grid.", 0)
 With grd
     .Visible = False
     .Clear
-    .Rows = rptRS.RecordCount + 1
+    .Rows = rptRS.recordCount + 1
     If .Rows < 50 Then .Rows = 50
     .FixedRows = 1
     .FixedCols = 0
@@ -3668,7 +3683,7 @@ nextRecord:
     DoEvents
     If gCancel Then rptRS.MoveLast
     Me.Refresh
-    RaiseEvent Processing("Writing the data to the grid.", SlNo / rptRS.RecordCount + 2)
+    RaiseEvent Processing("Writing the data to the grid.", SlNo / rptRS.recordCount + 2)
     rptRS.MoveNext
     
 Loop
@@ -3719,6 +3734,7 @@ Private Sub ReportClaimBill()
 ' Declare variables...
 Dim Lret As Long
 Dim rptRS As Recordset
+Dim rstKYC As Recordset
 Dim LoanID As Long
 Dim transType As wisTransactionTypes
 Dim ContraTransType As wisTransactionTypes
@@ -3771,19 +3787,23 @@ ElseIf Lret = 0 Then
     MsgBox GetResourceString(278), vbInformation, wis_MESSAGE_TITLE
     GoTo Exit_Line
 End If
-'Set rptRS = gDBTrans.Rst.Clone
+
+'GET THE KYC Details
+gDbTrans.SqlStmt = "Select * from  KYCTab order by customerid"
+Call gDbTrans.Fetch(rstKYC, adOpenDynamic)
 
 ' Populate the record set.
 rptRS.MoveLast
 rptRS.MoveFirst
-
+rstKYC.MoveLast
+rstKYC.MoveFirst
 ' Initialize the grid.
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Alignig the data tobe written into the grid.", 0)
 With grd
     .Visible = False
     .Clear
-    .Rows = rptRS.RecordCount + 1
+    .Rows = rptRS.recordCount + 1
     If .Rows < 50 Then .Rows = 50
     .FixedRows = 1
     .FixedCols = 0
@@ -3852,7 +3872,20 @@ Do While Not rptRS.EOF
             .TextMatrix(rowno, 1) = FormatField(rptRS("custname"))
             .TextMatrix(rowno, 2) = FormatField(rptRS("Place")) & suffix
             .TextMatrix(rowno, 3) = FormatField(rptRS("AccNum"))
-            Debug.Assert FormatField(rptRS("AccNum")) <> 747
+            Debug.Assert FormatField(rptRS("AccNum")) <> 2
+            ''KYC
+            rstKYC.MoveFirst
+            rstKYC.Find "CustomerID = " & FormatField(rptRS("CustomerID"))
+            If Not rstKYC.EOF Then
+                .TextMatrix(rowno, 17) = FormatField(rstKYC("IDText1"))
+                .TextMatrix(rowno, 18) = FormatField(rstKYC("CustPhone"))
+                .TextMatrix(rowno, 19) = FormatField(rstKYC("ExtAccNum1"))
+                .TextMatrix(rowno, 20) = FormatField(rstKYC("ExtIFSC1"))
+                .TextMatrix(rowno, 21) = FormatField(rstKYC("ExtAccNum2"))
+                .TextMatrix(rowno, 22) = FormatField(rstKYC("ExtIFSC2"))
+            rstKYC.MoveFirst
+            End If
+            'KYC
             .TextMatrix(rowno, 4) = suffix & GetIndianDate(LoanDate(payCount))
             '.TextMatrix(rowno, 5) = "Crop"
             '.TextMatrix(rowno, 7) = "Deposit Amount"
@@ -3920,7 +3953,7 @@ nextRecord:
     DoEvents
     If gCancel Then rptRS.MoveLast
     Me.Refresh
-    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / (rptRS.RecordCount + 2))
+    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / (rptRS.recordCount + 2))
     rptRS.MoveNext
 Loop
 
@@ -3993,6 +4026,7 @@ Private Sub ReportClaimBill_PrevYearly()
 ' Declare variables...
 Dim Lret As Long
 Dim rptRS As Recordset
+Dim rstKYC As Recordset
 Dim LoanID As Long
 Dim transType As wisTransactionTypes
 Dim ContraTransType As wisTransactionTypes
@@ -4045,19 +4079,22 @@ ElseIf Lret = 0 Then
     MsgBox GetResourceString(278), vbInformation, wis_MESSAGE_TITLE
     GoTo Exit_Line
 End If
-'Set rptRS = gDBTrans.Rst.Clone
+
+'GET THE KYC Details
+gDbTrans.SqlStmt = "Select * from  KYCTab order by customerid"
+Call gDbTrans.Fetch(rstKYC, adOpenDynamic)
 
 ' Populate the record set.
 rptRS.MoveLast
 rptRS.MoveFirst
 
 ' Initialize the grid.
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Alignig the data tobe written into the grid.", 0)
 With grd
     .Visible = False
     .Clear
-    .Rows = rptRS.RecordCount + 1
+    .Rows = rptRS.recordCount + 1
     If .Rows < 50 Then .Rows = 50
     .FixedRows = 1
     .FixedCols = 0
@@ -4131,6 +4168,7 @@ Do While Not rptRS.EOF
             .TextMatrix(rowno, 9) = suffix & Days
             .TextMatrix(rowno, 10) = FormatCurrency(loanIssueAmount * Days / 365 * 2 / 100)
             SubSubsidy = SubSubsidy + Val(.TextMatrix(rowno, 10))
+                    rowno = rowno + 1
             GoTo nextRecord
         End If
         LastIssueDate = CDate("31/3/" & Year(TransDate) + IIf(Month(TransDate) < 4, 0, 1))
@@ -4146,6 +4184,21 @@ Do While Not rptRS.EOF
             .TextMatrix(rowno, 1) = FormatField(rptRS("custname"))
             .TextMatrix(rowno, 2) = FormatField(rptRS("AccNum"))
             .TextMatrix(rowno, 3) = GetIndianDate(TransDate) & suffix
+            ''KYC
+            rstKYC.MoveFirst
+            rstKYC.Find "CustomerID = " & FormatField(rptRS("CustomerID"))
+            If Not rstKYC.EOF Then
+                .TextMatrix(rowno, 14) = FormatField(rstKYC("IDText1"))
+                .TextMatrix(rowno, 15) = FormatField(rstKYC("CustPhone"))
+                .TextMatrix(rowno, 16) = FormatField(rstKYC("ExtAccNum1"))
+                .TextMatrix(rowno, 17) = FormatField(rstKYC("ExtIFSC1"))
+                .TextMatrix(rowno, 18) = FormatField(rstKYC("ExtAccNum2"))
+                .TextMatrix(rowno, 19) = FormatField(rstKYC("ExtIFSC2"))
+            
+            End If
+            'KYC
+            
+            
             CalcualteDate = IIf(loanRepayDate(payCount) = "1/1/2000", LastIssueDate, loanRepayDate(payCount))
             currRepay = loanIssueAmount
             If loanIssueAmount > LoanRepayAmount(payCount) Then currRepay = LoanRepayAmount(payCount)
@@ -4211,7 +4264,7 @@ nextRecord:
     DoEvents
     If gCancel Then rptRS.MoveLast
     Me.Refresh
-    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / (rptRS.RecordCount + 2))
+    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / (rptRS.recordCount + 2))
     rptRS.MoveNext
 Loop
 
@@ -4280,6 +4333,7 @@ Private Sub ReportClaimBill_Yearly()
 ' Declare variables...
 Dim Lret As Long
 Dim rptRS As Recordset
+Dim rstKYC As Recordset
 Dim LoanID As Long
 Dim transType As wisTransactionTypes
 Dim ContraTransType As wisTransactionTypes
@@ -4332,19 +4386,22 @@ ElseIf Lret = 0 Then
     MsgBox GetResourceString(278), vbInformation, wis_MESSAGE_TITLE
     GoTo Exit_Line
 End If
-'Set rptRS = gDBTrans.Rst.Clone
+
+'KYC
+gDbTrans.SqlStmt = "Select * from KYCTab order by CustomerID"
+Call gDbTrans.Fetch(rstKYC, adOpenDynamic)
 
 ' Populate the record set.
 rptRS.MoveLast
 rptRS.MoveFirst
 
 ' Initialize the grid.
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Alignig the data tobe written into the grid.", 0)
 With grd
     .Visible = False
     .Clear
-    .Rows = rptRS.RecordCount + 1
+    .Rows = rptRS.recordCount + 1
     If .Rows < 50 Then .Rows = 50
     .FixedRows = 1
     .FixedCols = 0
@@ -4412,6 +4469,21 @@ Do While Not rptRS.EOF
             .TextMatrix(rowno, 1) = FormatField(rptRS("custname"))
             .TextMatrix(rowno, 2) = FormatField(rptRS("AccNum"))
             .TextMatrix(rowno, 3) = GetIndianDate(TransDate) & suffix
+            ''KYC
+            rstKYC.MoveFirst
+            rstKYC.Find "CustomerID = " & FormatField(rptRS("CustomerID"))
+            If Not rstKYC.EOF Then
+                .TextMatrix(rowno, 14) = FormatField(rstKYC("IDText1"))
+                .TextMatrix(rowno, 15) = FormatField(rstKYC("CustPhone"))
+                .TextMatrix(rowno, 16) = FormatField(rstKYC("ExtAccNum1"))
+                .TextMatrix(rowno, 17) = FormatField(rstKYC("ExtIFSC1"))
+                .TextMatrix(rowno, 18) = FormatField(rstKYC("ExtAccNum2"))
+                .TextMatrix(rowno, 19) = FormatField(rstKYC("ExtIFSC2"))
+            
+            End If
+            'KYC
+            
+            
             CalcualteDate = IIf(loanRepayDate(payCount) = "1/1/2000", LastIssueDate, loanRepayDate(payCount))
             currRepay = loanIssueAmount
             If loanIssueAmount > LoanRepayAmount(payCount) Then currRepay = LoanRepayAmount(payCount)
@@ -4476,7 +4548,7 @@ nextRecord:
     DoEvents
     If gCancel Then rptRS.MoveLast
     Me.Refresh
-    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / (rptRS.RecordCount + 2))
+    RaiseEvent Processing("Writing the data to the grid.", rptRS.AbsolutePosition / (rptRS.recordCount + 2))
     rptRS.MoveNext
 Loop
 
@@ -4586,7 +4658,7 @@ Dim OpeningBalance As Currency
 
 ' Initialize the grid.
 Call InitGrid
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
 ' Fill the rows
 Dim transType  As wisTransactionTypes
@@ -4653,7 +4725,7 @@ Do While Not rptRS.EOF
     DoEvents
     Me.Refresh
     If gCancel Then rptRS.MoveLast
-    RaiseEvent Processing("Writing the data ", rptRS.AbsolutePosition / rptRS.RecordCount)
+    RaiseEvent Processing("Writing the data ", rptRS.AbsolutePosition / rptRS.recordCount)
     ' Move to next row.
     rptRS.MoveNext
     
@@ -4772,7 +4844,7 @@ rptRS.MoveLast
 rptRS.MoveFirst
 
 'Raise event to access frmcancel.
-RaiseEvent Initialise(0, rptRS.RecordCount)
+RaiseEvent Initialise(0, rptRS.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
 
 ' Initialize the grid.
@@ -4850,7 +4922,7 @@ nextRecord:
 
     rptRS.MoveNext
     DoEvents
-    RaiseEvent Processing("Writing the data ", rptRS.AbsolutePosition / rptRS.RecordCount)
+    RaiseEvent Processing("Writing the data ", rptRS.AbsolutePosition / rptRS.recordCount)
 Loop
 
 With grd
@@ -4966,7 +5038,7 @@ If gDbTrans.Fetch(rstTrans, adOpenDynamic) < 1 Then Set rstTrans = Nothing
     
 
 ' Initialize the grid.
-RaiseEvent Initialise(0, rstPrev.RecordCount)
+RaiseEvent Initialise(0, rstPrev.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
 
 Dim SlNo As Integer
@@ -5042,7 +5114,7 @@ nextRecord:
     DoEvents
     If gCancel Then rstPrev.MoveLast
     
-    RaiseEvent Processing("Writing the data ", rstPrev.AbsolutePosition / rstPrev.RecordCount)
+    RaiseEvent Processing("Writing the data ", rstPrev.AbsolutePosition / rstPrev.recordCount)
     
     ' Move to next row.
     rstPrev.MoveNext
@@ -5134,7 +5206,7 @@ End If
 If gDbTrans.Fetch(rst, adOpenDynamic) <= 0 Then Exit Sub
 Call InitGrid
 
-RaiseEvent Initialise(0, rst.RecordCount)
+RaiseEvent Initialise(0, rst.recordCount)
 RaiseEvent Processing("Aligning the data ", 0)
 
 SlNo = 1
@@ -5157,7 +5229,7 @@ While Not rst.EOF
     SlNo = SlNo + 1
     DoEvents
     If gCancel Then rst.MoveLast
-    RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / (rst.RecordCount + 1))
+    RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / (rst.recordCount + 1))
     End If
     rst.MoveNext
 Wend
@@ -5242,7 +5314,7 @@ grd.Rows = 20
 
 Dim TotalBalance As Currency
 
-Lret = rstTrans.RecordCount + 2
+Lret = rstTrans.recordCount + 2
 RaiseEvent Initialise(0, Lret)
 RaiseEvent Processing("Alignig the data tobe written into the grid.", 0)
 
@@ -5440,7 +5512,7 @@ If gDbTrans.Fetch(rstMaster, adOpenDynamic) < 1 Then Exit Sub
 Call InitGrid
 Dim colno As Integer
 
-For I = 1 To rstMaster.RecordCount
+For I = 1 To rstMaster.recordCount
     If rstMaster.EOF Then Exit For
     With grd
         '.Row = I
@@ -5454,7 +5526,7 @@ For I = 1 To rstMaster.RecordCount
     End With
     DoEvents
     If gCancel Then rstMaster.MoveLast
-    RaiseEvent Processing("Writing the data ...", I / rstMaster.RecordCount)
+    RaiseEvent Processing("Writing the data ...", I / rstMaster.recordCount)
     
     rstMaster.MoveNext
 
@@ -5526,7 +5598,7 @@ Dim SlNo As Long
 Dim CustClass As New clsCustReg
     Call InitGrid
     
-    RaiseEvent Initialise(0, rst.RecordCount)
+    RaiseEvent Initialise(0, rst.recordCount)
     RaiseEvent Processing("Aligning the data ", 0)
     
     If Trim$(m_Place) <> "" Then
@@ -5565,7 +5637,7 @@ Dim CustClass As New clsCustReg
         
         DoEvents
         If gCancel Then rst.MoveLast
-        RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / rst.RecordCount)
+        RaiseEvent Processing("Writing the data ", rst.AbsolutePosition / rst.recordCount)
         rst.MoveNext
         
     Wend
@@ -5602,7 +5674,7 @@ Next I
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
     Set frmBkccReport = Nothing
 End Sub
 

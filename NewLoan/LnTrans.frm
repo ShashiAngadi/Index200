@@ -584,6 +584,7 @@ Begin VB.Form frmLoanTrans
             _ExtentX        =   15161
             _ExtentY        =   3466
             _Version        =   393217
+            Enabled         =   -1  'True
             TextRTF         =   $"LnTrans.frx":0000
          End
       End
@@ -720,7 +721,7 @@ If Not DateValidate(txtTransDate, "/", True) Then
 End If
 txtTotAmt = 0
 txtTotAmt.Tag = 0
-txtPenalINT = 0
+txtPenalInt = 0
 txtRegInt = 0
 txtTotalIntBalance = 0
 txtRepaid = ""
@@ -728,19 +729,19 @@ txtPrincAmount = 0
 
 txtRegInt.BackColor = wisWhite
 txtTotalIntBalance.BackColor = wisWhite
-txtPenalINT.BackColor = wisWhite
+txtPenalInt.BackColor = wisWhite
 txtRegIntBalance.BackColor = wisWhite
 txtMisc.BackColor = wisWhite
-txtCustName.BackColor = wisWhite
+txtCustNAme.BackColor = wisWhite
 txtLoanAccNo.BackColor = wisWhite
 txtPrincAmount.BackColor = wisWhite
 txtTotAmt.BackColor = wisWhite
 txtRegInt.Enabled = True
 txtTotalIntBalance.Enabled = True
-txtPenalINT.Enabled = True
+txtPenalInt.Enabled = True
 txtRegIntBalance.Enabled = True
 txtMisc.Enabled = True
-txtCustName.Enabled = True
+txtCustNAme.Enabled = True
 txtLoanAccNo.Enabled = True
 txtPrincAmount.Enabled = True
 txtTotAmt.Enabled = True
@@ -925,7 +926,7 @@ If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
     Load m_frmLoanInst
     If Err Then Debug.Print Err.Number & "  " & Err.Description
     
-    m_frmLoanInst.txtCustName = txtCustName
+    m_frmLoanInst.txtCustNAme = txtCustNAme
     m_frmLoanInst.txtLoanAmount = txtLoanAmount
 End If
 
@@ -980,7 +981,7 @@ If transType = wDeposit And DateValidate(txtTransDate, "/", True) Then
 '    txtTotalIntBalance = L_clsLoan.InterestBalance(LoanID, TransDate)
     txtTotalIntBalance = Val(txtRegIntBalance) + Val(txtPenalBalance)
     txtRegInt = L_clsLoan.RegularInterest(LoanID, , TransDate)
-    txtPenalINT = L_clsLoan.PenalInterest(LoanID, , TransDate)
+    txtPenalInt = L_clsLoan.PenalInterest(LoanID, , TransDate)
     If hasEMI Then txtPrincAmount = L_clsLoan.PrincipalAmountAsOn(LoanID, TransDate)
     Call CheckForDueAmount
     txtOverDue = FormatCurrency(L_clsLoan.OverDueAmount(LoanID, , TransDate))
@@ -1088,25 +1089,25 @@ If FormatField(m_rstLoanMast("LoanClosed")) Then
     txtPrincAmount.BackColor = wisGray
     txtTotalIntBalance = 0
     txtRegInt = 0
-    txtPenalINT = 0
+    txtPenalInt = 0
     txtRegIntBalance = "0.00"
     txtPenalBalance = "0.00"
     txtTotalIntBalance.BackColor = wisGray
     txtRegInt.BackColor = wisGray
-    txtPenalINT.BackColor = wisGray
+    txtPenalInt.BackColor = wisGray
     txtRegIntBalance.BackColor = wisGray
     txtPenalBalance.BackColor = wisGray
     txtMisc.BackColor = wisGray
-    txtCustName.BackColor = wisGray
+    txtCustNAme.BackColor = wisGray
     'txtLoanAccNo.BackColor = wisGray
     txtTotAmt.BackColor = wisGray
     txtTotAmt.Enabled = False
     txtTotalIntBalance.Enabled = False
     txtRegInt.Enabled = False
-    txtPenalINT.Enabled = False
+    txtPenalInt.Enabled = False
     'txtIntBalance.Enabled = False
     txtMisc.Enabled = False
-    txtCustName.Enabled = False
+    txtCustNAme.Enabled = False
   If FormatCurrency(Val(txtBalance)) = 0 Then
     cmdUndo.Caption = GetResourceString(313) '"&Reopen"
     'cmdUndo.Tag = "Reopen"
@@ -1131,8 +1132,8 @@ If FormatField(m_rstLoanMast("LoanClosed")) = 0 Then
     txtTotalIntBalance.BackColor = &H80000005
     txtRegInt.Enabled = True
     txtRegInt.BackColor = &H80000005
-    txtPenalINT.Enabled = True
-    txtPenalINT.BackColor = &H80000005
+    txtPenalInt.Enabled = True
+    txtPenalInt.BackColor = &H80000005
     txtPrincAmount.Enabled = True
     txtPrincAmount.BackColor = &H80000005
     txtMisc.Enabled = True
@@ -1591,7 +1592,7 @@ If Len(Trim(txtCustID)) = 0 Then Exit Sub
 Dim CustName As String
 Dim memberType As Integer
 
-txtCustName.Caption = GetMemberNameCustIDByMemberNum(Trim(txtCustID), m_CustomerID, memberType)
+txtCustNAme.Caption = GetMemberNameCustIDByMemberNum(Trim(txtCustID), m_CustomerID, memberType)
 
 If m_CustomerID < 1 Then Exit Sub
 
@@ -1641,7 +1642,7 @@ If gDbTrans.Fetch(rst, adOpenDynamic) < 1 Then
 End If
 
 m_ClsCust.LoadCustomerInfo (m_CustomerID)
-txtCustName = m_ClsCust.CustomerName(m_CustomerID)
+txtCustNAme = m_ClsCust.CustomerName(m_CustomerID)
 Call LoadCustomerLoans
 End Sub
 
@@ -1678,7 +1679,7 @@ If gDbTrans.Fetch(rst, adOpenDynamic) < 1 Then RecFetch = True
 If RecFetch Then
     'MsgBox "There is no Loan in this account", vbInformation
     MsgBox GetResourceString(582), vbInformation
-    txtCustName.Caption = ""
+    txtCustNAme.Caption = ""
     
     txtTransDate.Text = ""
     txtTransDate.Tag = txtTransDate.Text
@@ -1718,8 +1719,8 @@ Dim memberType As Integer
 txtCustID = GetMemberNumberAndType(custId, memberType)
 m_CustomerID = custId
 m_ClsCust.LoadCustomerInfo (m_CustomerID)
-txtCustName = m_ClsCust.CustomerName(m_CustomerID)
-
+txtCustNAme = m_ClsCust.CustomerName(m_CustomerID)
+Call SetComboIndex(cmbMemberType, , memberType)
 Call LoadCustomerLoans
 
 Dim count As Integer
@@ -1847,7 +1848,7 @@ End Sub
 Private Sub cmdRepay_Click()
 
 If Val(txtTotAmt.Tag) Then
-    If txtTotAmt.Value <> (txtTotalIntBalance + txtRegInt + txtPenalINT + txtMisc + txtPrincAmount) Then
+    If txtTotAmt.Value <> (txtTotalIntBalance + txtRegInt + txtPenalInt + txtMisc + txtPrincAmount) Then
         MsgBox GetResourceString(499), vbInformation, wis_MESSAGE_TITLE
         ActivateTextBox txtTotAmt
         Exit Sub
@@ -1934,7 +1935,7 @@ Dim RetMsg As VbMsgBoxResult
 Amount = Val(txtTotAmt)
 Balance = Val(txtBalance)
 IntAmount = txtRegInt
-PenalIntAmount = Val(txtPenalINT)
+PenalIntAmount = Val(txtPenalInt)
 PrevIntBalance = Val(txtRegIntBalance) + Val(txtPenalBalance)
 IntBalance = txtTotalIntBalance
 PenalBalance = Val(txtPenalBalance)
@@ -2414,7 +2415,7 @@ cmdPhoto.Enabled = Len(gImagePath)
 Me.Caption = Me.Caption
 Call CenterMe(Me)
 Call SetKannadaCaption
-txtCustName.FONTSIZE = txtCustName.FONTSIZE + 1
+txtCustNAme.FONTSIZE = txtCustNAme.FONTSIZE + 1
 
 'Load The instalment types
 txtTransDate = gStrDate
@@ -3040,7 +3041,7 @@ End Sub
 Private Sub txtCustID_Change()
 If m_CustomerID = Val(txtCustID) Then Exit Sub
 Call ClearControls
-txtCustName = ""
+txtCustNAme = ""
 fraLoanGrid.Visible = False
 tabLoans.Tabs.Clear
 m_CustomerID = 0
@@ -3070,7 +3071,7 @@ Call txtRegInt_Change
 End Sub
 
 Private Sub txtPenalInt_GotFocus()
-With txtPenalINT
+With txtPenalInt
     .SelStart = 0
     .SelLength = Len(.Text)
 End With
@@ -3094,9 +3095,9 @@ Dim Amount As Currency
 txtRegIntBalance.Tag = Val(txtRegInt)
 Amount = txtTotAmt
 If Val(txtTotAmt.Tag) Then
-    txtPrincAmount = txtTotAmt - (txtTotalIntBalance + txtRegInt + txtPenalINT + txtMisc)
+    txtPrincAmount = txtTotAmt - (txtTotalIntBalance + txtRegInt + txtPenalInt + txtMisc)
 Else
-    Amount = txtTotalIntBalance + txtRegInt + txtPenalINT + txtMisc + txtPrincAmount
+    Amount = txtTotalIntBalance + txtRegInt + txtPenalInt + txtMisc + txtPrincAmount
     If Amount < 0 Then Amount = 0
     txtTotAmt = Amount
 End If
@@ -3127,7 +3128,7 @@ End Sub
 
 Private Sub txtTotAmt_Change()
 If Me.ActiveControl.name <> txtTotAmt.name Then Exit Sub
-txtPrincAmount = txtTotAmt - txtRegInt - txtPenalINT - txtMisc
+txtPrincAmount = txtTotAmt - txtRegInt - txtPenalInt - txtMisc
 txtTotAmt.Tag = 1
 End Sub
 

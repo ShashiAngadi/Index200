@@ -2564,14 +2564,14 @@ If chkSb.Value = vbChecked And SelectedTransType = wWithdraw Then
 
     Set SBClass = New clsSBAcc
     
-    If cmbSB.Visible Then
-        SbHeadID = GetIndexHeadID(cmbSB.Text)
+    If cmbSb.Visible Then
+        SbHeadID = GetIndexHeadID(cmbSb.Text)
     Else
         SbHeadID = GetIndexHeadID(GetResourceString(421))
     End If
     'Check For the SB Number Existace
     SbACCID = 0
-    If cmbSB.Visible Then SbACCID = cmbSB.ItemData(cmbSB.ListIndex)
+    If cmbSb.Visible Then SbACCID = cmbSb.ItemData(cmbSb.ListIndex)
     SbACCID = SBClass.GetAccountID(txtSbAccNum, SbACCID)
     If Len(Trim(txtSbAccNum)) = 0 Or SbACCID = 0 Then
         'MsgBox "Account not existance", vbInformation, "SB Account"
@@ -3808,7 +3808,6 @@ Lret = gDbTrans.Fetch(rst, adOpenDynamic)
 If Lret <= 0 Then GoTo Exit_Line
 NewLoanID = Val(FormatField(rst(0))) + 1
 
-'Memeber type
 'Now Get the Farmer Type
 Dim FarmerType As Integer
 txtIndex = GetIndex("FarmerType")
@@ -4169,6 +4168,8 @@ Dim lGuarantorID As Long
 Dim rst As Recordset
 Dim CtrlIndex As Integer
 ' ------------------------------------------
+
+
 
 ' Check for member details.
 'Memeber type
@@ -4931,7 +4932,7 @@ End If
 If chkSb.Value = vbChecked And cmbTrans.ListIndex = 1 Then
     'Add Intrest transaction
     cmdSb.Enabled = True
-    cmbSB.Enabled = True
+    cmbSb.Enabled = True
     txtSbAccNum.Enabled = True
     txtSbAccNum.BackColor = wisWhite
 Else
@@ -4961,21 +4962,21 @@ Dim recCount As Integer
     recCount = gDbTrans.Fetch(rst, adOpenForwardOnly)
     If recCount = 1 Then
         txtSbAccNum = FormatField(rst(0))
-        If cmbSB.Visible Then Call SetComboIndex(cmbSB, , FormatField(rst("DepositTYpe")))
+        If cmbSb.Visible Then Call SetComboIndex(cmbSb, , FormatField(rst("DepositTYpe")))
         
     End If
     If recCount > 1 Then
-        If Not cmbSB.Visible Then
+        If Not cmbSb.Visible Then
             txtSbAccNum = FormatField(rst(0))
             Exit Sub
         End If
         
-        If cmbSB.ListIndex < 0 Then
+        If cmbSb.ListIndex < 0 Then
             MsgBox "Please select deposit type", , wis_MESSAGE_TITLE
             Exit Sub
         Else
             gDbTrans.SqlStmt = "SELECT AccNum From SBMASTER " & _
-                " WHERE DepositType = " & cmbSB.ItemData(cmbSB.ListIndex) & _
+                " WHERE DepositType = " & cmbSb.ItemData(cmbSb.ListIndex) & _
                 " And CustomerId = (SELECT CustomerID From BKCCMAster " & _
                 " WHERE LoanID = " & m_LoanID & ")"
             recCount = gDbTrans.Fetch(rst, adOpenForwardOnly)
@@ -5024,7 +5025,7 @@ lblChequeNo.Caption = GetResourceString(41, 60) '"Voucher Num
 lblRegInterest.Caption = GetResourceString(344)
 With cmbTrans
     chkSb.Enabled = False
-    cmbSB.Enabled = False
+    cmbSb.Enabled = False
     cmbCheque.Visible = False
     txtVoucherNo.ZOrder 0
     If .ListIndex = 0 Then 'Receipt
@@ -5033,14 +5034,14 @@ With cmbTrans
         chkSb.Caption = GetResourceString(47, 10) 'Interest add
         chkSb.TabIndex = cmbParticulars.TabIndex + 1
         '//HIDE THE SB COMOBO BOX
-        cmbSB.Visible = False
+        cmbSb.Visible = False
         'Now Check the Receivable Amount
         txtMiscAmount = GetReceivAbleAmount(m_LoanHeadID, m_LoanID)
         If txtMiscAmount.Value > 0 Then _
             Set m_clsReceivable = LoadReceivableAmounts(m_LoanHeadID, m_LoanID)
         
         chkSb.Enabled = True
-        cmbSB.Enabled = True
+        cmbSb.Enabled = True
         txtSbAccNum.Enabled = False
         txtSbAccNum.BackColor = wisGray
         cmdSb.Enabled = False
@@ -5049,11 +5050,11 @@ With cmbTrans
     ElseIf .ListIndex = 1 Then 'Payment
         .Tag = "-1"
         lblTotInst.Caption = GetResourceString(375, 40)
-        Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271) ' Savings bank receipt
+        Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSb) 'chkSb.Caption = GetResourceString(421, 271) ' Savings bank receipt
         lblChequeNo.Caption = GetResourceString(275, 60) '"Sb acc NUm
         chkSb.TabIndex = 34
         chkSb.Enabled = True
-        If cmbSB.Visible Then cmbSB.TabIndex = 34
+        If cmbSb.Visible Then cmbSb.TabIndex = 34
         txtSbAccNum.Enabled = True
         lblChequeNo.Enabled = True
         txtSbAccNum.BackColor = wisWhite
@@ -5067,7 +5068,7 @@ With cmbTrans
     'If .ListIndex = 2 Then 'interest on deposit
         .Tag = 1
         lblRegInterest.Caption = GetResourceString(233)
-        chkSb.Enabled = False: cmbSB.Enabled = False
+        chkSb.Enabled = False: cmbSb.Enabled = False
         txtSbAccNum.Enabled = False
         txtSbAccNum.BackColor = wisGray
         cmdSb.Enabled = False
@@ -7723,7 +7724,7 @@ Call SetFontToControlsSkipGrd(Me)
 'Raise the error if occurs
 On Error GoTo 0
 'Set kannada caption for the generally used  controls
-cmdOk.Caption = GetResourceString(1)
+cmdOK.Caption = GetResourceString(1)
 
 'Set captions for the all the tabs
 TabStrip.Tabs(1).Caption = GetResourceString(216)
@@ -7736,7 +7737,7 @@ TabStrip2.Tabs(2).Caption = GetResourceString(218)
     
 'Set Kannada/English captions for the Repayments
 lblMisc.Caption = GetResourceString(327)
-lblLoanAccNo.Caption = GetResourceString(58, 60) 'Loan No
+lblLoanAccNO.Caption = GetResourceString(58, 60) 'Loan No
 lblMemberId.Caption = GetResourceString(49, 60)
 cmdLoad.Caption = GetResourceString(3)
 lblName.Caption = GetResourceString(35)
@@ -7754,7 +7755,7 @@ lblParticulars.Caption = GetResourceString(39)  '"Particulars
 cmdUndo.Caption = GetResourceString(5)
 'cmdInstalment.Caption = GetResourceString(57)
 cmdAccept.Caption = GetResourceString(4)
-Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271)
+Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSb) 'chkSb.Caption = GetResourceString(421, 271)
 lblChequeNo.Caption = GetResourceString(275, 60) '"Sb acc NUm
 
 lblfarmer.Caption = GetResourceString(378, 253)
