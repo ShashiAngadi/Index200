@@ -814,10 +814,11 @@ lblPenal = GetResourceString(345) '"PenalInterest
 lblNewBalance = GetResourceString(260, 42) 'New BAlance
 chkInterest.Caption = GetResourceString(308)  'Deduct Interest
 'chk.Caption = GetResourceString(309)  'Deduct Legal Fee
+cmbSB.Clear
 Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271)
 
 cmdCancel.Caption = GetResourceString(2)  'Cancel
-cmdOk.Caption = GetResourceString(1)      'OK
+cmdOK.Caption = GetResourceString(1)      'OK
 
 End Sub
 

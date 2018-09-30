@@ -7,8 +7,18 @@ Begin VB.Form frmEmpoyee
    ClientTop       =   2355
    ClientWidth     =   6795
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   3675
    ScaleWidth      =   6795
+   Begin VB.TextBox txtPassword 
+      Height          =   345
+      IMEMode         =   3  'DISABLE
+      Left            =   4830
+      PasswordChar    =   "*"
+      TabIndex        =   22
+      Top             =   2610
+      Width           =   1605
+   End
    Begin VB.TextBox txtEpfNo 
       Height          =   315
       Left            =   4830
@@ -96,13 +106,13 @@ Begin VB.Form frmEmpoyee
       NumberString    =   "zero,one,two,three,four,five,six,seven,eight,nine"
       FontSize        =   8.25
    End
-   Begin VB.Label txtPassword 
+   Begin VB.Label txtPassword1 
       BackColor       =   &H80000005&
       BorderStyle     =   1  'Fixed Single
       Height          =   345
-      Left            =   4830
+      Left            =   2280
       TabIndex        =   16
-      Top             =   2610
+      Top             =   3120
       Width           =   1605
       WordWrap        =   -1  'True
    End
@@ -230,7 +240,7 @@ Private m_dbOperation As wis_DBOperation
 Public Property Let UserID(NewValue As Long)
 
 m_UserID = NewValue
-cmdOk.Enabled = False
+cmdOK.Enabled = False
 If m_LoadedForm And m_UserID Then Call GetEmployeeDetail
 
 End Property
@@ -238,7 +248,7 @@ End Property
 Private Sub GetEmployeeDetail()
 
 If m_UserID <= 0 Then Exit Sub
-cmdOk.Enabled = True
+cmdOK.Enabled = True
 m_dbOperation = Insert
 
 'Now Get the Details of Emloyee
@@ -288,7 +298,7 @@ lblLoginPassword.Caption = GetResourceString(151, 153)
 'lblConfirmPassword.Caption = GetResourceString(154,153)
 
 'lblPermissions.Caption = GetResourceString(156)
-cmdOk.Caption = GetResourceString(1)
+cmdOK.Caption = GetResourceString(1)
 cmdCancel.Caption = GetResourceString(2)
 
 End Sub
@@ -436,7 +446,7 @@ End Sub
 
 Private Sub Form_Load()
 
-cmdOk.Enabled = False
+cmdOK.Enabled = False
 
 Call CenterMe(Me)
 
@@ -448,3 +458,6 @@ If m_UserID Then Call GetEmployeeDetail
 End Sub
 
 
+Private Sub txtPassword_Click()
+
+End Sub

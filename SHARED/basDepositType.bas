@@ -4,34 +4,47 @@ Private Function SelectDepositType(ModuleID As wisModules, cancel As Boolean, By
     
     Dim selectDep As New clsSelectDeposit
     Dim multiDeposit As Boolean
-    Dim Deptype As Integer
-    Deptype = selectDep.SelectDeposit(ModuleID, grpAllDeposit, haveMultiDeposits, cancel)
+    Dim depTYpe As Integer
+    depTYpe = selectDep.SelectDeposit(ModuleID, grpAllDeposit, haveMultiDeposits, cancel)
     Set selectDep = Nothing
     
-    If Deptype > -1 Then
+    If depTYpe > -1 Then
         'm_frmSBAcc.DepositType = DepType
         'm_frmSBAcc.MultipleDeposit = multiDeposit
         'If m_DepositType <> DepType And m_frmSBAcc.IsFormLoaded Then m_frmSBAcc.txtAccNo = ""
         
     End If
     'm_DepositType = DepType
-    SelectDepositType = Deptype
+    SelectDepositType = depTYpe
     
 End Function
+Public Sub SetMultiDepositCheckBoxCaption(ModuleIDs() As wisModules, ByRef chkDep As CheckBox, ByRef cmbDep As ComboBox)
+    Dim loopCount As Integer
+    For loopCount = 0 To UBound(ModuleIDs)
+        Call SetDepositCheckBoxCaption(ModuleIDs(loopCount), chkDep, cmbDep)
+    Next
+    If loopCount > 0 Then
+        chkDep.Caption = GetResourceString(271)
+        cmbDep.Visible = True
+    Else
+    End If
+End Sub
+
 Public Sub SetDepositCheckBoxCaption(ByVal ModuleID As wisModules, ByRef chkDep As CheckBox, ByRef cmbDep As ComboBox)
     
     'Check the No Of Deposits
     Dim SBDepNames() As String
     SBDepNames = GetDepositTypesList(ModuleID)
     If UBound(SBDepNames) = 1 Then
-        chkDep.Caption = GetResourceString(421, 271)  'GetDepositName(ModuleID, 0) & " " & GetResourceString(271)
+        chkDep.Caption = GetDepositName(ModuleID, 0) & " " & GetResourceString(271)
         cmbDep.Visible = False
     Else
         chkDep.Caption = GetResourceString(271)
         'chkDep.Caption = ""
         cmbDep.Visible = True
-        Call LoadDepositTypesToCombo(wis_SBAcc, cmbDep, True)
+        
     End If
+    Call LoadDepositTypesToCombo(ModuleID, cmbDep, False)
     
 End Sub
 
@@ -63,20 +76,20 @@ End Sub
 Public Function GetDepositTypeOfAccount(ModuleID As wisModules, AccId As Long, ByRef DepositName As String, ByRef DepositNameInEnglish As String) As String
      Dim TableName As String
      Dim rst As Recordset
-     Dim Deptype As Integer
+     Dim depTYpe As Integer
      TableName = GetMasterTableName(ModuleID)
      gDbTrans.SqlStmt = "Select * From " & TableName & " Where AccID = " & AccId
      If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
-        Deptype = FormatField(rst("DepositType"))
-        DepositName = GetDepositName(ModuleID, Deptype, DepositNameInEnglish)
-        GetDepositTypeOfAccount = Deptype
+        depTYpe = FormatField(rst("DepositType"))
+        DepositName = GetDepositName(ModuleID, depTYpe, DepositNameInEnglish)
+        GetDepositTypeOfAccount = depTYpe
      End If
     
 End Function
 Public Function GetDepositTypesList(ModuleID As wisModules) As String()
     Dim depNames() As String
     Dim RstDep As Recordset
-    gDbTrans.SqlStmt = "Select * from DepositTYpeTab where ModuleID = " & ModuleID
+    gDbTrans.SqlStmt = "Select * from DepositTypeTab where ModuleID = " & ModuleID
     If gDbTrans.Fetch(RstDep, adOpenDynamic) > 0 Then
         ReDim Preserve depNames(0)
         While Not RstDep.EOF
@@ -101,7 +114,7 @@ Public Function GetDepositTypeIDFromHeadID(AccHeadID As Long) As Integer
     Dim ParentID As Long
     Dim ModuleID As wisModules
     Dim retValue As Integer
-    Dim Deptype As Integer
+    Dim depTYpe As Integer
     
     gDbTrans.SqlStmt = "Select HeadName,AccType From BankHeadIds where Headid = " & AccHeadID
     
@@ -117,13 +130,13 @@ Public Function GetDepositTypeIDFromHeadID(AccHeadID As Long) As Integer
                 gDbTrans.SqlStmt = "Select * From DepositTypeTab where DepositTypeName = " & AddQuotes(headName, True)
                 If gDbTrans.Fetch(RstDep, adOpenDynamic) > 0 Then
                     retValue = FormatField(RstDep("ModuleID"))
-                    Deptype = FormatField(RstDep("DepositTYpe"))
+                    depTYpe = FormatField(RstDep("DepositTYpe"))
                 End If
             Case wis_Deposits
                 gDbTrans.SqlStmt = "Select * From DepositName where DepositName = " & AddQuotes(headName, True)
                 If gDbTrans.Fetch(RstDep, adOpenDynamic) > 0 Then
                     retValue = wis_Deposits
-                    Deptype = FormatField(RstDep("DepositId"))
+                    depTYpe = FormatField(RstDep("DepositId"))
                 End If
                 
             Case wis_Loans
@@ -140,16 +153,16 @@ Public Function GetDepositTypeIDFromHeadID(AccHeadID As Long) As Integer
         End Select
     End If
     
-    GetDepositTypeIDFromHeadID = Deptype
+    GetDepositTypeIDFromHeadID = depTYpe
 End Function
 Public Function GetDepositName(ModuleID As wisModules, DepositType As Integer, Optional ByRef NameInEnglish As String) As String
-    Dim depName As String
+    Dim DepName As String
     Dim resStringId As Integer
     Dim rst As Recordset
     gDbTrans.SqlStmt = "Select * from DepositTypeTab Where ModuleID = " & ModuleID & " And DepositType =  " & DepositType
     If DepositType > 0 Then
         If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
-            depName = FormatField(rst("DepositTypeName"))
+            DepName = FormatField(rst("DepositTypeName"))
             NameInEnglish = FormatField(rst("DepositTypeNameEnglish"))
         End If
     ElseIf DepositType = 0 Then
@@ -168,12 +181,12 @@ Public Function GetDepositName(ModuleID As wisModules, DepositType As Integer, O
                 Err.Raise 400, , "Invalid Module"
         End Select
         
-        depName = GetResourceString(resStringId)
+        DepName = GetResourceString(resStringId)
         NameInEnglish = LoadResourceStringS(resStringId)
         
     End If
         
-    GetDepositName = depName
+    GetDepositName = DepName
 End Function
 Private Function GetDepositTypeID(ModuleID As wisModules, Optional ByRef MutliDeposit As Boolean) As Integer
     Dim rst As Recordset

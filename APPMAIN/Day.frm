@@ -640,7 +640,7 @@ With m_frmGrid.grd
     .Cols = 5
     .FixedCols = 2
     .FixedRows = 1
-    .Rows = rstDeposit.RecordCount + 1
+    .Rows = rstDeposit.recordCount + 1
     .Row = 0
     .Col = 0: .Text = GetResourceString(33)
     .Col = 1: .Text = GetResourceString(36, 60)
@@ -676,7 +676,7 @@ m_frmGrid.Show 1
 FDChecked = True
 
 Dim MaxAcc As Integer
-MaxAcc = rstDeposit.RecordCount
+MaxAcc = rstDeposit.recordCount
 Set rstDeposit = Nothing
 
 If Not m_retVar Then
@@ -852,7 +852,7 @@ gDbTrans.SqlStmt = "Select A.AccId,AccNum,Balance as DepositAmount, Name " & _
         " And C.CustomerID = A.CustomerId" & _
         " Order By MaturityDate,val(AccNum)"
 
-If gDbTrans.Fetch(rstDeposit, adOpenDynamic) < 1 Then GoTo PigmyDEPOSIT:
+If gDbTrans.Fetch(rstDeposit, adOpenDynamic) > 0 Then
 FDChecked = True
 
 Dim PDClass As New clsPDAcc
@@ -881,6 +881,8 @@ With m_frmGrid.grd
     Wend
     
 End With
+
+End If
 Set PDClass = Nothing
 
 With m_frmGrid.grd
@@ -903,7 +905,7 @@ If Not FDChecked Then Exit Sub
 m_frmGrid.Show 1
 
 Dim MaxAcc As Integer
-MaxAcc = rstDeposit.RecordCount
+MaxAcc = rstDeposit.recordCount
 Set rstDeposit = Nothing
 
 If Not m_retVar Then

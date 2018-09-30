@@ -29,7 +29,7 @@ Private WithEvents m_frmSBAcc As frmSBAcc
 Attribute m_frmSBAcc.VB_VarHelpID = -1
 Private WithEvents m_frmSBReport As frmSBReport
 Attribute m_frmSBReport.VB_VarHelpID = -1
-Public Property Let CustomerID(NewValue As Long)
+Public Property Let customerID(NewValue As Long)
 
 Dim rst As Recordset
 gDbTrans.SqlStmt = "Select AccID From SBMaster Where CustomerID = " & NewValue
@@ -323,7 +323,7 @@ ErrLine:
 End Function
  'This funtion returns the customer balance on given date ,His SB account No
 'Arguments CustomerId, Id of the customet whose balance is needed
-Public Function CustomerBalance(CustomerID As Long, retAccNum As String, AsOnDate As Date) As Currency
+Public Function CustomerBalance(customerID As Long, retAccNum As String, AsOnDate As Date) As Currency
 'To trap an error
 On Error GoTo ErrLine
 
@@ -331,7 +331,7 @@ CustomerBalance = 0
 'Sql stmt to get Accid
 gDbTrans.SqlStmt = "Select A.AccID,AccNum,Balance from " & _
     " SBMaster A Inner Join SBTrans B On A.AccID = B.AccId " & _
-    " where Customerid=" & CustomerID & " and TransID IN " & _
+    " where Customerid=" & customerID & " and TransID IN " & _
         "(Select Max(transID) From SBtrans C WHERE " & _
         " TransDate <= #" & AsOnDate & "# AND C.AccID =A.AccID)" & _
     " And (ClosedDate >= #" & AsOnDate & "# OR ClosedDate is NULL )"
@@ -679,8 +679,8 @@ Dim rst As ADODB.Recordset
     If ret <= 0 Then Exit Function
     
     If ret > 1 Then  'Screwed case
-        'MsgBox "Data base curruption !", vbExclamation, gAppName & " - Error"
-        MsgBox GetResourceString(601), vbExclamation, gAppName & " - Error"
+        'MsgBox "Invalid Account number specified !", vbExclamation, gAppName & " - Error"
+        MsgBox GetResourceString(500), vbExclamation, gAppName & " - Error"
         Exit Function
     End If
     
@@ -1182,3 +1182,26 @@ Public Function IsContraTransactionRemovable(AccId As Long, Amount As Currency, 
     
 End Function
 
+Public Function GetCustmerAccountNumbers(custID As Long) As Dictionary
+    
+    Dim dict As New Dictionary
+    Dim coll As New Collection
+    Dim rst As Recordset
+    gDbTrans.SqlStmt = "Select AccId,AccNum,DepositType from SBMAster where customerID = " & custID & " And ClosedDate is Null"
+    If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
+        While rst.EOF = False
+            Set coll = New Collection
+            
+            coll.Add FormatField(rst("AccId")), "AccId"
+            coll.Add FormatField(rst("AccNum")), "AccNum"
+            coll.Add FormatField(rst("DepositType")), "DepositType"
+            
+            dict.Add FormatField(rst("AccId")), coll
+            
+            
+            rst.MoveNext
+        Wend
+    End If
+    Set GetCustmerAccountNumbers = dict
+    Set rst = Nothing
+End Function

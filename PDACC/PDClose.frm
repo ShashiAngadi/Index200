@@ -367,7 +367,6 @@ Private m_ContraClass As clsContra
 Private WithEvents m_LookUp As frmLookUp
 Attribute m_LookUp.VB_VarHelpID = -1
 
-
 Public Property Let AccountId(NewValue As Long)
     m_AccID = NewValue
 End Property
@@ -1200,7 +1199,7 @@ End If
 
 End Sub
 '
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 '""(Me.hwnd, False)
 Set frmPDClose = Nothing
 End Sub

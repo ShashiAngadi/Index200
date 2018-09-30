@@ -42,7 +42,7 @@ Public Property Let AccountId(NewValue As Long)
 End Property
 
 
-Public Property Let CustomerID(NewValue As Long)
+Public Property Let customerID(NewValue As Long)
 Dim rst As Recordset
 gDbTrans.SqlStmt = "Select AccID From CAMAster " & _
     " WHERE CustomerID = " & NewValue
@@ -217,7 +217,29 @@ CashWithdrawls = Amount
 
 End Function
 
-Public Function CustomerBalance(CustomerID As Long, retAccNum As String, AsOnDate As Date) As Currency
+Public Function GetCustmerAccountNumbers(custID As Long) As Dictionary
+    
+    Dim dict As New Dictionary
+    Dim coll As New Collection
+    Dim rst As Recordset
+    gDbTrans.SqlStmt = "Select AccId,AccNum,DepositType from CAMAster where customerID = " & custID & " And ClosedDate is Null"
+    If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
+        While rst.EOF = False
+            Set coll = New Collection
+            
+            coll.Add FormatField(rst("AccId")), "AccId"
+            coll.Add FormatField(rst("AccNum")), "AccNum"
+            coll.Add FormatField(rst("DepositType")), "DepositType"
+            
+            dict.Add FormatField(rst("AccId")), coll
+             
+            rst.MoveNext
+        Wend
+    End If
+    Set GetCustmerAccountNumbers = dict
+    Set rst = Nothing
+End Function
+Public Function CustomerBalance(customerID As Long, retAccNum As String, AsOnDate As Date) As Currency
 'To trap an error
 On Error GoTo ErrLine
 
@@ -226,7 +248,7 @@ CustomerBalance = 0
 
 gDbTrans.SqlStmt = "Select A.Accid,AccNum,Balance from " & _
     " CAMaster A INNER Join CATrans B On A.AccID = B.AccID " & _
-    " where A.Customerid = " & CustomerID & " AND TransID = " & _
+    " where A.Customerid = " & customerID & " AND TransID = " & _
         "(Select MAx(TransID) From CATrans C Where C.AccId = A.AccID " & _
         " AND TransDate <= #" & AsOnDate & "# )" & _
     " AND Balance > 0"
@@ -238,7 +260,7 @@ NextAccount:
 retAccNum = CInt(FormatField(m_rstCustBalance("AccNum")))
 CustomerBalance = FormatField(m_rstCustBalance("Balance"))
 
-If CustomerBalance = 0 And m_rstCustBalance.RecordCount > 1 And m_rstCustBalance.EOF = False Then
+If CustomerBalance = 0 And m_rstCustBalance.recordCount > 1 And m_rstCustBalance.EOF = False Then
     m_rstCustBalance.MoveNext
     GoTo NextAccount
 End If
@@ -569,7 +591,7 @@ Amount = Amount + PLTransactionDetails(fromDate, toDate, transType)
 Profit = Amount
 End Function
 
-Public Function GetAccountID(AccNum As String) As Integer
+Public Function GetAccountID(AccNum As String, Optional ByVal depositType As Integer) As Integer
 
 GetAccountID = 0
 
@@ -604,12 +626,12 @@ Private Sub m_frmCAAcc_AccountChanged(ByVal AccId As Long)
 m_AccID = AccId
 End Sub
 
-Public Sub TotalDepositTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Public Sub TotalDepositTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency)
 
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
 
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
@@ -626,19 +648,19 @@ While rst.EOF = False
     TotalAmount = Val(FormatField(rst("TotalAmount")))
     If rst("TransType") = wDeposit Then CashDeposit = TotalAmount
     If rst("TransType") = wWithdraw Then cashWithdraw = TotalAmount
-    If rst("TransType") = wContraDeposit Then contraDeposit = TotalAmount
-    If rst("TransType") = wContraWithdraw Then contraWithdraw = TotalAmount
+    If rst("TransType") = wContraDeposit Then ContraDeposit = TotalAmount
+    If rst("TransType") = wContraWithdraw Then ContraWithDraw = TotalAmount
     rst.MoveNext
 Wend
 
 Set rst = Nothing
 End Sub
-Public Sub TotalDepositIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef contraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef contraWithdraw As Currency)
+Public Sub TotalDepositIntTransactions(fromDate As Date, toDate As Date, ByRef CashDeposit As Currency, ByRef ContraDeposit As Currency, ByRef cashWithdraw As Currency, ByRef ContraWithDraw As Currency)
 
 CashDeposit = 0
 cashWithdraw = 0
-contraDeposit = 0
-contraWithdraw = 0
+ContraDeposit = 0
+ContraWithDraw = 0
 
 Dim rst As ADODB.Recordset
 Dim SqlStr As String
@@ -655,8 +677,8 @@ While rst.EOF = False
     TotalAmount = Val(FormatField(rst("TotalAmount")))
     If rst("TransType") = wDeposit Then CashDeposit = TotalAmount
     If rst("TransType") = wWithdraw Then cashWithdraw = TotalAmount
-    If rst("TransType") = wContraDeposit Then contraDeposit = TotalAmount
-    If rst("TransType") = wContraWithdraw Then contraWithdraw = TotalAmount
+    If rst("TransType") = wContraDeposit Then ContraDeposit = TotalAmount
+    If rst("TransType") = wContraWithdraw Then ContraWithDraw = TotalAmount
     rst.MoveNext
 Wend
 

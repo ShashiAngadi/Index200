@@ -40,7 +40,7 @@ Private m_SQLStmt As String
 Public Property Get DataBaseName() As String
     On Error GoTo LastLine:
     If m_DataBaseObject Is Nothing Then Exit Sub
-    DataBaseName = m_DataBaseObject.Properties("Data Source Name").Value
+    DataBaseName = m_DataBaseObject.Properties("Data Source Name").value
 LastLine:
     Err.Clear
 End Property
@@ -576,8 +576,7 @@ Public Function RollBacknRaiseError() As Boolean
     'error nav
     'when clicking the cancel button it rise the
     'data base error
-    
-        
+            
     Err.Raise vbObjectError + 513, , "Database Error!"
     
 End Function
@@ -700,13 +699,15 @@ End Function
 
 Public Function OpenDB(strDBName As String, pwd As String) As Boolean
 
+Dim Retry As Boolean
 
+Retry = False
 If strDBName = "" Then Exit Function
 
 If m_DataBaseObject Is Nothing Then Set m_DataBaseObject = New ADODB.Connection
 
 m_DataBaseObject.Mode = adModeShareDenyNone
-   
+RetryLine:
 On Error GoTo ErrLine
 'Open a connection Using Microsoft.Jet Provider
 m_DataBaseObject.Open "Provider=Microsoft.Jet.OLEDB.4.0;" & _
@@ -719,6 +720,12 @@ m_DBOpen = True
 Exit Function
 
 ErrLine:
+If Retry = False Then
+    Retry = True
+    pwd = "WIS!@#"
+    GoTo RetryLine
+End If
+
       MsgBox "OpenDB: The following error occured, " _
                 & "while opening the database." _
                 & vbCrLf & Err.Description, vbCritical

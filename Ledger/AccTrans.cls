@@ -316,9 +316,9 @@ With m_frmAccTrans
     End With
     
     If DebitAmount > CreditAmount Then
-        .optTab0From(FromOpt).Value = (voucherTypes <> Journal)
+        .optTab0From(FromOpt).value = (voucherTypes <> Journal)
     Else
-        .optTab0From(ToOpt).Value = True
+        .optTab0From(ToOpt).value = True
     End If
     
         
@@ -698,7 +698,7 @@ Private Sub PrepareAccTrans()
 
 With m_frmAccTrans
     '.txtTab0Amount.Text = FormatCurrency(DrCrTotalsSame(True))
-    .txtTab0Amount.Value = DrCrTotalsSame(True)
+    .txtTab0Amount.value = DrCrTotalsSame(True)
     
     ' This will check the cash id exists if not by default adds to combo box
     If ALlTransHeadIDExists(wis_CashHeadID) Then
@@ -721,7 +721,7 @@ With m_frmAccTrans
     .cmdTab0AddtoGrid(AddToGrid).Caption = GetResourceString(10) 'Add
     .cmdTab0AddtoGrid(DeleteGrid).Enabled = False
     
-    If .txtTab0Amount.Value = 0 Then
+    If .txtTab0Amount.value = 0 Then
         If AllTrans.count > 0 Then
             .cmdOk.Enabled = True
             .txtParticulars.SetFocus
@@ -800,22 +800,22 @@ If .cmbTab0Ledger(VoucherCombo).ListIndex = 2 Then WavesUser = True
     Select Case voucherTypes
         Dim LedgerType As wis_LoadLedgers
         Case payment
-            .optTab0From(FromOpt).Value = True
+            .optTab0From(FromOpt).value = True
             LedgerType = LoadALL
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LedgerType)
         
         Case Receipt
-            .optTab0From(ToOpt).Value = True
+            .optTab0From(ToOpt).value = True
             LedgerType = LoadALL
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LedgerType)
         
         Case CONTRA
-            .optTab0From(ToOpt).Value = True
+            .optTab0From(ToOpt).value = True
             LedgerType = LoadOnlyCash
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LedgerType)
         
         Case Journal
-            .optTab0From(ToOpt).Value = True
+            .optTab0From(ToOpt).value = True
             LedgerType = LoadExceptCash
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LedgerType)
         
@@ -881,8 +881,8 @@ gDbTrans.SqlStmt = " SELECT * " & _
  
 If gDbTrans.Fetch(rstTrans, adOpenStatic) < 1 Then Exit Function
 
-DrTotal = rstTrans.Fields("a.Debit").Value
-CrTotal = rstTrans.Fields("b.Credit").Value
+DrTotal = rstTrans.Fields("a.Debit").value
+CrTotal = rstTrans.Fields("b.Credit").value
 
 For Item = 0 To MaxCount - 1
     With AllTrans(ObjKeys(Item))
@@ -980,8 +980,8 @@ gDbTrans.SqlStmt = " SELECT * " & _
                    
 If gDbTrans.Fetch(rstTrans, adOpenStatic) < 1 Then Exit Function
 
-DrTotal = rstTrans.Fields("a.Debit").Value
-CrTotal = rstTrans.Fields("b.Credit").Value
+DrTotal = rstTrans.Fields("a.Debit").value
+CrTotal = rstTrans.Fields("b.Credit").value
 
 For Item = 0 To MaxCount - 1
     
@@ -1169,7 +1169,7 @@ With m_frmAccTrans
     .txtTab0CurrentDate.Locked = False
     .cmdTab0Date.Enabled = True
     .cmbTab0Ledger(LedgerCombo).Clear
-    .txtTab0Amount.Value = 0
+    .txtTab0Amount.value = 0
     .txtParticulars.Text = ""
     .txtParticulars.Enabled = True
     
@@ -1933,7 +1933,7 @@ With m_frmAccTrans
     Select Case voucherTypes
         Case payment
             'Compatable To Index 20000
-            .optTab0From(ToOpt).Value = True
+            .optTab0From(ToOpt).value = True
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LoadExceptCash)
             .cmdOk.Caption = GetResourceString(IIf(WavesUser, 7, 10)) 'Add
             .cmdOk.Enabled = Not WavesUser
@@ -1946,7 +1946,7 @@ With m_frmAccTrans
             'Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LoadExceptCash)
             
             'Compatable To Index 20000
-            .optTab0From(FromOpt).Value = True
+            .optTab0From(FromOpt).value = True
             .optTab0From(FromOpt).Enabled = WavesUser
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LoadExceptCash)
             .cmdOk.Caption = GetResourceString(IIf(WavesUser, 7, 10)) 'Add
@@ -1961,36 +1961,36 @@ With m_frmAccTrans
             'Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LoadOnlyCash)
             
             'Compatable To INdex 20000
-            .optTab0From(FromOpt).Value = True
+            .optTab0From(FromOpt).value = True
             '.optTab0From(FromOpt).Enabled = True
             .optTab0From(FromOpt).Enabled = WavesUser
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LoadExceptCash)
         Case Journal
             .cmdOk.Enabled = False
-            .optTab0From(FromOpt).Value = True
+            .optTab0From(FromOpt).value = True
             .optTab0From(FromOpt).Enabled = True
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LoadExceptCash)
             
         Case Sales
-            .optTab0From(ToOpt).Value = True
+            .optTab0From(ToOpt).value = True
             .optTab0From(ToOpt).Enabled = True
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LoadCashCreditros)
             .txtParticulars.TabIndex = IIf(WavesUser, Val(.txtParticulars.Tag), .cmdOk.TabIndex - 1)
             
         Case Purchase
-            .optTab0From(FromOpt).Value = True
+            .optTab0From(FromOpt).value = True
             .optTab0From(FromOpt).Enabled = True
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LoadCashCreditros)
             .txtParticulars.TabIndex = IIf(WavesUser, Val(.txtParticulars.Tag), .cmdOk.TabIndex - 1)
             
         Case FreePurchase
-            .optTab0From(FromOpt).Value = True
+            .optTab0From(FromOpt).value = True
             .optTab0From(FromOpt).Enabled = True
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LoadExceptCash)
             .txtParticulars.TabIndex = IIf(WavesUser, Val(.txtParticulars.Tag), .cmdOk.TabIndex - 1)
             
         Case FreeSales
-            .optTab0From(FromOpt).Value = True
+            .optTab0From(FromOpt).value = True
             .optTab0From(FromOpt).Enabled = True
             Call LoadParentHeadsForVoucher(.cmbTab0Ledger(ParentCombo), LoadExceptCash)
             .txtParticulars.TabIndex = IIf(WavesUser, Val(.txtParticulars.Tag), .cmdOk.TabIndex - 1)
@@ -2073,13 +2073,13 @@ With m_frmAccTrans
         .optTab0From(ToOpt).Enabled = True
     End If
     If Credit > 0 Then
-        .optTab0From(FromOpt).Value = True
-        .txtTab0Amount.Value = Credit
+        .optTab0From(FromOpt).value = True
+        .txtTab0Amount.value = Credit
     End If
     
     If Debit > 0 Then
-        .optTab0From(ToOpt).Value = True
-        .txtTab0Amount.Value = Debit
+        .optTab0From(ToOpt).value = True
+        .txtTab0Amount.value = Debit
     End If
     
     ' Make the Delete command visible
@@ -2123,10 +2123,10 @@ If m_frmAccTrans Is Nothing Then Exit Sub
 
 With m_frmAccTrans
 
-    If .optTab0From(FromOpt).Value Then
-        .optTab0From(ToOpt).Value = True
-    ElseIf .optTab0From(ToOpt).Value Then
-        .optTab0From(FromOpt).Value = True
+    If .optTab0From(FromOpt).value Then
+        .optTab0From(ToOpt).value = True
+    ElseIf .optTab0From(ToOpt).value Then
+        .optTab0From(FromOpt).value = True
     End If
     
 End With
@@ -3090,7 +3090,7 @@ With m_frmAccTrans
     If .cmbTab0Ledger(LedgerCombo).ListIndex = -1 Then Err.Raise vbObjectError + 513, , "Select the Ledger Head"
     ' Check the Validate of the Date
     If Not TextBoxDateValidate(.txtTab0CurrentDate, "/", True, True) Then Exit Function
-    StrAmount = .txtTab0Amount.Value
+    StrAmount = .txtTab0Amount.value
     'If Not TextBoxCurrencyValidate(.txtTab0Amount,  False, True) Then Exit Function
     'now update the Propertries
     Credit = 0
@@ -3810,9 +3810,9 @@ Set LedgerClass = Nothing
 
 With m_frmAccTrans
     If Len(Particulars) > 0 Then .txtParticulars.Text = Particulars
-    .txtTab0Amount.Value = DrCrTotalsSame(False)
+    .txtTab0Amount.value = DrCrTotalsSame(False)
     
-    If .txtTab0Amount.Value = 0 Then
+    If .txtTab0Amount.value = 0 Then
         If AllTrans.count > 0 Then
             .cmdTab0AddtoGrid(AddToGrid).Enabled = False
             .cmdOk.Enabled = True

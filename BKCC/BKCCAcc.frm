@@ -348,13 +348,11 @@ Begin VB.Form frmBKCCAcc
             NumTabs         =   2
             BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Instructions"
-               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
             BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Pass book"
-               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
@@ -1698,6 +1696,7 @@ Private m_frmCheque As frmCheque
 
 Const CTL_MARGIN = 15
 Private m_dbOperation As wis_DBOperation
+Private m_DepAccount As Collection
 
 'Declare events.
 Public Event SetStatus(strMsg As String)
@@ -1755,7 +1754,7 @@ MaxTransID = MaxTransID + 1
 
 Dim IntAmount As Currency
 Dim transType As wisTransactionTypes
-IntAmount = txtTotal.Value
+IntAmount = txtTotal.value
 
 ' Begin the transaction
 If Not gDbTrans.BeginTrans Then GoTo Exit_Line
@@ -1767,8 +1766,8 @@ If Not gDbTrans.BeginTrans Then GoTo Exit_Line
             & "MiscAmount, IntBalance,Deposit, Particulars,UserID ) " _
             & "VALUES (" & m_LoanID & ", " & MaxTransID & ", " _
             & " #" & TransDate & "#," & transType & ", " _
-            & txtRegInterest.Value & ", 0 ," _
-            & txtMiscAmount.Value & ", 0 ," & Deposit & "," _
+            & txtRegInterest.value & ", 0 ," _
+            & txtMiscAmount.value & ", 0 ," & Deposit & "," _
             & AddQuotes(GetResourceString(47), True) _
             & "," & gUserID & ")"
             
@@ -1832,7 +1831,7 @@ If TransID Then 'There is AMount due int
         Wend
         
         With txtMiscAmount
-            .Value = m_clsReceivable.TotalAmount * -1
+            .value = m_clsReceivable.TotalAmount * -1
             .Locked = True
             CheckForDueAmount = m_clsReceivable.TotalAmount
         End With
@@ -1857,7 +1856,7 @@ Dim Balance As Currency
 Dim Amount As Currency
 Dim count As Integer
 Dim MemID As Long
-Dim custId As Long
+Dim custID As Long
 Dim SbACCID As Long
 Dim rst As Recordset
 
@@ -1882,14 +1881,14 @@ With txtLoanIssue(txtIndex)
         GoTo Exit_Line
     End If
     MemID = FormatField(rst("AccId"))
-    custId = FormatField(rst("CustomerID"))
+    custID = FormatField(rst("CustomerID"))
     
     ' ------------------------------------------------
     ' Check for the eligibility of this member...
     ' A member is elibible for taking loan, only if does not have any
     ' over due loans.
     If GetValue("IssueDate") <> "" Then
-        If HasOverdueLoans(custId, GetSysFormatDate(GetValue("IssueDate"))) Then
+        If HasOverdueLoans(custID, GetSysFormatDate(GetValue("IssueDate"))) Then
             'nRet = MsgBox("The member hasoverdue loans.  Loan cannot be issued." _
                     & vbCrLf & "Do you want to continue anyway?", vbQuestion + _
                     vbYesNo, wis_MESSAGE_TITLE)
@@ -2067,7 +2066,7 @@ With txtLoanIssue(txtIndex)
     Else
         ' Check if the guarantor is the same as the loan claimer.
         lGuarantorID = PropGuarantorID(1)
-        If lGuarantorID = custId Then
+        If lGuarantorID = custID Then
             'MsgBox "A person cannot stand guarantee for his own loan !", _
                     vbExclamation , wis_MESSAGE_TITLE
             MsgBox GetResourceString(724), _
@@ -2119,7 +2118,7 @@ With txtLoanIssue(txtIndex)
     
         ' Check if the guarantor is the same as the loan claimer.
         lGuarantorID = PropGuarantorID(2)
-        If lGuarantorID = custId Then
+        If lGuarantorID = custID Then
             'MsgBox "A person cannot stand guarantee for his own loan!", _
                     vbExclamation, wis_MESSAGE_TITLE
             MsgBox GetResourceString(724), _
@@ -2454,7 +2453,9 @@ Dim Deposit As Boolean
 Dim rst As Recordset
 Dim Amount As Currency
     
-Dim SBClass As clsSBAcc
+'Dim SBClass As clsSBAcc
+'Dim CAClass As ClsCAAcc
+Dim objClass As Object
 Dim bankClass As clsBankAcc
 Dim MiscHeadId As Long
 
@@ -2539,12 +2540,12 @@ End If
 If (transType = wWithdraw) And (TotalAmount = RegInt + PenalInt + MiscAmount) Then
     transType = wContraWithdraw
     If RegInt > 0 Or PenalInt > 0 Then
-      If chkSb.Value = vbChecked Then
+      If chkSb.value = vbChecked Then
           If MsgBox("No amount will be transferred to SBAccount. " & _
               "Paid amount will be received back as interest" & _
               vbCrLf & "Do you want to continue?" _
               , vbYesNo, wis_MESSAGE_TITLE) = vbNo Then GoTo Exit_Line
-          chkSb.Value = vbUnchecked
+          chkSb.value = vbUnchecked
       Else
           If MsgBox("No amount will given to the customer " & _
               "Paid amount will be received back as interest" & vbCrLf & _
@@ -2552,17 +2553,15 @@ If (transType = wWithdraw) And (TotalAmount = RegInt + PenalInt + MiscAmount) Th
               wis_MESSAGE_TITLE) = vbNo Then GoTo Exit_Line
       End If
     Else
-      chkSb.Value = vbUnchecked
+      chkSb.value = vbUnchecked
     End If
 End If
 
 'If transaction is payment & amount is crediting to the sb account
-If chkSb.Value = vbChecked And SelectedTransType = wWithdraw Then
+If chkSb.value = vbChecked And SelectedTransType = wWithdraw Then
     Dim SbACCID As Long
     Dim ContraID As Integer
     Dim SbHeadID As Long
-
-    Set SBClass = New clsSBAcc
     
     If cmbSb.Visible Then
         SbHeadID = GetIndexHeadID(cmbSb.Text)
@@ -2571,16 +2570,28 @@ If chkSb.Value = vbChecked And SelectedTransType = wWithdraw Then
     End If
     'Check For the SB Number Existace
     SbACCID = 0
-    If cmbSb.Visible Then SbACCID = cmbSb.ItemData(cmbSb.ListIndex)
-    SbACCID = SBClass.GetAccountID(txtSbAccNum, SbACCID)
+    
+    Dim depModule As wisModules
+    Dim depositType As Integer
+    If cmbSb.Visible Then depositType = cmbSb.ItemData(cmbSb.ListIndex)
+    depModule = GetModuleIDFromHeadID(SbHeadID)
+    If depModule >= wis_SBAcc And depModule < wis_SBAcc + 100 Then
+        Set objClass = New clsSBAcc
+        'depositType = depModule - wis_SBAcc
+        'SbACCID = SBClass.GetAccountID(txtSbAccNum, SbACCID)
+    Else
+        Set objClass = New ClsCAAcc
+        'SbACCID = CAClass.GetAccountID(txtSbAccNum, SbACCID)
+    End If
+    
+    SbACCID = objClass.GetAccountID(txtSbAccNum, depositType)
     If Len(Trim(txtSbAccNum)) = 0 Or SbACCID = 0 Then
         'MsgBox "Account not existance", vbInformation, "SB Account"
-        MsgBox GetResourceString(421, 525), _
-            vbInformation, "SB Account"
+        MsgBox GetResourceString(421, 525), vbInformation, "SB Account"
+        txtSbAccNum.SetFocus
         GoTo Exit_Line
     End If
     
-    Set SBClass = Nothing
     'Get the MAx Contra TransID
     ContraID = GetMaxContraTransID + 1
     
@@ -2908,8 +2919,7 @@ If TwoTransactions Then
             m_LoanID & "," & transType & ", " & _
             TransID & "," & Abs(Balance) & "," & gUserID & " )"
         If Not gDbTrans.SQLExecute Then GoTo Exit_Line
-        Set SBClass = New clsSBAcc
-        If SBClass.DepositAmount(SbACCID, Abs(Balance), _
+        If objClass.DepositAmount(SbACCID, Abs(Balance), _
                 "from KCC AccNo " & txtAccNo.Text, TransDate, " ") = 0 Then GoTo Exit_Line
         If Not bankClass.UpdateContraTrans(IIf(Deposit, m_DepHeadID, m_LoanHeadID), _
                 SbHeadID, Abs(Balance), TransDate) Then GoTo Exit_Line
@@ -2927,7 +2937,7 @@ If NewBalance > 0 Then Deposit = False
 'then only do this transction
 
 transType = IIf(cmbTrans.ListIndex = 0, wDeposit, wWithdraw)
-If transType = wWithdraw And chkSb.Value = vbChecked Then transType = wContraWithdraw
+If transType = wWithdraw And chkSb.value = vbChecked Then transType = wContraWithdraw
 
 If PrincAmount Or DepAmount Then
     If TotalAmount = RegInt + PenalInt + MiscAmount Then transType = wContraWithdraw
@@ -2950,7 +2960,7 @@ If PrincAmount Or DepAmount Then
     
     ' Execute the updation.
     If Not gDbTrans.SQLExecute Then GoTo Exit_Line
-    If chkSb.Value = vbChecked And transType = wContraWithdraw Then
+    If chkSb.value = vbChecked And transType = wContraWithdraw Then
         'The user debiting the withdrawn amount ot his Sb account then
         gDbTrans.SqlStmt = "Insert INTO ContraTrans " & _
                 " (ContraID, AccHeadID,AccId," & _
@@ -2962,8 +2972,8 @@ If PrincAmount Or DepAmount Then
         If Not gDbTrans.SQLExecute Then GoTo Exit_Line
         
         'Post the Deposit Transaction to SB account
-        If SBClass Is Nothing Then Set SBClass = New clsSBAcc
-        If SBClass.DepositAmount(SbACCID, Amount, _
+        'If SBClass Is Nothing Then Set SBClass = New clsSBAcc
+        If objClass.DepositAmount(SbACCID, Amount, _
                 "from Kcc AccNo " & txtAccNo, TransDate, " ") = 0 Then GoTo Exit_Line
         
         'Update the Contra transaction details to the ContrTrans table
@@ -3047,7 +3057,9 @@ LoanTransaction = True
 MsgBox GetResourceString(706), vbInformation, wis_MESSAGE_TITLE
 
 Exit_Line:
-    Set SBClass = Nothing
+    'Set SBClass = Nothing
+    'Set CAClass = Nothing
+    Set objClass = Nothing
     Set Cashclass = Nothing
     If inTransaction Then gDbTrans.RollBack
     'Writ the Particulars
@@ -3305,13 +3317,13 @@ fillmembers_error:
     GoTo Exit_Line
 
 End Function
-Public Function HasOverdueLoans(CustomerID As Long, Optional AsOnDate As Date) As Boolean
+Public Function HasOverdueLoans(customerID As Long, Optional AsOnDate As Date) As Boolean
 ' Variables...
 Dim Lret As Long
 
 ' Check how many loans this member has taken.
 gDbTrans.SqlStmt = "SELECT A.loanID,Balance,TransDate FROM BKCCMaster A, " & _
-    " BKCCTrans B WHERE CustomerID = " & CustomerID & _
+    " BKCCTrans B WHERE CustomerID = " & customerID & _
     " AND A.LoanID = B.LoanID ANd Transid = (Select Max(TransID) From " & _
         " BKCCTrans C WHERE C.LoanID = A.LoanID " & _
         " And TransDate < #" & DateAdd("yyyy", -1, AsOnDate) & "# )"
@@ -3378,7 +3390,7 @@ If m_LoanID = lLoanID Then
 Else
     Call ResetUserIntereface
 End If
-
+txtSbAccNum.Tag = ""
 gDbTrans.SqlStmt = "SELECT * FROM BKCCMaster WHERE loanID = " & lLoanID
 
 Lret = gDbTrans.Fetch(m_rstLoanMast, adOpenDynamic)
@@ -3498,6 +3510,32 @@ Call gDbTrans.Fetch(rstIntTrans, adOpenForwardOnly)
 txtIndex = GetIndex("InterestBalance")
 txtLoanIssue(txtIndex).Text = FormatField(rstIntTrans("intBalance"))
 
+'Now Get All the AccountID's relted in SB/CA for this user.
+Set m_DepAccount = New Collection
+
+'m_rstLoanMast ("CustomerID")
+Dim Acts As Dictionary
+Dim SBClass As New clsSBAcc
+Dim coll As Collection
+Dim value As String
+Dim retValue As String
+Dim actItem
+Set Acts = SBClass.GetCustmerAccountNumbers(FormatField(m_rstLoanMast("CustomerID")))
+For Each actItem In Acts
+    Set coll = Acts(actItem)
+    value = CStr(coll(1)) + "=" + CStr(coll(2))
+    Call PutKeyValue(retValue, CStr(wis_SBAcc + CInt(coll(3))), value)
+Next
+Set SBClass = Nothing
+Dim CaClass As New ClsCAAcc
+Set Acts = CaClass.GetCustmerAccountNumbers(FormatField(m_rstLoanMast("CustomerID")))
+For Each actItem In Acts
+    Set coll = Acts(actItem)
+    value = CStr(coll(1)) + "=" + CStr(coll(2))
+    Call PutKeyValue(retValue, CStr(wis_CAAcc + CInt(coll(3))), value)
+Next
+Set CaClass = Nothing
+txtSbAccNum.Tag = retValue
 
 'CHECK FOR THE LOAID OF ALREADY LOADED AND THIS LOANID
 'If The loanid Has Not changed then need not to load the below details
@@ -3777,7 +3815,7 @@ Dim Balance As Currency
 Dim Amount As Currency
 Dim count As Integer
 Dim MemID As Long
-Dim custId As Long
+Dim custID As Long
 Dim SbACCID As Long
 Dim rst As Recordset
 
@@ -3799,7 +3837,7 @@ With txtLoanIssue(txtIndex)
             
     Call gDbTrans.Fetch(rst, adOpenDynamic)
     MemID = FormatField(rst("AccId"))
-    custId = FormatField(rst("CustomerID"))
+    custID = FormatField(rst("CustomerID"))
 End With
 
 ' Get a new loanid.
@@ -3831,7 +3869,7 @@ gDbTrans.SqlStmt = "INSERT INTO BKCCMaster ( LoanID, AccNum," _
 gDbTrans.SqlStmt = gDbTrans.SqlStmt & " VALUES (" & _
         NewLoanID & ", " _
         & AddQuotes(Trim$(GetValue("AccNum")), True) & "," _
-        & MemID & ", " & custId & ", " _
+        & MemID & ", " & custID & ", " _
         & "#" & GetSysFormatDate(GetValue("IssueDate")) & "#, " _
         & Val(GetValue("SanctionAmount")) & ", " _
         & Val(GetValue("CurrentSanction")) & ", " _
@@ -4163,7 +4201,7 @@ Dim txtIndex As Integer
 Dim inTransaction As Boolean
 Dim Lret As Long
 Dim MemID As Long
-Dim custId As Long
+Dim custID As Long
 Dim lGuarantorID As Long
 Dim rst As Recordset
 Dim CtrlIndex As Integer
@@ -4190,7 +4228,7 @@ With txtLoanIssue(txtIndex)
             
     Call gDbTrans.Fetch(rst, adOpenDynamic)
     MemID = FormatField(rst("AccId"))
-    custId = FormatField(rst("CustomerID"))
+    custID = FormatField(rst("CustomerID"))
 End With
 
 
@@ -4236,7 +4274,7 @@ inTransaction = True
 ' Put an entry into LoanMaster table.
 gDbTrans.SqlStmt = "UPDATE BKCCMaster Set " & _
         " AccNum = " & AddQuotes(Trim$(GetValue("AccNum")), True) & ", " & _
-        " MemId = " & MemID & ", CustomerId = " & custId & ", " & _
+        " MemId = " & MemID & ", CustomerId = " & custID & ", " & _
         " IssueDate = #" & GetSysFormatDate(GetValue("IssueDate")) & "#, " & _
         " SanctionAmount = " & GetValue("SanctionAmount") & ", " & _
         " CurrentSanction = " & GetValue("CurrentSanction") & ", " & _
@@ -4555,10 +4593,10 @@ If picLoanIssueSlider.Top + Ctl.Top + Ctl.Height > picLoanIssueViewPort.ScaleHei
                     picLoanIssueViewPort.ScaleHeight
         ' scroll down by one row.
         With vscLoanIssue
-            If .Value + .SmallChange <= .Max Then
-                    .Value = .Value + .SmallChange
+            If .value + .SmallChange <= .Max Then
+                    .value = .value + .SmallChange
             Else
-                    .Value = .Max
+                    .value = .Max
             End If
         End With
     Loop
@@ -4568,10 +4606,10 @@ ElseIf picLoanIssueSlider.Top + Ctl.Top < 0 Then
     ' Keep scrolling until it is in viewport.
     Do While picLoanIssueSlider.Top + Ctl.Top < 0
         With vscLoanIssue
-            If .Value - .SmallChange >= .Min Then
-                .Value = .Value - .SmallChange
+            If .value - .SmallChange >= .Min Then
+                .value = .value - .SmallChange
             Else
-                .Value = .Min
+                .value = .Min
             End If
         End With
     Loop
@@ -4614,7 +4652,7 @@ txtRepayAmt = 0
 txtRepayAmt.Enabled = False
 txtSbAccNum = ""
 txtSbAccNum.Enabled = False
-chkSb.Value = vbUnchecked
+chkSb.value = vbUnchecked
 
 cmdPrevTrans.Enabled = False
 cmdNextTrans.Enabled = False
@@ -4636,7 +4674,7 @@ With cmdLoanSave
 End With
 With txtMiscAmount
     .Locked = False
-    .Value = 0
+    .value = 0
 End With
 
 Set m_clsReceivable = Nothing
@@ -4756,7 +4794,7 @@ MiscAmount = txtMiscAmount 'txtPenalInt = txtPenalInterest.Value
 transType = IIf(cmbTrans.ListIndex = 0, wContraDeposit, wContraWithdraw)
 TransDate = GetSysFormatDate(txtRepayDate.Text)
 
-TotalAmount = txtMiscAmount.Value
+TotalAmount = txtMiscAmount.value
 
 
 'Now check whether the amount collecting is
@@ -4929,7 +4967,7 @@ If cmbTrans.ListIndex = 0 Then
     Call txtRepayDate_Change
     Exit Sub
 End If
-If chkSb.Value = vbChecked And cmbTrans.ListIndex = 1 Then
+If chkSb.value = vbChecked And cmbTrans.ListIndex = 1 Then
     'Add Intrest transaction
     cmdSb.Enabled = True
     cmbSb.Enabled = True
@@ -4954,7 +4992,8 @@ cmbCheque.Visible = False
 txtVoucherNo.Visible = True
 txtVoucherNo.ZOrder 0
 Dim rst As Recordset
-gDbTrans.SqlStmt = "SELECT AccNum,DepositTYpe From SBMASTER " & _
+
+gDbTrans.SqlStmt = "SELECT AccNum,DepositType From SBMASTER " & _
     " WHERE CustomerId = (SELECT CustomerID From BKCCMAster " & _
         " WHERE LoanID = " & m_LoanID & ");"
 
@@ -4963,7 +5002,6 @@ Dim recCount As Integer
     If recCount = 1 Then
         txtSbAccNum = FormatField(rst(0))
         If cmbSb.Visible Then Call SetComboIndex(cmbSb, , FormatField(rst("DepositTYpe")))
-        
     End If
     If recCount > 1 Then
         If Not cmbSb.Visible Then
@@ -5011,6 +5049,15 @@ Private Sub cmbMember_Change()
 
 End Sub
 
+Private Sub cmbSb_Click()
+    Exit Sub
+    If cmbTrans.ListIndex = 0 Or Len(txtSbAccNum.Tag) = 0 Or cmbSb.ListIndex < 0 Then Exit Sub
+    Dim retValue As String
+    Dim key As String
+    key = CStr(cmbSb.ItemData(cmbSb.ListIndex))
+    retValue = GetValueForKey(txtSbAccNum.Tag, CStr(cmbSb.ItemData(cmbSb.ListIndex)), "")
+End Sub
+
 Private Sub cmbTrans_Click()
 
 If cmbTrans.ListIndex < 0 Then Exit Sub
@@ -5037,7 +5084,7 @@ With cmbTrans
         cmbSb.Visible = False
         'Now Check the Receivable Amount
         txtMiscAmount = GetReceivAbleAmount(m_LoanHeadID, m_LoanID)
-        If txtMiscAmount.Value > 0 Then _
+        If txtMiscAmount.value > 0 Then _
             Set m_clsReceivable = LoadReceivableAmounts(m_LoanHeadID, m_LoanID)
         
         chkSb.Enabled = True
@@ -5050,7 +5097,12 @@ With cmbTrans
     ElseIf .ListIndex = 1 Then 'Payment
         .Tag = "-1"
         lblTotInst.Caption = GetResourceString(375, 40)
-        Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSb) 'chkSb.Caption = GetResourceString(421, 271) ' Savings bank receipt
+        'cmbSB.Clear
+        'Dim depModules(1) As wisModules
+        'depModules(0) = wis_SBAcc
+        'depModules(1) = wis_CAAcc
+        'Call SetMultiDepositCheckBoxCaption(depModules, chkSb, cmbSB)
+        'Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271) ' Savings bank receipt
         lblChequeNo.Caption = GetResourceString(275, 60) '"Sb acc NUm
         chkSb.TabIndex = 34
         chkSb.Enabled = True
@@ -5074,7 +5126,7 @@ With cmbTrans
         cmdSb.Enabled = False
         txtMiscAmount.Locked = False
     End If
-    If Not chkSb.Enabled Then chkSb.Value = vbUnchecked
+    If Not chkSb.Enabled Then chkSb.value = vbUnchecked
 End With
 
 
@@ -5287,9 +5339,9 @@ Call IntClass.SaveInterest(wis_BKCCLoan, "NabardRate", CSng(txtNabardRate.Text),
 
 MaxI = txtMaxLimit.UBound
 For I = 1 To MaxI
-    If txtMaxLimit(I).Value = 0 Then Exit For
+    If txtMaxLimit(I).value = 0 Then Exit For
     'Now Check for the this limit is more than previos 1 or not
-    If txtMaxLimit(I) <= txtMaxLimit(I - 1) And txtMaxLimit(I).Value > 0 Then
+    If txtMaxLimit(I) <= txtMaxLimit(I - 1) And txtMaxLimit(I).value > 0 Then
         'Invalid amount specified
         MsgBox GetResourceString(506), vbInformation, wis_MESSAGE_TITLE
         ActivateTextBox txtMaxLimit(I)
@@ -5310,8 +5362,8 @@ Dim strScheme As String
 If MaxI > txtLoanIntRate.UBound Then MaxI = txtLoanIntRate.UBound
 For I = 0 To MaxI
     
-    strScheme = txtMinLimit(I).Caption & "-" & txtMaxLimit(I).Value
-    If txtMaxLimit(I).Value <= 0 Then Exit For
+    strScheme = txtMinLimit(I).Caption & "-" & txtMaxLimit(I).value
+    If txtMaxLimit(I).value <= 0 Then Exit For
     
     'Now store the Intrest rate to interest class
     If IntClass.SaveInterest(wis_BKCCLoan, "Slab" & I, _
@@ -5409,7 +5461,7 @@ Select Case UCase$(strField)
         If m_CustReg Is Nothing Then Set m_CustReg = New clsCustReg
         m_CustReg.ShowDialog
         'Now Check Whether selected Customer Is member Or not
-        gDbTrans.SqlStmt = "SELECT * From MemMaster Where CustomerId = " & m_CustReg.CustomerID
+        gDbTrans.SqlStmt = "SELECT * From MemMaster Where CustomerId = " & m_CustReg.customerID
         If gDbTrans.Fetch(rst, adOpenDynamic) < 1 Then
             MsgBox "Selected customer is not member ", vbInformation, wis_MESSAGE_TITLE
             Me.MousePointer = vbNormal
@@ -5519,9 +5571,9 @@ Select Case UCase$(strField)
     Case "DRYLAND"
         If m_dbOperation = Insert Then GoTo ExitLine
         If m_CustReg Is Nothing Then GoTo ExitLine
-        If m_CustReg.CustomerID = 0 Then GoTo ExitLine
+        If m_CustReg.customerID = 0 Then GoTo ExitLine
         If m_frmAsset Is Nothing Then Set m_frmAsset = New frmAsset
-        m_frmAsset.CustomerID = m_CustReg.CustomerID
+        m_frmAsset.customerID = m_CustReg.customerID
         m_frmAsset.Show 1
 
 End Select
@@ -5621,7 +5673,7 @@ m_clsReceivable.Show
     
 If m_clsReceivable.TotalAmount Then
     txtMiscAmount.Locked = True
-    txtMiscAmount.Value = m_clsReceivable.TotalAmount
+    txtMiscAmount.value = m_clsReceivable.TotalAmount
 Else
     txtMiscAmount.Locked = False
     Set m_clsReceivable = Nothing
@@ -5806,8 +5858,8 @@ End Sub
 
 Private Sub cmdPhoto_Click()
     If Not m_CustReg Is Nothing Then
-        frmPhoto.setAccNo (m_CustReg.CustomerID)
-        If (m_CustReg.CustomerID > 0) Then _
+        frmPhoto.setAccNo (m_CustReg.customerID)
+        If (m_CustReg.customerID > 0) Then _
             frmPhoto.Show vbModal
     End If
 End Sub
@@ -5857,7 +5909,7 @@ Dim SearchName As String
 Dim rst As Recordset
 
 gDbTrans.SqlStmt = "SELECT FirstName,MiddleName,LastName " & _
-    " FROM NAMETAB WHERE CustomerID = " & m_CustReg.CustomerID
+    " FROM NAMETAB WHERE CustomerID = " & m_CustReg.customerID
 If gDbTrans.Fetch(rst, adOpenForwardOnly) > 0 Then
     SearchName = FormatField(rst(0))
     If SearchName = "" Then SearchName = FormatField(rst(1))
@@ -6170,7 +6222,7 @@ If cmbFarmer.ListIndex < 0 Then cmbFarmer.ListIndex = 0
 
 Dim ReportType As wis_BKCCReports
 '0,1,2,3,4,5,,6,7,16,17,18,19,21,22,23,24,
-If optDepositReports.Value Then
+If optDepositReports.value Then
     If optReports(8) Then ReportType = repBkccDepBalance
     If optReports(9) Then ReportType = repBKCCDepDayBook
     If optReports(14) Then ReportType = repBkccDepHolder
@@ -6227,19 +6279,19 @@ Select Case KeyCode
     Case vbKeyUp
         ' Scroll up.
         With Me.vscLoanIssue
-            If .Value - .SmallChange > .Min Then
-                .Value = .Value - .SmallChange
+            If .value - .SmallChange > .Min Then
+                .value = .value - .SmallChange
             Else
-                .Value = .Min
+                .value = .Min
             End If
         End With
     Case vbKeyDown
         ' Scroll down.
         With vscLoanIssue
-            If .Value + .SmallChange < .Max Then
-                .Value = .Value + .SmallChange
+            If .value + .SmallChange < .Max Then
+                .value = .value + .SmallChange
             Else
-                .Value = .Max
+                .value = .Max
             End If
         End With
    Case vbKeyTab
@@ -6366,7 +6418,7 @@ Do
     'Now Get the LImit range
     pos = InStr(1, SchemeName, "-")
     txtMinLimit(I).Caption = Left(SchemeName, pos - 1)
-    txtMaxLimit(I).Value = Val(Mid(SchemeName, pos + 1))
+    txtMaxLimit(I).value = Val(Mid(SchemeName, pos + 1))
     
     'Now Get the LOan Int Rate for this range
     SchemeName = Val(IntClass.InterestRate(wis_BKCCLoan, "Slab" & I, FinUSFromDate))
@@ -6389,11 +6441,11 @@ fraDepReports.Width = fraReports.Width - 180
 fraDepReports.BorderStyle = 0
 cmdPhoto.Enabled = Len(gImagePath)
 
-optReports(1).Value = True
-optReports(9).Value = True
+optReports(1).value = True
+optReports(9).value = True
 
-optReports(0).Value = True
-optReports(8).Value = True
+optReports(0).value = True
+optReports(8).value = True
 End Sub
 
 Private Sub Form_Unload(cancel As Integer)
@@ -7240,7 +7292,7 @@ Private Sub TabStrip_Click()
 On Error Resume Next
 Dim txtIndex As Integer
 On Error Resume Next
-Select Case UCase$(TabStrip.SelectedItem.Key)
+Select Case UCase$(TabStrip.SelectedItem.key)
     Case "LOANACCOUNTS"
         fraLoanAccounts.ZOrder 0
         txtIndex = GetIndex("MemberID")
@@ -7336,8 +7388,8 @@ End Sub
 Private Sub txtIntBalance_Change()
 On Error Resume Next
 If ActiveControl.name <> txtTotal.name Then _
-    txtTotal = (txtIntBalance.Value + txtRegInterest.Value + _
-            txtPenalInterest.Value + txtMiscAmount.Value) * Val(cmbTrans.Tag) + txtRepayAmt
+    txtTotal = (txtIntBalance.value + txtRegInterest.value + _
+            txtPenalInterest.value + txtMiscAmount.value) * Val(cmbTrans.Tag) + txtRepayAmt
 Err.Clear
 End Sub
 
@@ -7533,7 +7585,7 @@ If Index >= txtMaxLimit.UBound Then Exit Sub
 'If maximum limit is 0
 'then it is the limit for all above slabs
 'then need not to put the limit further
-If txtMaxLimit(Index).Value = 0 Then _
+If txtMaxLimit(Index).value = 0 Then _
     txtEffectiveDate.TabIndex = txtMaxLimit(Index).TabIndex + 1: Exit Sub
 
 
@@ -7541,7 +7593,7 @@ If txtMaxLimit(Index).Value = 0 Then _
 'Then Add the maximum Limit
 'as minimum limit for next Slab
     
-txtMinLimit(Index + 1).Caption = txtMaxLimit(Index).Value + 1
+txtMinLimit(Index + 1).Caption = txtMaxLimit(Index).value + 1
 
 End Sub
 
@@ -7637,7 +7689,7 @@ txtLoanIssue(Val(GetIndex("InterestBalance"))) = txtIntBalance.Text
 txtLastInt = FormatField(m_rstLoanMast("LastIntDate"))
 
 'Compute and display the regular interest.
-If chkSb.Value = vbChecked Then
+If chkSb.value = vbChecked Then
     IntAmount = BKCCRegularInterest(TransDate, m_LoanID)
     If IntAmount < 0 Then IntAmount = BKCCDepositInterest(m_LoanID, TransDate)
     lblRegInterest = GetResourceString(IIf(IntAmount < 0, 233, 344))
@@ -7695,8 +7747,8 @@ Private Sub txtTotal_Change()
 
 On Error Resume Next
 If ActiveControl.name = txtTotal.name Then _
-    txtRepayAmt.Value = txtTotal.Value - (txtIntBalance.Value + _
-            txtRegInterest.Value + txtPenalInterest.Value + txtMiscAmount.Value) * Val(cmbTrans.Tag)
+    txtRepayAmt.value = txtTotal.value - (txtIntBalance.value + _
+            txtRegInterest.value + txtPenalInterest.value + txtMiscAmount.value) * Val(cmbTrans.Tag)
 
 Err.Clear
 
@@ -7713,7 +7765,7 @@ End Sub
 
 Private Sub vscLoanIssue_Change()
 ' Move the picLoanissueSlider.
-picLoanIssueSlider.Top = -vscLoanIssue.Value
+picLoanIssueSlider.Top = -vscLoanIssue.value
 End Sub
 
 Private Sub SetKannadaCaption()
@@ -7755,7 +7807,20 @@ lblParticulars.Caption = GetResourceString(39)  '"Particulars
 cmdUndo.Caption = GetResourceString(5)
 'cmdInstalment.Caption = GetResourceString(57)
 cmdAccept.Caption = GetResourceString(4)
-Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSb) 'chkSb.Caption = GetResourceString(421, 271)
+cmbSb.Clear
+Dim depModules() As wisModules
+ReDim Preserve depModules(0)
+depModules(0) = wis_SBAcc
+
+'Check Is there any Currnet Account Or Not
+gDbTrans.SqlStmt = "Select top 10 * from CAMaster where ClosedDate Is NULL"
+Dim rst As ADODB.Recordset
+If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
+    ReDim Preserve depModules(1)
+    depModules(1) = wis_CAAcc
+End If
+Call SetMultiDepositCheckBoxCaption(depModules, chkSb, cmbSb)
+'Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271)
 lblChequeNo.Caption = GetResourceString(275, 60) '"Sb acc NUm
 
 lblfarmer.Caption = GetResourceString(378, 253)

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Begin VB.Form frmUsrAdd 
    BorderStyle     =   3  'Fixed Dialog
@@ -24,105 +24,6 @@ Begin VB.Form frmUsrAdd
       TabIndex        =   19
       Top             =   6840
       Width           =   1215
-   End
-   Begin VB.Frame fraTrans 
-      Height          =   6135
-      Left            =   240
-      TabIndex        =   20
-      Top             =   480
-      Width           =   6975
-      Begin VB.CommandButton cmdEndDate 
-         Caption         =   "..."
-         Height          =   315
-         Left            =   6555
-         TabIndex        =   28
-         Top             =   840
-         Width           =   315
-      End
-      Begin VB.CommandButton cmdStDate 
-         Caption         =   "..."
-         Height          =   315
-         Left            =   2970
-         TabIndex        =   27
-         Top             =   840
-         Width           =   315
-      End
-      Begin VB.TextBox txtEndDate 
-         Height          =   315
-         Left            =   5145
-         TabIndex        =   26
-         Top             =   840
-         Width           =   1230
-      End
-      Begin VB.TextBox txtStartDate 
-         Height          =   315
-         Left            =   1605
-         TabIndex        =   25
-         Top             =   840
-         Width           =   1290
-      End
-      Begin MSFlexGridLib.MSFlexGrid grd 
-         Height          =   4815
-         Left            =   120
-         TabIndex        =   24
-         Top             =   1200
-         Width           =   6735
-         _ExtentX        =   11880
-         _ExtentY        =   8493
-         _Version        =   393216
-         AllowUserResizing=   3
-      End
-      Begin VB.CommandButton cmdLoad 
-         Caption         =   "..."
-         BeginProperty Font 
-            Name            =   "Arial"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   450
-         Left            =   6060
-         TabIndex        =   22
-         Top             =   240
-         Width           =   795
-      End
-      Begin VB.ComboBox cmbUser 
-         Height          =   315
-         Left            =   1650
-         Style           =   2  'Dropdown List
-         TabIndex        =   21
-         Top             =   360
-         Width           =   4335
-      End
-      Begin VB.Label lblDate2 
-         AutoSize        =   -1  'True
-         Caption         =   "&Ending date :"
-         Height          =   195
-         Left            =   3615
-         TabIndex        =   30
-         Top             =   900
-         Width           =   1605
-      End
-      Begin VB.Label lblDate1 
-         AutoSize        =   -1  'True
-         Caption         =   "&Starting date :"
-         Height          =   195
-         Left            =   120
-         TabIndex        =   29
-         Top             =   885
-         Width           =   990
-      End
-      Begin VB.Label lblUser 
-         Caption         =   "Register user:"
-         Height          =   315
-         Left            =   120
-         TabIndex        =   23
-         Top             =   390
-         Width           =   1425
-      End
    End
    Begin VB.Frame fraUser 
       Height          =   6075
@@ -344,6 +245,105 @@ Begin VB.Form frmUsrAdd
          EndProperty
       EndProperty
    End
+   Begin VB.Frame fraTrans 
+      Height          =   6135
+      Left            =   240
+      TabIndex        =   20
+      Top             =   480
+      Width           =   6975
+      Begin VB.CommandButton cmdEndDate 
+         Caption         =   "..."
+         Height          =   315
+         Left            =   6555
+         TabIndex        =   28
+         Top             =   840
+         Width           =   315
+      End
+      Begin VB.CommandButton cmdStDate 
+         Caption         =   "..."
+         Height          =   315
+         Left            =   2970
+         TabIndex        =   27
+         Top             =   840
+         Width           =   315
+      End
+      Begin VB.TextBox txtEndDate 
+         Height          =   315
+         Left            =   5145
+         TabIndex        =   26
+         Top             =   840
+         Width           =   1230
+      End
+      Begin VB.TextBox txtStartDate 
+         Height          =   315
+         Left            =   1605
+         TabIndex        =   25
+         Top             =   840
+         Width           =   1290
+      End
+      Begin MSFlexGridLib.MSFlexGrid grd 
+         Height          =   4815
+         Left            =   120
+         TabIndex        =   24
+         Top             =   1200
+         Width           =   6735
+         _ExtentX        =   11880
+         _ExtentY        =   8493
+         _Version        =   393216
+         AllowUserResizing=   3
+      End
+      Begin VB.CommandButton cmdLoad 
+         Caption         =   "..."
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   450
+         Left            =   6060
+         TabIndex        =   22
+         Top             =   240
+         Width           =   795
+      End
+      Begin VB.ComboBox cmbUser 
+         Height          =   315
+         Left            =   1650
+         Style           =   2  'Dropdown List
+         TabIndex        =   21
+         Top             =   360
+         Width           =   4335
+      End
+      Begin VB.Label lblDate2 
+         AutoSize        =   -1  'True
+         Caption         =   "&Ending date :"
+         Height          =   195
+         Left            =   3615
+         TabIndex        =   30
+         Top             =   900
+         Width           =   1605
+      End
+      Begin VB.Label lblDate1 
+         AutoSize        =   -1  'True
+         Caption         =   "&Starting date :"
+         Height          =   195
+         Left            =   120
+         TabIndex        =   29
+         Top             =   885
+         Width           =   990
+      End
+      Begin VB.Label lblUser 
+         Caption         =   "Register user:"
+         Height          =   315
+         Left            =   120
+         TabIndex        =   23
+         Top             =   390
+         Width           =   1425
+      End
+   End
 End
 Attribute VB_Name = "frmUsrAdd"
 Attribute VB_GlobalNameSpace = False
@@ -497,7 +497,7 @@ ExecuteLine:
     Retval = gDbTrans.Fetch(rst, adOpenForwardOnly)
     If Retval <= 0 Then Exit Sub
     If m_CustReg Is Nothing Then Set m_CustReg = New clsCustReg
-    For I = 1 To rst.RecordCount
+    For I = 1 To rst.recordCount
         If Val(rst("UserID")) = 0 Then
             cmbNames.AddItem "Administrator"
             cmbNamesEnglish.AddItem "Administrator"
@@ -1452,7 +1452,7 @@ fraTrans.Left = fraUser.Left
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
 If gCurrUser.IsAdmin Then
     Dim ColCount As Integer
     For ColCount = 0 To grd.Cols - 1

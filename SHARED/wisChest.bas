@@ -5,7 +5,12 @@ Private m_DayFormat As String
 Private m_YearFormat As String
 Private m_DateSep As String
 Private m_swap As Boolean
-
+Private Const m_sepChar = ":"
+Private Const m_sepEscapeChar = "***"
+Private Const m_delimChar = ";"
+Private Const m_delimEscapeChar = "###"
+    
+    
 ''Time
 Private Declare Function VariantTimeToSystemTime Lib "oleaut32.dll" (ByVal vtime As Date, lpSystemTime As SYSTEMTIME) As Long
 Private Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYSTEMTIME, lpFileTime As FileTime) As Long
@@ -740,7 +745,7 @@ End Function
 '   Eg. If your valid set contains A and you want to allow "a" also,
 '   then pass AllowOtherCase as TRUE
 
-Function AllowKeyAscii(txt As Object, ValidSet As String, Key As Integer, Optional AllowOtherCase As Boolean) As Integer
+Function AllowKeyAscii(txt As Object, ValidSet As String, key As Integer, Optional AllowOtherCase As Boolean) As Integer
 Dim count As Integer, I As Integer
 Dim Flag As Boolean
 Dim TempBuf As String
@@ -755,13 +760,13 @@ Dim TempBuf As String
 
     Flag = 0
     For count = 1 To Len(ValidSet)
-        If Key = Asc(Mid(ValidSet, count, 1)) Then
+        If key = Asc(Mid(ValidSet, count, 1)) Then
             Flag = True
         End If
     Next count
     
 
-    If Key = 22 Then
+    If key = 22 Then
         TempBuf = Clipboard.GetText
         For count = 1 To Len(TempBuf)
             Flag = False
@@ -778,7 +783,7 @@ Dim TempBuf As String
         Next count
     End If
     
-    If Not Flag Then Key = 0
+    If Not Flag Then key = 0
     
 End Function
 
@@ -1543,106 +1548,7 @@ fillview_error:
     GoTo Exit_Line
 End Function
 
-' Fills the listview control with the record set data.
-Public Function FillView_dup(view As ListView, rs As ADODB.Recordset, Optional AutoWidth As Boolean) As Boolean
-On Error GoTo fillview_error
-Const FIELD_MARGIN = 1.5
-If rs.EOF And rs.BOF Then Exit Function
-' Check if there are any records in the recordset.
-rs.MoveLast
-rs.MoveFirst
-If rs.recordCount = 0 Then
-    FillView = True
-    GoTo Exit_Line
-End If
 
-Dim I As Integer
-Dim itmX As ListItem
-
-With view
-    ' Hide the view control before processing.
-    .Visible = False
-    .ListItems.Clear
-    .ColumnHeaders.Clear
-
-    ' Add column headers.
-    Dim X As Integer
-    X = 4
-    If rs.Fields.count <= 4 Then X = rs.Fields.count - 1
-    
-    For I = 0 To X  'display only selected fields instead of all the fields
-        .ColumnHeaders.Add , rs.Fields(I).name, rs.Fields(I).name, _
-                     view.Parent.TextWidth(rs.Fields(I).name) * FIELD_MARGIN
-        ' Set the alignment characterstic for the column.
-        If I > 0 Then
-            If rs.Fields(I).Type = adNumeric Or _
-                    rs.Fields(I).Type = adInteger Or _
-                    rs.Fields(I).Type = adInteger Or _
-                    rs.Fields(I).Type = adDouble Or _
-                    rs.Fields(I).Type = adCurrency Then
-                .ColumnHeaders(I + 1).Alignment = lvwColumnRight
-            End If
-        End If
-        ' If the autowidth property is set,
-        ' check if the width of the column is to be adjusted.
-    Next
-
-    ' Begin a loop for processing rows.
-    Dim KeyField As String
-    Do While Not rs.EOF
-         KeyField = FormatField(rs.Fields(0))
-         DoEvents
-         ' Add the details.
-        Set itmX = .ListItems.Add(, "KEY" & KeyField, KeyField)
-        'Set itmX = .ListItems.Add(, , FormatField(rs.Fields(0)))
-        
-        ' If the 'Autowidth' property is enabled,
-        ' then check if the width needs to be expanded.
-        If AutoWidth Then
-            If .ColumnHeaders(1).Width \ FIELD_MARGIN < _
-                        .Parent.TextWidth(FormatField(rs.Fields(0))) Then
-                .ColumnHeaders(1).Width = _
-                    .Parent.TextWidth(FormatField(rs.Fields(0))) * FIELD_MARGIN
-            End If
-        End If
-        ' Add sub-items.
-       ' For I = 1 To rs.fields.Count - 1
-           X = 4
-    If rs.Fields.count <= 4 Then X = rs.Fields.count - 1
-
-       For I = 1 To X 'display only necessary fields to user
-            itmX.SubItems(I) = FormatField(rs.Fields(I))
-            ' If the 'Autowidth' property is enabled,
-            ' then check if the width needs to be expanded.
-            If AutoWidth Then
-                If .ColumnHeaders(I + 1).Width \ FIELD_MARGIN < _
-                        .Parent.TextWidth(FormatField(rs.Fields(I))) Then
-                    .ColumnHeaders(I + 1).Width = _
-                        .Parent.TextWidth(FormatField(rs.Fields(I))) * FIELD_MARGIN
-                End If
-            End If
-        Next
-
-        rs.MoveNext
-    Loop
-End With
-FillView_dup = True
-
-Exit_Line:
-view.Visible = True
-view.view = lvwReport
-view.Tag = ""
-
-Exit Function
-
-fillview_error:
-    If Err Then
-        MsgBox "FillView: The following error occurred." _
-            & vbCrLf & Err.Description, vbCritical
-        'Resume
-    End If
-    GoTo Exit_Line
-End Function
 
 
 ' Fills the listview control with the record set data.
@@ -2323,7 +2229,7 @@ End Function
 '
 Public Function FormatField(fld As Field) As Variant
 On Error Resume Next
-    If IsNull(fld.Value) Then
+    If IsNull(fld.value) Then
         ' If the value in the field is NULL,
         ' return it as a Null String rather than NULL.
         ' This will avoid potential run-time errors.
@@ -2336,7 +2242,7 @@ On Error Resume Next
     Else
         ' Check if the field is date type.
         If fld.Type = adDate Then
-            FormatField = Format(fld.Value, "dd/mm/yyyy")
+            FormatField = Format(fld.value, "dd/mm/yyyy")
             If InStr(1, DateFormat, "/") Then
                 FormatField = Replace(FormatField, "-", "/")
             Else
@@ -2344,13 +2250,13 @@ On Error Resume Next
             End If
             
             Dim LDate As Date
-            LDate = fld.Value
+            LDate = fld.value
             'FormatField = GetAppFormatDate(LDate)
         ElseIf fld.Type = adCurrency Then
-            FormatField = FormatCurrency(fld.Value)
+            FormatField = FormatCurrency(fld.value)
             If FormatField = "" Then FormatField = 0
         Else
-            FormatField = fld.Value
+            FormatField = fld.value
         End If
   End If
 
@@ -2362,13 +2268,13 @@ End Function
 Public Function FormatDateField(fld As Field) As String
 On Error Resume Next
 If fld.Type <> adDate Then Exit Function
-If IsNull(fld.Value) Then
+If IsNull(fld.value) Then
     ' If the value in the field is NULL,
     ' return it as a Null String rather than NULL.
     ' This will avoid potential run-time errors.
     FormatDateField = "NULL"
 Else
-    FormatDateField = "#" + CStr(fld.Value) + "#"
+    FormatDateField = "#" + CStr(fld.value) + "#"
 End If
 
 End Function
@@ -2417,9 +2323,9 @@ Next I
 ErrLine:
 End Function
 
-Public Function GetConfigValue(Key As String, Optional Default As String) As String
+Public Function GetConfigValue(key As String, Optional Default As String) As String
     Dim retValue As String
-    retValue = ReadFromIniFile("CONFIG", Key, App.Path & "\" & constFINYEARFILE)
+    retValue = ReadFromIniFile("CONFIG", key, App.Path & "\" & constFINYEARFILE)
     If Len(retValue) = 0 Then retValue = Default
     
     GetConfigValue = retValue
@@ -2489,4 +2395,66 @@ Public Sub GetPassBookNextButton(rstTrans As Recordset, recordsPerPage As Intege
     cmdNext.Enabled = totalRecords < currRecord + recordsPerPage
     
 End Sub
+Public Sub PutKeyValue(ByRef sourceText As String, ByVal key As String, ByVal value As String)
+    Dim strPairArr() As String
+    Dim strKey() As String
+    Dim I As Integer
+    
+    
+    key = Replace(key, m_sepChar, m_sepEscapeChar)
+    value = Replace(value, m_sepChar, m_sepEscapeChar)
+    
+    key = Replace(key, m_delimChar, m_delimEscapeChar)
+    value = Replace(value, m_delimChar, m_delimEscapeChar)
+    
+    If Len(Trim$(sourceText)) = 0 Then
+        sourceText = key + m_sepChar + value
+        Exit Sub
+    End If
+    
+    Dim found As Boolean
+    found = False
+    strPairArr = Split(sourceText, m_delimChar, , vbTextCompare)
+    sourceText = ""
+    For I = 0 To UBound(strPairArr)
+        If StrComp(Split(strPairArr(I), m_sepChar)(0), key, vbTextCompare) = 0 Then
+            sourceText = sourceText + IIf(Len(sourceText) = 0, "", m_delimChar) + key + m_sepChar + value
+            found = True
+        Else
+            sourceText = sourceText + IIf(Len(sourceText) = 0, "", m_delimChar) + strPairArr(I)
+        End If
+    Next
+    
+    If Not found Then
+        sourceText = sourceText + m_delimChar + key + m_sepChar + value
+    End If
+    
+End Sub
+Public Function GetValueForKey(ByRef sourceText As String, ByVal key As String, ByVal value As String) As String
+    Dim strPairArr() As String
+    Dim I As Integer
+    
+    GetValueForKey = ""
+    
+    key = Replace(key, m_sepChar, m_sepEscapeChar)
 
+    
+    key = Replace(key, m_delimChar, m_delimEscapeChar)
+
+    
+    If Len(Trim$(sourceText)) = 0 Then
+        sourceText = key + m_delimChar + value
+        Exit Function
+    End If
+    
+    Dim strArr() As String
+    strPairArr = Split(sourceText, m_delimChar, , vbTextCompare)
+    For I = 0 To UBound(strPairArr)
+        strArr = Split(strPairArr(I), m_sepChar)
+        If StrComp(strArr(0), m_sepChar, vbTextCompare) = 0 Then
+            GetValueForKey = Replace(Replace(strArr(1), m_sepEscapeChar, m_sepChar), m_delimEscapeChar, m_delimChar)
+        End If
+    Next
+    
+    
+End Function
