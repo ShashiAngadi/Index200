@@ -492,18 +492,33 @@ If gDbTrans.Fetch(RstLoanTrans, adOpenForwardOnly) > 0 Then _
                         Balance = FormatField(RstLoanTrans("Balance"))
     
 
-Dim SBClass As clsSBAcc
+Dim objClass As Object
 Dim SbACCID As Long
 Dim ContraID As Long
+Dim CrHeadID As Long
 Dim rst As Recordset
 
 If chkSb.Value = vbChecked Then
     If Trim(txtSbAccNum) <> "" Then
         'check the existance of sbaccount
-        Set SBClass = New clsSBAcc
+        'Set SBClass = New clsSBAcc
+        Dim depModule As wisModules
+        Dim DepositType As Integer
+        If cmbSB.Visible Then
+            CrHeadID = GetIndexHeadID(cmbSB.Text)
+        Else
+            CrHeadID = GetIndexHeadID(GetResourceString(421))
+        End If
+        If cmbSB.Visible Then DepositType = cmbSB.ItemData(cmbSB.ListIndex)
+        depModule = GetModuleIDFromHeadID(CrHeadID)
+        If depModule >= wis_SBAcc And depModule < wis_SBAcc + 100 Then
+            Set objClass = New clsSBAcc
+        Else
+            Set objClass = New ClsCAAcc
+        End If
         If cmbSB.Visible Then SbACCID = cmbSB.ItemData(cmbSB.ListIndex)
-        SbACCID = SBClass.GetAccountID(txtSbAccNum, SbACCID)
-        Set SBClass = Nothing
+        SbACCID = objClass.GetAccountID(txtSbAccNum, SbACCID)
+        'Set SBClass = Nothing
         If SbACCID = 0 Then
             'Invalid Account NO
             MsgBox GetResourceString(500), vbInformation, wis_MESSAGE_TITLE
@@ -744,18 +759,18 @@ If SbACCID Then
     Dim SBType As Integer
     Dim headName As String
     SBType = 0
-    If cmbSB.Visible Then
-        SBType = cmbSB.ItemData(cmbSB.ListIndex)
-        headName = GetDepositName(wis_SBAcc, SBType, engHeadName)
-        SbHeadID = bankClass.GetHeadIDCreated(headName, engHeadName, parMemberDeposit, 0, wis_SBAcc + SBType)
-    Else
-        SbHeadID = bankClass.GetHeadIDCreated(GetResourceString(421), LoadResString(421), parMemberDeposit, 0, wis_SBAcc + SBType)
-    End If
+    'If cmbSB.Visible Then
+    '    SBType = cmbSB.ItemData(cmbSB.ListIndex)
+    '    headName = GetDepositName(wis_SBAcc, SBType, engHeadName)
+    '    SbHeadID = bankClass.GetHeadIDCreated(headName, engHeadName, parMemberDeposit, 0, wis_SBAcc + SBType)
+    'Else
+    '    SbHeadID = bankClass.GetHeadIDCreated(GetResourceString(421), LoadResString(421), parMemberDeposit, 0, wis_SBAcc + SBType)
+    'End If
     
-    If Not bankClass.UpdateContraTrans(LoanHeadID, SbHeadID, Amount, TransDate) Then GoTo Err_line
+    If Not bankClass.UpdateContraTrans(LoanHeadID, CrHeadID, Amount, TransDate) Then GoTo Err_line
                             
-    Set SBClass = New clsSBAcc
-    If SBClass.DepositAmount(SbACCID, Amount, "Loan Advance", TransDate, VoucherNo) = 0 Then GoTo Err_line
+    'Set SBClass = New clsSBAcc
+    If objClass.DepositAmount(SbACCID, Amount, "Loan Advance", TransDate, VoucherNo) = 0 Then GoTo Err_line
     
 End If
 
@@ -778,7 +793,7 @@ Exit_Line:
 
     If InTrans Then gDbTrans.RollBack: InTrans = False
     Set bankClass = Nothing
-    Set SBClass = Nothing
+    Set objClass = Nothing
     Set Cashclass = Nothing
     
     Exit Function
@@ -815,10 +830,22 @@ lblNewBalance = GetResourceString(260, 42) 'New BAlance
 chkInterest.Caption = GetResourceString(308)  'Deduct Interest
 'chk.Caption = GetResourceString(309)  'Deduct Legal Fee
 cmbSB.Clear
-Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271)
+Dim depModules() As wisModules
+ReDim Preserve depModules(0)
+depModules(0) = wis_SBAcc
+
+'Check Is there any Currnet Account Or Not
+gDbTrans.SqlStmt = "Select top 10 * from CAMaster where ClosedDate Is NULL"
+Dim rst As ADODB.Recordset
+If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
+    ReDim Preserve depModules(1)
+    depModules(1) = wis_CAAcc
+End If
+Call SetMultiDepositCheckBoxCaption(depModules, chkSb, cmbSB)
+'Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271)
 
 cmdCancel.Caption = GetResourceString(2)  'Cancel
-cmdOK.Caption = GetResourceString(1)      'OK
+cmdOk.Caption = GetResourceString(1)      'OK
 
 End Sub
 

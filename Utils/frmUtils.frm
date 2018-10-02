@@ -17,244 +17,6 @@ Begin VB.Form frmUtils
    Begin VB.Frame fra 
       Caption         =   "Uitls"
       Height          =   4600
-      Index           =   0
-      Left            =   200
-      TabIndex        =   62
-      Top             =   600
-      Width           =   6400
-      Begin VB.OptionButton optPigmy 
-         Caption         =   "New Pigmy Deposit"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   3390
-         TabIndex        =   76
-         Top             =   1662
-         Width           =   2805
-      End
-      Begin VB.OptionButton optRD 
-         Caption         =   "New Recuring Deposit"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   390
-         TabIndex        =   75
-         Top             =   1725
-         Width           =   2805
-      End
-      Begin VB.OptionButton optCurrentAccount 
-         Caption         =   "New Current Account"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   3390
-         TabIndex        =   74
-         Top             =   1128
-         Width           =   2655
-      End
-      Begin VB.OptionButton optSavings 
-         Caption         =   "New Savings Account"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   390
-         TabIndex        =   73
-         Top             =   1200
-         Width           =   2415
-      End
-      Begin VB.OptionButton optMember 
-         Caption         =   "New Member Type"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   390
-         TabIndex        =   72
-         Top             =   675
-         Width           =   2805
-      End
-      Begin VB.OptionButton optFarmer 
-         Caption         =   "New Farmer Type"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   390
-         TabIndex        =   71
-         Top             =   2640
-         Width           =   2805
-      End
-      Begin VB.OptionButton optPlace 
-         Caption         =   "New Place"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   3390
-         TabIndex        =   70
-         Top             =   240
-         Width           =   2865
-      End
-      Begin VB.OptionButton optCustomer 
-         Caption         =   "New Customer Type"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   3390
-         TabIndex        =   69
-         Top             =   2196
-         Width           =   2865
-      End
-      Begin VB.OptionButton optCaste 
-         Caption         =   "New Caste"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   390
-         TabIndex        =   68
-         Top             =   240
-         Width           =   2865
-      End
-      Begin VB.OptionButton optAccount 
-         Caption         =   "New Account Group"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   240
-         Left            =   390
-         TabIndex        =   67
-         Top             =   2250
-         Width           =   2865
-      End
-      Begin VB.OptionButton optLoanPurpose 
-         Caption         =   "New Loan Purpose"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   3390
-         TabIndex        =   66
-         Top             =   2640
-         Width           =   2805
-      End
-      Begin VB.OptionButton optDeposit 
-         Caption         =   "New Deposit Type"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   285
-         Left            =   3390
-         TabIndex        =   65
-         Top             =   684
-         Width           =   2865
-      End
-      Begin VB.CommandButton cmdLoad 
-         Caption         =   "OK"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   9.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   400
-         Left            =   4950
-         TabIndex        =   63
-         Top             =   4080
-         Width           =   1215
-      End
-      Begin VB.Label lblNewMessage 
-         Caption         =   "X"
-         Height          =   495
-         Left            =   480
-         TabIndex        =   64
-         Top             =   3450
-         Width           =   5565
-      End
-   End
-   Begin VB.Frame fra 
-      Caption         =   "Uitls"
-      Height          =   4600
       Index           =   1
       Left            =   200
       TabIndex        =   0
@@ -1205,6 +967,244 @@ Begin VB.Form frmUtils
          Strikethrough   =   0   'False
       EndProperty
    End
+   Begin VB.Frame fra 
+      Caption         =   "Uitls"
+      Height          =   4600
+      Index           =   0
+      Left            =   200
+      TabIndex        =   62
+      Top             =   600
+      Width           =   6400
+      Begin VB.OptionButton optPigmy 
+         Caption         =   "New Pigmy Deposit"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   3390
+         TabIndex        =   76
+         Top             =   1662
+         Width           =   2805
+      End
+      Begin VB.OptionButton optRD 
+         Caption         =   "New Recuring Deposit"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   390
+         TabIndex        =   75
+         Top             =   1725
+         Width           =   2805
+      End
+      Begin VB.OptionButton optCurrentAccount 
+         Caption         =   "New Current Account"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   3390
+         TabIndex        =   74
+         Top             =   1128
+         Width           =   2655
+      End
+      Begin VB.OptionButton optSavings 
+         Caption         =   "New Savings Account"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   390
+         TabIndex        =   73
+         Top             =   1200
+         Width           =   2415
+      End
+      Begin VB.OptionButton optMember 
+         Caption         =   "New Member Type"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   390
+         TabIndex        =   72
+         Top             =   675
+         Width           =   2805
+      End
+      Begin VB.OptionButton optFarmer 
+         Caption         =   "New Farmer Type"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   390
+         TabIndex        =   71
+         Top             =   2640
+         Width           =   2805
+      End
+      Begin VB.OptionButton optPlace 
+         Caption         =   "New Place"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   3390
+         TabIndex        =   70
+         Top             =   240
+         Width           =   2865
+      End
+      Begin VB.OptionButton optCustomer 
+         Caption         =   "New Customer Type"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   3390
+         TabIndex        =   69
+         Top             =   2196
+         Width           =   2865
+      End
+      Begin VB.OptionButton optCaste 
+         Caption         =   "New Caste"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   390
+         TabIndex        =   68
+         Top             =   240
+         Width           =   2865
+      End
+      Begin VB.OptionButton optAccount 
+         Caption         =   "New Account Group"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   240
+         Left            =   390
+         TabIndex        =   67
+         Top             =   2250
+         Width           =   2865
+      End
+      Begin VB.OptionButton optLoanPurpose 
+         Caption         =   "New Loan Purpose"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   3390
+         TabIndex        =   66
+         Top             =   2640
+         Width           =   2805
+      End
+      Begin VB.OptionButton optDeposit 
+         Caption         =   "New Deposit Type"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   3390
+         TabIndex        =   65
+         Top             =   684
+         Width           =   2865
+      End
+      Begin VB.CommandButton cmdLoad 
+         Caption         =   "OK"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   400
+         Left            =   4950
+         TabIndex        =   63
+         Top             =   4080
+         Width           =   1215
+      End
+      Begin VB.Label lblNewMessage 
+         Caption         =   "X"
+         Height          =   495
+         Left            =   480
+         TabIndex        =   64
+         Top             =   3450
+         Width           =   5565
+      End
+   End
 End
 Attribute VB_Name = "frmUtils"
 Attribute VB_GlobalNameSpace = False
@@ -1370,7 +1370,7 @@ End If
 
 If optCompact Then
     Screen.MousePointer = vbHourglass
-    If Not DbUtilClass.CompactTheDataBase(srcFile, "WIS!@#") Then
+    If Not DbUtilClass.CompactTheDataBase(srcFile, constDBPWD) Then
         Screen.MousePointer = vbDefault
         MsgBox "Can not compact the database", vbInformation, wis_MESSAGE_TITLE
         Exit Sub
@@ -1401,7 +1401,7 @@ If optCompareDb Then
     DbName = Mid(DbName, 1, Len(DbName) - 4) & " BLANK.mdb"
     dstFile = dstFile & "\BlankDataBase\" & DbName
     
-    If Not DbUtilClass.CompareDBFromDB(dstFile, "WIS!@#") Then
+    If Not DbUtilClass.CompareDBFromDB(dstFile, constDBPWD) Then
         MsgBox "Can not compact the database", vbInformation, wis_MESSAGE_TITLE
         Exit Sub
     End If
@@ -1626,7 +1626,7 @@ Dim ModuleID As wisModules
 Dim headID As Long
 Dim SchemeID As Long
 Dim AccountType As wis_AccountType
-Dim Deptype As Integer
+Dim depTYpe As Integer
 Dim subDepType As Integer
 
 TransDate = GetSysFormatDate(txtDate)
@@ -1642,7 +1642,7 @@ ModuleID = GetModuleIDFromHeadID(headID)
 
 If ModuleID = wis_None Then Exit Function
 
-Deptype = ModuleID Mod 100
+depTYpe = ModuleID Mod 100
 subDepType = ModuleID Mod 10
 If ModuleID > 100 Then ModuleID = ModuleID - (ModuleID Mod 100)
 

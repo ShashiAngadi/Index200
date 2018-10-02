@@ -366,7 +366,20 @@ lblTotAmtIssued.Caption = GetResourceString(249)
 cmdAccept.Caption = GetResourceString(4)
 cmdCancel.Caption = GetResourceString(11)
 cmbSB.Clear
-Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSB) 'chkSb.Caption = GetResourceString(421, 271)
+Dim depModules() As wisModules
+ReDim Preserve depModules(0)
+depModules(0) = wis_SBAcc
+
+'Check Is there any Currnet Account Or Not
+gDbTrans.SqlStmt = "Select top 10 * from CAMaster where ClosedDate Is NULL"
+Dim rst As ADODB.Recordset
+If gDbTrans.Fetch(rst, adOpenDynamic) > 0 Then
+    ReDim Preserve depModules(1)
+    depModules(1) = wis_CAAcc
+End If
+Call SetMultiDepositCheckBoxCaption(depModules, chkSb, cmbSB)
+'Call SetDepositCheckBoxCaption(wis_SBAcc, chkSb, cmbSb) 'chkSb.Caption = GetResourceString(421, 271)
+
 lblMisc.Caption = GetResourceString(327)
 
 End Sub
@@ -375,12 +388,12 @@ Private Sub chkSb_Click()
 
 If m_LoanID = 0 Then Exit Sub
 If chkSb.Value = vbUnchecked Then
-    cmdSB.Enabled = False
+    cmdSb.Enabled = False
     txtSbAccNum.Enabled = False
     Exit Sub
 End If
 
-cmdSB.Enabled = True
+cmdSb.Enabled = True
 txtSbAccNum.Enabled = True
 
 Dim rst As Recordset
@@ -414,6 +427,8 @@ Dim recCount As Integer
     End If
 
 End Sub
+
+
 
 Private Sub cmdAccept_Click()
 
@@ -483,7 +498,7 @@ End If
     
     
     LoanAmount = txtSanctioned
-    IntAmount = txtInterestAmount
+    IntAmount = txtInterestamount
     MiscAmount = txtMisc
     
     MiscHeadId = parIncome + 1 'Misceleneous
@@ -513,9 +528,9 @@ End If
 'Now Get the Calculated Interest till date
 
     Dim ContraID As Long
-    Dim SbACCID As Long
-    Dim SBClass As clsSBAcc
-    Dim SbHeadID As Long
+    Dim crACCID As Long
+    Dim objClass As Object
+    Dim CrHeadID As Long
     Dim bankClass As clsBankAcc
     
 If chkSb.Value = vbChecked Then
@@ -527,14 +542,20 @@ If chkSb.Value = vbChecked Then
         GoTo ExitLine
     End If
     
-    'Check For the SB Number Existace
-    Set SBClass = New clsSBAcc
-    SbACCID = 0
-    If cmbSB.Visible Then SbACCID = cmbSB.ItemData(cmbSB.ListIndex)
-    SbACCID = SBClass.GetAccountID(txtSbAccNum, SbACCID)
-    Set SBClass = Nothing
+    CrHeadID = GetIndexHeadID(cmbSB.Text)
+    Dim depModule As wisModules
+    Dim DepositType As Integer
+    If cmbSB.Visible Then DepositType = cmbSB.ItemData(cmbSB.ListIndex)
+    depModule = GetModuleIDFromHeadID(CrHeadID)
+    If depModule >= wis_SBAcc And depModule < wis_SBAcc + 100 Then
+        Set objClass = New clsSBAcc
+    Else
+        Set objClass = New ClsCAAcc
+    End If
     
-    If SbACCID = 0 Then
+    crACCID = objClass.GetAccountID(txtSbAccNum, DepositType)
+           
+    If crACCID = 0 Then
         'MsgBox "Invalid Account no sepcified", vbInformation, "SB Account"
         MsgBox GetResourceString(500), vbInformation, "SB Account"
         ActivateTextBox cmbSB
@@ -573,9 +594,9 @@ InTrans = True
         Dim C_IntAmount As Currency
         C_IntAmount = ComputeDepLoanRegularInterest(TransDate, m_LoanID)
         If IntAmount < C_IntAmount Then
-            If MsgBox(GetResourceString(668) & vbCrLf & GetResourceString(669), _
+            If MsgBox(GetResourceString(668, 669), _
                     vbYesNo, wis_MESSAGE_TITLE) = vbYes Then _
-            IntBalance = IntBalance + C_IntAmount - txtInterestAmount
+            IntBalance = IntBalance + C_IntAmount - txtInterestamount
         End If
         gDbTrans.SqlStmt = "Insert into DepositLoanIntTrans (LoanID, " & _
                         " TransID, TransType, " & _
@@ -600,15 +621,19 @@ InTrans = True
     End If
     If chkSb.Value = vbChecked Then
         transType = wContraWithdraw
-        Dim SBType As Integer
         Dim headName As String
         Dim headNameEnglish As String
         If cmbSB.Visible Then
-            SBType = cmbSB.ItemData(cmbSB.ListIndex)
-            headName = GetDepositName(wis_SBAcc, SBType, headNameEnglish)
-            SbHeadID = bankClass.GetHeadIDCreated(headName, headNameEnglish, parMemberDeposit, 0, wis_SBAcc + SBType)
+            If depModule >= wis_SBAcc And depModule < wis_SBAcc + 100 Then
+                Set objClass = New clsSBAcc
+            Else
+                Set objClass = New ClsCAAcc
+            End If
+            'SBType = cmbSB.ItemData(cmbSB.ListIndex)
+            headName = GetDepositName(IIf(depModule >= wis_SBAcc And depModule < wis_SBAcc + 100, wis_SBAcc, wis_CAAcc), DepositType, headNameEnglish)
+            CrHeadID = bankClass.GetHeadIDCreated(headName, headNameEnglish, parMemberDeposit, 0, depModule)
         Else
-            SbHeadID = bankClass.GetHeadIDCreated(GetResourceString(421), LoadResString(421), parMemberDeposit, 0, wis_SBAcc + SBType)
+            CrHeadID = bankClass.GetHeadIDCreated(GetResourceString(421), LoadResString(421), parMemberDeposit, 0, wis_SBAcc)
         End If
         
         gDbTrans.SqlStmt = "Insert INTO ContraTrans " & _
@@ -643,23 +668,23 @@ InTrans = True
         'If He is repaying any interest then Only mak this transaction
         If MiscAmount > 0 Then If Not gDbTrans.SQLExecute Then GoTo ExitLine
         
-        Set SBClass = New clsSBAcc
-        If SBClass.DepositAmount(SbACCID, txtIssuedAmount, _
+        'Set SBClass = New clsSBAcc
+        If objClass.DepositAmount(crACCID, txtIssuedAmount, _
                     "from Dep Loan AccNo " & txtAccNo, TransDate, " ") = 0 Then GoTo ExitLine
         
         'now make the receipt or payment to the ledger heads
-        If txtInterestAmount > 0 Then
+        If txtInterestamount > 0 Then
             If Not bankClass.UpdateContraTrans(m_LoanHeadID, m_IntHeadID, _
-                        txtInterestAmount, TransDate) Then GoTo ExitLine
+                        txtInterestamount, TransDate) Then GoTo ExitLine
         End If
         If MiscAmount > 0 Then
             If Not bankClass.UpdateContraTrans(m_LoanHeadID, _
                 MiscHeadId, MiscAmount, TransDate) Then GoTo ExitLine
         End If
-        If Not bankClass.UpdateContraTrans(m_LoanHeadID, SbHeadID, _
+        If Not bankClass.UpdateContraTrans(m_LoanHeadID, CrHeadID, _
                                 txtIssuedAmount, TransDate) Then GoTo ExitLine
         
-        Set SBClass = Nothing
+        Set objClass = Nothing
     Else
         If transType = wDeposit Then
             If IntAmount > 0 Then
@@ -909,7 +934,7 @@ On Error Resume Next
 If Val(txtLoan) <= 0 Then Exit Sub
 
 IntAmount = ComputeDepLoanRegularInterest(GetSysFormatDate(txtDate.Text), m_LoanID)
-txtInterestAmount = (IntAmount \ 1)
+txtInterestamount = (IntAmount \ 1)
     
 Err.Clear
 
@@ -943,12 +968,12 @@ End Sub
 
 Private Sub txtInterestAmount_Change()
 'COmpute the total amount to be actully issued
-txtIssuedAmount = txtSanctioned.Text - txtInterestAmount - txtMisc
+txtIssuedAmount = txtSanctioned.Text - txtInterestamount - txtMisc
 
 End Sub
 
 Private Sub txtInterestAmount_GotFocus()
-With txtInterestAmount
+With txtInterestamount
     .SelStart = 0
     .SelLength = Len(.Text)
 End With
@@ -966,12 +991,12 @@ End Sub
 
 
 Private Sub txtMisc_Change()
-txtIssuedAmount = txtSanctioned - txtInterestAmount - txtMisc
+txtIssuedAmount = txtSanctioned - txtInterestamount - txtMisc
 End Sub
 
 Private Sub txtSanctioned_Change()
 'COmpute the total amount to be actully issued
-txtIssuedAmount = txtSanctioned - txtInterestAmount - txtMisc
+txtIssuedAmount = txtSanctioned - txtInterestamount - txtMisc
 End Sub
 
 

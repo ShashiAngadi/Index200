@@ -1,14 +1,15 @@
 [Language]
 Language=kannada
-LanguageTool=NUDI
-1LanguageTool=SAMHITA
-1FontName=SUCHI-KAN-0850
+LanguageTool1=NUDI
+LanguageTool=SAMHITA
+FontName=SUCHI-KAN-0850
+ICUCIREQ=14012017782 
 [DBPath]
-Path=C:\Projects\Index 2000 Total New\APPMAIN
+Path=C:\Projects\repository\indx200\APPMAIN
 [CONFIG]
 NewReport=true
 FarmerType=true
 FarmerTypeName=Customer
 [FinYear]
-Year1=FromYear#01/04/2015,ToYear#31/03/2016,DBPath#WISDB1516
-Year2=FromYear#01/04/2016,ToYear#31/03/2017,DBPath#WISDB1617
+Year1=FromYear#01/04/2017,ToYear#31/03/2018,DBPath#WISDB1718
+Year2=FromYear#01/04/2018,ToYear#31/03/2019,DBPath#WISDB1819

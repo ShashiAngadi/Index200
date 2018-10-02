@@ -187,6 +187,10 @@ Public Function CompactTheDataBase(ByVal strDBName As String, ByVal pwd As Strin
     
 On Error GoTo ErrLine
 
+Dim Retry As Boolean
+
+Retry = False
+
 Dim strPath As String
 
 CompactTheDataBase = False
@@ -202,6 +206,8 @@ If m_JROEngine Is Nothing Then Set m_JROEngine = New JRO.JetEngine
 
 gDbTrans.CloseDB
 
+RetryLine:
+On Error GoTo ErrLine
 ' Compact the database specifying the new database password
 m_JROEngine.CompactDatabase "Data Source = " & strDBName & ";" & _
                             "Jet OLEDB:Database Password=" & pwd & ";", _
@@ -222,6 +228,12 @@ CompactTheDataBase = True
 Exit Function
 
 ErrLine:
+If Retry = False Then
+    Retry = True
+    pwd = "WIS!@#"
+    GoTo RetryLine
+End If
+
     MsgBox "CompactTheDataBase:" & vbCrLf & Err.Description
     
 End Function
@@ -294,6 +306,9 @@ End Function
 Public Function CompareDBFromDB(ByVal BlankDbFile As String, ByVal StrPwd As String) As Boolean
 
 On Error GoTo Hell:
+Dim Retry As Boolean
+
+Retry = False
 
 Dim TheTable As ADOX.Table
 Dim TotalTable As Integer
@@ -325,6 +340,9 @@ m_SourceDB.ActiveConnection = SourceConnection
 
 TotalTable = m_SourceDB.Tables.count
 
+RetryLine:
+On Error GoTo Hell
+
 For TableCount = 0 To TotalTable - 1
     Debug.Assert TableCount <> 86
     
@@ -345,6 +363,12 @@ CompareDBFromDB = True
 Exit Function
 
 Hell:
+If Retry = False Then
+    Retry = True
+    StrPwd = "WIS!@#"
+    GoTo RetryLine
+End If
+
     MsgBox Err.Description, vbCritical
     
 End Function
@@ -1167,7 +1191,7 @@ Hell:
 '    Resume
 End Function
 '
-Private Function TableExists(ByVal tableName As String, Cat As ADOX.Catalog) As Boolean
+Private Function TableExists(ByVal TableName As String, Cat As ADOX.Catalog) As Boolean
 
 Dim TableCount As Integer
 Dim Item As Integer
@@ -1177,7 +1201,7 @@ TableCount = Cat.Tables.count
 TableExists = False
 
 For Item = 0 To TableCount - 1
-    If UCase$(Cat.Tables(Item).name) = UCase$(tableName) Then
+    If UCase$(Cat.Tables(Item).name) = UCase$(TableName) Then
         TableExists = True
         Exit Function
     End If
