@@ -1474,8 +1474,11 @@ With frmInterest
     .Balance(rowno) = TotalBalance
     .Amount(rowno) = TotalIntAmount
     .Total(rowno) = TotalBalance + TotalIntAmount
-    
-    
+    .grd.Row = rowno
+    For I = 0 To .grd.Cols - 1
+    .grd.Col = I
+    .grd.CellFontBold = True
+    Next
 'Now show the Form
     .ShowForm
     

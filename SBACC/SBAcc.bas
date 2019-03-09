@@ -580,11 +580,13 @@ Dim rst As ADODB.Recordset
         PrevBalance = 0
         AccId = FormatField(rst_Main("AccID"))
         If Not rst_PM Is Nothing Then
+            If Not rst_PM.EOF Then rst.MoveFirst
+            rst_PM.Find ("AccID = " & AccId)
             If Not rst_PM.EOF Then
-                If AccId = FormatField(rst_PM("AccID")) Then
-                    PrevBalance = FormatField(rst_PM("Balance"))
-                    rst_PM.MoveNext
-                End If
+            If AccId = FormatField(rst_PM("AccID")) Then
+                PrevBalance = FormatField(rst_PM("Balance"))
+                rst_PM.MoveNext
+            End If
             End If
         End If
         'Now Get the Balance for each closing DAy and calculate the interest
